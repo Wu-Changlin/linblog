@@ -1,0 +1,60 @@
+* {
+    padding: 0;
+    margin: 0;
+    scrollbar-width: none; /*不显示滚动条，但是该元素依然可以滚动。*/
+    list-style-type: none;/* 移除ul下所有li元素的列表项标记（即圆点） */
+    
+}
+
+a {
+    text-decoration: none;
+    background-color: transparent
+}
+
+:root{
+    --bg: #f0eeee;
+    --card_bg: white;
+    --order: #f0eeee;
+    --slide: #2b3539;
+    --card_boder: #e2e2e2;
+    --slide_sub_bg: #465257;
+    --slide_bg: #2e393d;
+    --h2: #333333;
+    --bg_darken: #e2e2e2;
+    --chat_text_bg: #e2e2e2;
+    --chat_text_out_bg: #d9e4ee;
+    --active: #2184fc;
+    --text: #555;
+    --mask-paper: hsla(0, 0%, 100%, 0.98);
+   
+}
+
+
+
+
+/* 夜晚模式 */
+.dark {
+    --bg: #2a2a2a;
+    --order: #252525;
+    --slide: #1a1a1a;
+    --card_bg: #141414;
+    --card_boder: #303030;
+    --slide_sub_bg: #2f2f2f;
+    --slide_bg: #282828;
+    --h2: #b7b7b7;
+    --bg_darken: #0c1e23;
+    --chat_text_bg: #020202;
+    --chat_text_out_bg: #06111b;
+}
+
+
+.dark body {
+    margin: 0;
+    color: #ffffffa6;
+    font-size: 14px;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    background-color: #000;
+    font-feature-settings: tnum;
+}
