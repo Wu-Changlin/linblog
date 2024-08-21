@@ -77,8 +77,8 @@
 			width: 100%;
 			max-width: 1728px;
 			height: 72px;
-			padding: 0 16px 0 16px;
-			
+			/* padding: 0 16px 0 16px; */
+            padding: 0;
 			.header-logo {
 				display: flex;
 				width: auto;

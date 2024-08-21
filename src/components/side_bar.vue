@@ -67,18 +67,18 @@ const sideBarInfo = ref([
 		padding-top: 16px;
 		margin-top: 72px;
 		position: fixed;
-		/* overflow: visible; */
-		visibility: visible;
+		overflow: visible;
+		/* visibility: visible; */
 
 	
 		@media screen and (max-width: 695px) {
-			/* display: none; */
-			visibility: hidden;
+			display: none;
+			/* visibility: hidden; */
 			
 		}
 		@media screen and (min-width: 696px) and (max-width: 959px) {
-			/* display: none; */
-			visibility: hidden;
+			display: none;
+			/* visibility: hidden; */
 			
 		}
 

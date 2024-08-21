@@ -167,10 +167,6 @@ getInit();
   margin: 0 3px;
   margin-bottom: 40px;  /*  防止吸底标签栏遮盖内容 */
 
- 
-
-
-
   .feeds-container {
     position: relative;
     /* transition: width 0.5s; */
