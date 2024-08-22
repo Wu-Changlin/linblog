@@ -2,10 +2,10 @@
 
     <div class="side-bar">
         <ul class="channel-list">
-		<li v-for="(site,index) in sideBarInfo"  :class="{'active-channel': site.side_bar_path == '/'?true:''}">
-			<a class="link-wrapper":href="site.side_bar_path">
+		<li v-for="(site,index) in sideBarInfo"  :class="{'active-channel': site.menu_path == '/'?true:''}">
+			<a class="link-wrapper":href="site.menu_path">
 			<Star style="width: 1em; height: 1em; margin-right: 8px" />
-			<span class="channel"> {{site.side_bar_chinese_name}}</span>
+			<span class="channel"> {{site.menu_chinese_name}}</span>
 			</a>
 		</li>
         </ul>
@@ -17,42 +17,47 @@
 <script setup>
 import { reactive, ref } from 'vue';
 
+// menu_name: string //菜单唯一标识，与路由名保持一致
+// menu_chinese_name: string //菜单显示名称
+
 const sideBarInfo = ref([
     {
-        side_bar_name: "index",
-        side_bar_chinese_name:"首页",
-        side_bar_path: "/",
+        menu_name: "index",
+        menu_chinese_name:"首页",
+        menu_path: "/",
     },
     {
-      side_bar_name: "frontend",
-      side_bar_chinese_name:"前端",
-      side_bar_path: "/frontend",
+      menu_name: "frontend",
+      menu_chinese_name:"前端",
+      menu_path: "/frontend",
     },
     {
-      side_bar_name: "backend",
-      side_bar_chinese_name:"后端",
-      side_bar_path: "/backend",
-    },
-
-    {
-      side_bar_name: "resource",
-      side_bar_chinese_name:"资源",
-      side_bar_path: "/resource",
+      menu_name: "backend",
+      menu_chinese_name:"后端",
+      menu_path: "/backend",
     },
 
     {
-      side_bar_name: "archives",
-      side_bar_chinese_name:"归档",
-      side_bar_path: "/archives",
+      menu_name: "resource",
+      menu_chinese_name:"资源",
+      menu_path: "/resource",
     },
 
     {
-      side_bar_name: "diary",
-      side_bar_chinese_name:"随笔",
-      side_bar_path: "/diary",
+      menu_name: "archives",
+      menu_chinese_name:"归档",
+      menu_path: "/archives",
+    },
+
+    {
+      menu_name: "diary",
+      menu_chinese_name:"随笔",
+      menu_path: "/diary",
     },
     
 ]);
+
+
 
 </script>
 

@@ -9,6 +9,10 @@
 				<CntentList></CntentList>
 			</div>
 
+
+			
+
+
 			<!-- 页脚 （底部）-->
 			<FooterMenu></FooterMenu>
 		</div>
@@ -29,7 +33,16 @@ import FooterMenu from "@/components/footer_menu.vue";
 </script>
 
 <style scoped>
-	
+
+ 
+@keyframes moveToTop {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
 .container {
 	padding: 0;
 	max-width: 1728px;

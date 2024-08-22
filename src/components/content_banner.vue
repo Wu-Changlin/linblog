@@ -35,182 +35,7 @@
 </template>
 
 
-<style>
 
-.swipe-body{
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    /* margin: 0 auto; */
-    /* align-items: center;
-    justify-content: space-between; */
- }
-/* 轮播图 开始*/
- .carousel{
-    width: 100%;
-    height: 0;
-    padding-top: 56.25%;
-    position: relative;
-    overflow: hidden; 
- }
-
-.carousel-inner{
-    width: 100%;
-    position:absolute;
-    inset: 0;
-    display: flex;
-    transition: transform 1s ease-in-out;
-   
-}
-
-
-.item {
-    flex: 0 0 100%; 
-    
-}
-
-.carousel-inner img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-}
-
-
-/* 轮播图底部交互 开始*/
-.vui_carousel {
-    display:flex ;
-     /* 计算底部区域高度 */
-    height:100%;
-    /* --b-color是自定义属性，在js中会进行动态赋值 */
-    --b-color: #000;
-    background-color: var(--b-color);
-    color: #fff;
-    /* 相对定位 */
-    position: relative;
-} 
-
-
-
-/* 图片底部的渐变部分 */
-.vui_carousel::before{
-    content: "";
-    width: 100%;
-    height: 50px;
-    /* 背景渐变（透明——底部区域同色，上到下） */
-    background: linear-gradient(to bottom,transparent,var(--b-color));
-    /* 绝对定位 位置上移它的高度 */
-    position: absolute;
-    top: -50px;
-}
-
-/* 底部区域的左侧部分 */
-.vui_carousel .l-box{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 12px;
-    width: 100%;
-}
-.vui_carousel .title{
-    width: 100%;
-    font-size: 18px;
-    line-height: 25px;
-    /* 标题不换行，溢出显示省略号 */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.vui_carousel .dots{
-    display: flex;
-    margin-top: 13px;
-    margin-right: 0;
-}
-/* 指示器（小圆点） */
-.vui_carousel li{
-    width: 8px;
-    height: 8px;
-    background-color: rgba(255,255,255,0.4);
-    margin: 4px;
-    border-radius: 50%;
-    cursor: pointer;;
-}
-/* 指示器选中态（吃豆人） */
-.vui_carousel li.pacman{
-    position: relative;
-    width: 14px;
-    height: 14px;
-    background-color: transparent;
-    margin-top: 1px;
-}
-/* 吃豆人由两个div组成 */
-.vui_carousel li.pacman div{
-    width: 0;
-    height: 0;
-    border: 7px solid #fff;
-    border-radius: 50%;
-    border-right-width: 7px;
-    border-right-color: transparent;
-    /* 绝对定位 两个重合 */
-    position: absolute;
-}
-/* 吃豆人朝向左 */
-.vui_carousel li.pacman.l{
-    transform: rotate(180deg);
-}
-/* 接下来分别为吃豆人的两个部分设置动画 */
-.vui_carousel li.pacman div:nth-child(1){
-    /* 执行动画：动画名 时长 线性的 停留在最后一帧 */
-    animation: pacman1 0.75s linear forwards;
-}
-.vui_carousel li.pacman div:nth-child(2){
-    animation: pacman2 0.75s linear forwards;
-}
-/* 底部区域的右侧部分 */
-.vui_carousel .r-box{
-    display: flex;
-    margin-right: 10px;
-}
-
-
-/* 定义吃豆人动画 */
-@keyframes pacman1 {
-    0%{
-        transform: rotate(360deg);
-    }
-    40%{
-        transform: rotate(270deg);
-    }
-    60%{
-        transform: rotate(360deg);
-    }
-    100%{
-        transform: rotate(270deg);
-    }
-}
-@keyframes pacman2 {
-    0%{
-        transform: rotate(0deg);
-    }
-    40%{
-        transform: rotate(90deg);
-    }
-    60%{
-        transform: rotate(0deg);
-    }
-    100%{
-        transform: rotate(90deg);
-    }
-}
-
-/* 轮播图底部交互 结束*/
-
-/* 轮播图 结束*/
-
-
-
-
-</style>
 
 <script setup>
 
@@ -233,7 +58,7 @@
       onMounted(()=>{
         console.log('挂载完毕');
         // 初始化,自动轮播
-        showSlide();
+        // showSlide();
       })
       onBeforeUpdate(()=>{
         console.log('更新之前')
@@ -271,7 +96,6 @@
         
         
         const data=reactive( {
-            timer:null, //定时器
             active_index:0, //当前轮播下标
             is_prev:false, //是否点击上一张(控制吃豆人朝向)
             // 轮播图数据(json格式)
@@ -361,10 +185,182 @@
         }
 
 
-
-
-
-     
-
-
 </script>
+
+<style>
+
+    .swipe-body{
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        /* margin: 0 auto; */
+        /* align-items: center;
+        justify-content: space-between; */
+     }
+    /* 轮播图 开始*/
+     .carousel{
+        width: 100%;
+        height: 0;
+        padding-top: 56.25%;
+        position: relative;
+        overflow: hidden; 
+     }
+    
+    .carousel-inner{
+        width: 100%;
+        position:absolute;
+        inset: 0;
+        display: flex;
+        transition: transform 1s ease-in-out;
+       
+    }
+    
+    
+    .item {
+        flex: 0 0 100%; 
+        
+    }
+    
+    .carousel-inner img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+    
+    
+    /* 轮播图底部交互 开始*/
+    .vui_carousel {
+        display:flex ;
+         /* 计算底部区域高度 */
+        height:100%;
+        /* --b-color是自定义属性，在js中会进行动态赋值 */
+        --b-color: #000;
+        background-color: var(--b-color);
+        color: #fff;
+        /* 相对定位 */
+        position: relative;
+    } 
+    
+    
+    
+    /* 图片底部的渐变部分 */
+    .vui_carousel::before{
+        content: "";
+        width: 100%;
+        height: 50px;
+        /* 背景渐变（透明——底部区域同色，上到下） */
+        background: linear-gradient(to bottom,transparent,var(--b-color));
+        /* 绝对定位 位置上移它的高度 */
+        position: absolute;
+        top: -50px;
+    }
+    
+    /* 底部区域的左侧部分 */
+    .vui_carousel .l-box{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-left: 12px;
+        width: 100%;
+    }
+    
+    .vui_carousel .title{
+        width: 100%;
+        font-size: 18px;
+        line-height: 25px;
+        /* 标题不换行，溢出显示省略号 */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .vui_carousel .dots{
+        display: flex;
+        margin-top: 13px;
+        margin-right: 0;
+    }
+    /* 指示器（小圆点） */
+    .vui_carousel li{
+        width: 8px;
+        height: 8px;
+        background-color: rgba(255,255,255,0.4);
+        margin: 4px;
+        border-radius: 50%;
+        cursor: pointer;;
+    }
+    /* 指示器选中态（吃豆人） */
+    .vui_carousel li.pacman{
+        position: relative;
+        width: 14px;
+        height: 14px;
+        background-color: transparent;
+        margin-top: 1px;
+    }
+    /* 吃豆人由两个div组成 */
+    .vui_carousel li.pacman div{
+        width: 0;
+        height: 0;
+        border: 7px solid #fff;
+        border-radius: 50%;
+        border-right-width: 7px;
+        border-right-color: transparent;
+        /* 绝对定位 两个重合 */
+        position: absolute;
+    }
+    /* 吃豆人朝向左 */
+    .vui_carousel li.pacman.l{
+        transform: rotate(180deg);
+    }
+    /* 接下来分别为吃豆人的两个部分设置动画 */
+    .vui_carousel li.pacman div:nth-child(1){
+        /* 执行动画：动画名 时长 线性的 停留在最后一帧 */
+        animation: pacman1 0.75s linear forwards;
+    }
+    .vui_carousel li.pacman div:nth-child(2){
+        animation: pacman2 0.75s linear forwards;
+    }
+    /* 底部区域的右侧部分 */
+    .vui_carousel .r-box{
+        display: flex;
+        margin-right: 10px;
+    }
+    
+    
+    /* 定义吃豆人动画 */
+    @keyframes pacman1 {
+        0%{
+            transform: rotate(360deg);
+        }
+        40%{
+            transform: rotate(270deg);
+        }
+        60%{
+            transform: rotate(360deg);
+        }
+        100%{
+            transform: rotate(270deg);
+        }
+    }
+    @keyframes pacman2 {
+        0%{
+            transform: rotate(0deg);
+        }
+        40%{
+            transform: rotate(90deg);
+        }
+        60%{
+            transform: rotate(0deg);
+        }
+        100%{
+            transform: rotate(90deg);
+        }
+    }
+    
+    /* 轮播图底部交互 结束*/
+    
+    /* 轮播图 结束*/
+    
+    
+    
+    
+    </style>
