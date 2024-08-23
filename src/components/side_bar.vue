@@ -65,7 +65,7 @@ const sideBarInfo = ref([
   .side-bar {
 		height: calc(100vh - 72px);
 		overflow-y: scroll;
-		background-color: #fff;
+		background-color: var(--bg);
 		display: flex;
 		flex-direction: column;
 		flex-shrink: 0;
@@ -119,7 +119,7 @@ const sideBarInfo = ref([
 			.active-channel {
 				background-color: rgba(0, 0, 0, 0.03);
 				border-radius: 999px;
-				color: #333;
+				color: var(--text)
 			}
 
 			li {
@@ -143,7 +143,7 @@ const sideBarInfo = ref([
 				&:hover {
 					background-color: rgba(0, 0, 0, 0.03);
 					border-radius: 999px;
-					color: #333;
+					color: var(--text);
 				}
 			}
 
@@ -151,14 +151,14 @@ const sideBarInfo = ref([
 				font-size: 16px;
 				font-weight: 600;
 				margin-left: 12px;
-				color: #333;
+				color: var(--text);
 			}
 		}
 
 		.information-container {
 			display: inline-block;
 			width: 100%;
-			color: #333;
+			color: var(--text);
 			font-size: 16px;
 			position: absolute;
 			bottom: 0;
@@ -170,7 +170,7 @@ const sideBarInfo = ref([
 
 				.container {
 					width: 100%;
-					background: #fff;
+					background: var(--bg);
 					box-shadow:
 						0 4px 32px 0 rgba(0, 0, 0, 0.08),
 						0 1px 4px 0 rgba(0, 0, 0, 0.04);
@@ -225,11 +225,11 @@ const sideBarInfo = ref([
 								cursor: pointer;
 
 								.active {
-									background: #fff;
+									background: var(--bg);
 									box-shadow:
 										0 2px 8px 0 rgba(0, 0, 0, 0.04),
 										0 1px 2px 0 rgba(0, 0, 0, 0.02);
-									color: #333;
+									color: var(--text);
 								}
 
 								.toggle-item {

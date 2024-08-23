@@ -46,12 +46,13 @@ import FooterMenu from "@/components/footer_menu.vue";
 .container {
 	padding: 0;
 	max-width: 1728px;
-	background-color: #FFF;  /* fff*/
+	background-color: var(--bg);  /* fff*/
 	margin: 0 auto;
 	
 
 	.main {
 	display: flex;
+	
 	.main-content {
 		width: 100%;	
 		

@@ -10,7 +10,7 @@
                 </div> 
             </div>
         </div>
-        <div class="vui_carousel" ref='dotsList' :style="{'--b-color':data.list[data.active_index].vui_carousel_color}">
+        <div class="vui-carousel" ref='dotsList' :style="{'--b-color':data.list[data.active_index].vui_carousel_color}">
     
             <div class="l-box">
                 <div class="title">{{data.list[data.active_index].title}}</div>
@@ -51,47 +51,47 @@
         nextTick
       } from 'vue'
     
-      // 生命周期钩子
-      onBeforeMount(()=>{
-        console.log('挂载之前')
-      })
-      onMounted(()=>{
-        console.log('挂载完毕');
-        // 初始化,自动轮播
-        // showSlide();
-      })
-      onBeforeUpdate(()=>{
-        console.log('更新之前')
-      })
-      onUpdated(()=>{
-        console.log('更新完毕')
-      })
-      onBeforeUnmount(()=>{
-        console.log('卸载之前')
-      })
-      onUnmounted(()=>{
-        console.log('卸载完毕')
-      })
+    //   // 生命周期钩子
+    //   onBeforeMount(()=>{
+    //     console.log('挂载之前')
+    //   })
+    //   onMounted(()=>{
+    //     console.log('挂载完毕');
+    //     // 初始化,自动轮播
+    //     // showSlide();
+    //   })
+    //   onBeforeUpdate(()=>{
+    //     console.log('更新之前')
+    //   })
+    //   onUpdated(()=>{
+    //     console.log('更新完毕')
+    //   })
+    //   onBeforeUnmount(()=>{
+    //     console.log('卸载之前')
+    //   })
+    //   onUnmounted(()=>{
+    //     console.log('卸载完毕')
+    //   })
     
     
-    const carouselRef=ref();
-      window.addEventListener('resize', onWindowResize)
-      function onWindowResize() {
+    // const carouselRef=ref();
+    //   window.addEventListener('resize', onWindowResize)
+    //   function onWindowResize() {
        
-              // 通过捕获系统的onresize事件触发我们需要执行的事件
-              var w = window.innerWidth;
-              var h = window.innerHeight;
-              console.log('innerWidth:'+w)
-              console.log('innerHeight:'+h)
-              var h = 270
-              if (w > 1180) {
-                h = 270
-              } else {
-                h = 0.22 * w
-              }
-              const imgH = h + 'px'
+    //           // 通过捕获系统的onresize事件触发我们需要执行的事件
+    //           var w = window.innerWidth;
+    //           var h = window.innerHeight;
+    //           console.log('innerWidth:'+w)
+    //           console.log('innerHeight:'+h)
+    //           var h = 270
+    //           if (w > 1180) {
+    //             h = 270
+    //           } else {
+    //             h = 0.22 * w
+    //           }
+    //           const imgH = h + 'px'
               
-            }
+    //         }
           
         
         
@@ -230,14 +230,14 @@
     
     
     /* 轮播图底部交互 开始*/
-    .vui_carousel {
+    .vui-carousel {
         display:flex ;
          /* 计算底部区域高度 */
         height:100%;
-        /* --b-color是自定义属性，在js中会进行动态赋值 */
+        /* --b-color是自定义属性，接口返回进行动态赋值 */
         --b-color: #000;
-        background-color: var(--b-color);
-        color: #fff;
+        background-color: var(--b-color); 
+        color: var(--text);
         /* 相对定位 */
         position: relative;
     } 
@@ -245,7 +245,7 @@
     
     
     /* 图片底部的渐变部分 */
-    .vui_carousel::before{
+    .vui-carousel::before{
         content: "";
         width: 100%;
         height: 50px;
@@ -257,7 +257,7 @@
     }
     
     /* 底部区域的左侧部分 */
-    .vui_carousel .l-box{
+    .vui-carousel .l-box{
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -265,7 +265,7 @@
         width: 100%;
     }
     
-    .vui_carousel .title{
+    .vui-carousel .title{
         width: 100%;
         font-size: 18px;
         line-height: 25px;
@@ -274,22 +274,22 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-    .vui_carousel .dots{
+    .vui-carousel .dots{
         display: flex;
         margin-top: 13px;
         margin-right: 0;
     }
     /* 指示器（小圆点） */
-    .vui_carousel li{
+    .vui-carousel li{
         width: 8px;
         height: 8px;
-        background-color: rgba(255,255,255,0.4);
+        background-color: var(--text);
         margin: 4px;
         border-radius: 50%;
         cursor: pointer;;
     }
     /* 指示器选中态（吃豆人） */
-    .vui_carousel li.pacman{
+    .vui-carousel li.pacman{
         position: relative;
         width: 14px;
         height: 14px;
@@ -297,10 +297,10 @@
         margin-top: 1px;
     }
     /* 吃豆人由两个div组成 */
-    .vui_carousel li.pacman div{
+    .vui-carousel li.pacman div{
         width: 0;
         height: 0;
-        border: 7px solid #fff;
+        border: 7px solid  var(--bg);
         border-radius: 50%;
         border-right-width: 7px;
         border-right-color: transparent;
@@ -308,19 +308,19 @@
         position: absolute;
     }
     /* 吃豆人朝向左 */
-    .vui_carousel li.pacman.l{
+    .vui-carousel li.pacman.l{
         transform: rotate(180deg);
     }
     /* 接下来分别为吃豆人的两个部分设置动画 */
-    .vui_carousel li.pacman div:nth-child(1){
+    .vui-carousel li.pacman div:nth-child(1){
         /* 执行动画：动画名 时长 线性的 停留在最后一帧 */
         animation: pacman1 0.75s linear forwards;
     }
-    .vui_carousel li.pacman div:nth-child(2){
+    .vui-carousel li.pacman div:nth-child(2){
         animation: pacman2 0.75s linear forwards;
     }
     /* 底部区域的右侧部分 */
-    .vui_carousel .r-box{
+    .vui-carousel .r-box{
         display: flex;
         margin-right: 10px;
     }

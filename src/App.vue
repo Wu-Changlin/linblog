@@ -6,14 +6,10 @@
 
 </template>
 
-<script setup>
+<script>
 </script>
 
-<style scoped>
-* {
-    padding: 0;
-    margin: 0;
-}
+<style>
 
 
 </style>

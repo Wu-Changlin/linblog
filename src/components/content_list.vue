@@ -13,7 +13,7 @@
 
      
       <ContentBanner></ContentBanner>
-      <Waterfall :list="list" :breakpoints="breakpoints" >
+      <Waterfall :list="list" :breakpoints="breakpoints"  style="background-color: var(--bg);">
         <template #item="{ item, url, index }">
           <div class="card">
             <LazyImg :url="url" style="border-radius: 8px"/>
@@ -166,17 +166,18 @@ getInit();
   width: 100%;
   margin: 0 3px;
   margin-bottom: 40px;  /*  防止吸底标签栏遮盖内容 */
+  
 
   .feeds-container {
     position: relative;
     /* transition: width 0.5s; */
     margin: 0 auto;
     width: 100%;
-    
+   
 
     .card-img-mask-stats {
       position: absolute;
-      bottom: 72px;
+      bottom: 71px;
       left: 0;
       z-index: 2;
       box-sizing: border-box;
@@ -186,14 +187,15 @@ getInit();
       border-bottom-right-radius: 6px;
       border-bottom-left-radius: 6px;
       background-image: linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.8) 100%);
-      color: #fff;
+      color: var(--b-color);
       font-size:13px;
       line-height:18px;
       opacity: 1;
       display: -webkit-flex;
       display: flex;
       align-items: center;
-      justify-content: space-between
+      justify-content: space-between;
+ 
   }
 
 
@@ -214,7 +216,8 @@ getInit();
         display: -webkit-flex;
         display: flex;
         align-items: flex-start;
-        justify-content: center
+        justify-content: center;
+       
     }
 
     .card-img-mask-stats-text{
@@ -226,7 +229,7 @@ getInit();
         margin-right: 2px;
         width: 18px;
         height: 18px;
-        color: #fff;
+        color: var(--bg);
     }
 
 
@@ -234,6 +237,7 @@ getInit();
 
     .footer {
       padding: 12px;
+      
       .title {
         margin-bottom: 8px;
         word-break: break-all;
@@ -244,7 +248,7 @@ getInit();
         font-weight: 500;
         font-size: 14px;
         line-height: 140%;
-        color: #333;
+        color: var(--text);
       }
 
       .author-wrapper {
@@ -252,7 +256,7 @@ getInit();
         align-items: center;
         justify-content: space-between;
         height: 20px;
-        color: rgba(51, 51, 51, 0.8);
+        color: var(--text);
         font-size: 12px;
         transition: color 1s;
 

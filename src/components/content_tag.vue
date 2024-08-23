@@ -9,7 +9,8 @@
               
   
           </div>
-          <div class="channel" > 更多</div>
+          <div class="channel" > <svg-icon icon-class="arrow-up"/> <svg-icon icon-class="arrow-down"/></div>
+          
         </div>
 
   
@@ -163,7 +164,7 @@
       -webkit-user-select: none;
       align-items: center;
       font-size: 16px;
-      color: rgba(51, 51, 51, 0.8);
+      color: var(--text);
       height: 40px;
       white-space: nowrap;
       height: 72px;
@@ -172,14 +173,14 @@
       .content-container {
         display: flex;
         /* white-space: nowrap; */
-        color: rgba(51, 51, 51, 0.8);
+        color: var(--text);
 
 
         .active {
           font-weight: 600;
-          background: rgba(0, 0, 0, 0.03);
+          background: var(--bg);
           border-radius: 999px;
-          color: #333;
+          color: var(--text);
         }
 
         .channel {
@@ -195,7 +196,7 @@
           &:hover{ 
             background-color: rgba(0, 0, 0, 0.03);
             border-radius: 999px;
-            color: #333;
+            color: var(--text);
           }
         }
        
@@ -214,5 +215,7 @@
       justify-content: center;
       z-index: 1001;
       position: fixed;
+      background: var(--bg);
+      color: var(--text);
     }
     </style>
