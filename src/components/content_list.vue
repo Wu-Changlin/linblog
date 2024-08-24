@@ -164,30 +164,33 @@ getInit();
   flex: 1;
   padding-top: 72px;
   width: 100%;
-  margin: 0 3px;
-  margin-bottom: 40px;  /*  防止吸底标签栏遮盖内容 */
-  
+  margin: 0 auto;
+  padding-left: 12px;
+  padding-right: 12px;
+  /* 修改盒子大小属性 */
+  box-sizing: border-box;
+ 
 
   .feeds-container {
     position: relative;
-    /* transition: width 0.5s; */
+    transition: width 0.5s;
     margin: 0 auto;
     width: 100%;
    
 
     .card-img-mask-stats {
       position: absolute;
-      bottom: 71px;
+      bottom: 62px;
       left: 0;
       z-index: 2;
       box-sizing: border-box;
-      padding: 16px 8px 6px;
+      padding: 0px 8px 0px;
       width: 100%;
       height: 38px;
       border-bottom-right-radius: 6px;
       border-bottom-left-radius: 6px;
-      background-image: linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.8) 100%);
-      color: var(--b-color);
+      /* background-image: linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.8) 100%); */
+      color: var(--card_bg);
       font-size:13px;
       line-height:18px;
       opacity: 1;
@@ -256,7 +259,7 @@ getInit();
         align-items: center;
         justify-content: space-between;
         height: 20px;
-        color: var(--text);
+        color: var(--text );
         font-size: 12px;
         transition: color 1s;
 

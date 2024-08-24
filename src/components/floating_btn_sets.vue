@@ -1,7 +1,8 @@
 <template>
-
   
+  <!-- 浮动按钮集合 开始-->
 
+   <!-- 菜单按钮 开始-->
   <div class="main-box" ref="main-box">
     <div class="content-box" ref="contentBox">
       <div class="plus" @click="clickMeun" ref="plus">
@@ -10,19 +11,23 @@
      
       <div class="cont"  v-for="(menu,index) in menuInfo" :key="index" :ref="setMenuRef(menu.menu_name)">
         <a :href="menu.menu_path">
-          <svg-icon :icon-class="menu.menu_name" />
+          <svg-icon class="svg_icon" :icon-class="menu.menu_name" />
         </a>
       </div>
      
     </div>
   </div>
+   <!-- 菜单按钮 结束-->
 
+   <!-- 置顶按钮 开始-->
   <div class="top" @click="toTop"> 
     <div class="cont">
       <svg-icon  icon-class="top" />
     </div>
   </div>
+ <!-- 置顶按钮 结束-->
 
+ <!-- 浮动按钮集合 结束-->
 </template>
 
 <script setup>
@@ -192,27 +197,25 @@ const clickMeun = async () => {
 </script>
 
 <style scoped>
+    .top {
+      position: fixed;
+      width: 32px;
+      height: 32px;
+      bottom: 20px;
+      right: 20px;
+    }
 
+    .main-box {
+      /* //鼠标拖拽时通过改变right bottom值来根据鼠标移动 */
+        position: fixed;
+        right: 50px;
+        bottom: 100px;
+    }
+    .content-box {
+      /* //<!--父容器相对定位--> */
+      position: relative;
 
-.top {
-    position: fixed;
-    width: 32px;
-    height: 32px;
-    bottom: 20px;
-    right: 20px;
-  }
-
-.main-box {
-  /* //鼠标拖拽时通过改变right bottom值来根据鼠标移动 */
-  position: fixed;
-  right: 50px;
-  bottom: 100px;
-}
-.content-box {
-  /* //<!--父容器相对定位--> */
-  position: relative;
-
-}
+    }
 .cont {
   /* //<!--5个图标绝对定位  罗列在一起  通过z-index属性设置+号为最上级--> */
   position: absolute;
@@ -220,15 +223,24 @@ const clickMeun = async () => {
   height: 32px;
   /* background-color: #73e8e8; */
   /* background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0)); */
-  background-color:  #4298e7; 
+  background-color:  var(--blue); 
   transition: 1s;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
+
+  .svg_icon {
+    fill: var(--primary)!important;
+  }
+
   &:hover {
-      border: 1px solid #4298e7;
-      background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
+      border: 1px solid var(--blue);
+      .svg_icon {
+        fill: var(--blue)!important;
+      }
+      background-color: var(--bg);
+      /* background: linear-gradient(45deg, rgba(255,255,255,3), rgba(255,255,255,6)); */
 	}
 }
 

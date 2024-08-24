@@ -14,7 +14,7 @@ a {
 
 /* 暗色主题 */
 html[data-theme='dark'] {
-    --bg: #2a2a2a;
+    --bg: rgba(10, 10, 10, 0.98);;
     --order: #252525;
     --slide: #1a1a1a;
     --card_bg: #141414;
@@ -26,11 +26,24 @@ html[data-theme='dark'] {
     --chat_text_bg: #020202;
     --chat_text_out_bg: #06111b;
     --text: #fff;
+    --card_bg: #fff;
+    --primary:#fff;
+
+   
+
+    --side_bar_bg:hsla(0, 0%, 100%, 0.04);
+    --side_bar_active_bg:hsla(0, 0%, 100%, 0.04);
+    --vui_carousel_bg:#fff;
+    --blue:#4298e7;
+
+
+    
 }
 
 /* 默认 亮色主题*/
 :root{
-    --bg: #ffff;
+    --bg: #fff;
+    --primary:#333;
     --card_bg: white;
     --order: #f0eeee;
     --slide: #2b3539;
@@ -42,9 +55,14 @@ html[data-theme='dark'] {
     --chat_text_bg: #e2e2e2;
     --chat_text_out_bg: #d9e4ee;
     --active: #2184fc;
-    --text: #999999;
+    --text: #333;
     --mask-paper: hsla(0, 0%, 100%, 0.98);
-   
+    --card_bg: #fff;
+
+    --side_bar_bg:hsla(0, 0%, 100%, 0.03);
+    --side_bar_active_bg:rgba(0, 0, 0, 0.03);
+    --vui_carousel_bg:#fff;
+    --blue:#4298e7;
 }
 
 

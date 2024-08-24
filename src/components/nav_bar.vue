@@ -75,7 +75,7 @@ import NavTheme from './nav_theme.vue'
 					.svg-icon{
 						width: 32px;
 						height: 32px;
-						margin-left: 10px;
+						margin-right: 10px;
 					}
 				}
 			}

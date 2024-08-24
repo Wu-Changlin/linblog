@@ -12,10 +12,12 @@
 
 			
 
-
-			<!-- 页脚 （底部）-->
-			<FooterMenu></FooterMenu>
+			
+			<FloatingBtnSets></FloatingBtnSets>
+			<Footer></Footer>
+			
 		</div>
+		
 		
 	</div>
 
@@ -27,14 +29,15 @@
 import NavBar from "@/components/nav_bar.vue";
 import SideBar from "@/components/side_bar.vue";
 import CntentList from "@/components/content_list.vue";
-import FooterMenu from "@/components/footer_menu.vue";
+import FloatingBtnSets from "@/components/floating_btn_sets.vue";
+import Footer from "@/components/footer.vue";
 
 
 </script>
 
 <style scoped>
 
- 
+
 @keyframes moveToTop {
   0% {
     transform: translateX(0);
