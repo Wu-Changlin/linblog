@@ -38,14 +38,7 @@ import Footer from "@/components/footer.vue";
 <style scoped>
 
 
-@keyframes moveToTop {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateY(-100%);
-  }
-}
+
 .container {
 	padding: 0;
 	max-width: 1728px;

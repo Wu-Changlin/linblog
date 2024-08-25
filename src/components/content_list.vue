@@ -125,35 +125,6 @@ const breakpoints=ref ({
 
 }) 
 
-
-
-const data=reactive({
-    isFixed:false, //悬浮内容标签栏 
-});
-
-/*吸顶效果 开始*/
-//滑动监听
-const scrollTop=()=>{
-    let top=document.documentElement.scrollTop || window.pageYOffset ||document.body.scrollTop; //兼容写法
-    let offsetTop = document.querySelector('.channel-scroll-container').offsetTop;//获取内容标签栏高度
-    if(top > offsetTop){//如果下滑超过内容标签栏，那么显示悬浮内容标签栏
-      data.isFixed=true;
-    }else{
-      data.isFixed=false;
-    }
-
-}
-
-//初始化
-async function getInit(){
-  if(data.isFixed!=true){
-    window.addEventListener('scroll',scrollTop);  
-  }          
-}
-
-getInit();
-  
-/*吸顶效果 结束*/
 </script>
 
 <style  scoped>

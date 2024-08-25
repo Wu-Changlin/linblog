@@ -1,5 +1,6 @@
 <template>
-    <div style="padding-top: 72px;"></div>
+ 
+   
     <div  class="swipe-body">
         <div class="carousel" @mouseover="pauseTimer" @mouseout="resumeTimer">
             <div class="carousel-inner" :style="{'transform': `translateX(-${data.active_index * 100}%)` }">
@@ -137,6 +138,7 @@ import { ref, reactive} from 'vue'
         width: 100%;
         margin: 0 auto;
         max-width: 1200px;
+        margin-top: 72px;
     }
     /* 轮播图 开始*/
     .carousel{
