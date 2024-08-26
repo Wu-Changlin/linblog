@@ -33,6 +33,13 @@ import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import Footer from "@/components/footer.vue";
 
 
+
+import { reactive ,ref,nextTick,onMounted} from 'vue';
+    import { useRouter } from "vue-router";
+    const router = useRouter();
+    const tagRef = ref();//获取元素高度
+
+
 </script>
 
 <style scoped>
