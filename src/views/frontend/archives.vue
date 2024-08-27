@@ -1,7 +1,7 @@
 <template>
-  <ContributionsChart></ContributionsChart>
+  <ContributionCalendar></ContributionCalendar>
 </template>
 
 <script setup>
-  import ContributionsChart from '@/components/contributions_chart.vue'
+  import ContributionCalendar from '@/components/contribution_calendar.vue'
 </script>
