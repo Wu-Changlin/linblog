@@ -22,7 +22,6 @@
       </div>
    
 
-
       <div id="div" style="visibility:hidden; position: absolute;top:-9999px;left:-9999px;">
         <div class="tag-container">
     
@@ -45,7 +44,7 @@
 
 
 <script setup>
-    import { reactive ,ref,nextTick,onMounted} from 'vue';
+    import { reactive ,ref,nextTick,onMounted,onUnmounted} from 'vue';
     import { useRouter } from "vue-router";
     const router = useRouter();
     const tagRef = ref();//获取元素高度
@@ -131,13 +130,18 @@
     onMounted(()=>{
     //     console.log('挂载完毕');
         // 初始化 防止元素换行(元素已设置换行属性)
-        onWindowResize();
-      })
+        window.addEventListener('resize', onWindowResize);//监听窗口缩放
+    })
+
+    
+    onUnmounted(() => {
+      window.removeEventListener('resize', onWindowResize)
+    })//离开页面时移除监听窗口缩放
 
     const tagHeightRet=ref();
-    //监控屏幕伸缩    
-    window.addEventListener('resize', onWindowResize);
-
+        
+    
+    
     function onWindowResize() {
       // console.log('tagRef:',tagRef.value.clientHeight);
       // console.log('tagHeightRet:',tagHeightRet.value.clientHeight);
@@ -172,7 +176,6 @@ function clickTagBtn () {
 </script>
 
 <style>
-
 
 
 .tag-container {

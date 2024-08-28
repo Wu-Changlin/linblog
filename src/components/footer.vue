@@ -9,7 +9,7 @@
 
 
 <script setup>
-    import {  reactive } from 'vue';
+    import {  reactive, onMounted ,onUnmounted} from 'vue';
     
     const data=reactive({
         show_website_approve:false, //悬浮内容标签栏 
@@ -30,7 +30,19 @@
     
     }
 
-    window.addEventListener('scroll',scrollBottom); 
+    onMounted(()=>{
+    //     console.log('挂载完毕');
+        window.addEventListener('scroll',scrollBottom);  //监听窗口滑动到底部
+    })
+
+    
+    onUnmounted(() => {
+      window.removeEventListener('scroll', scrollBottom)
+    })//离开页面时移除监听窗口滑动到底部
+
+
+
+    
 
 </script>
 

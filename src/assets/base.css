@@ -14,7 +14,7 @@ a {
 
 /* 暗色主题 */
 html[data-theme='dark'] {
-    --bg: rgba(10, 10, 10, 0.98);;
+    --bg: rgba(10, 10, 10, 0.98);
     --order: #252525;
     --slide: #1a1a1a;
     --card_bg: #141414;
@@ -35,6 +35,13 @@ html[data-theme='dark'] {
     --side_bar_active_bg:hsla(0, 0%, 100%, 0.04);
     --vui_carousel_bg:#fff;
     --blue:#4298e7;
+    --floating_btn_box_shadow_one:rgba(0, 0, 0, 1);
+    --floating_btn_box_shadow_two:#ffffffcc;
+
+    --floating_btn_box_shadow_three:rgba(0, 0, 0, 1);
+
+    --floating_btn_box_shadow_four:rgba(255, 255, 255, 0.1);
+   
 
 
     
@@ -63,6 +70,15 @@ html[data-theme='dark'] {
     --side_bar_active_bg:rgba(0, 0, 0, 0.03);
     --vui_carousel_bg:#fff;
     --blue:#4298e7;
+
+    --floating_btn_box_shadow_one:rgba(0, 0, 0, 0.2);
+    --floating_btn_box_shadow_two:#ffffffcc;
+
+    --floating_btn_box_shadow_three:rgba(0, 0, 0, 0.1);
+
+    --floating_btn_box_shadow_four:rgba(255, 255, 255, 1);
+
+
 }
 
 

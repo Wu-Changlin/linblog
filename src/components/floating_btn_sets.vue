@@ -3,7 +3,7 @@
   <!-- 浮动按钮集合 开始-->
 
    <!-- 菜单按钮 开始-->
-  <div class="main-box" ref="main-box">
+  <div class="main-box" ref="mainboxRef">
     <div class="content-box" ref="contentBox">
       <div class="plus" @click="clickMeun" ref="plus">
         <svg-icon :icon-class="data.menu_icon"/>
@@ -20,7 +20,7 @@
    <!-- 菜单按钮 结束-->
 
    <!-- 置顶按钮 开始-->
-  <div class="top" @click="toTop"> 
+  <div class="top" @click="scrollToTop"> 
     <div class="cont">
       <svg-icon  icon-class="top" />
     </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import {onMounted,ref,reactive} from "vue";
+import {onMounted,onUnmounted,ref,reactive} from "vue";
 
 // menu_name: string //菜单唯一标识，与路由名保持一致
 // menu_chinese_name: string //菜单显示名称
@@ -92,7 +92,7 @@ const resource = ref()
 const archives= ref()
 
 const diary = ref()
-const mainBox = ref()
+const mainboxRef = ref()
 const plus = ref()
 const isShow = ref(false)
 const  isMove = ref(false)
@@ -146,10 +146,10 @@ function onmousemove(e){
   // console.log("moveX", moveX, "moveY", moveY)
   //设置触发了移动
   isMove.value = true
-  let style = window.getComputedStyle(mainBox.value)
+  let style = window.getComputedStyle(mainboxRef.value)
   //设置right，bottom值来跟随鼠标移动
-  mainBox.value.style.right = (parseFloat(style.right.replace("px",""))  - moveX)+"px"
-  mainBox.value.style.bottom = (parseFloat(style.bottom.replace("px","")) - moveY)+"px"
+  mainboxRef.value.style.right = (parseFloat(style.right.replace("px",""))  - moveX)+"px"
+  mainboxRef.value.style.bottom = (parseFloat(style.bottom.replace("px","")) - moveY)+"px"
   startX = e.clientX
   startY = e.clientY
 }
@@ -194,6 +194,38 @@ const clickMeun = async () => {
   }
 };
 
+
+
+const interval = ref(null);
+const duration = 500; // 动画总时长，单位毫秒
+const isScrolling = ref(null);
+
+// 滚动到页面顶部的函数
+function scrollToTop() {
+ // 如果当前正在滚动，则不再执行
+ if (isScrolling.value) return;
+ 
+ // 标记开始滚动
+ isScrolling.value = true;
+  
+  if (interval.value) {
+    clearInterval(interval.value);
+  }
+  interval.value = setInterval(() => {
+    const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+    if (currentScroll > 0) {//滚动过程
+      window.scrollTo(0, currentScroll - (currentScroll / duration * 10));
+      // console.log('currentScroll -if:'+currentScroll)
+    } else {//已滚动到顶部
+      isScrolling.value = false;
+        //  console.log('currentScroll -else:'+currentScroll)
+      clearInterval(interval.value);
+    }
+  }, 10); // 每10毫秒执行一次
+
+}
+
+
 </script>
 
 <style scoped>
@@ -203,6 +235,7 @@ const clickMeun = async () => {
       height: 32px;
       bottom: 20px;
       right: 20px;
+      transition: opacity 0.5s ease;
     }
 
     .main-box {
@@ -214,6 +247,7 @@ const clickMeun = async () => {
     .content-box {
       /* //<!--父容器相对定位--> */
       position: relative;
+      background-color: #fff;
 
     }
 .cont {
@@ -223,24 +257,38 @@ const clickMeun = async () => {
   height: 32px;
   /* background-color: #73e8e8; */
   /* background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(255,255,255,0)); */
-  background-color:  var(--blue); 
+  /* background-color:  var(--blue);  */
   transition: 1s;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
+  background: var(--bg);
+  box-shadow: 10px 10px 30px #bebebe,
+  -10px -10px 30px #ffffff;
+  /* box-shadow: 10px 10px 30px var(--bg),
+  -10px -10px 30px var(--bg); */
 
+             
   .svg_icon {
     fill: var(--primary)!important;
+   
   }
 
   &:hover {
-      border: 1px solid var(--blue);
-      .svg_icon {
+    cursor: pointer;  
+     box-shadow:
+    
+              0 0 0 var(--floating_btn_box_shadow_one),  
+              0 0 0 var(--floating_btn_box_shadow_two),  
+              inset 10px 10px 30px var(--floating_btn_box_shadow_three),   
+              inset -10px -10px 30px var(--floating_btn_box_shadow_four), ; 
+      
+    .svg_icon {
         fill: var(--blue)!important;
+       
       }
-      background-color: var(--bg);
-      /* background: linear-gradient(45deg, rgba(255,255,255,3), rgba(255,255,255,6)); */
+      
 	}
 }
 
@@ -250,12 +298,13 @@ const clickMeun = async () => {
   position: absolute;
   width: 32px;
   height: 32px;
-  background-color:  #4298e7; 
   transition: 1s;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
+  background-color: var(--bg);
+  
 }
 
 /* .plus:active {

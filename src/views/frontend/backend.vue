@@ -37,7 +37,6 @@
   }
 
   .li-label{
-    
     width: 18px;
     height: 18px;
     list-style: none;             /*记得把list的圆点效果去掉*/
@@ -56,51 +55,72 @@
     text-align: center;
   }
   
-  .li-day {
-    width: 18px;
-    height: 18px;
-    background-color: #eaeaea;
-    list-style: none;             /*记得把list的圆点效果去掉*/
-    margin: 1.5px;
-    border-radius: 3px;
-  }
-  
-  .li-day:hover {               /*添加hover强调效果*/
-    box-shadow: 0px 0px 5px rgb(57, 120, 255);
-  }
+.li-day {
+  width: 18px;
+  height: 18px;
+  background-color: #eaeaea;
+  list-style: none;             /*记得把list的圆点效果去掉*/
+  margin: 1.5px;
+  border-radius: 3px;
+}
 
-  .active {               /*添加hover强调效果*/
-    /* box-shadow: 0px 0px 5px rgb(57, 120, 255); */
-    color: #636c76!important;
-    background-color: #999999 !important;
-  }
+.li-day:hover {               /*添加hover强调效果*/
 
-  .no-active{
-    color:#636c76!important;
-  }
+  /* filter: brightness(100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 1); */
 
-.graph li[data-level="0"] {
+  -webkit-box-shadow: 1px 1px 13px #20232e, -1px -1px 13px #545b78;
+  box-shadow: 1px 1px 13px #20232e, -1px -1px 13px #545b78;
+  /* color: #d6d6d6; */
+  -webkit-transition: 500ms;
+  transition: 500ms;
+}
+
+
+.active {    
+  outline: none;      
+  opacity: .8 !important;
+  -webkit-box-shadow: 1px 1px 13px #20232e, -1px -1px 33px #545b78;
+  box-shadow: 1px 1px 13px #20232e, -1px -1px 33px #545b78;
+  /* color: #d6d6d6; */
+  -webkit-transition: 100ms;
+  transition: 100ms;
+}
+
+.no-active{
+  opacity: .3 !important;
+}
+
+ [data-level="0"] {
+  fill:#ebedf0;
   background-color: #ebedf0;
+  outline: 1px solid rgba(27, 31, 35, 0.06);;
 }
 
-.graph li[data-level="1"] {
+ [data-level="1"] {
+  fill: #9be9a8;
   background-color: #9be9a8;
+  outline: 1px solid rgba(27, 31, 35, 0.06);;
 }
 
-.graph li[data-level="2"] {
+[data-level="2"] {
+  fill:#40c463;
   background-color: #40c463;
+  outline: 1px solid rgba(27, 31, 35, 0.06);;
 }
 
-.graph li[data-level="3"] {
+ [data-level="3"] {
+  fill:#30a14e;
   background-color: #30a14e;
+  outline: 1px solid rgba(27, 31, 35, 0.06);;
 }
 
-.graph li[data-level="4"] {
+[data-level="4"] {
+  fill:#216e39;
   background-color: #216e39;
+  outline: 1px solid rgba(27, 31, 35, 0.06);;
 }
-
-
-
 
 
 .operation {
@@ -109,13 +129,13 @@
       align-items: center;
       margin-top: 10px;
  
-      .slider {
+      .contributions_count_desc {
         display: flex;
         justify-content: center;
         align-items: center;
         width: 200px;
  
-        .slider-desc {
+        .contributions_count {
           width: 11px;
           margin: 0 8px;
         }
@@ -139,37 +159,21 @@
           width: 11px;
           height: 11px;
         }
- 
-        .level-0 {
-          background: #ebedf0;
-        }
- 
-        .level-1 {
-          background:  #9be9a8;
-        }
- 
-        .level-2 {
-          background: #40c463;
-        }
- 
-        .level-3 {
-          background: #30a14e;
-        }
- 
-        .level-4 {
-          background: #216e39;
-        }
-
-
 
       }
-    }
+}
 
-
-  .hover-level {
-    box-shadow: inset 0px 0px 1px 2px rgba(255, 255, 255, 0.5);
-    color: rgba(55,126,259,0.1);
-  }
+/* 没有悬停变白色  悬停保留原来颜氏*/
+.no-hover-level {
+  cursor: pointer;  
+  box-shadow:
+            inset 18px 18px 30px rgba(0, 0, 0, 0.1),  
+            inset -18px -18px 30px rgba(255, 255, 255, 1),
+            0 0 0 rgba(0, 0, 0, 0.2),  
+            0 0 0 rgba(255, 255, 255, 0.8),  
+            inset 18px 18px 30px rgba(0, 0, 0, 0.1),  
+            inset -18px -18px 30px rgba(255, 255, 255, 1);  
+}
 
 </style>
 
@@ -201,27 +205,49 @@
             <li></li>
           </div>
           <!-- 占位格 结束-->
-          <div class="item"   v-for="(item, index) in infos" :key="index">
-              <li   :data-level="item.id==active_id?'':item.level"        :class="{'li-day':true,'hover-level': item.level == hoverLevel ,'active':item.id==active_id}"   @click="handleClick(item)"></li>
-          </div>
+          <div class="item"  v-for="(item, index) in infos" :key="index">
+
+              <!-- 默认数据 开始-->
+              <li v-if="is_selected == false" 
+              
+                :data-level="item.level"  :data-selected="item.id===active_id?true:false"       
+                :class="{'li-day':true,'no-hover-level':hoverLevel!=-1&&item.level!=hoverLevel ,'active':item.id===active_id}"  
+                @click="handleClick(item)">
+              </li>
+              <!-- 默认数据 结束-->
+               
+              <!-- 选择模式 开始-->
+              <li  v-else
+                :data-level="item.level"  :data-selected="item.id===active_id?true:false"     
+                :class="{'li-day':true,'active':item.id===active_id,'no-active':item.id!=active_id}"  
+                @click="handleClick(item)">
+              </li>
+              <!-- 选择模式 结束-->
+            
+          
+            </div>
         </ul>
 
         <div class="operation">
-          <div class="slider">
-            <div class="slider-desc">0</div>
+          <div class="contributions_count_desc">
+            <div class="contributions_count">0</div>
               <svg-icon class="svg_icon" icon-class="jindutiao" />
-            <div class="slider-desc">5+</div>
+            <div class="contributions_count">5+</div>
           </div>
           <div class="legend">
             <div class="level-desc">少</div>
-              <!-- <div class="level level-0"></div>
-              <div class="level level-1"></div>
-              <div class="level level-2"></div>
-              <div class="level level-3"></div>
-              <div class="level level-4"></div> -->
-              <div class="level" @mouseover="hoverLevel = index" @mouseout="hoverLevel = -1" v-for="(item, index)  in 5" :key="index"
-              :class="['level-' + index]">
+           
+               
+            <div  v-if="is_selected == false"  class="level" @mouseover="hoverLevel = index" @mouseout="hoverLevel = -1" v-for="(item, index)  in 5"
+               :data-level="index">
               </div>
+
+              <div  v-else  class="level no-active"  v-for="(item, index)  in 5" 
+               :data-level="index">
+              </div>
+
+
+
             <div class="level-desc">多</div>
           </div>
         </div>
@@ -246,7 +272,9 @@
         },
         blank_grid:0,//空白占位格
         hoverLevel:-1,
-        active_id:0,
+        is_selected:false,
+        active_id:-1,
+        active_info:{},
         monthBar: ["", "", "", "", "", "", "", "", "", "", "", ""],//12列对应的月份，比如第三列开始是五月份，则令monthBar[2]="5月"，算法实现见下面method
 
       }
@@ -325,7 +353,7 @@
                 number: 10,    //今日的数据量
                 level: level,  //今日数据量对应的等级
                 isToday: true, //是否是今天
-                id:i,
+                id:i+1,
             };
             this.infos.push(info);
         } else {
@@ -336,7 +364,7 @@
                 number: 10,
                 level: level,
                 isToday: false,
-                id:i,
+                id:i+1,
             };
             this.infos.push(info);
         }
@@ -368,43 +396,31 @@
        
     }
     
-    
 },
 
 
     methods: {
 
-
-      getColor (number) {
-        // level color
-        // 左闭右开
-        let color = '#EBEDF0'
-        if (number >= 4) {
-          color = '#196127'
-        } else if (number >= 3) {
-          color = '#239A3B'
-        } else if (number >= 2) {
-          color = '#7BC96F'
-        } else if (number >= 1) {
-          color = '#C6E48B'
-        } else {
-          color = '#EBEDF0'
-        }
-        return color
-      },
-
       handleClick: function (item) {
         // console.log(JSON.stringify(item))
         
+        
         if(this.active_id==item.id){
           this.active_id=-1;
+          this.is_selected=false;
         }else{
+          this.is_selected=true;
           this.active_id=item.id;
         }
-        console.log(' this.active_id:', this.active_id);
+        console.log('item:', JSON.stringify(item));
         // {"year":2023,"month":11,"date":18,"number":10,"level":0,"isToday":false}
         // alert(item.month + "-" + item.date+'，博文：'+item.number)
-      }
+      },
+
+
+      
+
+
     }
   }
 </script>
