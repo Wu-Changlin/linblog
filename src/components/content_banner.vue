@@ -3,26 +3,26 @@
    
     <div  class="swipe-body">
         <div class="carousel" @mouseover="pauseTimer" @mouseout="resumeTimer">
-            <div class="carousel-inner" :style="{'transform': `translateX(-${data.active_index * 100}%)` }">
+            <div class="carousel-inner" :style="{'transform': `translateX(-${data.active_carousel_index * 100}%)` }">
                 <div class="item"  v-for="index in data.list" >
                     <img    :src="index.image" >
                 </div> 
             </div>
         </div>
-        <div class="vui-carousel" ref='dotsList' :style="{'--b-color':data.list[data.active_index].vui_carousel_color}">
+        <div class="vui-carousel" ref='dotsList' :style="{'--b-color':data.list[data.active_carousel_index].vui_carousel_color}">
     
             <div class="l-box">
-                <div class="title">{{data.list[data.active_index].title}}</div>
+                <div class="title">{{data.list[data.active_carousel_index].title}}</div>
                 
             </div>
 
             <div class="r-box">
                 
                 <ul class="dots">
-                    <li :class="[index==data.active_index?'pacman':'dot',data.is_prev?'l':'']" v-for="(item,index) in data.list"  @click="jumpToSlide(index)">
+                    <li :class="[index==data.active_carousel_index?'pacman':'dot',data.is_prev?'l':'']" v-for="(item,index) in data.list"  @click="jumpToSlide(index)">
                         <!-- 吃豆人 -->
-                        <div v-if="index==data.active_index"></div>
-                        <div v-if="index==data.active_index"></div>
+                        <div v-if="index==data.active_carousel_index"></div>
+                        <div v-if="index==data.active_carousel_index"></div>
                     </li>
                 </ul>
             </div>
@@ -40,7 +40,7 @@
 import { ref, reactive} from 'vue'
     
     const data=reactive( {
-        active_index:0, //当前轮播下标
+        active_carousel_index:0, //当前轮播下标
         is_prev:false, //是否点击上一张(控制吃豆人朝向)
         // 轮播图数据(json格式)
         list:[{
@@ -72,16 +72,16 @@ import { ref, reactive} from 'vue'
     //放映幻灯片
     function showSlide() {
         
-        data.active_index.value >= data.list.length - 1 ? 0 : data.active_index;
+        data.active_carousel_index.value >= data.list.length - 1 ? 0 : data.active_carousel_index;
         
     }
 
     //上一张
     function prevSlide() {
-        if (data.active_index > 0) {
-            data.active_index--;
+        if (data.active_carousel_index > 0) {
+            data.active_carousel_index--;
         } else {
-            data.active_index = data.list.length - 1;
+            data.active_carousel_index = data.list.length - 1;
         }
         data.is_prev=true;
         showSlide();
@@ -89,10 +89,10 @@ import { ref, reactive} from 'vue'
 
     //下一张
     function nextSlide() {
-        if (data.active_index < data.list.length - 1) {
-            data.active_index++;
+        if (data.active_carousel_index < data.list.length - 1) {
+            data.active_carousel_index++;
         } else {
-            data.active_index = 0;
+            data.active_carousel_index = 0;
         }
         data.is_prev=false;
         showSlide();
@@ -117,15 +117,15 @@ import { ref, reactive} from 'vue'
             // 停止轮播
         clearInterval(timer);
         // 点击时轮播下标小于当前轮播下标时,则为上一张,吃豆人向左
-        if(index<data.active_index){
+        if(index<data.active_carousel_index){
             data.is_prev=true;
         }else{// 默认是下一张,吃豆人向右
             data.is_prev=false;
         }
         // 设置当前轮播下标
-        data.active_index = index;
+        data.active_carousel_index = index;
         resumeTimer();
-        // console.log('data.active_index:'+data.active_index)
+        // console.log('data.active_carousel_index:'+data.active_carousel_index)
     }
 
 

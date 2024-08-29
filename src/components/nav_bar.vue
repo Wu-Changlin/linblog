@@ -1,7 +1,7 @@
 <template>
     <div class="header-container">
         <header class="mask-paper">
-            <a aria-current="page" href="/" class="active router-link-exact-active" id="link-guide" >
+            <a aria-current="page" href="/" class="router-link-exact-active" id="link-guide" >
                 <img crossorigin="anonymous" class="header-logo" style="pointer-events:none;" src="@/assets/img/logo.png">
             </a>
 

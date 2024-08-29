@@ -130,6 +130,7 @@
     onMounted(()=>{
     //     console.log('挂载完毕');
         // 初始化 防止元素换行(元素已设置换行属性)
+        onWindowResize();
         window.addEventListener('resize', onWindowResize);//监听窗口缩放
     })
 
@@ -143,7 +144,7 @@
     
     
     function onWindowResize() {
-      // console.log('tagRef:',tagRef.value.clientHeight);
+      console.log('tagRef:',tagRef.value.clientHeight);
       // console.log('tagHeightRet:',tagHeightRet.value.clientHeight);
 
       data.tagHeight=tagHeightRet.value.clientHeight;//元素高度
