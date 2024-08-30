@@ -328,7 +328,7 @@
       props: {
         //年贡献结束时间
         contribution_activities_endtime : {
-          // default: '2022-12-31',//2023-12-31
+          default: '2023-12-31',//2023-12-31
           type: String
         }
       },
@@ -370,18 +370,17 @@
       *假如今天是20240826日，那么第1列第1格为本日的前365天，则那天的日期设置为(today - 365 + i)=setDate(26-356-0=-339)，最后就能获得那一天的年月日对象，再获得年月日数值。
       *知道前提后下面的代码可以自己体会了
       */
-      //0 第一个格子的时间：上一年今天。倒查   上一年今天至今天
+      //0 第一个格子的时间：上一年今天。倒查   上一年今天至今天    
       //1 第一个格子的时间：减去上一年今天。上一年第一天至上一年最后一天（按年统计贡献contribution_activities_endtime）  
-      //start_day_number=0  2022-12-31至2023-12-31   
-      //start_day_number=1  2023-12-31至2023-12-31
+      //start_day_number=0  2022-12-31至2023-12-31       20230830---20240830 367
+      //start_day_number=1  2023-12-31至2023-12-31       20230831---20240830 366 
       for (let i = start_day_number; i <=year_day_number; i++) {
           d.setFullYear(this.current.year);  //每次循环要重置年月日为今天否则会以上次循环结尾的年月日计算而计算错误
           d.setMonth(this.current.month);
           d.setDate(this.current.date);
-  
-          
-          // console.log('today：',today,',i：',i,',today - 365 + i:',today - 365 + i,'d.setDate(today - 365 + i)：', d.setDate(today - 365 + i) );
-          d.setDate(today -year_day_number+ i);   //设置到本次循环的date   
+ 
+        
+          d.setDate(today-year_day_number+ i);   //设置到本次循环的date   
           //(today-365+i)
           // 开始循环：today： 26 ,i： 0 ,today - 365 + i: -339   1693144206789       对应开始格子
           // 结束循环：today： 26 ,i： 365 ,today - 365 + i: 26   1724680206789       对应结束格子
@@ -399,7 +398,7 @@
                   number: i,    //今日的数据量
                   level: level,  //今日数据量对应的等级
                   isToday: true, //是否是今天
-                  id:i+1,
+                  id:i,
               };
               this.infos.push(info);
           } else {
@@ -410,7 +409,7 @@
                   number: i,
                   level: level,
                   isToday: false,
-                  id:i+1,
+                  id:i,
               };
               this.infos.push(info);
           }
@@ -421,11 +420,23 @@
               //这个月的第一天的index（84天的第几天）除以7获得所在列的index（12列的第几列），
               //作为下面monthBar的index，并把原来空的内容用替换为xx月
               weekOfMonth = parseInt((i + 1) / 7)
+              console.log('oen-i:',i)
+               
+              //判断每月最后一天是否等于每月第一天位置
+              console.log('列：'+weekOfMonth,',(i + 1) / 7:',(i + 1) / 7,',month:',month)
               // console.log('d.getDate():',d.getDate(),',列：'+weekOfMonth,',month:',month)
               this.monthBar[weekOfMonth] = month + "月"
           }
+
+          // new Date(2020,5,0).getDate() 
+          // const end_day= Date(d.getFullYear(), d.getMonth() + 1, 0);
+          
+            
+          //   console.log('end_day:'+JSON.stringify(end_day),i)
+          
       }
   
+      // console.log('this.infos:',JSON.stringify(this.infos));
       if(this.infos){
        
         let [firstElement] =this.infos; //使用解构赋值取得第一个元素；
