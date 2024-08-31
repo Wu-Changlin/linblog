@@ -156,19 +156,29 @@ function getDarkRandomColor() {
             text-align:center;
             border: none !important;
             width: auto;
-            margin-right: 10px;
+            margin: 10px;
             height: 30px;
             /* 可以添加其他样式，比如字体颜色、背景等 */
-            color: blue;
+            padding: 10px;
             text-decoration: none;
-            
-            
+            color: var(--text-light-dark);
+            opacity: 5;
+              /*鼠标移入效果*/
+              &:hover{ 
+                /* background-color: rgba(0, 0, 0, 0.03); */
+                border-radius: 999px;
+                color: var(--text-light-dark);
+              }
          
           }
-          /* 当鼠标悬停时改变链接的外观 */
-          .tag-count-item:hover {
-            background-color: yellow;
+
+          .active {
+            /* background-color: rgba(0, 0, 0, 0.03); */
+            border-radius: 999px;
+            color: var(--text-light-dark);
           }
+         
+           
 
     }
 

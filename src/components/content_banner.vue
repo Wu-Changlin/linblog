@@ -226,10 +226,10 @@ import { ref, reactive} from 'vue'
     .vui-carousel li{
         width: 8px;
         height: 8px;
-        background-color:rgba(128, 128, 128, 0.7);;
+        background-color:rgba(128, 128, 128, 0.7);
         margin: 4px;
         border-radius: 50%;
-        cursor: pointer;;
+        cursor: pointer;
     }
     /* 指示器选中态（吃豆人） */
     .vui-carousel li.pacman{

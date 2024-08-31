@@ -34,10 +34,20 @@
     </div>
     <!-- 标签统计栏 开始-->
 
+    <!-- 贡献统计栏 开始-->
+    <h2>贡献</h2>
+    <div class="contribution-calendar-count-content">
+      <ContributionCalendar></ContributionCalendar>
+    </div>
+    <!-- 贡献统计栏 开始-->
+
+
+    
+
   </div>
  
 
-  <ContributionCalendar></ContributionCalendar>
+ 
 </div>
 </template>
 
@@ -92,6 +102,17 @@ import TagCount from '@/components/tag_count.vue'
         max-width:1280px;
         box-sizing: border-box;
     
+      }
+      .contribution-calendar-count-content{
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+        /* display: flex;
+        overflow-x: scroll;
+        overflow-y: hidden;
+          .container-card::-webkit-scrollbar {
+            display: none;
+        } */
       }
 
      
