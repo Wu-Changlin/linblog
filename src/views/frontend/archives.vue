@@ -41,6 +41,12 @@
     </div>
     <!-- 贡献统计栏 开始-->
 
+    <!-- 贡献统计栏 开始-->
+    <h2>结果</h2>
+    <div>
+      <CntentList></CntentList>
+    </div>
+    <!-- 贡献统计栏 开始-->
 
     
 
@@ -56,6 +62,7 @@ import WebsiteContentCount from '@/components/website_content_count.vue'
 import WebsiteRunTiem from '@/components/website_run_tiem.vue'
 import ContributionCalendar from '@/components/contribution_calendar.vue'
 import TagCount from '@/components/tag_count.vue'
+import CntentList from "@/components/content_list.vue";
 </script>
 
 <style>

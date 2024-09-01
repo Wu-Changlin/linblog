@@ -87,6 +87,7 @@
   </div>
 
  
+  
   </template>
 
 <!-- 
@@ -113,15 +114,8 @@
           is_selected:false,//是否开启选择模式
           active_id:-1,//已选中id
           monthBar: ["", "", "", "", "", "", "", "", "", "", "", ""],//12列对应的月份，比如第三列开始是五月份，则令monthBar[2]="5月"，算法实现见下面method
-          monthBarEnd:[],
-          show_year_list:false,
-          active_year_id:0,
-          selected: '',
-          options: [
-            { value: 'option1', text: '选项1' },
-            { value: 'option2', text: '选项2' },
-            { value: 'option3', text: '选项3' }
-          ]
+         
+          
         }
       },
       props: {
@@ -182,6 +176,8 @@
           d.setMonth(this.current.month);
           d.setDate(this.current.date);
 
+         
+
           d.setDate(today-year_day_number+i);   //设置到本次循环的date   
           //(today-365+i)
           // 开始循环：today： 26 ,i： 0 ,today - 365 + i: -339   1693144206789       对应开始格子
@@ -230,13 +226,14 @@
               //这个月的第一天的index（84天的第几天）除以7获得所在列的index（12列的第几列），
               //作为下面monthBar的index，并把原来空的内容用替换为xx月
               // weekOfMonth = parseInt((i + 1) / 7)
-             
+            
 
               if(start_day_number==0){
                 if(one_date_week==new Date(d.getFullYear(),d.getMonth(),d.getDate()).getDay()){
                   weekOfMonth =  parseInt(i/ 7);
                 }else{
-                  weekOfMonth = parseInt((i + one_date_week) / 7);//加上占位格
+                  weekOfMonth =  parseInt((i+1)/ 7);
+                  // weekOfMonth = parseInt((i + one_date_week) / 7);//加上占位格
                 }
                
               }else{
@@ -309,13 +306,7 @@
           // alert(item.month + "-" + item.date+'，博文：'+item.number)
         },
   
-        toggleMenu:function (year_id) {
-          console.log(111)
-          console.log('1:this.show_year_list:',this.show_year_list)
-          this.show_year_list= !this.show_year_list;
-          console.log('2:this.show_year_list:',this.show_year_list)
-          this.active_year_id=year_id;
-        },
+     
   
       }
     }

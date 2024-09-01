@@ -251,24 +251,24 @@
             <!-- 月份 结束-->
             <!--  开始-->
             <ul class="graph">
-              <!-- 占位格 开始-->
-              <div class="item"   v-for="(blank_grid_item, blank_grid_index) in blank_grid" :key="blank_grid_index">
-                <li></li>
-              </div>
-              <!-- 占位格 结束-->
-              <div class="item tooltip"  v-for="(item, index) in infos" :key="index">
-    
               
-                  <li
-                    :data-level="item.level"  :data-selected="item.id===active_id?true:false"       
-                    :class="{'li-day':true,'no-hover-level':hoverLevel!=-1&&item.level!=hoverLevel ,'active':item.id===active_id,'no-active':is_selected==true&&item.id!=active_id}"  
-                    @click="handleClick(item)">
-                   
-                  </li>
-                 
-                  <span class="tooltiptext">{{item.month+'-'}}{{item.date+'：'}}{{item.number+'次贡献'}}</span>
+               <div  v-for="(item, index) in infos" :key="index">
+                
+                <div class="item tooltip" v-if="index>4">
+      
                   
+                    <li  
+                      :data-level="item.level"  :data-selected="item.id===active_id?true:false"       
+                      :class="{'li-day':true,'no-hover-level':hoverLevel!=-1&&item.level!=hoverLevel ,'active':item.id===active_id,'no-active':is_selected==true&&item.id!=active_id}"  
+                      @click="handleClick(item)">
+                    
+                    </li>
+                  
+                    <span class="tooltiptext">{{ item.year }} - {{ item.month }} -{{item.date}} : {{item.number+'次贡献'}}</span>
+                    
                 </div>
+
+              </div>
             </ul>
     
             <div class="operation">
@@ -318,13 +318,13 @@
             is_selected:false,//是否开启选择模式
             active_id:-1,//已选中id
             monthBar: ["", "", "", "", "", "", "", "", "", "", "", ""],//12列对应的月份，比如第三列开始是五月份，则令monthBar[2]="5月"，算法实现见下面method
-            monthBarEnd:[],
+            
           }
         },
         props: {
           //年贡献结束时间
           contribution_activities_endtime : {
-            default: '2022-12-31',//2023-12-31
+            default: '2024-08-31',//2023-12-31
             type: String
           }
         },
@@ -342,12 +342,13 @@
         this.current.month = d.getMonth();
         this.current.date = d.getDate();
   
-        let year_day_number=365;//平年天数 默认
+      
+        // let year_day_number=365;//平年天数 默认
     
-        //闰年天数   4整除且非100整除，或400整除
-        if((this.current.year % 4 == 0 && this.current.year % 100 != 0) || this.current.year % 400 == 0){
-          year_day_number=366;
-        }
+        // //闰年天数   4整除且非100整除，或400整除
+        // if((this.current.year % 4 == 0 && this.current.year % 100 != 0) || this.current.year % 400 == 0){
+        //   year_day_number=366;
+        // }
         
         let start_day_number=0;//第一个格子开始天
     
@@ -374,121 +375,152 @@
         //1 第一个格子的时间：减去上一年今天。上一年第一天至上一年最后一天（按年统计贡献contribution_activities_endtime）  
         //start_day_number=0  2022-12-31至2023-12-31       20230830---20240830 367
         //start_day_number=1  2023-12-31至2023-12-31       20230831---20240830 366 
-        for (let i = start_day_number; i <=year_day_number; i++) {
-            d.setFullYear(this.current.year);  //每次循环要重置年月日为今天否则会以上次循环结尾的年月日计算而计算错误
-            d.setMonth(this.current.month);
-            d.setDate(this.current.date);
-  
-            d.setDate(today-year_day_number+i);   //设置到本次循环的date   
-            //(today-365+i)
-            // 开始循环：today： 26 ,i： 0 ,today - 365 + i: -339   1693144206789       对应开始格子
-            // 结束循环：today： 26 ,i： 365 ,today - 365 + i: 26   1724680206789       对应结束格子
-            let level = Math.floor(Math.random() * 5); //这里是随机设置每天的频率等级，后续开发要替换为自己计算的真实等级（不同等级对应不同颜色方格）
-  
-            // console.log( i,',年月日:',d.getFullYear(), '-',d.getMonth(),'-', d.getDate());
-            if (     //判断是否为今天，是则做些标记，后续渲染时可以突出强调今天的格子
-                d.getFullYear()== this.current.year && d.getMonth() == this.current.month &&
-                d.getDate() == this.current.date
-            ) {
-                info = {                      //每个格子（天）的info对象
-                    year: d.getFullYear(),      //年月日
-                    month: d.getMonth() + 1,
-                    date: d.getDate(),
-                    number: i,    //今日的数据量
-                    level: level,  //今日数据量对应的等级
-                    isToday: true, //是否是今天
-                    id:i,
-                };
-                this.infos.push(info);
-            } else {
-                info = {
-                    year: d.getFullYear(),
-                    month: d.getMonth() + 1,
-                    date: d.getDate(),
-                    number: i,
-                    level: level,
-                    isToday: false,
-                    id:i,
-                };
-                this.infos.push(info);
-            }
-  
-  
-            if(i==start_day_number){
-              one_date_week =new Date(d.getFullYear(),d.getMonth(),d.getDate()).getDay();
-              one_date_month=d.getMonth();
-              // console.log('mond:',d.getMonth()+1,',date,',d.getDate(),',one_date_week:',one_date_week,',one_date_month',one_date_month);
-            }
-            
-            // console.log('weekOfMonth = parseInt((i + 1) / 7):'+parseInt((i + 1) / 7));
-            //判断每月第一天在12列种的哪一列
-            if (d.getDate() == 1) { //date为1的肯定是某月第一天
-                month = d.getMonth() + 1  //获取这一天对应的月份（0-11，所以还要+1）
-                //这个月的第一天的index（84天的第几天）除以7获得所在列的index（12列的第几列），
-                //作为下面monthBar的index，并把原来空的内容用替换为xx月
-                // weekOfMonth = parseInt((i + 1) / 7)
-               
-  
-                if(start_day_number==0){
-                  if(one_date_week==new Date(d.getFullYear(),d.getMonth(),d.getDate()).getDay()){
-                    weekOfMonth =  parseInt(i/ 7);
-                  }else{
-                    weekOfMonth = parseInt((i + one_date_week) / 7);//加上占位格
-                  }
-                 
-                }else{
-                  
-                  if(one_date_week==0){//当第一天是星期天
-                    weekOfMonth =  parseInt(i/ 7);
-  
-                    //某月的第一天出现在某月当列的就前一列，需减去占位格促使某月当列前移。
-                    const with_data= new Date(d.getFullYear(),d.getMonth(),d.getDate()).getDay();
-                    if(with_data==6){
-                      weekOfMonth = parseInt((i - 7) / 7);//减去占位格  7天一轮回
-                    }
-                  }else{//当第一天非星期天
-                    weekOfMonth = parseInt((i + one_date_week) / 7);//加上占位格
-                    const with_data= new Date(d.getFullYear(),d.getMonth(),d.getDate()).getDay();
-                    if(with_data==6){
-                        weekOfMonth = parseInt(i / 7);//减去占位格  7天一轮回
-                    }
-                  }
-  
-                 
-                 // 
-                  // // console.log('i:',i,',one_date_week !=:','mond:', d.getMonth() ,',date,',d.getDate(),',with_data:',with_data);
-                  // weekOfMonth = parseInt((i - with_data) / 7);//减去占位格
-              
-                }     
-                this.monthBar[weekOfMonth] = month + "月"
-             
-            }
-         
-        }
-    
-        // console.log('this.infos:',JSON.stringify(this.infos));
-        if(this.infos){
-  
-          // console.log('this.infos:',JSON.stringify(this.infos))
-  
-          let [firstElement] =this.infos; //使用解构赋值取得第一个元素；
+
         
+
+
+       
+
+        // 获取当前日期
+        let dataObj = this.contribution_activities_endtime ? new Date(this.contribution_activities_endtime) : new Date() ;
+        // 获取当前年份  返回值 Number类型	表示年份的 4 位数字。
+        let dataObj_year=dataObj.getFullYear();
+ 
+        let year_day_number=365;//平年天数 默认
+    
+        //闰年天数   4整除且非100整除，或400整除
+        if(( dataObj_year % 4 == 0 && dataObj_year % 100 != 0) || dataObj_year % 400 == 0){
+          year_day_number=366;
+        }
+
+        // 倒推 闰年天数366或平年天数 365天
+        for (let i = year_day_number; i >= 0; i--) {
+          // 创建一个新的日期对象
+          const pastDate = new Date(dataObj);
+          
+          // 将日期倒推i天
+          pastDate.setDate(pastDate.getDate() - i);
+          
+          // 格式化日期为YYYY-MM-DD
+          const year = pastDate.getFullYear();
+          const month = (pastDate.getMonth() + 1).toString().padStart(2, '0');
+          const day = pastDate.getDate().toString().padStart(2, '0');
+          let level = Math.floor(Math.random() * 5); //这里是随机设置每天的频率等级，后续开发要替换为自己计算的真实等级（不同等级对应不同颜色方格）
+
+          info = {                      //每个格子（天）的info对象
+                year: year,      //年月日
+                month: month,
+                date: day,
+                number: i,    //今日的数据量
+                level: level,  //今日数据量对应的等级
+                date_number: i,    //天数
+          };
+
+          this.infos.push(info);
+
+          // 打印结果
+          // console.log(`${year}-${month}-${day}`);
+        }
+
+      
+        if(this.infos){
+
+          // console.log('this.infos:',JSON.stringify(this.infos))
+
+          let [firstElement] =this.infos; //使用解构赋值取得第一个元素；
+
           // console.log('firstElement:',JSON.stringify(firstElement));
           //firstElement: [{"year":2023,"month":8,"date":27,"number":10,"level":2,"isToday":false}]
           //获取天数的星期数，以进行后续计算（周日返回0，周一返回1，周六返回6）
           let first_element_week = new Date(firstElement.year+'-'+firstElement.month+'-'+firstElement.date).getDay();
           // console.log('first_element_week:'+Object(first_element_week));
           if(first_element_week!=0){//处理第一个元素的星期数非星期日，需补位。如第一个元素的星期数是6，那么需补6个占位格
-            this.blank_grid=first_element_week;
-            // console.log('week:'+first_element_week);  
-          }      
+            // this.blank_grid=first_element_week;
            
-        }
+            
+            // 创建一个新数组，包含n个空元素 n=第一天星期数
+            let newArray = new Array(first_element_week);
+            // console.log(' this.infos', this.infos);
+            // 将原始数组和新添加的空元素合并
+            this.infos = newArray.concat(this.infos);
+           
+            //切割数组,每7天为一组
+            let group =[];
+            for (let i = 0; i < this.infos.length; i += 7) {
+               group.push( this.infos.slice(i, i + 7));
+              
+            }
+
+            //获取每月第一天出现的列数
+            group.map((element, index) => {
+                // console.log(index, element); // 打印下标和元素
+                element.map((item_element, item_index) => { 
+                  // console.log(item_index, item_element); // 打印下标和元素
+                  if(item_element.date && item_element.date==1){
+                    // console.log('列:',index);
+                    // console.log('月:',item_element.month.replace(/^0+/, ''));//用正则把月份的0替换空
+                    this.monthBar[index] = item_element.month.replace(/^0+/, '') + "月";
+                  }
+                  
+                });
+               
+            });
+       
+
+      
+          } 
+          
+          
+          
         
-    },
+        }
+
+      
+
+        this.infos.map((element, index) => {
+         
+          console.log(index);
+          // console.log(index,'element.length:',element)
+         
+        });
+
+        
+  },
     
     
         methods: {
+
+
+
+  
+          printDataDimensions:function (arr) {
+            let maxDepth = 0;
+          
+            function calculateDepth(arr, currentDepth) {
+              currentDepth++;
+              maxDepth = Math.max(maxDepth, currentDepth);
+              arr.forEach(item => {
+                if (Array.isArray(item)) {
+                  calculateDepth(item, currentDepth);
+                }
+              });
+            }
+          
+            calculateDepth(arr, 0);
+            console.log(`数组的维数是: ${maxDepth}`);
+          },
+
+          
+
+           changeArrNum:function(arr,num){
+              let newCardList = [];
+              for (var i = 0; i < arr.length; i += num) {
+                  newCardList.push(arr.slice(i, i + num));
+              }
+              return newCardList;
+          },
+
+
     
           handleClick: function (item) {
             // console.log(JSON.stringify(item))

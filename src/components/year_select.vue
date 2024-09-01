@@ -1,64 +1,74 @@
 <template>
 
-    <div id="select_module">
-      <div class="divSelect">
-          <div class="divSelectinput">
-              <!-- 选中后的内容 -->
-              <div class="selectinfos"   @click="clickSelect()" :title="annexTitle"> {{ data.annexTitle }} </div>
-              <!-- 三角形图标 -->
-              <div class="imgthree"></div>
-          </div>
-          <div class="Selectlist" :style="{display:data.is_show_select?'block':'none'}">
-          <!-- 下拉框列表 -->
-              <ul>
-                  <li v-for="(item,index) in data.Files" :key="item.value" @click="changeSelect(item.FileName)">
-                      {{ item.FileName }}
-                  </li>
-              </ul>
-          </div>
-      </div>
-  </div>
+
+    <div class="select-container">
+        <div class="select-comtent">
+            <!-- 选中后的内容 -->
+            <div class="selectinfos"   @click="clickSelect()" > {{ data.annex_title }} </div>
+            <!-- 三角形图标 -->
+            <div style="display: flex; margin: auto; padding-top: 15px;padding-right: 3px;"><svg-icon  icon-class="arrow-down"/></div>
+        </div>
+        <div class="select-list" :style="{display:data.is_show_select?'block':'none'}">
+        <!-- 下拉框列表 -->
+            <ul>
+                <li :class="{'active':data.active_contribution_year==item.contribution_year?'true':''}" v-for="(item,index) in data.Files" :key="item.value" @click="changeSelect(item.contribution_year)">
+                    {{ item.contribution_year }}
+                </li>
+            </ul>
+        </div>
+    </div>
+
   
     
   </template>
   
   <script setup>
-      import { reactive,} from 'vue'
-   
-              const	data =reactive({
-                      annexTitle: '请选择',
-                      is_show_select:false,
-                      Files: [
-                          {
-                              FileName: '第一个：法律',
-                              value: 1,
-                          },
-                          {
-                              FileName: '第二个：经济',
-                              value: 2,
-                          },
-                          {
-                              FileName: '第三个：政治',
-                              value: 3,
-                          },
-                          {
-                              FileName: '第四个：安全',
-                              value: 4,
-                          },
-                      ],
-                  })
-                  
-                  
-                  
-                  function clickSelect(){
-                      data.is_show_select=!data.is_show_select;
-                      console.log(111);
-                  }
-                  
-                  //点击选择下拉框中的某一选项
-                  function changeSelect (FileName){
-                          data.annexTitle = FileName;
-                      }
+import { reactive,} from 'vue'
+
+const	data =reactive({
+    annex_title: '请选择',
+    is_show_select:false,
+    active_contribution_year:0,
+    Files: [
+        {
+            contribution_year: 2024,
+            contribution_year_id: 1,
+        },
+        {
+            contribution_year: 2023,
+            contribution_year_id: 2,
+        },
+        {
+            contribution_year: 2022,
+            contribution_year_id: 3,
+        },
+        {
+            contribution_year:2021,
+            contribution_year_id: 4,
+        },
+    ],
+})
+
+//点击外部下拉菜单关闭
+window.addEventListener('click', closeselectDown());
+
+function closeselectDown(){
+    if(data.is_show_select){
+        data.is_show_select=false;
+    }
+}
+
+//显示/隐藏
+function clickSelect(){
+    data.is_show_select=!data.is_show_select;
+}
+
+//点击选择下拉框中的某一选项
+function changeSelect (contribution_year){
+    data.active_contribution_year = contribution_year;
+    data.annex_title=contribution_year;
+    closeselectDown();
+}
                   
   
           
@@ -70,31 +80,11 @@
   
   <style>
           /* 三角形图标 */
-              .imgthree {
-                  margin-top: 17px;
-                  width: 6px;
-                  height: 6px;
-                  background: url(../img/shape.png) 0px 0px;
-                  background-repeat: no-repeat;
-                  float: left;
+              
   
-              }
-  
-              .imgthree2 {
-                  animation: imgthreeanimation2 0.5s forwards;
-              }
-  
-              @keyframes imgthreeanimation2 {
-                  0% {
-                      transform: rotate(0deg);
-                  }
-  
-                  100% {
-                      transform: rotate(180deg);
-                  }
-              }
+              
               /*  重新写一个下拉框组件  */
-              .divSelect{
+              .select-container{
                   /*width:100%;*/
                   height:100%;
               
@@ -107,14 +97,14 @@
               
                   
               }
-              .divSelectinput {
+              .select-comtent {
                   margin-top:2px;
                   width:130px;
                   height:40px;
                   border:1px solid #131D88;
                   cursor:pointer;
               }
-              .divSelectinput .selectinfos{
+              .select-comtent .selectinfos{
                   width:120px;
                   height:40px;
                   text-align:center;
@@ -128,7 +118,7 @@
               }
               
               /* 出现的下拉列表 */
-              .Selectlist{
+              .select-list{
                   display: none;
                   position:absolute;
                   margin-top: 10px;
@@ -138,12 +128,12 @@
                   border:1px solid #E4E7ED;
                   position: absolute;
               }
-              .Selectlist>ul{
+              .select-list>ul{
                   margin: 0;
                   padding: 0;
               }
-              .divSelect li{
-                  width:238px;
+              .select-container li{
+                  width:168px;
                   padding:0 10px;
                   height:34px;
                   line-height:34px;
@@ -155,10 +145,16 @@
                   list-style:none;
                   cursor:pointer;
               }
-              .divSelect li:hover{
+              .select-container li:hover{
                   color: #409EFF;
                   font-weight: 700;
                   background-color:#F5F7FA;
+              }
+
+              .active{
+                color: #409EFF;
+                font-weight: 700;
+                background-color:#F5F7FA;
               }
   </style>
   

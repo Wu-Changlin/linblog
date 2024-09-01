@@ -22,22 +22,7 @@
       </div>
    
 
-      <div id="div" style="visibility:hidden; position: absolute;top:-9999px;left:-9999px;">
-        <div class="tag-container">
-    
-          <div class="content-container" >
-            <div   class="tag-content" style="flex-wrap: wrap" ref="tagHeightRet"> 
-                <div class="tag-item" >All</div>
-                <div class="tag-item" v-for="(item, index) in data.list" :key="index" > {{ item.tag_name }}</div>
-              </div>
-          </div>
-          
-         
-      
-        </div>
-         
-       
-    </div>
+     
      
  
 </template>
