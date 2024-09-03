@@ -20,6 +20,24 @@
         </div>
 
       </div>
+
+
+      <div id="div" style="visibility:hidden; position: absolute;top:-9999px;left:-9999px;">
+        <div class="tag-container">
+
+          <div class="content-container" >
+            <div   class="tag-content" style="flex-wrap: wrap" ref="tagHeightRet"> 
+                <div class="tag-item" >All</div>
+                <div class="tag-item" v-for="(item, index) in data.list" :key="index" > {{ item.tag_name }}</div>
+              </div>
+          </div>
+
+
+
+        </div>
+
+
+    </div>
    
 
      
@@ -62,38 +80,38 @@
           { tag_id: 18, tag_name: "jq" },
           { tag_id: 19, tag_name: "React" },
           { tag_id: 20, tag_name: "Swift" },
-          // { tag_id: 21, tag_name: "Kotlin" },
-          // { tag_id: 22, tag_name: "Fortran" },
-          // { tag_id: 23, tag_name: "MATLAB" },
-          // { tag_id: 24, tag_name: "r" },
-          // { tag_id: 25, tag_name: "d" },
-          // { tag_id: 26, tag_name: "sas" },
-          // { tag_id: 27, tag_name: "c" },
-          // { tag_id: 28, tag_name: "C++" },
-          // { tag_id: 29, tag_name: "Java" },
-          // { tag_id: 30, tag_name: "Python" },
-          // { tag_id: 31, tag_name: "PHP" },
-          // { tag_id: 32, tag_name: "Go" },
-          // { tag_id: 33, tag_name: "Ruby" },
-          // { tag_id: 34, tag_name: "Node.js" },
-          // { tag_id: 35, tag_name: "C#" },
-          // { tag_id: 36, tag_name: "html" },
-          // { tag_id: 37, tag_name: "html5" },
-          // { tag_id: 38, tag_name: "css" },
-          // { tag_id: 39, tag_name: "css3" },
-          // { tag_id: 40, tag_name: "js" },
-          // { tag_id: 41, tag_name: "ts" },
-          // { tag_id: 42, tag_name: "vue2" },
-          // { tag_id: 43, tag_name: "vue3" },
-          // { tag_id: 44, tag_name: "jq" },
-          // { tag_id: 45, tag_name: "React" },
-          // { tag_id: 46, tag_name: "Swift" },
-          // { tag_id: 47, tag_name: "Kotlin" },
-          // { tag_id: 48, tag_name: "Fortran" },
-          // { tag_id: 49, tag_name: "MATLAB" },
-          // { tag_id: 50, tag_name: "r" },
-          // { tag_id: 51, tag_name: "d" },
-          // { tag_id: 52, tag_name: "sas" },
+          { tag_id: 21, tag_name: "Kotlin" },
+          { tag_id: 22, tag_name: "Fortran" },
+          { tag_id: 23, tag_name: "MATLAB" },
+          { tag_id: 24, tag_name: "r" },
+          { tag_id: 25, tag_name: "d" },
+          { tag_id: 26, tag_name: "sas" },
+          { tag_id: 27, tag_name: "c" },
+          { tag_id: 28, tag_name: "C++" },
+          { tag_id: 29, tag_name: "Java" },
+          { tag_id: 30, tag_name: "Python" },
+          { tag_id: 31, tag_name: "PHP" },
+          { tag_id: 32, tag_name: "Go" },
+          { tag_id: 33, tag_name: "Ruby" },
+          { tag_id: 34, tag_name: "Node.js" },
+          { tag_id: 35, tag_name: "C#" },
+          { tag_id: 36, tag_name: "html" },
+          { tag_id: 37, tag_name: "html5" },
+          { tag_id: 38, tag_name: "css" },
+          { tag_id: 39, tag_name: "css3" },
+          { tag_id: 40, tag_name: "js" },
+          { tag_id: 41, tag_name: "ts" },
+          { tag_id: 42, tag_name: "vue2" },
+          { tag_id: 43, tag_name: "vue3" },
+          { tag_id: 44, tag_name: "jq" },
+          { tag_id: 45, tag_name: "React" },
+          { tag_id: 46, tag_name: "Swift" },
+          { tag_id: 47, tag_name: "Kotlin" },
+          { tag_id: 48, tag_name: "Fortran" },
+          { tag_id: 49, tag_name: "MATLAB" },
+          { tag_id: 50, tag_name: "r" },
+          { tag_id: 51, tag_name: "d" },
+          { tag_id: 52, tag_name: "sas" },
         ],
         showAll: false,
       
@@ -129,7 +147,7 @@
     
     
     function onWindowResize() {
-      console.log('tagRef:',tagRef.value.clientHeight);
+   
       // console.log('tagHeightRet:',tagHeightRet.value.clientHeight);
 
       data.tagHeight=tagHeightRet.value.clientHeight;//元素高度

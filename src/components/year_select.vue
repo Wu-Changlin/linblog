@@ -23,7 +23,11 @@
   </template>
   
   <script setup>
-import { reactive,} from 'vue'
+import { reactive,defineEmits} from 'vue'
+
+const emit = defineEmits(['child-click-contribution-year'])
+
+
 
 const	data =reactive({
     annex_title: '请选择',
@@ -45,6 +49,7 @@ const	data =reactive({
         {
             contribution_year:2021,
             contribution_year_id: 4,
+
         },
     ],
 })
@@ -67,6 +72,8 @@ function clickSelect(){
 function changeSelect (contribution_year){
     data.active_contribution_year = contribution_year;
     data.annex_title=contribution_year;
+    emit('child-click-contribution-year',contribution_year);//子传父 
+   
     closeselectDown();
 }
                   

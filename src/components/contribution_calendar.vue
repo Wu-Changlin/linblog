@@ -4,7 +4,7 @@
     <h3 style="flex: 1;">12次贡献在今年</h3>
 
     <div>
-      <YearSelect></YearSelect>
+      <YearSelect @child-click-contribution-year="clickContributionYear"></YearSelect>
     </div>
 
   </div>
@@ -29,29 +29,27 @@
             <div style="margin-right: auto;">
               <!-- 月份 开始-->
               <ul class="months">
-                <li class="li-month" v-for="(item,index) in monthBar" :key="index"><span>{{item}}</span></li>
+                <li class="li-month" v-for="(item,index) in data.monthBar"><span>{{item}}</span></li>
               </ul>
               <!-- 月份 结束-->
               <!--  开始-->
               <ul class="graph">
-                <!-- 占位格 开始-->
-                <div class="item"   v-for="(blank_grid_item, blank_grid_index) in blank_grid" :key="blank_grid_index">
-                  <li></li>
-                </div>
-                <!-- 占位格 结束-->
-                <div class="item tooltip"  v-for="(item, index) in infos" :key="index">
+               
+                <!-- <div class="item tooltip"  v-for="(item, index) in contribution_year_data.infos" :key="index"> -->
+                  <div class="item tooltip"  v-for="(item, index) in data.infos" :key="index">
       
-                
-                    <li
-                      :data-level="item.level"  :data-selected="item.id===active_id?true:false"       
-                      :class="{'li-day':true,'no-hover-level':hoverLevel!=-1&&item.level!=hoverLevel ,'active':item.id===active_id,'no-active':is_selected==true&&item.id!=active_id}"  
+                  <div v-if="item != undefined">
+                    <li  
+                      :data-level="item.level"  :data-years="item.year" :data-date="item.date"  :data-date-number="item.date_number"  :data-selected="item.id===data.active_id?true:false"       
+                      :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.level!=data.hoverLevel ,'active':item.id===data.active_id,'no-active':data.is_selected==true&&item.id!=data.active_id}"  
                       @click="handleClick(item)">
                     
                     </li>
                   
-                    <span class="tooltiptext">{{item.month+'-'}}{{item.date+'：'}}{{item.number+'次贡献'}}</span>
-                    
+                    <span class="tooltiptext">{{ item.year }} - {{ item.month }} -{{item.date}} : {{item.number}}次贡献</span>
                   </div>
+                
+                </div>
               </ul>
     
             </div>
@@ -71,7 +69,7 @@
         <div class="level-desc">少</div>
       
           
-        <div  v-if="is_selected == false"  class="level" @mouseover="hoverLevel = index" @mouseout="hoverLevel = -1" v-for="(item, index)  in 5"
+        <div  v-if="data.is_selected == false"  class="level" @mouseover="data.hoverLevel = index" @mouseout="data.hoverLevel = -1" v-for="(item, index)  in 5"
           :data-level="index">
           </div>
 
@@ -95,253 +93,342 @@
     border-bottom: var(--borderWidth-thin, 1px) solid var(--borderColor-default, var(--color-border-default)) !important;
 } -->
 
-  <script setup>
+<script setup>
+  import {onMounted,onUnmounted,ref,reactive} from "vue";
   import YearSelect  from   '@/components/year_select.vue'
-  </script>
-   
-  <script>
-    export default {
-      data () {
-        return {
-          infos: [],  //存放每一天的数据（year，month，date，状态数量，isToday标记）
-          current: {  //存放今天的年月日
-            year: "",  
-            month: "",
-            date: "",
-          },
-          blank_grid:0,//空白占位格
-          hoverLevel:-1,//等级高亮
-          is_selected:false,//是否开启选择模式
-          active_id:-1,//已选中id
-          monthBar: ["", "", "", "", "", "", "", "", "", "", "", ""],//12列对应的月份，比如第三列开始是五月份，则令monthBar[2]="5月"，算法实现见下面method
-         
+
+  const data=reactive( 
+    {
+            
+            infos: [],  //存放每一天的数据（year，month，date，状态数量，isToday标记） 
+            hoverLevel:-1,//等级高亮
+            is_selected:false,//是否开启选择模式
+            active_id:-1,//已选中id
+            monthBar: [],//12列对应的月份，比如第三列开始是五月份，则令monthBar[2]="5月"，算法实现见下面method
+            calculate_month_data:[],
           
         }
-      },
-      props: {
-        //年贡献结束时间
-        contribution_activities_endtime : {
-          // default: '2024-12-31',//2023-12-31
-          type: String
-        }
-      },
-  
-  
-      created() {
-      let d = this.contribution_activities_endtime ? new Date(this.contribution_activities_endtime) : new Date() ;
+  );
 
-  
-
-      let day = d.getDay();           //获取今天所在星期，以进行后续计算
-      let today = d.getDate();        //获取今天的日数
-  
-      this.current.year = d.getFullYear();   //初始化今日的年月日
-      this.current.month = d.getMonth();
-      this.current.date = d.getDate();
-
-      let year_day_number=365;//平年天数 默认
-  
-      //闰年天数   4整除且非100整除，或400整除
-      if((this.current.year % 4 == 0 && this.current.year % 100 != 0) || this.current.year % 400 == 0){
-        year_day_number=366;
-      }
-      
-      let start_day_number=0;//第一个格子开始天
-  
-      if(this.contribution_activities_endtime){
-        start_day_number=1;
-      }
-  
-  
-      let info = {};         //用来存放某一天的数据对象（年月日、isToday、level）      
-      let month = "";        //后续计算某月第一天在哪一列用，表示第几月
-      let weekOfMonth = ""   //后续计算某月第一天在哪一列用，表示第几列
-      let info_data= {};
-      let one_date_week=0;    //开始天所在星期
-      let one_date_month=0;   //开始天所在月
-
-      /**
-      *前提：Date对象通过setDate()设置到某一天的年月日，例如setDate(1)就是设置日期月本月1号
-      *而setDate(0)则是上个月最后一天，setDate(-1)则是设置为上个月倒数第二天
-      *以此类推，假如今天是星期一，如果周日算本周第一天，则今天是本周第2天，也就是本周在今日前面还有1天，本周在第53列，则今天前的日期有52*7+1=365天，所以第1列第1格为365天前。
-      *假如今天是20240826日，那么第1列第1格为本日的前365天，则那天的日期设置为(today - 365 + i)=setDate(26-356-0=-339)，最后就能获得那一天的年月日对象，再获得年月日数值。
-      *知道前提后下面的代码可以自己体会了
-      */
-      //0 第一个格子的时间：上一年今天。倒查   上一年今天至今天    
-      //1 第一个格子的时间：减去上一年今天。上一年第一天至上一年最后一天（按年统计贡献contribution_activities_endtime）  
-      //start_day_number=0  2022-12-31至2023-12-31       20230830---20240830 367
-      //start_day_number=1  2023-12-31至2023-12-31       20230831---20240830 366 
-      for (let i = start_day_number; i <=year_day_number; i++) {
-          d.setFullYear(this.current.year);  //每次循环要重置年月日为今天否则会以上次循环结尾的年月日计算而计算错误
-          d.setMonth(this.current.month);
-          d.setDate(this.current.date);
-
-         
-
-          d.setDate(today-year_day_number+i);   //设置到本次循环的date   
-          //(today-365+i)
-          // 开始循环：today： 26 ,i： 0 ,today - 365 + i: -339   1693144206789       对应开始格子
-          // 结束循环：today： 26 ,i： 365 ,today - 365 + i: 26   1724680206789       对应结束格子
-          let level = Math.floor(Math.random() * 5); //这里是随机设置每天的频率等级，后续开发要替换为自己计算的真实等级（不同等级对应不同颜色方格）
-
-          // console.log( i,',年月日:',d.getFullYear(), '-',d.getMonth(),'-', d.getDate());
-          if (     //判断是否为今天，是则做些标记，后续渲染时可以突出强调今天的格子
-              d.getFullYear()== this.current.year && d.getMonth() == this.current.month &&
-              d.getDate() == this.current.date
-          ) {
-              info = {                      //每个格子（天）的info对象
-                  year: d.getFullYear(),      //年月日
-                  month: d.getMonth() + 1,
-                  date: d.getDate(),
-                  number: i,    //今日的数据量
-                  level: level,  //今日数据量对应的等级
-                  isToday: true, //是否是今天
-                  id:i,
-              };
-              this.infos.push(info);
-          } else {
-              info = {
-                  year: d.getFullYear(),
-                  month: d.getMonth() + 1,
-                  date: d.getDate(),
-                  number: i,
-                  level: level,
-                  isToday: false,
-                  id:i,
-              };
-              this.infos.push(info);
-          }
+//计算月份的列
+  const calculate_month_data=reactive([]);
 
 
-          if(i==start_day_number){
-            one_date_week =new Date(d.getFullYear(),d.getMonth(),d.getDate()).getDay();
-            one_date_month=d.getMonth();
-            // console.log('mond:',d.getMonth()+1,',date,',d.getDate(),',one_date_week:',one_date_week,',one_date_month',one_date_month);
-          }
-          
-          // console.log('weekOfMonth = parseInt((i + 1) / 7):'+parseInt((i + 1) / 7));
-          //判断每月第一天在12列种的哪一列
-          if (d.getDate() == 1) { //date为1的肯定是某月第一天
-              month = d.getMonth() + 1  //获取这一天对应的月份（0-11，所以还要+1）
-              //这个月的第一天的index（84天的第几天）除以7获得所在列的index（12列的第几列），
-              //作为下面monthBar的index，并把原来空的内容用替换为xx月
-              // weekOfMonth = parseInt((i + 1) / 7)
+
+  //初始化执行输出近年信息
+  lastYear();
+
+  function lastYear(){
+    // 获取当前日期
+    const todays = new Date();
             
-
-              if(start_day_number==0){
-                if(one_date_week==new Date(d.getFullYear(),d.getMonth(),d.getDate()).getDay()){
-                  weekOfMonth =  parseInt(i/ 7);
-                }else{
-                  weekOfMonth =  parseInt((i+1)/ 7);
-                  // weekOfMonth = parseInt((i + one_date_week) / 7);//加上占位格
-                }
-               
-              }else{
-                
-                if(one_date_week==0){//当第一天是星期天
-                  weekOfMonth =  parseInt(i/ 7);
-
-                  //某月的第一天出现在某月当列的就前一列，需减去占位格促使某月当列前移。
-                  const with_data= new Date(d.getFullYear(),d.getMonth(),d.getDate()).getDay();
-                  if(with_data==6){
-                    weekOfMonth = parseInt((i - 7) / 7);//减去占位格  7天一轮回
-                  }
-                }else{//当第一天非星期天
-                  weekOfMonth = parseInt((i + one_date_week) / 7);//加上占位格
-                  const with_data= new Date(d.getFullYear(),d.getMonth(),d.getDate()).getDay();
-                  if(with_data==6){
-                      weekOfMonth = parseInt(i / 7);//减去占位格  7天一轮回
-                  }
-                }
-
-               
-               // 
-                // // console.log('i:',i,',one_date_week !=:','mond:', d.getMonth() ,',date,',d.getDate(),',with_data:',with_data);
-                // weekOfMonth = parseInt((i - with_data) / 7);//减去占位格
-            
-              }     
-              this.monthBar[weekOfMonth] = month + "月"
-           
-          }
-       
-      }
-  
-      // console.log('this.infos:',JSON.stringify(this.infos));
-      if(this.infos){
-
-        // console.log('this.infos:',JSON.stringify(this.infos))
-
-        let [firstElement] =this.infos; //使用解构赋值取得第一个元素；
+    // 获取当前年份
+    const currentYear = todays.getFullYear();
       
-        // console.log('firstElement:',JSON.stringify(firstElement));
-        //firstElement: [{"year":2023,"month":8,"date":27,"number":10,"level":2,"isToday":false}]
-        //获取天数的星期数，以进行后续计算（周日返回0，周一返回1，周六返回6）
-        let first_element_week = new Date(firstElement.year+'-'+firstElement.month+'-'+firstElement.date).getDay();
-        // console.log('first_element_week:'+Object(first_element_week));
-        if(first_element_week!=0){//处理第一个元素的星期数非星期日，需补位。如第一个元素的星期数是6，那么需补6个占位格
-          this.blank_grid=first_element_week;
-          // console.log('week:'+first_element_week);  
-        }      
-         
-      }
+    // 设置为去年的今天
+    const lastYearToday = new Date(currentYear - 1, todays.getMonth(), todays.getDate());
       
-  },
-  
-  
-      methods: {
-  
-        handleClick: function (item) {
-          // console.log(JSON.stringify(item))
-          
-          
-          if(this.active_id==item.id){
-            this.active_id=-1;
-            this.is_selected=false;
-          }else{
-            this.is_selected=true;
-            this.active_id=item.id;
-          }
-          console.log('item:', JSON.stringify(item));
-          // {"year":2023,"month":11,"date":18,"number":10,"level":0,"isToday":false}
-          // alert(item.month + "-" + item.date+'，博文：'+item.number)
-        },
-  
-     
-  
-      }
-    }
-  </script>
-
-
-<style>
-
-
-.year-select {
-    color: #25292e;
-    fill: #59636e;
-    background-color: #f6f8fa;
-    border-color: #d1d9e0;
-    box-shadow: 0px 1px 0px 0px #1f23280a;
-     /*清除select聚焦时候的边框颜色*/
-  outline: none;
-  option:hover{ 
-            background-color: rgba(0, 0, 0, 0.03);
-            border-radius: 999px;
-            color: var(--text);
-          }
-  option {
-    color: #1f2328;
-    border: none;
-   
+    // 初始日期（去年的今天最近的星期天）
+    let firstMondayDate = getNextSunday(lastYearToday.toISOString().split('T')[0]);
     
+    // console.log('firstMondayDate:',firstMondayDate.toISOString().split('T')[0])
+    
+
+    // 计算天数差值加1(今天) 向下取整
+    var daysDifference =  Math.floor((todays - firstMondayDate) / (1000 * 60 * 60 * 24)) +1;
+      
+    // console.log('todays:',todays.toISOString().split('T')[0],',daysDifference:',daysDifference,',firstMondayDate:',firstMondayDate.toISOString().split('T')[0]); // 输出从初始日期到今天的天数
+
+    // todays: 2024-09-02 ,daysDifference: 366 ,firstMondayDate: 2023-09-03
+
+          /**
+          *前提：Date对象通过setDate()设置到某一天的年月日，例如setDate(1)就是设置日期月本月1号
+          *今天是20240902日，那么第1列第1格为本日的前365天，则那天的日期设置为(pastDate + i)=setDate(2+0=2)，最后就能获得那一天的年月日对象，再获得年月日数值。 
+          *daysDifference=366 第一个格子的时间：去年今天临近的星期天。   去年今天临近的星期天至今天    
+          *i序号： 0 ,年月日： 2023 09 03 ,循环次数： 1 ===> i序号： 365 ,年月日： 2024 09 02 ,循环次数： 366
+          */
+
+          getDaylist(daysDifference,firstMondayDate)
+               
+
+         
+           
+           //月份计算
+          //  if(contribution_year_data.value.infos){
+            if(data.infos){
+             // console.log('contribution_year_data.infos:',JSON.stringify(contribution_year_data.value.infos))
+            //  let [firstElement] = contribution_year_data.value.infos; //使用解构赋值取得第一个元素；
+             let [firstElement] = data.infos; //使用解构赋值取得第一个元素；
+
+            
+             // console.log('firstElement:',JSON.stringify(firstElement));
+             //firstElement: [{"year":2023,"month":8,"date":27,"number":10,"level":2,"isToday":false}]
+             //获取天数的星期数，以进行后续计算（周日返回0，周一返回1，周六返回6）
+             let last_year_first_day_week = new Date(firstElement.year+'-'+firstElement.month+'-'+firstElement.date).getDay();
+             // console.log('first_element_week:'+Object(first_element_week));
+               
+                getMonthBar(last_year_first_day_week);
+    
+           }
+
   }
 
 
 
 
-}
+ /* 
+  * first_day_week     第一天的星期数，以进行后续计算（周日返回0，周一返回1，周六返回6）
+  * days_number_data   天数数据 来源data.calculate_month_data
+  * 
+ */
+  //获取月份栏
+  
+  function getMonthBar(first_day_week){
+
+    //初始化（或者赋空值data.monthBar.length=0 或data.monthBar=[] ），清除原有数据（防止变成追加数据）
+    data.monthBar=["", "", "", "", "", "", "", "", "", "", "", ""];
+   
+    let days_number_data=data.calculate_month_data;
+    let month = "";        //后续计算某月第一天在哪一列用，表示第几月
+    if(first_day_week!=0){//处理第一个元素的星期数非星期日，需补位。如第一个元素的星期数是6，那么需补6个占位格
+      // 创建一个新数组，包含n个空元素 n=第一天星期数
+      let newArray = new Array(first_day_week);
+      // console.log(' contribution_year_data.value.infos', contribution_year_data.value.infos);
+      // 将渲染数据和新添加的空元素合并
+      data.infos=newArray.concat(data.infos);
+      // 将天数数组和新添加的空元素合并
+      days_number_data=newArray.concat(days_number_data);
+
+    }
+
+    // console.log('newArray.concat(days_number_data):',JSON.stringify(days_number_data))
+    //切割数组,每7天为一组
+    let days_number_data_spArr= spArr(days_number_data,7);
+
+    //获取每月第一天出现的列数
+    days_number_data_spArr.map((element, index) => {
+      // console.log('53列数据:',index, element); // 打印下标和元素
+      element.map((item_element, item_index) => { 
+        // console.log('每天数据:',item_index, item_element); // 打印下标和元素
+        if(item_element.date && item_element.date==1){
+          // console.log('days_number_data_spArr.l:',days_number_data)
+          // console.log('列:',index,',月:',item_element.month.replace(/^0+/, ''));//用正则把月份的0替换空
+          if(index!=53){
+            month=item_element.month.replace(/^0+/, '');
+            data.monthBar[index] = month + "月";
+              // console.log('列:',index,',月:',item_element.month.replace(/^0+/, ''));//用正则把月份的0替换空
+          }
+          
+        }
+      
+      });
+
+    });
+
+    //初始化 calculate_month_data
+    data.calculate_month_data=[];
+    // console.log('data.monthBar.length:', data.monthBar.length)
+
+  }
+
+  
+
+   /* 
+  * first_day_week     第一天的星期数，以进行后续计算（周日返回0，周一返回1，周六返回6）
+  * cycle_days   循环天数
+  * cycle_days_start_time   循环循环天数的开始时间
+ */
+  //获取天数列表 循环遍历
+  function getDaylist(cycle_days,cycle_days_start_time){
+
+              let day_info = {};         //用来存放某一天的数据对象（年月日、isToday、level）      
+              
+              //天数数据用于推算月份
+              // let calculate_month_day_data=[];  //所有天数数据对象
+              let month_day= {};      //用来存放某一天的数据对象（月日） 
+
+               
+                // 倒推序号: 0 ,年月日: 2021 12 31    倒推序号: 0   修改为 数组索引364  ,年月日: 2021 01 01
+                for ( let i = 0; i <cycle_days; i++) { 
+                  // 创建一个新的日期对象           //let i = 364; i >=0 ; i--    倒推序号: 364 ,年月日: 2023 09 03   倒推序号: 0 ,年月日: 2024 09 01 
+                  const pastDate = new Date(cycle_days_start_time);
+                  // 将日期顺推
+                  pastDate.setDate(pastDate.getDate() +i);
+                  
+                  // console.log('pastDate.getDate():',  pastDate.setDate(pastDate.getDate() +i))
+
+                  // 格式化日期为YYYY-MM-DD
+                  const year = pastDate.getFullYear();
+                  const month = (pastDate.getMonth() + 1).toString().padStart(2, '0');
+                  const day = pastDate.getDate().toString().padStart(2, '0');
+
+                  // console.log('i序号:',i,',年月日:',year,month,day);
 
 
+                  let level = Math.floor(Math.random() * 5); //这里是随机设置每天的频率等级，后续开发要替换为自己计算的真实等级（不同等级对应不同颜色方格）
+
+                  day_info = {                      //每个格子（天）的info对象
+                    year: year,      //年月日
+                    month: month,
+                    date: day,
+                    number: i,    //今日的数据量
+                    level: level,  //今日数据量对应的等级
+                    date_number: i,    //天数
+                    id:i,
+                  };
+
+                  month_day={
+                    month: month,
+                    date: day,
+                  }
+
+                  data.calculate_month_data.push(month_day);
+
+                 
+                  // contribution_year_data.value.infos.push(day_info); //push数组末尾添加
+                  data.infos.push(day_info); //push数组末尾添加
+
+                  
+                }
+  }
+
+
+
+            function clickContributionYear(year){
+                //赋空值（或者monthBar_data.monthBar.length=0），清除原有数据（防止变成追加数据）
+                data.infos=[];
+                
+                //平年、闰年
+                let contribution_year_date_num=365
+                if((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
+                  contribution_year_date_num=366
+                }
+               
+                //年贡献结束时间
+                const click_contribution_year_start = new Date(year, 0, 1); // 年份开始时间，1月1日
+                const click_contribution_year_end = new Date(year, 11, 31); // 年份结束时间，12月31日
+                // console.log('click_contribution_year_start:',click_contribution_year_start);
+                // console.log('click_contribution_year_end:',click_contribution_year_end);
+               
+                getDaylist(contribution_year_date_num,click_contribution_year_start)
+               
+         
+
+               
+              // if(contribution_year_data.value.infos){
+              if(data.infos){
+
+  
+                // console.log('contribution_year_data.infos:',JSON.stringify(contribution_year_data.value.infos))
+               
+                let [firstElement] =data.infos; //使用解构赋值取得第一个元素；
+
+
+                // console.log('firstElement:',JSON.stringify(firstElement));
+                //firstElement: [{"year":2023,"month":8,"date":27,"number":10,"level":2,"isToday":false}]
+                //获取天数的星期数，以进行后续计算（周日返回0，周一返回1，周六返回6）
+                let contribution_year_first_day_week = new Date(firstElement.year+'-'+firstElement.month+'-'+firstElement.date).getDay();
+                
+                // console.log('contribution_year_first_day_week:',contribution_year_first_day_week);
+                
+                getMonthBar(contribution_year_first_day_week)
+  
+              }
+       
+
+
+            }
+
+
+        
+           
+       
+             
+  
+              //获取下周周日  周日0 => 周六6
+              function getNextSunday (today) {
+              //   const now = new Date('2023-09-01');
+                  const now = new Date(today);
+                // 获取当前周的星期日（0代表星期日）
+                const dayOfWeek = now.getDay() || 7;
+                // 计算从今天开始到下周星期日的毫秒数
+              //   console.log('dayOfWeek',dayOfWeek);
+                const millisecondsUntilNextSunday = (7 - dayOfWeek) * 24 * 60 * 60 * 1000;
+              //   console.log('millisecondsUntilNextSunday',millisecondsUntilNextSunday);
+  
+                // 创建下周星期日的Date对象
+                const nextSunday = new Date(now.getTime() + millisecondsUntilNextSunday);
+  
+                // 格式化日期为YYYY-MM-DD
+              //   return nextSunday.toISOString().split('T')[0];
+                  // console.log('nextSunday.toISOString().split(T)[0]:',nextSunday.toISOString().split('T')[0]);
+                  return nextSunday;
+              }
+  
+  
+              //分割的数组
+              function spArr(arr, num) { //arr是你要分割的数组，num是以几个为一组
+              let newArr = [] //首先创建一个新的空数组。用来存放分割好的数组
+              for (let i = 0; i < arr.length;) { //注意：这里与for循环不太一样的是，没有i++
+                newArr.push(arr.slice(i, i += num));
+              }
+              return newArr
+            }
+  
+             //计算数组维度
+            function printDataDimensions (arr) {
+              let maxDepth = 0;
+            
+              function calculateDepth(arr, currentDepth) {
+                currentDepth++;
+                maxDepth = Math.max(maxDepth, currentDepth);
+                arr.forEach(item => {
+                  if (Array.isArray(item)) {
+                    calculateDepth(item, currentDepth);
+                  }
+                });
+              }
+            
+              calculateDepth(arr, 0);
+              console.log(`数组的维数是: ${maxDepth}`);
+            }
+  
+            
+            // 分割数组
+            //  changeArrNum:function(arr,num){
+            //     let newCardList = [];
+            //     for (var i = 0; i < arr.length; i += num) {
+            //         newCardList.push(arr.slice(i, i + num));
+            //     }
+            //     return newCardList;
+            // },
+  
+  
+      
+             function  handleClick(item) {
+              
+              
+              if(data.active_id==item.id){
+                data.active_id=-1;
+                data.is_selected=false;
+              }else{
+                data.active_id=item.id;
+                data.is_selected=true;
+              }
+              // console.log('item:', JSON.stringify(item));
+             
+              // {"year":2023,"month":11,"date":18,"number":10,"level":0,"isToday":false}
+              // alert(item.month + "-" + item.date+'，博文：'+item.number)
+            }
+      
+      
+      
+         
+        
+</script>
+
+
+<style>
 
   .contribution-calendar-container {
     display: block;
@@ -400,7 +487,7 @@
     
     .months {
       display: grid;
-      grid-template-columns: repeat(52, 21px);
+      grid-template-columns: repeat(53, 21px);
       grid-template-rows: 21px;
       font-size: 8px;
       /* color: #aaa; */
@@ -615,5 +702,4 @@
 
 
 
-  </style>
-  
+  </style> -->
