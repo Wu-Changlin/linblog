@@ -4,7 +4,9 @@
         <div class="tag-count-content-container">
             
           
-          <a :style="{backgroundColor: getDarkRandomColor()} " :class=" {'tag-count-item':true,'active':data.tagActive==item.tag_id?true:''}" v-for="(item, index) in data.list" :key="index" @click="clickTag(item.tag_id)">
+          <a :style="{backgroundColor: getDarkRandomColor()} " 
+          :class=" {'tag-count-item':true,'active':data.tagActive==item.tag_id?true:''}"
+           v-for="(item, index) in data.list" :key="index" @click="clickTag(item.tag_id,item.tag_name)">
             {{ item.tag_name }}
           </a>
         </div>
@@ -85,6 +87,10 @@
 
 
 
+  const emit = defineEmits(['child-click-tag'])
+
+
+
 
 //问题：切换主题随机颜色没有响应
 function getandomColor(){
@@ -134,9 +140,11 @@ function getDarkRandomColor() {
 
 
 
-  function clickTag(tag_id){
-    console.log('tag_id:',tag_id);
+  function clickTag(tag_id,tag_name){
+    // console.log('tag_id:',tag_id,',tag_name:',tag_name);
     data.tagActive=tag_id;
+
+    emit('child-click-tag',tag_id,tag_name);
     console.log('data.tagActive:',data.tagActive);
   }
    

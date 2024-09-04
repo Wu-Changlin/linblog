@@ -93,10 +93,6 @@ function clickMenu(menu_path){
 
 <style>
 
-	.svg_icon {
-		fill: var(--primary)!important;
-	}
-
   	.side-bar {
 		height: calc(100vh - 72px);
 		overflow-y: scroll;
@@ -191,4 +187,10 @@ function clickMenu(menu_path){
 		}
 
 	}
+
+	
+	.svg_icon {
+		fill: var(--primary)!important;
+	}
+
 </style>

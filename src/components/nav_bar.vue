@@ -5,9 +5,6 @@
                 <img crossorigin="anonymous" class="header-logo" style="pointer-events:none;" src="@/assets/img/logo.png">
             </a>
 
-
-
-
             <div class="header-container-right-icon">
 				
             <div class="icon-item">
@@ -38,7 +35,7 @@ import NavTheme from './nav_theme.vue'
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		width: 100vw;
+		width: 100%;
 		height: 72px;
 		position: fixed;
 		left: 0;
@@ -75,7 +72,7 @@ import NavTheme from './nav_theme.vue'
 					.svg-icon{
 						width: 32px;
 						height: 32px;
-						margin-right: 10px;
+						padding-right: 20px;
 					}
 				}
 			}

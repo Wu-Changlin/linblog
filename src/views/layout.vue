@@ -9,7 +9,7 @@
 				<router-view />
 			</div>
 
-			<FloatingBtnSets></FloatingBtnSets>
+			<!-- <FloatingBtnSets></FloatingBtnSets> -->
 			<!-- <Footer></Footer> -->
 			
 		</div>
