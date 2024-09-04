@@ -47,9 +47,9 @@ const routes=[
     },
 
     {
-        path:'/blog',
-        name:"blog",
-        component:()=>import('@/views/frontend/blog.vue')
+        path:'/article',
+        name:"article",
+        component:()=>import('@/views/frontend/article.vue')
     },
 
    

@@ -29,18 +29,25 @@
   
       <!-- 标签统计栏 开始-->
       <h2>标签</h2>
-      <div class="tag-count-content">
-        <TagCount @child-click-tag="clickTag"></TagCount>
-       
+      <div class="tag-count">
+        <div class="tag-count-content">
+          <TagCount @child-click-tag="clickTag"></TagCount>
+        </div>
       </div>
+     
+   
       <!-- 标签统计栏 结束-->
       <!-- 点击标签结果栏 开始-->
-       <div v-if="tag_name">
-        <div  class="contribution-activity">
+     
+       <div v-if="tag_name" class="contribution-activity-count">
+        <div  class="contribution-activity-count-content">
           <div class="text-left"> <h3>标签：{{tag_name}} </h3></div>
           <div class="line"></div>
           <div class="text-right"> <span>结果：找到{{ tag_number}}个</span></div>
         </div>
+       </div>
+    
+      <div   v-if="tag_name" style="width: 100%;">
         <Waterfall></Waterfall>
        </div>
       
@@ -48,15 +55,20 @@
   
       <!-- 贡献统计栏 开始-->
       <h2>贡献</h2>
-      <div class="contribution-calendar-count-content">
-        <ContributionCalendar @child-click-contribution-day="clickContributionDay"></ContributionCalendar>
+      <div class="contribution-calendar-count">
+        <div class="contribution-calendar-count-content">
+          <ContributionCalendar @child-click-contribution-day="clickContributionDay"></ContributionCalendar>
+        </div>
       </div>
+      
       <!-- 贡献统计栏 结束-->
   
       <!-- 动态栏 开始-->
     
-      <div v-if="select_contribution_year">
-        <div  class="contribution-activity">
+      
+      <div v-if="select_contribution_year" class="contribution-activity-count">
+
+        <div  class="contribution-activity-count-content">
           <div class="text-left"> <h3>动态 </h3></div>
           <div class="line"></div>
           <div class="text-right"> 
@@ -64,15 +76,21 @@
               {{ select_contribution_year}} 
             </span>
             <span v-if="is_selected_data==true">
-              {{ select_contribution_year}} 
+                {{select_contribution_year}} 
               -{{contribution_day_month_data?contribution_day_month_data:'' }}
               -{{contribution_day_date_data?contribution_day_date_data:'' }}
               ,贡献{{contribution_day_number_data?contribution_day_number_data:''}}次
             </span>
           </div>
         </div>
-        <Waterfall></Waterfall>
+
       </div>
+
+      <div   v-if="select_contribution_year" style="width: 100%;">
+        <Waterfall></Waterfall>
+       </div>
+     
+
        <!-- 动态栏 结束 -->
        <!-- <Waterfall></Waterfall> -->
       
@@ -173,60 +191,39 @@
   
   <style>
   
-
-
-
-.contribution-activity {
-  display: flex;
-  align-items: center; /* 纵向居中 */
-}
- 
-.text-left {
-  order: -1; /* 确保左侧文本在左侧显示 */
-  margin-right: 10px; /* 左侧文本和横线之间的间隔 */
-}
- 
-.line {
-  border-top: var(--borderWidth-thin, 1px) solid var(--borderColor-default) !important; /* 横线样式 */
-  flex-grow: 1; /* 横线拉伸以占据剩余空间 */
-  margin: 0 10px; /* 横线两侧的间隔 */
-}
- 
-.text-right {
-  order: 1; /* 确保右侧文本在右侧显示 */
-  margin-left: 10px; /* 右侧文本与容器右边缘的间隔 */
-}
-
-
-
-
   .feeds-page {
-    display: flex;
+    flex: 1;
+    padding: 0 12px;
     padding-top: 72px;
-    width: 100%;
-    margin: 0px 0px;
-    padding-left: 12px;
-    padding-right: 12px;
-   
-    /* 修改盒子大小属性 */
-    /* box-sizing: border-box; */
-   
+    margin: 0 auto;
+    width: 100%;    
+    max-width:1260px;
+    flex-direction: column;
+    overflow: hidden; /* 禁止容器滚动 */
+     /* 修改盒子大小属性 */
+ 
+ 
     .feeds-container {
       display: flex;
       flex-direction: column;
-      transition: width 0.5s;
-      margin: 0 auto;
-      width: 100%;
-  
+      align-items: center;
+      user-select: none;
+      -webkit-user-select: none;
   
         h2 {
+          width: 100%;
+          max-width:1260px;
           border-bottom: 3px solid #2ECC71;
         }
    
 
         .website-content-count{
           width: 100%;
-          box-sizing: border-box;
+          max-width:1260px;
+          user-select: none;
+          -webkit-user-select: none;
+          align-items: center;
+          justify-content: center;
           .website-content-count-content{
             padding: 20px;
             
@@ -235,49 +232,94 @@
   
         .run-time-count{
           width: 100%;
-          max-width:1280px;
-          box-sizing: border-box;
+          max-width:1260px;
+          /* box-sizing: border-box; */
+
+          user-select: none;
+          -webkit-user-select: none;
+          align-items: center;
+          justify-content: center;
           .run-time-count-content{
             padding: 20px 
           }
         }
   
-          
-        .tag-count-content{
-          padding: 20px;
+
+        .tag-count{
           width: 100%;
-          
-          max-width:1280px;
-          box-sizing: border-box;
-      
+          max-width:1260px;
+          user-select: none;
+          -webkit-user-select: none;
+          align-items: center;
+          justify-content: center;
+          .tag-count-content{
+            padding: 20px;
+            /* box-sizing: border-box; */
+          }
+
         }
+        
        
-        .contribution-calendar-count-content{
+        .contribution-calendar-count{
           width: 100%;
-          padding: 20px;
-          max-width:1280px;
-          box-sizing: border-box;
-          overflow: hidden;
-          /* display: flex;
-          overflow-x: scroll;
-          overflow-y: hidden;
-            .container-card::-webkit-scrollbar {
-              display: none;
-          } */
+          max-width:1260px;
+          user-select: none;
+          -webkit-user-select: none;
+          align-items: center;
+          justify-content: center;
+          .contribution-calendar-count-content{
+            padding: 20px;
+            overflow: hidden;
+          }
         }
-  
-        .contribution-activity{
-          width: 100%;
-          padding: 20px;
-          display: flex;
-          box-sizing: border-box;
-        }
-  
-       
-  
-      }
-  
-  
+
+ 
     }
-  </style>
+  
+  
+  }
+
+
+
+    /* 动态栏 开始*/
+    .contribution-activity-count {
+        display: flex;
+        width: 100%;
+        max-width:1260px;
+        user-select: none;
+        -webkit-user-select: none;
+        align-items: center;
+        justify-content: center;
+        
+        .contribution-activity-count-content {
+          display: flex;
+          align-items: center;
+          padding: 20px;
+          width: 100%;
+
+          .text-left {
+            text-align: left;
+            margin-right: 10px; /* 可根据需要调整间距 */
+          }
+          
+          .line {
+            flex-grow: 1; /* 占据中间的空白部分 */
+            border-top: var(--borderWidth-thin, 1px) solid var(--borderColor-default) !important; /* 横线样式 */
+            margin: 0 10px; /* 可根据需要调整间距 */
+          }
+          
+          .text-right {
+            text-align: right;
+            margin-left: 10px; /* 可根据需要调整间距 */
+          }
+
+       
+        }  
+
+  }
+
+/* 动态栏 结束*/
+
+     
+</style>
   
