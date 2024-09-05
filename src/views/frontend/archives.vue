@@ -1,7 +1,7 @@
 <template>
 
-  <div class="feeds-page">
-    <div class="feeds-container">
+  <div class="archives-page">
+    <div class="archives-container">
       <!-- 网站统计栏 开始-->
       <h2>网站统计</h2>
         <!-- 网站内容 开始-->
@@ -86,7 +86,7 @@
 
       </div>
 
-      <div   v-if="select_contribution_year" style="width: 100%;">
+      <div   v-if="select_contribution_year" style="width: 100%; padding: 2px;">
         <Waterfall></Waterfall>
        </div>
      
@@ -191,25 +191,17 @@
   
   <style>
   
-  .feeds-page {
-    flex: 1;
-    padding: 0 12px;
-    padding-top: 72px;
-    margin: 0 auto;
-    width: 100%;    
-    max-width:1260px;
-    flex-direction: column;
-    overflow: hidden; /* 禁止容器滚动 */
-     /* 修改盒子大小属性 */
- 
- 
-    .feeds-container {
+  .archives-page {
+    overflow-x: hidden;/* 禁止容器x轴方向滚动 */
+  
+  }
+  .archives-container {
+      overflow-x: hidden;/* 禁止容器x轴方向滚动 */
       display: flex;
       flex-direction: column;
-      align-items: center;
-      user-select: none;
-      -webkit-user-select: none;
-  
+      padding: 0 12px;
+      padding-top: 72px;
+      width: 100%;
         h2 {
           width: 100%;
           max-width:1260px;
@@ -275,10 +267,6 @@
 
  
     }
-  
-  
-  }
-
 
 
     /* 动态栏 开始*/

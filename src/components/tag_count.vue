@@ -5,7 +5,7 @@
             
           
           <a :style="{backgroundColor: getDarkRandomColor()} " 
-          :class=" {'tag-count-item':true,'active':data.tagActive==item.tag_id?true:''}"
+          :class=" {'tag-count-item':true,'active':data.active_id==item.tag_id?true:'','no-active':data.active_id!=item.tag_id && data.active_id!=-1?true:''}"
            v-for="(item, index) in data.list" :key="index" @click="clickTag(item.tag_id,item.tag_name)">
             {{ item.tag_name }}
           </a>
@@ -21,12 +21,7 @@
   const tagRef = ref();//获取元素高度
 
    const data=reactive({
-      tagHeight:0,
-      tagBtn:false,
-      tagNoWrap:false,
-      tagBtnType:false,
-      tagWrap:false,
-      tagActive:0,
+      active_id:-1,
       list: [
         { tag_id: 1, tag_name: "c" },
         { tag_id: 2, tag_name: "C++" },
@@ -81,18 +76,31 @@
         { tag_id: 51, tag_name: "d" },
         { tag_id: 52, tag_name: "sas" },
       ],
-      showAll: false,
-    
   })
-
 
 
   const emit = defineEmits(['child-click-tag'])
 
 
 
+  function clickTag(tag_id,tag_name){
+    // console.log('tag_id:',tag_id,',tag_name:',tag_name);
+    
 
-//问题：切换主题随机颜色没有响应
+    if (data.active_id==tag_id) {
+        data.active_id = -1;
+      } else {
+        data.active_id = tag_id;
+      }
+      console.log('tag_id:',tag_id,', data.active_id:', data.active_id);
+
+    emit('child-click-tag',tag_id,tag_name);
+    // console.log('data.tagActive:',data.tagActive);
+  }
+
+
+
+  //问题：切换主题随机颜色没有响应
 function getandomColor(){
   // 从取缓存中取值，给个默认值。
   const theme = ref(localStorage.getItem('theme') || 'light');
@@ -136,17 +144,6 @@ function getDarkRandomColor() {
 }
  
 
-
-
-
-
-  function clickTag(tag_id,tag_name){
-    // console.log('tag_id:',tag_id,',tag_name:',tag_name);
-    data.tagActive=tag_id;
-
-    emit('child-click-tag',tag_id,tag_name);
-    console.log('data.tagActive:',data.tagActive);
-  }
    
 </script>
 
@@ -158,19 +155,19 @@ function getDarkRandomColor() {
         display: flex;
         width: 100%;
         flex-wrap: wrap;
+      
+       
         .tag-count-item {
-            flex: 1;
-            /* word-wrap: pre-wrap; */
+            /* flex: 1; */
+            display :block; 
             text-align:center;
-            border: none !important;
             width: auto;
             margin: 10px;
             height: 30px;
-            /* 可以添加其他样式，比如字体颜色、背景等 */
             padding: 10px;
-            text-decoration: none;
             color: var(--text-light-dark);
             opacity: 5;
+            line-height: 50%;
               /*鼠标移入效果*/
               &:hover{ 
                 /* background-color: rgba(0, 0, 0, 0.03); */
@@ -184,6 +181,11 @@ function getDarkRandomColor() {
             /* background-color: rgba(0, 0, 0, 0.03); */
             border-radius: 999px;
             color: var(--text-light-dark);
+          }
+
+          .no-active {
+            /* background-color: rgba(0, 0, 0, 0.03); */
+            opacity: 1;
           }
          
            

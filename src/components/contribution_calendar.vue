@@ -287,6 +287,7 @@
 
 
 
+  //已选择某年贡献信息
   function clickContributionYear(year) {
     //赋空值（或者monthBar_data.monthBar.length=0），清除原有数据（防止变成追加数据）
     data.infos = [];
@@ -332,8 +333,8 @@
 
   //选定日期的年份
    const the_year_of_the_selected_date=ref();
-    //点击日期格子
-    function handleClick(item) {
+  //点击日期格子
+  function handleClick(item) {
       if (data.active_id == item.id) {
         data.active_id = -1;
         data.is_selected = false;

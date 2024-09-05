@@ -79,8 +79,8 @@ onMounted(() => {
     stopWatch.value = watch(
     () => props.theYearOfTheSelectedDate,
     (newValue, oldValue) => {
-        console.log(111);
-        console.log('props.theYearOfTheSelectedDate:',props.theYearOfTheSelectedDate)
+        // console.log(111);
+        // console.log('props.theYearOfTheSelectedDate:',props.theYearOfTheSelectedDate)
         data.active_contribution_year = props.theYearOfTheSelectedDate;
         data.annex_title=props.theYearOfTheSelectedDate;
       // 你可以在这里根据newValue做出响应

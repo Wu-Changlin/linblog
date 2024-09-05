@@ -1,4 +1,6 @@
 * {
+     /*border-box就是将border和padding数值包含在width和height之内，这样的好处就是修改border和padding数值盒子的大小不变。*/
+    box-sizing: border-box;
     padding: 0;
     margin: 0;
     /*不显示滚动条，但是该元素依然可以滚动。*/
@@ -8,6 +10,7 @@
 }
 
 a {
+    
     text-decoration: none;
     background-color: transparent
 }
