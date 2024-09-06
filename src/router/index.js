@@ -42,6 +42,8 @@ const routes=[
                 name:"diary",
                 component:()=>import('@/views/frontend/diary.vue')
             },
+            
+        
         
         ]
     },
@@ -51,7 +53,6 @@ const routes=[
         name:"article",
         component:()=>import('@/views/frontend/article.vue')
     },
-
    
 
     

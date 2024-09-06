@@ -2,7 +2,7 @@
     
 
     <div class="side-bar-catalog">
-        <div class="catalog-card" v-if="Object.keys(titles).length > 0">
+        <div class="catalog-card" v-if="Object.keys(tocArray).length > 0">
             <div class="catalog-card-header">
                 <div>
                     <!-- <span>
@@ -15,7 +15,7 @@
     
             <div class="catalog-content">
                 <div
-                    v-for="title in titles"
+                    v-for="title in tocArray"
                     :key="title.id"
                     @click="scrollToView(title.scrollTop)"
                     :class="[
@@ -35,12 +35,12 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref,nextTick,defineProps } from "vue";
 
  
 
 const props = defineProps({
-    container: {
+    containerName: {
         type: String,
         default: ".article-content",
     },
@@ -51,88 +51,94 @@ const props = defineProps({
     
 console.log(111);
 
-
-        let titles = reactive(getTitles());
+//获取目录
+        const tocArray =ref([]);
+        // let titles = reactive(getTitles());
         let currentTitle = reactive({});
         let progress = ref(0);
 
+        getTitles();
         // 获取目录的标题
         function getTitles() {
-            let titles = [];
-            let levels = ["h1", "h2", "h3"];
-            console.log('props.container:',document.querySelector(props.container));
-            let articleElement = document.querySelector(props.container);
-            if (!articleElement) {
-                return titles;
-            }
-          
 
-            let elements = Array.from(articleElement.querySelectorAll("*"));
-            
-            // 调整标签等级
-            let tagNames = new Set(
-                elements.map((el) => el.tagName.toLowerCase())
-            );
-            for (let i = levels.length - 1; i >= 0; i--) {
-                if (!tagNames.has(levels[i])) {
-                    levels.splice(i, 1);
+            nextTick(()=>{
+                let titles = [];
+                let levels = ['h1','h2','h3','h4','h5','h6'];
+                console.log('props.containerName:',document.querySelector(props.containerName));
+                let articleElement = document.querySelector(props.containerName);
+                if (!articleElement) {
+                    return titles;
                 }
-            }
+            
 
-            let serialNumbers = levels.map(() => 0);
-            for (let i = 0; i < elements.length; i++) {
-                const element = elements[i];
-                let tagName = element.tagName.toLowerCase();
-                let level = levels.indexOf(tagName);
-                if (level == -1) continue;
-
-                let id = tagName + "-" + element.innerText + "-" + i;
-                let node = {
-                    id,
-                    level,
-                    parent: null,
-                    children: [],
-                    rawName: element.innerText,
-                    scrollTop: element.offsetTop,
-                };
-
-                if (titles.length > 0) {
-                    let lastNode = titles.at(-1);
-
-                    // 遇到子标题
-                    if (lastNode.level < node.level) {
-                        node.parent = lastNode;
-                        lastNode.children.push(node);
+                let elements = Array.from(articleElement.querySelectorAll("*"));
+                
+                // 调整标签等级
+                let tagNames = new Set(
+                    elements.map((el) => el.tagName.toLowerCase())
+                );
+                for (let i = levels.length - 1; i >= 0; i--) {
+                    if (!tagNames.has(levels[i])) {
+                        levels.splice(i, 1);
                     }
-                    // 遇到上一级标题
-                    else if (lastNode.level > node.level) {
-                        serialNumbers.fill(0, level + 1);
-                        let parent = lastNode.parent;
-                        while (parent) {
-                            if (parent.level < node.level) {
-                                parent.children.push(node);
-                                node.parent = parent;
-                                break;
+                }
+
+                let serialNumbers = levels.map(() => 0);
+                for (let i = 0; i < elements.length; i++) {
+                    const element = elements[i];
+                    let tagName = element.tagName.toLowerCase();
+                    let level = levels.indexOf(tagName);
+                    if (level == -1) continue;
+
+                    let id = tagName + "-" + element.innerText + "-" + i;
+                    let node = {
+                        id,
+                        level,
+                        parent: null,
+                        children: [],
+                        rawName: element.innerText,
+                        scrollTop: element.offsetTop,
+                    };
+
+                    if (titles.length > 0) {
+                        let lastNode = titles.at(-1);
+
+                        // 遇到子标题
+                        if (lastNode.level < node.level) {
+                            node.parent = lastNode;
+                            lastNode.children.push(node);
+                        }
+                        // 遇到上一级标题
+                        else if (lastNode.level > node.level) {
+                            serialNumbers.fill(0, level + 1);
+                            let parent = lastNode.parent;
+                            while (parent) {
+                                if (parent.level < node.level) {
+                                    parent.children.push(node);
+                                    node.parent = parent;
+                                    break;
+                                }
+                                parent = parent.parent;
                             }
-                            parent = parent.parent;
+                        }
+                        // 遇到平级
+                        else if (lastNode.parent) {
+                            node.parent = lastNode.parent;
+                            lastNode.parent.children.push(node);
                         }
                     }
-                    // 遇到平级
-                    else if (lastNode.parent) {
-                        node.parent = lastNode.parent;
-                        lastNode.parent.children.push(node);
-                    }
+
+                    serialNumbers[level] += 1;
+                    let serialNumber = serialNumbers.slice(0, level + 1).join(".");
+
+                    node.isVisible = node.parent == null;
+                    node.name = serialNumber + ". " + element.innerText;
+                    tocArray.value.push(node);
                 }
-
-                serialNumbers[level] += 1;
-                let serialNumber = serialNumbers.slice(0, level + 1).join(".");
-
-                node.isVisible = node.parent == null;
-                node.name = serialNumber + ". " + element.innerText;
-                titles.push(node);
-            }
-         
-            return titles;
+            
+                console.log('tocArray:',JSON.stringify(tocArray.value))
+                 return titles;  
+            })
         }
 
         // 监听滚动事件并更新样式
@@ -145,8 +151,8 @@ console.log(111);
 
             let visibleTitles = [];
 
-            for (let i = titles.length - 1; i >= 0; i--) {
-                const title = titles[i];
+            for (let i =  tocArray.value.length - 1; i >= 0; i--) {
+                const title =  tocArray.value[i];
                 if (title.scrollTop <= window.scrollY) {
                     if (currentTitle.id === title.id) return;
 
@@ -165,7 +171,7 @@ console.log(111);
                     }
 
                     // 折叠其余节点
-                    for (const t of titles) {
+                    for (const t of  tocArray.value) {
                         if (!visibleTitles.includes(t)) {
                             setChildrenVisible(t, false);
                         }
@@ -197,6 +203,18 @@ console.log(111);
 <style scoped>
 
 
+/* .side-bar-catalog {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100%;
+  /* 半透明背景 */
+  /* background-color: rgba(0, 0, 0, 0.5);  */
+   /* 确保遮罩在其他内容之上 */
+  /* z-index: 1000; */
+/* }  */
+
 .side-bar-catalog {
 		height: calc(100vh - 72px);
 		overflow-y: scroll;
@@ -208,19 +226,21 @@ console.log(111);
 		margin-top: 72px;
 		position: fixed;
 		overflow: visible;
-		/* visibility: visible; */
 
-	
-		@media screen and (max-width: 695px) {
-			display: none;
-			/* visibility: hidden; */
+        @media screen and (max-width: 959px) {
+			/* display: none; */
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100%;
+            /* 半透明背景 */
+            background-color: rgba(0, 0, 0, 0.5); 
+            /* 确保遮罩在其他内容之上 */
+            z-index: 1000;
 			
 		}
-		@media screen and (min-width: 696px) and (max-width: 959px) {
-			display: none;
-			/* visibility: hidden; */
-			
-		}
+		
 
 		@media screen and (min-width: 960px) and (max-width: 1191px) {
 			width: calc(-18px + 25vw);
@@ -240,13 +260,12 @@ console.log(111);
 		@media screen and (min-width: 1728px) {
 			width: 266.66667px;
 			margin-left: 16px;
-		}
+		} 
 
-		
 
-	
-
-	}
+	}  
+    
+   
 
 
 
@@ -255,12 +274,13 @@ console.log(111);
 
 .catalog-card {
     background: white;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     box-shadow: 0 3px 8px 6px rgba(7, 17, 27, 0.05);
     padding: 20px 24px;
     width: 100%;
-    margin-top: 25px;
+    /* margin-top: 25px; */
     box-sizing: border-box;
+    height: 100%;
 }
 
 .catalog-card-header {
@@ -315,7 +335,7 @@ console.log(111);
 }
 
 .active {
-    background-color: red;
+    background-color:  #0c82e9;
     color: white;
 
     &:hover {
