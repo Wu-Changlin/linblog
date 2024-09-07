@@ -1,22 +1,212 @@
+
+<style scoped>
+
+ .post-pager {
+    margin-top: 2rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    color: rgba(0,0,0,.86);
+    border-radius: 4px
+}
+
+.theme-dark  .post-pager {
+    color: #b0b0b0
+}
+
+ .post-pager>div {
+    padding-top: 2.5rem;
+    width: calc(50% - 1rem);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    text-align: center;
+    position: relative
+}
+
+ .post-pager>div a {
+    display: block
+}
+
+ .post-pager>div h2 {
+    margin: 0;
+    line-height: 1.3;
+    font-size: 1.25rem
+}
+
+ .post-pager>div p {
+    margin: 0;
+    margin-top: .3rem;
+    font-size: 1rem;
+    color: rgba(0,0,0,.42);
+    line-height: 1.4
+}
+
+.theme-dark  .post-pager>div p {
+    color: #aaa
+}
+
+ .post-pager>div::before {
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    top: .4rem;
+    font-size: 14px;
+    padding: .2em .5em;
+    color: rgba(0,0,0,.2);
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 4px
+}
+
+.theme-dark  .post-pager>div::before {
+    color: rgba(255,255,255,.2);
+    border-color: rgba(255,255,255,.15)
+}
+
+ .post-pager>div.prev::before {
+    content: "上一篇"
+}
+
+ .post-pager>div.prev::after {
+    content: "";
+    width: 1px;
+    height: calc(100% - 1rem);
+    background: #ddd;
+    position: absolute;
+    right: -1rem;
+    top: .5rem
+}
+
+.theme-dark  .post-pager>div.prev::after {
+    background: rgba(255,255,255,.1)
+}
+
+ .post-pager>div.next::before {
+    content: "下一篇"
+}
+
+@media screen and (max-width: 767.5px) {
+     .post-pager {
+        -webkit-box-orient:vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column
+    }
+
+     .post-pager>div {
+        width: 100%;
+        text-align: left;
+        -webkit-box-align: start;
+        -ms-flex-align: start;
+        align-items: flex-start
+    }
+
+     .post-pager>div::before {
+        left: 0;
+        -webkit-transform: translateX(0);
+        transform: translateX(0)
+    }
+
+     .post-pager>div::after {
+        display: none
+    }
+
+     .post-pager>div:first-child {
+        padding-bottom: .8rem;
+        margin-bottom: .8rem;
+        border-bottom: 1px solid #ddd
+    }
+
+    .theme-dark  .post-pager>div:first-child {
+        border-color: rgba(255,255,255,.1)
+    }
+}
+</style>
 <template>
 	<div class="container">
 		<NavBar></NavBar>
 
 		<div class="main">
 			
-			<ArticleCatalog :containerName="container_name"></ArticleCatalog>
+			<ArticleCatalog :containerName="container_name" :style="{ display: show_article_catalog  ?'block':'none'}"></ArticleCatalog>
+			
 			<div class="main-content with-side-bar">
-				
+				<!-- 博文内容 开始-->
 				<div class="article-page">
 					<div class="article-container">
 						<div class="article-content" v-html="data.list"></div>
 
 					</div>
-				</div>	
+				</div>
+				<!-- 博文内容 结束-->
+				
+
+				<div style="margin: 20px auto;width: fit-content;">----- <span style="color: white;background-color: black;padding: 0 5px;font-size: .7rem;">END</span> -----</div>
+
+
+				<p class="notice" style="text-indent:0em">
+					博客站点：<a href="https://blog.wuchanglin.com/author/1/" rel="author" class="pjax"><span class="brand">LinBlog</span></a><br>
+					本文链接：<a href="https://blog.wuchanglin.com/archives/2038/" class="pjax">https://blog.wuchanglin.com/archives/2038/</a><br>
+					版权声明：本文章采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"><i>&nbsp;<strong>知识共享署名 - 非商业性使用 - 相同方式共享 4.0 国际许可协议&nbsp;</strong></i></a>。
+				</p>
+
+
+				<div class="post-pager">
+					<div class="prev">
+						<a href="https://blog.wuchanglin.com/archives/2037/" class="pjax">
+							<h2>2024博客搭建一</h2>
+						</a>
+						<!-- 如果有摘要就输出摘要，没有摘要输出一段文字 -->
+						<p>环境搭建</p>
+					</div>
+					<div class="next">
+						<a href="https://blog.wuchanglin.com/archives/2039/" class="pjax">
+							<h2>2024博客搭建二</h2>
+						</a>
+						<p>vscode插件</p>
+					</div>
+				</div>
+
         		
 			</div>
 
-			<FloatingBtnSets></FloatingBtnSets>
+
+
+
+			<FloatingBtnSets  :style="{ right: article_ccatalog_right + 'px' }">
+				<div class="article-catalog-slot" @click="showArticleCatalog" :style="{ visibility: show_article_catalog_icon ?'visible':'hidden'}"> 
+					<div class="btn-wrapper">
+					  <div class="cont">
+						<svg-icon  icon-class="catalog" />
+						</div>
+					</div>
+				
+				
+					<div class="tip-container">
+					  <span  class="tip-text">目录</span>
+					</div>
+				
+				</div>
+				
+			</FloatingBtnSets>
 			<!-- <Footer></Footer> -->
 			
 		</div>
@@ -35,7 +225,7 @@ import CntentList from "@/components/content_list.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import ArticleCatalog from "@/components/article_catalog.vue";
 // import Footer from "@/components/footer.vue";
-import {ref,reactive} from "vue";
+import {ref,reactive,onMounted , onUnmounted} from "vue";
 
 const container_name=ref('.article-content');
 
@@ -45,9 +235,63 @@ const data=reactive({
 
 
 
+////目录显示隐藏开关
+const show_article_catalog=ref(false);
+function showArticleCatalog(){
+	if(show_article_catalog.value==false){//目录隐藏，需要打开
+		show_article_catalog.value=true;
+		article_ccatalog_right.value=300;		 //目录右边距
+		console.log('show_article_catalog.value=true:',show_article_catalog.value)
+	}else{//目录显示，需要隐藏
+		show_article_catalog.value=false;
+		article_ccatalog_right.value=5;		 //目录右边距
+		console.log('show_article_catalog.value=flase:',show_article_catalog.value)
+
+	}
+	// show_article_catalog.value=!show_article_catalog.value;
+	
+}
+
+
+const article_ccatalog_right=ref(5);
+const show_article_catalog_icon=ref(false);
+//监听窗口大小变化	
+function mediaQuery() {
+	const media_query = window.matchMedia('(max-width: 959px)');// 创建一个媒体查询(移动端)实例
+	if (media_query.matches) { // 当前窗口大小满足移动端右侧遮罩目录（使用移动端样式）条件
+		// 执行相关操作
+		console.log('article小于959');
+		// article_ccatalog_right.value=300;	//目录右边距
+		show_article_catalog.value=false;		//隐藏移动端样式
+		show_article_catalog_icon.value=true;//显示目录图标
+	} else { // 当前窗口大小不满足移动端右侧遮罩目录（使用PC端样式）条件
+		// 执行相关操作
+		console.log('article大于959');
+		show_article_catalog.value=true;		 //PC端样式
+		article_ccatalog_right.value=5;		 //目录右边距
+		show_article_catalog_icon.value=false;//隐藏目录图标
+	}
+}
+
+
+onMounted(()=>{
+	mediaQuery();//初始化（防止刷新失效）
+//     console.log('挂载完毕');
+	window.addEventListener('resize',mediaQuery);  //监听窗口大小变化	
+})
+
+
+onUnmounted(() => {
+	window.removeEventListener('resize', mediaQuery);
+})//离开页面时移除监听窗口大小变化	
+
+
+
 </script>
 
 <style scoped>
+
+
 
 
 

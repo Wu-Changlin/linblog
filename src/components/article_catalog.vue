@@ -48,8 +48,6 @@ const props = defineProps({
 });
 
 
-    
-console.log(111);
 
 //获取目录
         const tocArray =ref([]);
@@ -64,7 +62,7 @@ console.log(111);
             nextTick(()=>{
                 let titles = [];
                 let levels = ['h1','h2','h3','h4','h5','h6'];
-                console.log('props.containerName:',document.querySelector(props.containerName));
+                // console.log('props.containerName:',document.querySelector(props.containerName));
                 let articleElement = document.querySelector(props.containerName);
                 if (!articleElement) {
                     return titles;
@@ -136,7 +134,7 @@ console.log(111);
                     tocArray.value.push(node);
                 }
             
-                console.log('tocArray:',JSON.stringify(tocArray.value))
+                // console.log('tocArray:',JSON.stringify(tocArray.value))
                  return titles;  
             })
         }
@@ -202,19 +200,6 @@ console.log(111);
 
 <style scoped>
 
-
-/* .side-bar-catalog {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 280px;
-  height: 100%;
-  /* 半透明背景 */
-  /* background-color: rgba(0, 0, 0, 0.5);  */
-   /* 确保遮罩在其他内容之上 */
-  /* z-index: 1000; */
-/* }  */
-
 .side-bar-catalog {
 		height: calc(100vh - 72px);
 		overflow-y: scroll;
@@ -227,18 +212,19 @@ console.log(111);
 		position: fixed;
 		overflow: visible;
 
+        /* 移动端右侧遮罩目录 */
         @media screen and (max-width: 959px) {
-			/* display: none; */
+			display: none;
             position: fixed;
             top: 0;
             right: 0;
             width: 280px;
             height: 100%;
             /* 半透明背景 */
-            background-color: rgba(0, 0, 0, 0.5); 
+            background-color: var(--bg);
+            /* background-color: rgba(0, 0, 0, 0.5);  */
             /* 确保遮罩在其他内容之上 */
-            z-index: 1000;
-			
+            z-index: 100;
 		}
 		
 
@@ -266,10 +252,6 @@ console.log(111);
 	}  
     
    
-
-
-
-
 
 
 .catalog-card {
