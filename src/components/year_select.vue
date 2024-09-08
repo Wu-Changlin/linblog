@@ -206,7 +206,7 @@ function changeSelect (contribution_year){
                   z-index:800;
                   border-radius:5px;
                   border:1px solid #E4E7ED;
-                  position: absolute;
+            
                   transform: translate(-100%, -30%);
                   border-radius: 6px;
               }
