@@ -1,100 +1,203 @@
 <template>
-    <div style="padding-top: 200px;">
-        资源
+
+
+  <div style="padding-top: 200px;"></div>
+  <div class="channel-container">
+
+      <div  class="channel-scroll-container" >
+        <div  class="content-container" @mouseenter="data.showAll = true" @mouseleave="data.showAll = false">
+
+            <div class="channel" v-for="(item, index) in Showhidden()" :key="index" @click="clickFronEndTag(item.tag_id)"> {{ item.tag_name }}</div>
+
+
+
+        </div>
+        <div class="channel" > 更多</div>
+      </div>
+
+
     </div>
 
-    <CntentList></CntentList>
+
+<!-- <div class="sticky-box" :style="{display:(data.isFixed?'block':'none')}">
+  <div class="channel-container">
+
+    <div  class="channel-scroll-container" >
+      <div  class="content-container" @mouseenter="data.showAll = true" @mouseleave="data.showAll = false">
+
+          <div class="channel" v-for="(item, index) in Showhidden()" :key="index" @click="clickFronEndTag(item.tag_id)"> {{ item.tag_name }}</div>
+
+
+
+      </div>
+      <div class="channel"> 更多</div>
+    </div>
+
+
+
+
+
+
+  </div>
+</div> -->
 </template>
 
 
 <script setup>
-import CntentList from "@/components/content_list.vue";
-
-
-
-//获取下周周日  周日0 => 周六6
-function getNextSunday(today) {
-//   const now = new Date('2023-09-01');
-    const now = new Date(today);
-  // 获取当前周的星期日（0代表星期日）
-  const dayOfWeek = now.getDay() || 7;
-  // 计算从今天开始到下周星期日的毫秒数
-//   console.log('dayOfWeek',dayOfWeek);
-  const millisecondsUntilNextSunday = (7 - dayOfWeek) * 24 * 60 * 60 * 1000;
-//   console.log('millisecondsUntilNextSunday',millisecondsUntilNextSunday);
-
-  // 创建下周星期日的Date对象
-  const nextSunday = new Date(now.getTime() + millisecondsUntilNextSunday);
-
-  // 格式化日期为YYYY-MM-DD
-//   return nextSunday.toISOString().split('T')[0];
-    // console.log('nextSunday.toISOString().split(T)[0]:',nextSunday.toISOString().split('T')[0]);
-    return nextSunday;
-}
-
-
-
-
-
-         // 获取当前日期
-         const todays = new Date();
- 
- // 获取当前年份
- const currentYear = todays.getFullYear();
-  
- // 设置为上一年的今天
- const lastYearToday = new Date(currentYear - 1, todays.getMonth(), todays.getDate());
-  
-
-
-  // 初始日期（上年临近的星期天）
-  let firstMondayDate = getNextSunday(lastYearToday.toISOString().split('T')[0]);
-  console.log('firstMondayDate:',firstMondayDate.toISOString().split('T')[0])
-
- let d = new Date() ;
-
- // 计算天数差值 向下取整
-var daysDifference =  Math.floor((d - firstMondayDate) / (1000 * 60 * 60 * 24));
- 
-//  console.log('daysDifference:',daysDifference); // 输出从初始日期到今天的天数
-
- 
-
-
-let info={};
-let date_number_key=[];
-// const year_day_number=365;
-// year_day_number=year_day_number-1;//实际循环天数
-for ( let i = 1; i <=daysDifference; i++) { 
-    // 创建一个新的日期对象           //let i = 364; i >=0 ; i--    倒推序号: 364 ,年月日: 2023 09 03   倒推序号: 0 ,年月日: 2024 09 01 
-    const pastDate = new Date(firstMondayDate);
-        // 将日期倒推i天
-        pastDate.setDate(pastDate.getDate() +i);
-
-        // 格式化日期为YYYY-MM-DD
-        const year = pastDate.getFullYear();
-        const month = (pastDate.getMonth() + 1).toString().padStart(2, '0');
-        const day = pastDate.getDate().toString().padStart(2, '0');
-        // console.log('倒推序号:',i,',年月日:',year,month,day);
-
-        let level = Math.floor(Math.random() * 5); 
-        //这里是随机设置每天的频率等级，后续开发要替换为自己计算的真实等级（不同等级对应不同颜色方格）
-
-        info = {                      //每个格子（天）的info对象
-              year: year,      //年月日
-              month: month,
-              date: day,
-              number: i,    //今日的数据量
-              level: level,  //今日数据量对应的等级
-              date_number: i,    //天数
-            };
-        
-            date_number_key.push(info);
-
-            // 倒推序号: 364 ,年月日: 2021 01 01  倒推序号: 364 修改为 数组索引0  ,年月日: 2021 01 01
-            // 倒推序号: 0 ,年月日: 2021 12 31    倒推序号: 0   修改为 数组索引364  ,年月日: 2021 01 01
+  import { reactive ,ref} from 'vue';
+  import { useRouter } from "vue-router";
+  const router = useRouter();
+   const data=reactive({
+      isFixed:false, //悬浮内容标签栏 
+      list: [
+        { tag_id: 1, tag_name: "c" },
+        { tag_id: 2, tag_name: "C++" },
+        { tag_id: 3, tag_name: "Java" },
+        { tag_id: 4, tag_name: "Python" },
+        { tag_id: 5, tag_name: "PHP" },
+        { tag_id: 6, tag_name: "Go" },
+        { tag_id: 7, tag_name: "Ruby" },
+        { tag_id: 8, tag_name: "Node.js" },
+        { tag_id: 9, tag_name: "C#" },
+        { tag_id: 10, tag_name: "html" },
+        { tag_id: 11, tag_name: "html5" },
+        { tag_id: 12, tag_name: "css" },
+        { tag_id: 13, tag_name: "css3" },
+        { tag_id: 14, tag_name: "js" },
+        { tag_id: 15, tag_name: "ts" },
+        { tag_id: 16, tag_name: "vue2" },
+        { tag_id: 17, tag_name: "vue3" },
+        { tag_id: 18, tag_name: "jq" },
+        { tag_id: 19, tag_name: "React" },
+      ],
+      showAll: false,
     
-}
+  })
+    function  Showhidden() {
+      if (data.showAll == false) {
+        //不显示全部数据
+        var showList = []; //空数组
+        if (data.list.length > 6) {
+          //只显示6条
+          for (var i = 0; i < 6; i++) {
+            showList.push(data.list[i]); //将数组对象的前5条存放到showList数组中
+          }
+        } else {
+          showList = data.list; //个数足够显示，不需要在截取
+        }
+        return showList;
+      } else {
+        //显示全部数据
+        return data.list;
+      }
+    }
+  // function  Showhidden() {
+  //     var showList = []; //空数组
+  //       if (data.list.length > 6) {//数组长度大于6 默认值根据屏幕大小配置显示数量
+  //         showList=data.list.slice(0, 5);//将数组对象的前5条存放到showList数组中
+  //     }else{//数组长度小于6 
+  //         showList= data.list;
+  //     } 
+  //     return showList;
+  //   }
+    function  showAll() {
+      var showList = []; //空数组
+      showList=data.list.slice(5);//将数组对象的第5条后存放到showList数组中
+      return showList;
+    }
+    function clickFronEndTag(tagId){
+      console.log('tagId:'+tagId);
+      data.showAll=false;//关闭鼠标移入效果
+    }
+  /*吸顶效果 开始*/
+  //滑动监听
+  const scrollTop=()=>{
+      let top=document.documentElement.scrollTop || window.pageYOffset ||document.body.scrollTop; //兼容写法
+      let offsetTop = document.querySelector('.channel-scroll-container').offsetTop;//获取内容标签栏高度
+      if(top > offsetTop){//如果下滑超过内容标签栏，那么显示悬浮内容标签栏
+        data.isFixed=true;
+      }else{
+        data.isFixed=false;
+      }
+  
+  }
+  
+  //初始化
+  async function getInit(){
+    if(data.isFixed!=true){
+      window.addEventListener('scroll',scrollTop);  
+    }          
+  }
+  
+  getInit();
+    
+  /*吸顶效果 结束*/
+  </script>
 
-console.log('date_number_key:',JSON.stringify(date_number_key))
-</script>
+  <style>
+.channel-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;/*相对固定 防止吸顶时页面会上下跳*/
+
+  .channel-scroll-container {
+    backdrop-filter: blur(20px);
+    background-color: transparent;
+    width: 100%;
+    display: flex;
+    user-select: none;
+    -webkit-user-select: none;
+    align-items: center;
+    font-size: 16px;
+    color: rgba(51, 51, 51, 0.8);
+    height: 40px;
+    white-space: nowrap;
+    height: 72px;
+    overflow: hidden;
+  
+    .content-container {
+      display: flex;
+      /* white-space: nowrap; */
+      color: rgba(51, 51, 51, 0.8);
+      .active {
+        font-weight: 600;
+        background: rgba(0, 0, 0, 0.03);
+        border-radius: 999px;
+        color: #333;
+      }
+      .channel {
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 16px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        user-select: none;
+          /*鼠标移入效果*/
+        &:hover{ 
+          background-color: rgba(0, 0, 0, 0.03);
+          border-radius: 999px;
+          color: #333;
+        }
+      }
+     
+    }
+  }
+}
+ /* 占位 吸顶标签栏 */
+.sticky-box  {
+    margin: 0px 0px;
+    top: 72px;
+    width: 100%;
+    height: 72px;
+    background: var(--mask-paper);
+    display: flex;
+    justify-content: center;
+    z-index: 1001;
+    position: fixed;
+  }
+  </style>

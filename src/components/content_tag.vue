@@ -1,41 +1,38 @@
 <template>
-
-
-
         <div class="tag-container">
-    
           <div :class=" {'content-container':true,'show-all-tag':data.tagWrap}" >
             <div  :class=" {'tag-content':true,'show-all-tag':data.tagWrap}" ref="tagRef"> 
                 <div :class=" {'tag-item':true,'active':data.tagActive=='all'?true:''}" @click="clickAllTag()">All</div>
                 <div :class=" {'tag-item':true,'active':data.tagActive==item.tag_id?true:''}" v-for="(item, index) in data.list" :key="index" @click="clickTag(item.tag_id)"> {{ item.tag_name }}</div>
             </div>
           </div>
-          
-          <div class="tag-show-all-bnt-container"   @click="clickTagBtn()">
+          <!-- 上下指向图标 开始-->
+          <div class="tag-show-all-bnt-container"  v-if="data.tagBtn"   @click="clickTagBtn()">
             <div>
               <svg-icon  class="svg-icon" :icon-class="data.tagBtnType?'arrow-up':'arrow-down'"/>
             </div> 
           </div>
+          <!-- 上下指向图标 结束-->
 
-          <div class="select-list"  :style="{display:data.tagWrap?'block':'none', 'background-color':'red'}">
-            <!-- 下拉框列表 -->
-          
-              <div :class=" {'content-container':true}" >
-                <div  :class=" {'tag-content':true,'show-all-tag':data.tagWrap}" ref="tagRef"> 
-                    <div :class=" {'tag-item':true,'active':data.tagActive=='all'?true:''}" @click="clickAllTag()">All</div>
+          <!-- 点击显示更多 开始-->
+          <div class="select-container"  :style="{display:data.tagWrap?'block':'none', 'background-color':'red'}">
+            
+              <div class="select-content-container" >
+                <div  class="tag-content"> 
                     <div :class=" {'tag-item':true,'active':data.tagActive==item.tag_id?true:''}" v-for="(item, index) in data.list" :key="index" @click="clickTag(item.tag_id)"> {{ item.tag_name }}</div>
                 </div>
               </div>
          
-             </div>
+          </div>
+           <!-- 点击显示更多 结束-->
       
         </div>
 
        
 
+        <!-- <div  style="visibility:hidden; position: absolute;top:-9999px;left:-9999px;"> -->
 
-
-      <div id="div" style="visibility:hidden; position: absolute;top:-9999px;left:-9999px;">
+      <div class="visibility" style="padding-top:200px ;">
         <div class="tag-container">
 
           <div class="content-container" >
@@ -78,26 +75,26 @@
           { tag_id: 3, tag_name: "Java" },
           { tag_id: 4, tag_name: "Python" },
           { tag_id: 5, tag_name: "PHP" },
-          // { tag_id: 6, tag_name: "Go" },
-          // { tag_id: 7, tag_name: "Ruby" },
-          // { tag_id: 8, tag_name: "Node.js" },
-          // { tag_id: 9, tag_name: "C#" },
-          // { tag_id: 10, tag_name: "html" },
-          // { tag_id: 11, tag_name: "html5" },
-          // { tag_id: 12, tag_name: "css" },
-          // { tag_id: 13, tag_name: "css3" },
-          // { tag_id: 14, tag_name: "js" },
-          // { tag_id: 15, tag_name: "ts" },
-          // { tag_id: 16, tag_name: "vue2" },
-          // { tag_id: 17, tag_name: "vue3" },
-          // { tag_id: 18, tag_name: "jq" },
-          // { tag_id: 19, tag_name: "React" },
-          // { tag_id: 20, tag_name: "Swift" },
-          // { tag_id: 21, tag_name: "Kotlin" },
-          // { tag_id: 22, tag_name: "Fortran" },
-          // { tag_id: 23, tag_name: "MATLAB" },
-          // { tag_id: 24, tag_name: "r" },
-          // { tag_id: 25, tag_name: "d" },
+          { tag_id: 6, tag_name: "Go" },
+          { tag_id: 7, tag_name: "Ruby" },
+          { tag_id: 8, tag_name: "Node.js" },
+          { tag_id: 9, tag_name: "C#" },
+          { tag_id: 10, tag_name: "html" },
+          { tag_id: 11, tag_name: "html5" },
+          { tag_id: 12, tag_name: "css" },
+          { tag_id: 13, tag_name: "css3" },
+          { tag_id: 14, tag_name: "js" },
+          { tag_id: 15, tag_name: "ts" },
+          { tag_id: 16, tag_name: "vue2" },
+          { tag_id: 17, tag_name: "vue3" },
+          { tag_id: 18, tag_name: "jq" },
+          { tag_id: 19, tag_name: "React" },
+          { tag_id: 20, tag_name: "Swift" },
+          { tag_id: 21, tag_name: "Kotlin" },
+          { tag_id: 22, tag_name: "Fortran" },
+          { tag_id: 23, tag_name: "MATLAB" },
+          { tag_id: 24, tag_name: "r" },
+          { tag_id: 25, tag_name: "d" },
           // { tag_id: 26, tag_name: "sas" },
           // { tag_id: 27, tag_name: "c" },
           // { tag_id: 28, tag_name: "C++" },
@@ -156,8 +153,6 @@
     })//离开页面时移除监听窗口缩放
 
     const tagHeightRet=ref();
-        
-    
     
     function onWindowResize() {
    
@@ -197,16 +192,64 @@ function clickTagBtn () {
 
 
 
-.select-list{
+.select-container{
                   display: none;
                   position:fixed;
-               
                   background-color:var(--bg);
-                 
-                 
                   transform: translateY(100%);
-                 
                   z-index: 1007;
+                  width: 100%;
+                  
+
+                  .select-content-container {
+     
+      display: flex;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+      align-items: center;
+      font-size: 16px;
+      background-color: var(--bg);  
+      color: var(--text);
+      height: 40px;
+      white-space: nowrap;
+      height: 72px;
+
+      .tag-content {
+        display: flex;
+        color: var(--text);
+         /*这是关键属性，flex模式允许换行 */
+        flex-wrap: wrap;
+        
+        .active {
+            background-color: rgba(0, 0, 0, 0.03);
+            border-radius: 999px;
+            color: var(--text);
+          }
+        .tag-item {
+          height: 40px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 0 16px;
+          cursor: pointer;
+          -webkit-user-select: none;
+          user-select: none;
+
+          
+            /*鼠标移入效果*/
+          &:hover{ 
+            background-color: rgba(0, 0, 0, 0.03);
+            border-radius: 999px;
+            color: var(--text);
+          }
+        }
+       
+      }
+    }
+
+
+                 
               }
 
 
@@ -224,9 +267,10 @@ function clickTagBtn () {
 
     .content-container {
       /* backdrop-filter: blur(20px); */
-      width: calc(100vw - 24px);
-      position: relative;
+      /* width: calc(100vw - 24px); */
+      width:calc(100% - 30px);
       display: flex;
+      position: relative;
       user-select: none;
       -webkit-user-select: none;
       align-items: center;
@@ -270,27 +314,34 @@ function clickTagBtn () {
       }
     }
 
-
-
-  }
-
-
-
+    
   .tag-show-all-bnt-container{
+    display: flex;
+
    width: 30px;
-   height: 100%;
-   
+   /* height: 100%; */
+   height: 72px;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
-  /* margin-right: 10px; */
+  margin-right: 10px;
+  background-color: var(--bg);
   .svg-icon{
+    justify-content: center;
+    align-items: center;
         width: 16px;
         height: 16px;
 		}
 }
+
+
+
+
+  }
+
+
 
 
 
