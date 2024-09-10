@@ -8,7 +8,8 @@
             <div class="header-container-right-icon">
 				
             <div class="icon-item">
-				<svg-icon class="svg-icon" icon-class="search"/>
+				<svg-icon  class="svg-icon" icon-class="search"/>
+				
 				<NavTheme></NavTheme>
 			</div>
 				    
@@ -69,10 +70,14 @@ import NavTheme from './nav_theme.vue'
 				.icon-item{
 					margin-left: auto;
 					display: flex;
+					width: 100px;
+					height: 100%;
+					justify-content: center;
+					align-items: center;
 					.svg-icon{
 						width: 32px;
 						height: 32px;
-						padding-right: 20px;
+						padding-right: 10px;
 					}
 				}
 			}
