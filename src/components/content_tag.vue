@@ -36,14 +36,11 @@
 
     </div>
     <!-- 点击显示更多 结束-->
-  <!-- <div  style="visibility:hidden; position: absolute;top:-9999px;left:-9999px;"> -->
-
   <div style="visibility:hidden; position: absolute;top:-9999px;left:-9999px;">
     <div class="tag-container">
 
       <div class="content-container">
         <div class="tag-content" ref="tagWithRet" style="overflow: hidden;">
-          <div class="tag-item">All</div>
           <div class="tag-item" v-for="(item, index) in data.list" :key="index"> {{ item.tag_name }}</div>
         </div>
       </div>
@@ -144,41 +141,30 @@
 
   onMounted(() => {
     //     console.log('挂载完毕');
-
-
-    maxItemsPerLines();//每行最多标签数量
-    // 初始化 防止元素换行(元素已设置换行属性)
-    // onWindowResize();
-    // window.addEventListener('resize', onWindowResize);//监听窗口缩放
+    //初始化每行最多标签数量
+    maxItemsPerLines();
+    //监听窗口响应式每行最多标签数量
+    window.addEventListener('resize', maxItemsPerLines);//监听窗口缩放
   })
 
 
   onUnmounted(() => {
-    // window.removeEventListener('resize', onWindowResize)
+    window.removeEventListener('resize', maxItemsPerLines)
   })//离开页面时移除监听窗口缩放
-
-  const tagHeightRet = ref();
-
-  function onWindowResize() {
-
-    // console.log('tagHeightRet:',tagHeightRet.value.clientHeight);
-
-    data.tagHeight = tagHeightRet.value.clientHeight;//元素高度
-
-
-  }
-
 
   //每行最多标签数量
   function maxItemsPerLines() {
     const tagContainer = tagWithRet.value;              //标签容器dom
     const tagItem = Array.from(tagContainer.children); //标签容器内所有子项dom
     let tag_container_width = tagContainer.offsetWidth;//标签容器宽度
+
+    console.log('tag_container_width:',tag_container_width);
+
     let i = 0;
     const tag_item_count = tagItem.length;//标签个数
 
-
     if (tag_item_count > 0) {
+      data.tag_item_dom_with_count=0;//初始化，防止标签宽度和累加
       for (i; i < tag_item_count; i++) {
         const tag_item_dom = tagItem[i];                    //标签容器dom
         data.tag_item_dom_with_count += tag_item_dom.offsetWidth;//标签宽度相加
@@ -219,8 +205,8 @@
         //截取指向更多标签数据
         data.show_arrow_more_tag_data = data.list.slice(data.show_tag_count, data.list.length);
       }
-      console.log('data.tag_item_dom_with_count', data.tag_item_dom_with_count);
-      console.log('data.show_arrow_more_tag_data', data.show_arrow_more_tag_data);
+      // console.log('data.tag_item_dom_with_count', data.tag_item_dom_with_count);
+      // console.log('data.show_arrow_more_tag_data', data.show_arrow_more_tag_data);
       data.tagWrap = true;
     } else {
 
@@ -260,6 +246,10 @@
       white-space: nowrap;
       height: 72px;
 
+    
+    }
+
+
       .tag-content {
         display: flex;
         color: var(--text);
@@ -292,7 +282,6 @@
         }
 
       }
-    }
 
 
     .arrow-more-tag-bnt-container {

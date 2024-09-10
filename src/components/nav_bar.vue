@@ -8,9 +8,9 @@
             <div class="header-container-right-icon">
 				
             <div class="icon-item">
-				<svg-icon  class="svg-icon" icon-class="search"/>
+				<div><svg-icon  class="svg-icon" icon-class="search"/> </div>
+				<div><NavTheme></NavTheme></div>	
 				
-				<NavTheme></NavTheme>
 			</div>
 				    
 				
@@ -57,28 +57,31 @@ import NavTheme from './nav_theme.vue'
 			/* padding: 0 16px 0 16px; */
             padding: 0;
 			.header-logo {
-				display: flex;
+				flex:1;
 				width: auto;
 				height: 32px
 			}
 			.header-container-right-icon{
-				display: flex;
-				align-items: center;
+				align-items: center; 
 				justify-content: space-between;
 				height: 72px;
-				width: 100%;
+				width: 85px;
 				.icon-item{
 					margin-left: auto;
 					display: flex;
-					width: 100px;
+					width: 100%;
 					height: 100%;
-					justify-content: center;
-					align-items: center;
-					.svg-icon{
-						width: 32px;
-						height: 32px;
-						padding-right: 10px;
+					align-items: center; 
+					justify-content:content;
+					>div{
+						margin-right: 10px;
+						.svg-icon{
+							width: 32px;
+							height: 32px;
+						}
+
 					}
+					
 				}
 			}
 
