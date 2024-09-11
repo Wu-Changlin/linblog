@@ -58,18 +58,7 @@ const routes=[
         path:'/article',
         name:"article",
         component:()=>import('@/views/frontend/article.vue')
-    },
-
-    {
-        path:'/article_copy',
-        name:"article_copy",
-        component:()=>import('@/views/frontend/article_copy.vue')
-    },
-
-    
-   
-
-    
+    },    
 ]
 
 const router =createRouter({

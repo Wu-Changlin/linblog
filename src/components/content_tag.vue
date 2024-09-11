@@ -40,7 +40,7 @@
     <div class="tag-container">
 
       <div class="content-container">
-        <div class="tag-content" ref="tagWithRet" style="overflow: hidden;">
+        <div class="tag-content" ref="tagWidthRet" style="overflow: hidden;">
           <div class="tag-item" v-for="(item, index) in data.list" :key="index"> {{ item.tag_name }}</div>
         </div>
       </div>
@@ -57,7 +57,7 @@
   import { useRouter } from "vue-router";
   const router = useRouter();
 
-  const tagWithRet = ref();//获取标签容器dom宽度
+  const tagWidthRet = ref();//获取标签容器dom宽度
 
   const data = reactive({
     tagHeight: 0,
@@ -69,7 +69,7 @@
     show_tag_count: 0,//页面实际渲染标签数量
     show_tag_data: [],//页面实际渲染标签数据
     show_arrow_more_tag_data: [],//显示更多标签数据
-    tag_item_dom_with_count: 0,//统计标签dom宽度
+    tag_item_dom_width_count: 0,//统计标签dom宽度
     list: [
       { tag_id: 1, tag_name: "All" },
       { tag_id: 53, tag_name: "c" },
@@ -131,7 +131,7 @@
 
 
   function clickTag(tag_id) {
-    console.log('tag_id:', tag_id);
+    // console.log('tag_id:', tag_id);
     data.tagActive = tag_id;
   }
 
@@ -151,10 +151,10 @@
 
   //每行最多标签数量
   function maxItemsPerLines() {
-    const tagContainer = tagWithRet.value;              //标签容器dom
+    const tagContainer = tagWidthRet.value;              //标签容器dom
     const tagItem = Array.from(tagContainer.children); //标签容器内所有子项标签dom
     let tag_container_width = tagContainer.offsetWidth;//标签容器宽度
-    let tag_item_with_count = 0;
+    let tag_item_width_count = 0;
     let tag_item_count = 0;
     let i = 0;
     const all_tag_item_num = tagItem.length;//标签个数
@@ -163,17 +163,17 @@
      
       for (i; i < all_tag_item_num; i++) {
         const tag_item_dom = tagItem[i];                    //标签容器dom
-        tag_item_with_count += tag_item_dom.offsetWidth;//标签宽度相加
-        if (tag_item_with_count <= tag_container_width) {//判断标签dom宽度和小于等于标签容器宽度，标签数量加1
-          // console.log('tag_item_dom_with_count:',tag_item_dom_with_count);
+        tag_item_width_count += tag_item_dom.offsetWidth;//标签宽度相加
+        if (tag_item_width_count <= tag_container_width) {//判断标签dom宽度和小于等于标签容器宽度，标签数量加1
+          // console.log('tag_item_dom_width_count:',tag_item_dom_width_count);
           tag_item_count += 1;
         }
       }
      
       data.show_tag_count=tag_item_count;//赋值，页面实际渲染标签数量
-      data.tag_item_dom_with_count=tag_item_with_count;//赋值，页面标签dom总宽度
+      data.tag_item_dom_width_count=tag_item_width_count;//赋值，页面标签dom总宽度
       // console.log('data.show_tag_data:',data.show_tag_data);
-      if (data.tag_item_dom_with_count <= tag_container_width) {//判断标签dom小于等于标签容器dom宽（没有溢出），隐藏指向图标容器  
+      if (data.tag_item_dom_width_count <= tag_container_width) {//判断标签dom小于等于标签容器dom宽（没有溢出），隐藏指向图标容器  
         data.show_tag_data = data.list;
         data.tagBtn = false; //隐藏指向图标容器  
       } else {//溢出标签容器dom，显示指向图标容器
@@ -198,11 +198,11 @@
     data.tagBtnType = !data.tagBtnType;
     if (data.tagBtnType) {
 
-      if (data.tag_item_dom_with_count > tagWithRet.value.offsetWidth) {//判断标签dom总宽度大于标签容器dom宽度（有溢出），截取指向更多标签数据
+      if (data.tag_item_dom_width_count > tagWidthRet.value.offsetWidth) {//判断标签dom总宽度大于标签容器dom宽度（有溢出），截取指向更多标签数据
         //截取指向更多标签数据
         data.show_arrow_more_tag_data = data.list.slice(data.show_tag_count, data.list.length);
       }
-      // console.log('data.tag_item_dom_with_count', data.tag_item_dom_with_count);
+      // console.log('data.tag_item_dom_width_count', data.tag_item_dom_width_count);
       // console.log('data.show_arrow_more_tag_data', data.show_arrow_more_tag_data);
       data.tagWrap = true;
     } else {
