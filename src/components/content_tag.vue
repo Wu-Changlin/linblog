@@ -49,9 +49,6 @@
   </div>
 
 
-
-
-
 </template>
 
 
@@ -155,28 +152,28 @@
   //每行最多标签数量
   function maxItemsPerLines() {
     const tagContainer = tagWithRet.value;              //标签容器dom
-    const tagItem = Array.from(tagContainer.children); //标签容器内所有子项dom
+    const tagItem = Array.from(tagContainer.children); //标签容器内所有子项标签dom
     let tag_container_width = tagContainer.offsetWidth;//标签容器宽度
-
-    console.log('tag_container_width:',tag_container_width);
-
+    let tag_item_with_count = 0;
+    let tag_item_count = 0;
     let i = 0;
-    const tag_item_count = tagItem.length;//标签个数
+    const all_tag_item_num = tagItem.length;//标签个数
 
-    if (tag_item_count > 0) {
-      data.tag_item_dom_with_count=0;//初始化，防止标签宽度和累加
-      for (i; i < tag_item_count; i++) {
+    if (all_tag_item_num > 0) {
+     
+      for (i; i < all_tag_item_num; i++) {
         const tag_item_dom = tagItem[i];                    //标签容器dom
-        data.tag_item_dom_with_count += tag_item_dom.offsetWidth;//标签宽度相加
-        if (data.tag_item_dom_with_count <= tag_container_width) {//判断标签宽度和小于等于标签容器宽度，标签数量加1
+        tag_item_with_count += tag_item_dom.offsetWidth;//标签宽度相加
+        if (tag_item_with_count <= tag_container_width) {//判断标签dom宽度和小于等于标签容器宽度，标签数量加1
           // console.log('tag_item_dom_with_count:',tag_item_dom_with_count);
-          data.show_tag_count += 1;
+          tag_item_count += 1;
         }
       }
-      // console.log('data.show_tag_count:',data.show_tag_count);
-
+     
+      data.show_tag_count=tag_item_count;//赋值，页面实际渲染标签数量
+      data.tag_item_dom_with_count=tag_item_with_count;//赋值，页面标签dom总宽度
       // console.log('data.show_tag_data:',data.show_tag_data);
-      if (data.tag_item_dom_with_count <= tag_container_width) {//判断标签dom小于等于标签容器dom（没有溢出），隐藏指向图标容器  
+      if (data.tag_item_dom_with_count <= tag_container_width) {//判断标签dom小于等于标签容器dom宽（没有溢出），隐藏指向图标容器  
         data.show_tag_data = data.list;
         data.tagBtn = false; //隐藏指向图标容器  
       } else {//溢出标签容器dom，显示指向图标容器
@@ -201,7 +198,7 @@
     data.tagBtnType = !data.tagBtnType;
     if (data.tagBtnType) {
 
-      if (data.tag_item_dom_with_count > tagWithRet.value.offsetWidth) {//判断标签dom大于标签容器dom（有溢出），截取指向更多标签数据
+      if (data.tag_item_dom_with_count > tagWithRet.value.offsetWidth) {//判断标签dom总宽度大于标签容器dom宽度（有溢出），截取指向更多标签数据
         //截取指向更多标签数据
         data.show_arrow_more_tag_data = data.list.slice(data.show_tag_count, data.list.length);
       }

@@ -42,6 +42,12 @@ const routes=[
                 name:"diary",
                 component:()=>import('@/views/frontend/diary.vue')
             },
+
+            {
+                path:'/search',
+                name:"search",
+                component:()=>import('@/views/frontend/search.vue')
+            },
             
         
         
@@ -53,6 +59,14 @@ const routes=[
         name:"article",
         component:()=>import('@/views/frontend/article.vue')
     },
+
+    {
+        path:'/article_copy',
+        name:"article_copy",
+        component:()=>import('@/views/frontend/article_copy.vue')
+    },
+
+    
    
 
     

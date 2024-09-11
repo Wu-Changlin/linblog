@@ -2,30 +2,7 @@
 
   <div class="archives-page">
     <div class="archives-container">
-      <!-- 网站统计栏 开始-->
-      <h2>网站统计</h2>
-        <!-- 网站内容 开始-->
-        <div class="website-content-count">
-          <p>内容统计：</p>
-       
-          <div class="website-content-count-content">
-            <WebsiteContentCount></WebsiteContentCount>
-          </div>
-  
-        </div>
-        <!-- 网站内容 结束-->
-        <!-- 运行时间 开始-->
-        <div class="run-time-count">
-          
-          <p>本站已运行：</p>
-          <div class="run-time-count-content">
-            <WebsiteRunTiem></WebsiteRunTiem>
-          </div>
-         
-  
-        </div>
-        <!-- 运行时间 结束-->
-      <!-- 网站统计栏 结束-->  
+   
   
       <!-- 标签统计栏 开始-->
       <h2>标签</h2>
@@ -53,48 +30,8 @@
       
       <!-- 点击标签结果栏 结束-->
   
-      <!-- 贡献统计栏 开始-->
-      <h2>贡献</h2>
-      <div class="contribution-calendar-count">
-        <div class="contribution-calendar-count-content">
-          <ContributionCalendar @child-click-contribution-day="clickContributionDay"></ContributionCalendar>
-        </div>
-      </div>
-      
-      <!-- 贡献统计栏 结束-->
   
-      <!-- 动态栏 开始-->
     
-      
-      <div v-if="select_contribution_year" class="contribution-activity-count">
-
-        <div  class="contribution-activity-count-content">
-          <div class="text-left"> <h3>动态 </h3></div>
-          <div class="line"></div>
-          <div class="text-right"> 
-            <span v-if="!is_selected_data">
-              {{ select_contribution_year}} 
-            </span>
-            <span v-if="is_selected_data==true">
-                {{select_contribution_year}} 
-              -{{contribution_day_month_data?contribution_day_month_data:'' }}
-              -{{contribution_day_date_data?contribution_day_date_data:'' }}
-              ,贡献{{contribution_day_number_data?contribution_day_number_data:''}}次
-            </span>
-          </div>
-        </div>
-
-      </div>
-
-      <div   v-if="select_contribution_year" style="width: 100%; padding: 2px;">
-        <Waterfall></Waterfall>
-       </div>
-     
-
-       <!-- 动态栏 结束 -->
-       <!-- <Waterfall></Waterfall> -->
-      
-  
     </div>
    
   

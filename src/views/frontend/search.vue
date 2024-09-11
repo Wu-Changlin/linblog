@@ -2,30 +2,7 @@
 
   <div class="archives-page">
     <div class="archives-container">
-      <!-- 网站统计栏 开始-->
-      <h2>网站统计</h2>
-        <!-- 网站内容 开始-->
-        <div class="website-content-count">
-          <p>内容统计：</p>
-       
-          <div class="website-content-count-content">
-            <WebsiteContentCount></WebsiteContentCount>
-          </div>
-  
-        </div>
-        <!-- 网站内容 结束-->
-        <!-- 运行时间 开始-->
-        <div class="run-time-count">
-          
-          <p>本站已运行：</p>
-          <div class="run-time-count-content">
-            <WebsiteRunTiem></WebsiteRunTiem>
-          </div>
-         
-  
-        </div>
-        <!-- 运行时间 结束-->
-      <!-- 网站统计栏 结束-->  
+   
   
       <!-- 标签统计栏 开始-->
       <h2>标签</h2>
@@ -53,48 +30,39 @@
       
       <!-- 点击标签结果栏 结束-->
   
-      <!-- 贡献统计栏 开始-->
-      <h2>贡献</h2>
-      <div class="contribution-calendar-count">
-        <div class="contribution-calendar-count-content">
-          <ContributionCalendar @child-click-contribution-day="clickContributionDay"></ContributionCalendar>
-        </div>
-      </div>
-      
-      <!-- 贡献统计栏 结束-->
   
-      <!-- 动态栏 开始-->
+
+
+        <div style="display: flex; width: 100vw;">
     
-      
-      <div v-if="select_contribution_year" class="contribution-activity-count">
-
-        <div  class="contribution-activity-count-content">
-          <div class="text-left"> <h3>动态 </h3></div>
-          <div class="line"></div>
-          <div class="text-right"> 
-            <span v-if="!is_selected_data">
-              {{ select_contribution_year}} 
-            </span>
-            <span v-if="is_selected_data==true">
-                {{select_contribution_year}} 
-              -{{contribution_day_month_data?contribution_day_month_data:'' }}
-              -{{contribution_day_date_data?contribution_day_date_data:'' }}
-              ,贡献{{contribution_day_number_data?contribution_day_number_data:''}}次
-            </span>
-          </div>
+          <input style="width: calc(100vw - 52px);" bgColor="#FFFFFF" :placeholder="searchPlaceHolder"
+            ref="searchBar" :focus="true" radius="6" v-model="searchText" cancelButton="none" />
+          <div style="width: 52px; line-height: 50px;" @click="goSearchClick()"> 搜索 </div>
+    
+    
+        </div>
+    
+        <div style="display: flex; margin-top: -6px;" >
+          <div class="hotSearchTitV"> 历史记录 </div>
+          <image @click="deleteHisClick()"
+            style="margin-left: calc(100vw - 222px);width: 22px;height: 22px;margin-top: 6px;"
+            src="./delete_icon.png"></image>
+        </div>
+    
+        <div class="upview" 
+          style="overflow: hidden; flex: 1; flex-wrap: wrap;  width: calc(100vw - 20px);  margin-top:2px;">
+    
+          <!-- 自定义了一个data-id的属性,可以通过js获取到它的值!  hover-class 指定按下去的样式类-->
+          <!-- <div class="celldiv" v-for="(tagItem, index) in hisList" :key="index" @click="selHisClick(tagItem)">
+            {{tagItem}}
+          </div> -->
+    
         </div>
 
-      </div>
 
-      <div   v-if="select_contribution_year" style="width: 100%; padding: 2px;">
-        <Waterfall></Waterfall>
-       </div>
-     
 
-       <!-- 动态栏 结束 -->
-       <!-- <Waterfall></Waterfall> -->
-      
-  
+
+    
     </div>
    
   
@@ -188,6 +156,41 @@
   </script>
   
   <style>
+
+
+.hotSearchTitV {
+		margin-left: 14px;
+		margin-top: 4px;
+		width: 170px;
+		height: 22px;
+		font-size: 14px;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		color: #161616;
+		line-height: 22px;
+	}
+
+	.upView {
+		display: flex;
+		flex-direction: row;
+		height: auto;
+		margin-left: 4px;
+	}
+
+	.cellView {
+
+		height: 16px;
+		line-height: 16px;
+		text-align: center;
+
+		padding: 6px 10px !important;
+		margin-top: 10px;
+		font-size: 12px;
+		margin-left: 10px;
+		border-radius: 2px;
+		background-color: white;
+	}
+
   
   .archives-page {
     overflow-x: hidden;/* 禁止容器x轴方向滚动 */

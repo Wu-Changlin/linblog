@@ -1,6 +1,5 @@
 <template>
     
-
     <div class="side-bar-catalog">
         <div class="catalog-card" v-if="Object.keys(tocArray).length > 0">
             <div class="catalog-card-header">
@@ -26,10 +25,11 @@
                     v-show="title.isVisible"
                     :title="title.rawName"
                 >
-                    {{ title.name }}
+                {{title.isVisible}}   {{ title.rawName }} 
                 </div>
             </div>
         </div>
+        <div v-else>没有目录</div>
     </div>
 
 </template>
@@ -49,7 +49,7 @@ const props = defineProps({
 
 
 
-//获取目录
+        //获取目录
         const tocArray =ref([]);
         // let titles = reactive(getTitles());
         let currentTitle = reactive({});
@@ -62,7 +62,7 @@ const props = defineProps({
             nextTick(()=>{
                 let titles = [];
                 let levels = ['h1','h2','h3','h4','h5','h6'];
-                // console.log('props.containerName:',document.querySelector(props.containerName));
+              
                 let articleElement = document.querySelector(props.containerName);
                 if (!articleElement) {
                     return titles;
@@ -98,44 +98,48 @@ const props = defineProps({
                         scrollTop: element.offsetTop,
                     };
 
-                    if (titles.length > 0) {
-                        let lastNode = titles.at(-1);
-
-                        // 遇到子标题
-                        if (lastNode.level < node.level) {
-                            node.parent = lastNode;
-                            lastNode.children.push(node);
-                        }
-                        // 遇到上一级标题
-                        else if (lastNode.level > node.level) {
-                            serialNumbers.fill(0, level + 1);
-                            let parent = lastNode.parent;
-                            while (parent) {
-                                if (parent.level < node.level) {
-                                    parent.children.push(node);
-                                    node.parent = parent;
-                                    break;
-                                }
-                                parent = parent.parent;
+                    if (tocArray.value.length> 0) {//目录数组长度大于0
+                    let lastNode = tocArray.value.at(-1);
+                       
+                    // 遇到子标题
+                    if (lastNode.level < node.level) {
+                        node.parent = lastNode;
+                        lastNode.children.push(node);
+                    }
+                    // 遇到上一级标题
+                    else if (lastNode.level > node.level) {
+                        serialNumbers.fill(0, level + 1);
+                        let parent = lastNode.parent;
+                        while (parent) {
+                            if (parent.level < node.level) {
+                                parent.children.push(node);
+                                node.parent = parent;
+                                break;
                             }
-                        }
-                        // 遇到平级
-                        else if (lastNode.parent) {
-                            node.parent = lastNode.parent;
-                            lastNode.parent.children.push(node);
+                            parent = parent.parent;
                         }
                     }
+                    // 遇到平级
+                    else if (lastNode.parent) {
+                        node.parent = lastNode.parent;
+                        lastNode.parent.children.push(node);
+                    }
+                }
 
+                   
                     serialNumbers[level] += 1;
                     let serialNumber = serialNumbers.slice(0, level + 1).join(".");
 
                     node.isVisible = node.parent == null;
+                    // node.isVisible =  null;
+                    // console.log('titles.length,',JSON.stringify(node));
+                   
                     node.name = serialNumber + ". " + element.innerText;
-                    tocArray.value.push(node);
+                    tocArray.value.push(node);//循环每一条目录加入目录数组
                 }
             
                 // console.log('tocArray:',JSON.stringify(tocArray.value))
-                 return titles;  
+                //  return titles;  
             })
         }
 
@@ -151,6 +155,7 @@ const props = defineProps({
 
             for (let i =  tocArray.value.length - 1; i >= 0; i--) {
                 const title =  tocArray.value[i];
+             
                 if (title.scrollTop <= window.scrollY) {
                     if (currentTitle.id === title.id) return;
 
@@ -189,12 +194,11 @@ const props = defineProps({
 
         // 滚动到指定的位置
         function scrollToView(scrollTop) {
+            scrollTop=scrollTop-72;//减去头部导航栏
             window.scrollTo({ top: scrollTop, behavior: "smooth" });
         }
 
-        // return { titles, currentTitle, progress, scrollToView };
-
-   
+       
 
 </script>
 
