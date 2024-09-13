@@ -91,7 +91,7 @@ function clickMenu(menu_path){
 }
 </script>
 
-<style>
+<style scoped>
 
   	.side-bar {
 		height: calc(100vh - 72px);

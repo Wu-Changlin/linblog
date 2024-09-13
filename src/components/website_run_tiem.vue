@@ -75,7 +75,7 @@ onBeforeMount(()=>{
   
 </script>
 
-<style>
+<style scoped>
 /* 网站运行时间 */
 
 .run-time-count .run-time-count-container

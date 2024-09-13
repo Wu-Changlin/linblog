@@ -62,30 +62,6 @@ const list = ref([
 ]);
 
 
-
-//获取数据
-
-
-//每行显示个数。如没有符合尺寸，默认选择相近条件。
-const breakpoints=ref ({
-  1424: {
-    rowPerView:5
-  },
-  1192: {
-    rowPerView:4
-  },
-  960: {
-    rowPerView:3
-  },
-  696: {
-    rowPerView:2
-  },
-  400: {
-    rowPerView:1
-  }
-
-}) 
-
 </script>
 
 <style  scoped>

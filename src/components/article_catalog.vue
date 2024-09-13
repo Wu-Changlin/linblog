@@ -3,12 +3,10 @@
     <div class="side-bar-catalog">
         <div class="catalog-card" v-if="Object.keys(tocArray).length > 0">
             <div class="catalog-card-header">
-                <div>
-                    <!-- <span>
-                        <font-awesome-icon :icon="['fas', 'bars-staggered']" class="catalog-icon"/>
-                    </span> -->
+                <!-- <div style="display: flex;align-items: center; justify-content: center; "> -->
+                    <!-- <svg-icon icon-class="catalog" /> -->
                     <span>目录</span>
-                </div>
+                <!-- </div> -->
                 <span class="progress">{{ progress }}</span>
             </div>
     
@@ -25,7 +23,7 @@
                     v-show="title.isVisible"
                     :title="title.rawName"
                 >
-                {{title.isVisible}}   {{ title.rawName }} 
+                  {{ title.rawName }} 
                 </div>
             </div>
         </div>
@@ -211,7 +209,7 @@ const props = defineProps({
 		display: flex;
 		flex-direction: column;
 		flex-shrink: 0;
-		padding-top: 16px;
+		/* padding-top: 16px; */
 		margin-top: 72px;
 		position: fixed;
 		overflow: visible;
@@ -228,7 +226,7 @@ const props = defineProps({
             background-color: var(--bg);
             /* background-color: rgba(0, 0, 0, 0.5);  */
             /* 确保遮罩在其他内容之上 */
-            z-index: 100;
+            z-index: 10;
 		}
 		
 
@@ -262,7 +260,7 @@ const props = defineProps({
     background: white;
     /* border-radius: 8px; */
     box-shadow: 0 3px 8px 6px rgba(7, 17, 27, 0.05);
-    padding: 20px 24px;
+    padding: 0px 20px  24px 20px;
     width: 100%;
     /* margin-top: 25px; */
     box-sizing: border-box;

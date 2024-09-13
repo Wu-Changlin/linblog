@@ -141,7 +141,7 @@
   //爷组件传值 子组件以 inject接收
   let select_contribution_year =ref(2024);
   
-  provide('contributionYear', select_contribution_year)
+  provide('contributionYear', select_contribution_year);//爷传孙，默认选中当年年份
   
    
   let stopWatch = null;
@@ -161,13 +161,11 @@
     // console.log(`select_contribution_year from ${oldValue} to ${newValue}`);
   }
   
-
-
-
   let contribution_day_month_data =ref();
   let contribution_day_date_data =ref();
   let contribution_day_number_data =ref();
   let is_selected_data=ref();
+  //由ContributionCalendar子组件发到父组件的点击贡献图某日数据
   function clickContributionDay(contribution_day_year,contribution_day_month,contribution_day_date,contribution_day_number,is_selected){
  
     is_selected_data.value=is_selected;
@@ -187,7 +185,7 @@
 
   </script>
   
-  <style>
+  <style scoped>
   
   .archives-page {
     overflow-x: hidden;/* 禁止容器x轴方向滚动 */

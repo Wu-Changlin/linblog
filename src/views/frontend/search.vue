@@ -29,61 +29,54 @@
        </div>
       
       <!-- 点击标签结果栏 结束-->
-  
-  
-
-
-        <div style="display: flex; width: 100vw;">
-    
-          <input style="width: calc(100vw - 52px);" bgColor="#FFFFFF" :placeholder="searchPlaceHolder"
-            ref="searchBar" :focus="true" radius="6" v-model="searchText" cancelButton="none" />
-          <div style="width: 52px; line-height: 50px;" @click="goSearchClick()"> 搜索 </div>
-    
-    
-        </div>
-    
-        <div style="display: flex; margin-top: -6px;" >
-          <div class="hotSearchTitV"> 历史记录 </div>
-          <image @click="deleteHisClick()"
-            style="margin-left: calc(100vw - 222px);width: 22px;height: 22px;margin-top: 6px;"
-            src="./delete_icon.png"></image>
-        </div>
-    
-        <div class="upview" 
-          style="overflow: hidden; flex: 1; flex-wrap: wrap;  width: calc(100vw - 20px);  margin-top:2px;">
-    
-          <!-- 自定义了一个data-id的属性,可以通过js获取到它的值!  hover-class 指定按下去的样式类-->
-          <!-- <div class="celldiv" v-for="(tagItem, index) in hisList" :key="index" @click="selHisClick(tagItem)">
-            {{tagItem}}
-          </div> -->
-    
-        </div>
-
-
-
-
-    
     </div>
    
-  
-   
   </div>
-
-
   </template>
   
   <script setup>
-  import WebsiteContentCount from '@/components/website_content_count.vue';  
-  import WebsiteRunTiem from '@/components/website_run_tiem.vue';
-  import ContributionCalendar from '@/components/contribution_calendar.vue';
   import TagCount from '@/components/tag_count.vue';
   import Waterfall from '@/components/waterfall.vue';
-  
-  
   import { ref, reactive,onMounted, provide ,watch,onUnmounted} from "vue";
+  import { useRoute } from 'vue-router';
+const route = useRoute();
 
+const search_content=ref('');
 
+// 使用ref来存储watch返回的函数 监听路由传参keyword
+const stopKeywordWatch = ref(null);
+
+   onMounted(() => {
+      search_content.value = route.query.keyword;
+      // console.log('onMounted, search_content.value :', search_content.value );
+       // 设置一个watch监听器
+       // 立即监听，并存储取消监听的函数
+       stopKeywordWatch.value = watch(
+       () => route.query.keyword,
+       (newValue, oldValue) => {
+        if(newValue){//如有路由传参更新,那么重新赋值
+          search_content.value = newValue;
+          // console.log('newValue <= oldValue :',newValue,'<=' ,oldValue,',search_content:',search_content.value);
+        }
+       
+        
+       },
+       // { immediate: true }
+     );
+   
+   });
+   
+
+   
   
+   onUnmounted(() => {
+      
+    stopKeywordWatch.value (); // 如果watch返回了一个停止监听的函数，调用它
+   });
+
+ 
+
+
 
   let tag_name=ref('');
   let tag_number=ref(0);
@@ -107,90 +100,13 @@
   3.爷爷当初定义的空函数中参数写value,获得的就是孙子传递过来的值 (或者监听响应式数据、响应式对象的变化进行下一步操作，如作为参数去请求接口)
   */
   //爷组件传值 子组件以 inject接收
-  let select_contribution_year =ref(2024);
-  
-  provide('contributionYear', select_contribution_year)
-  
-   
-  let stopWatch = null;
-   
-  // 设置一个watch监听器
-  stopWatch = watch(select_contribution_year, (newValue, oldValue) => {
-    watchselect_contribution_year(oldValue,newValue)
-  });
-  
-  // 组件销毁前清除watch
-  onUnmounted(() => {
-    stopWatch(); // 如果watch返回了一个停止监听的函数，调用它
-  });
-  
-  
-  function watchselect_contribution_year(oldValue,newValue){
-    // console.log(`select_contribution_year from ${oldValue} to ${newValue}`);
-  }
   
 
-
-
-  let contribution_day_month_data =ref();
-  let contribution_day_date_data =ref();
-  let contribution_day_number_data =ref();
-  let is_selected_data=ref();
-  function clickContributionDay(contribution_day_year,contribution_day_month,contribution_day_date,contribution_day_number,is_selected){
- 
-    is_selected_data.value=is_selected;
-    // console.log('contribution_day_year：',contribution_day_year,',contribution_day_month:',contribution_day_month,',contribution_day_date:',contribution_day_date,',contribution_day_date:',contribution_day_number)
-    if(is_selected==true){
-      select_contribution_year.value=contribution_day_year;
-      contribution_day_month_data.value =contribution_day_month;
-      contribution_day_date_data.value =contribution_day_date;
-      contribution_day_number_data.value =contribution_day_number;
-    }else{
-      select_contribution_year.value=contribution_day_year;
-    }
-    
- 
-  }
 
 
   </script>
   
-  <style>
-
-
-.hotSearchTitV {
-		margin-left: 14px;
-		margin-top: 4px;
-		width: 170px;
-		height: 22px;
-		font-size: 14px;
-		font-family: PingFangSC-Medium, PingFang SC;
-		font-weight: 500;
-		color: #161616;
-		line-height: 22px;
-	}
-
-	.upView {
-		display: flex;
-		flex-direction: row;
-		height: auto;
-		margin-left: 4px;
-	}
-
-	.cellView {
-
-		height: 16px;
-		line-height: 16px;
-		text-align: center;
-
-		padding: 6px 10px !important;
-		margin-top: 10px;
-		font-size: 12px;
-		margin-left: 10px;
-		border-radius: 2px;
-		background-color: white;
-	}
-
+  <style scoped>
   
   .archives-page {
     overflow-x: hidden;/* 禁止容器x轴方向滚动 */

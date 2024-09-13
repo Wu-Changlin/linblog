@@ -214,7 +214,7 @@
 
 </script>
 
-<style>
+<style scoped>
 
 
   .tag-container {
@@ -224,7 +224,7 @@
     user-select: none;
     -webkit-user-select: none;
     position: fixed;
-    z-index: 1000;
+    z-index: 9;
     width: 100%;
     max-width: 1285px;
     .content-container {
@@ -317,7 +317,7 @@
     position: fixed;
     background-color: var(--bg);
     /* transform: translateY(100%); */
-    z-index: 1007;
+    z-index: 10;
     width: 100%;
     max-width: 1285px;
 

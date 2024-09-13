@@ -26,10 +26,10 @@
 import { ref,reactive,defineEmits,onMounted,onUnmounted,inject,defineProps,watch} from 'vue';
 
 
- // 接收爷爷的响应式数据
+ // 接收爷爷的响应式数据  默认选中当年年份
 const contributionYearInject = inject('contributionYear')
 
-
+//子传父
 const emit = defineEmits(['child-click-contribution-year'])
 
 
@@ -58,10 +58,7 @@ const	data =reactive({
     ],
 })
 
-
-
-
- 
+//选定日期的年份(父页面点击贡献图中日期格子的年份传值到子页面)
 const props = defineProps({
     theYearOfTheSelectedDate: Number
 });
@@ -70,10 +67,10 @@ const props = defineProps({
 // 使用ref来存储watch返回的函数
 const stopWatch = ref(null);
    
-// 监听全局点击事件
+
 onMounted(() => {
     //点击外部下拉菜单关闭
-    window.addEventListener('click', closeselectDown);
+    window.addEventListener('click', closeselectDown); // 监听全局点击事件
     // 设置一个watch监听器
     // 立即监听，并存储取消监听的函数
     stopWatch.value = watch(
@@ -101,16 +98,11 @@ function closeselectDown(e){
 }
 
 
-// 移除全局点击事件监听
+
 onUnmounted(() => {
-    window.removeEventListener('click', closeselectDown);
+    window.removeEventListener('click', closeselectDown);// 移除全局点击事件监听
     stopWatch.value (); // 如果watch返回了一个停止监听的函数，调用它
 });
-
-
-
-   
-
 
 //显示/隐藏
 function clickSelect(){
@@ -123,14 +115,14 @@ function changeSelect (contribution_year){
     data.annex_title=contribution_year;
     data.is_show_select=false;
     emit('child-click-contribution-year',contribution_year);//子传父 
-    contributionYearInject.value=contribution_year;//孙修改爷的传值 响应式 
+    contributionYearInject.value=contribution_year;//孙修改爷的传值 （选中当年年份改为当前所选年份）响应式 
 }
    
  
 </script>
   
   
-  <style>
+  <style scoped>
           
               
               /*  重新写一个下拉框组件  */
@@ -203,7 +195,7 @@ function changeSelect (contribution_year){
                   position:absolute;
                   margin-top: 10px;
                   background-color:var(--bg);
-                  z-index:800;
+                  z-index:9;
                   border-radius:5px;
                   border:1px solid #E4E7ED;
             
@@ -233,7 +225,7 @@ function changeSelect (contribution_year){
               .select-container li:hover{
                 background-color: rgba(0, 0, 0, 0.03);
                 border-radius: 999px;
-                color: var(--text);
+                color: var(--blue);
               }
 
               .contribution-year-active{

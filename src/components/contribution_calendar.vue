@@ -45,7 +45,7 @@
 
                   </li>
 
-                  <span class="tooltiptext">{{ item.year }} - {{ item.month }} -{{item.date}} :
+                  <span class="tooltiptext"> {{ item.month }} -{{item.date}} :
                     {{item.number}}次贡献</span>
                 </div>
 
@@ -407,7 +407,7 @@
 </script>
 
 
-<style>
+<style scoped>
   .contribution-calendar-container {
     display: flex;
     flex-direction: column;
@@ -554,7 +554,7 @@
     border-radius: 5px;
     padding: 5px;
     position: absolute;
-    z-index: 10000;
+    z-index: 8;
     bottom: 125%;
     left: 50%;
     transform: translateX(-50%);

@@ -147,7 +147,7 @@ function getDarkRandomColor() {
    
 </script>
 
-<style>
+<style scoped>
 
 
 

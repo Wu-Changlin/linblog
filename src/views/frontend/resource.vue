@@ -109,32 +109,11 @@
       console.log('tagId:'+tagId);
       data.showAll=false;//关闭鼠标移入效果
     }
-  /*吸顶效果 开始*/
-  //滑动监听
-  const scrollTop=()=>{
-      let top=document.documentElement.scrollTop || window.pageYOffset ||document.body.scrollTop; //兼容写法
-      let offsetTop = document.querySelector('.channel-scroll-container').offsetTop;//获取内容标签栏高度
-      if(top > offsetTop){//如果下滑超过内容标签栏，那么显示悬浮内容标签栏
-        data.isFixed=true;
-      }else{
-        data.isFixed=false;
-      }
-  
-  }
-  
-  //初始化
-  async function getInit(){
-    if(data.isFixed!=true){
-      window.addEventListener('scroll',scrollTop);  
-    }          
-  }
-  
-  getInit();
-    
+
   /*吸顶效果 结束*/
   </script>
 
-  <style>
+  <style scoped>
 .channel-container {
   display: flex;
   justify-content: space-between;
@@ -188,16 +167,5 @@
     }
   }
 }
- /* 占位 吸顶标签栏 */
-.sticky-box  {
-    margin: 0px 0px;
-    top: 72px;
-    width: 100%;
-    height: 72px;
-    background: var(--mask-paper);
-    display: flex;
-    justify-content: center;
-    z-index: 1001;
-    position: fixed;
-  }
+ 
   </style>

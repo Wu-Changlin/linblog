@@ -37,7 +37,7 @@ const data = reactive({
 
 </script>
 
-<style>
+<style scoped>
     /* 网站内容统计 */
     
     .website-content-container .website-content-count-container

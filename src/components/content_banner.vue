@@ -131,7 +131,7 @@ import { ref, reactive} from 'vue'
 
 </script>
 
-<style>
+<style scoped>
 
     .swipe-body{
         padding: 0;

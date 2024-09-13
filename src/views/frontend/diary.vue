@@ -1,4 +1,4 @@
-<style>
+<style scoped>
 
     .container-card{
       display: flex;
@@ -92,7 +92,7 @@
       border-radius: 5px;
       padding: 5px; 
       position: absolute;
-      z-index: 10000;
+      z-index: 100;
       bottom: 125%;
       left: 50%; 
       transform: translateX(-50%);
