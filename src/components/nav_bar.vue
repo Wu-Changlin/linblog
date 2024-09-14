@@ -31,14 +31,8 @@
 						<div class="select-list">
 							<!-- 下拉框列表 -->
 								<ul>
-									<li>
-										yyy
-									</li>
-									<li>
-										2222
-									</li>
-									<li>
-										eeee
+									<li  v-for="(item,index) in data.Files" :key="item.value" @click="changeSelect(item.contribution_year)">
+										{{ item.contribution_year }}
 									</li>
 								</ul>
 							</div>

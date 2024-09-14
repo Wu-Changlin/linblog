@@ -9,7 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@highlightjs/vue-plugin": "^2.1.0",
     "element-plus": "^2.8.0",
+    "highlight.js": "^11.10.0",
     "moment": "^2.30.1",
     "vue": "^3.4.31",
     "vue-router": "^4.4.2",
