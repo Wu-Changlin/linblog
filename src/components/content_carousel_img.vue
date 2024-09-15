@@ -1,72 +1,129 @@
 <template>
  
-   
-    <div  class="swipe-body">
-        <div class="carousel" @mouseover="pauseTimer" @mouseout="resumeTimer">
-            <div class="carousel-inner" :style="{'transform': `translateX(-${data.active_carousel_index * 100}%)` }">
-                <div class="item"  v-for="index in data.list" >
-                    <img    :src="index.image" >
-                </div> 
-            </div>
-        </div>
-        <div class="vui-carousel" ref='dotsList' :style="{'--b-color':data.list[data.active_carousel_index].vui_carousel_color}">
     
-            <div class="l-box">
-                <div class="title">{{data.list[data.active_carousel_index].title}}</div>
+    <transition name="scale-down" mode="out-in">
+        <!-- 骨架屏 开始-->
+            <div v-if="is_loading" key="loading" class="content-banner-skeleton" ref="contentBannerSkeletonContainerRef">
+              <!-- <div class="home-skeleton"  :style=" {height: home_skeleton_height + 'px'}" ref="skeletonContainerRef"> -->
+              
+                <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height + 'px'" animated /><!-- 图片占位 -->
                 
+               
             </div>
-
-            <div class="r-box">
-                
-                <ul class="dots">
-                    <li :class="[index==data.active_carousel_index?'pacman':'dot',data.is_prev?'l':'']" v-for="(item,index) in data.list"  @click="jumpToSlide(index)">
-                        <!-- 吃豆人 -->
-                        <div v-if="index==data.active_carousel_index"></div>
-                        <div v-if="index==data.active_carousel_index"></div>
-                    </li>
-                </ul>
+<!-- 骨架屏 结束-->
+ <!-- 轮播图 开始-->
+            <div v-else class="carousel-container">
+                <div class="carousel-content" @mouseover="pauseTimer" @mouseout="resumeTimer">
+                    <div class="carousel-inner" :style="{'transform': `translateX(-${data.active_carousel_index * 100}%)` }">
+                        <div class="item"  v-for="index in data.list" >
+                            <img    :src="index.image" >
+                        </div> 
+                    </div>
+                </div>
+                <div class="vui-carousel" ref='dotsList' :style="{'--b-color':data.list[data.active_carousel_index].vui_carousel_color}">
+            
+                    <div class="l-box">
+                        <div class="title">{{data.list[data.active_carousel_index].title}}</div>
+                        
+                    </div>
+        
+                    <div class="r-box">
+                        
+                        <ul class="dots">
+                            <li :class="[index==data.active_carousel_index?'pacman':'dot',data.is_prev?'l':'']" v-for="(item,index) in data.list"  @click="jumpToSlide(index)">
+                                <!-- 吃豆人 -->
+                                <div v-if="index==data.active_carousel_index"></div>
+                                <div v-if="index==data.active_carousel_index"></div>
+                            </li>
+                        </ul>
+                    </div>
+        
+                </div>
             </div>
-
-        </div>
-    </div>
-           
+ <!-- 轮播图 结束-->
+</transition>
          
 </template>
 
 
-
-
 <script setup>
-import { ref, reactive} from 'vue'
-    
+import { ref, reactive,onMounted,onUnmounted } from 'vue'
+import axios from 'axios';
+ import Skeleton from '@/components/skeleton.vue'
     const data=reactive( {
         active_carousel_index:0, //当前轮播下标
         is_prev:false, //是否点击上一张(控制吃豆人朝向)
         // 轮播图数据(json格式)
-        list:[{
-            title:'标题一',
-            image:'https://img1.baidu.com/it/u=1290439506,2867352752&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=450',
-            vui_carousel_color:'bisque',
-        },
-        {
-            title:'标题二',
-            image:'https://img1.baidu.com/it/u=1968056694,654014724&fm=253&fmt=auto?w=800&h=450',
-            vui_carousel_color:'red'
-        },
-        {
-            title:'标题三',
-            image:'https://img0.baidu.com/it/u=2518818718,2818020477&fm=253&fmt=auto?w=800&h=450',
-            vui_carousel_color:'pink'
-        },
-        {
-            title:'标题四',
-            image:'https://img1.baidu.com/it/u=715214091,4275190383&fm=253&fmt=auto?w=759&h=427',
-            vui_carousel_color:'pink'
-        },
-
-        
-        ]
+        list:[{}]
     })
+
+
+
+  
+
+
+
+
+    const is_loading=ref(true)
+  const list = ref([]);
+
+  onMounted(() => {
+    // 假设JSON文件与组件在同一目录下
+    // import('./mock-data.json').then(res => {
+    //   items.value = res.data;
+    // }).catch(error => {
+    //   console.error('Error fetching mock data:', error);
+    // });
+
+    // 如果你想使用axios来模拟请求，可以这样做
+    axios.get('/data/frontend/content_carousel_img.json', { responseType: 'json' })
+      .then(response => {
+        setTimeout(() => {
+            data.list = response.data; // 数据加载完毕，关闭骨架屏
+           is_loading.value=false;
+        }, 3000); // 假设加载时间是3秒
+
+      })
+      .catch(error => {
+
+        console.error('Error fetching mock data:', error);
+      });
+
+
+    // //控制骨架屏尺寸
+    skeletonHandleResize(); // 初始化尺寸
+    window.addEventListener('resize', skeletonHandleResize);
+
+  });
+
+
+
+//   轮播图骨架屏
+  const contentBannerSkeletonContainerRef = ref();
+  const skeleton_width = ref(1200);
+  const skeleton_height = ref(675); // 默认高度
+  // const skeleton_item= ref(5);
+
+  function skeletonHandleResize() {
+    if (contentBannerSkeletonContainerRef.value) {
+      const skeleton_container_width = contentBannerSkeletonContainerRef.value.offsetWidth;
+      
+      skeleton_width.value =skeleton_container_width;
+      skeleton_height.value = skeleton_width.value * 0.5625;
+    //   console.log('skeleton_container_width:',skeleton_container_width,',skeleton_width.value:',skeleton_width.value,',skeleton_height.value:',skeleton_height.value)
+      // switch
+
+      // skeleton_width.value = `${width}px`;
+      // skeleton_height.value = `${height}px`;
+    }
+  }
+
+
+
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', skeletonHandleResize);
+  });
 
 
     //放映幻灯片
@@ -133,7 +190,40 @@ import { ref, reactive} from 'vue'
 
 <style scoped>
 
-    .swipe-body{
+
+ /* 骨架屏 */
+ .content-banner-skeleton {
+    padding: 0;
+    width: 100%;
+    margin: 0 auto;
+    max-width: 1200px;
+    margin-top: 72px;
+    transition: all 0.3s ease;
+    margin-bottom: 5px;
+
+
+      .skeleton~.skeleton {
+        display: flex;
+        position: relative;
+        
+      }
+    /* } */
+    
+  }
+
+
+  /* 骨架屏缩放动画 */
+  .scale-down-enter-active, .scale-down-leave-active {
+  transition: all 0.3s ease;
+}
+ 
+.scale-down-enter-from, .scale-down-leave-to {
+  opacity: 0;
+  transform: scale(0.3);
+} 
+
+
+    .carousel-container{
         padding: 0;
         width: 100%;
         margin: 0 auto;
@@ -141,9 +231,10 @@ import { ref, reactive} from 'vue'
         margin-top: 72px;
     }
     /* 轮播图 开始*/
-    .carousel{
+    .carousel-content{
         width: 100%;
         height: 0;
+        /* 宽高比 16/9 */
         padding-top: 56.25%;
         position: relative;
         overflow: hidden; 

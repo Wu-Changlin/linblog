@@ -1,70 +1,77 @@
 <template>
-  <transition name="scale-down" mode="out-in">
-<!-- 骨架屏 开始-->
-    <div v-if="is_loading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef">
-      
-      <div
-      class="item"
-       v-for="(item, index)  in 5" 
-       :key="item"
-      :style="{ backgroundColor: '#f0f9f4', width:skeleton_width + 'px'}" >
-        <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height + 'px'" animated /><!-- 图片占位 -->
-        <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" height="24px" animated style="margin-top: 12px;" /><!-- 标题占位 -->
-        <Skeleton bg="#e4e4e4" width="120px" height="24px" animated style="margin: 12px 0px;" /><!-- 作者 -->
-      </div>
-      
-    </div>
 
-<!-- 骨架屏 结束-->
- <!-- 渲染内容 开始-->
-      <Waterfall  v-else  key="waterfall-container" class="waterfall-container" v-if="list.length>0" :list="list" :breakpoints="breakpoints" style="background-color: var(--bg);"
-        :delay="300">
-        <template #item="{ item,index }">
-          <div class="waterfall-card">
-    
-            <LazyImg class="lazy-img" :url="item.src" style="border-radius: 8px" @click="goViewAticle(item.id)" />
-    
-    
-            <div class="card-img-mask-stats">
-              <div class="card-img-mask-stats-left">
-                <span class="card-img-mask-stats-item">
-                  <div class="card-img-mask-stats-icon"><svg-icon icon-class="visits" /></div>
-                  <span class="card-img-mask-stats-text"> {{ item.visits}}</span>
-                </span>
-                <span class="card-img-mask-stats-item">
-                  <div class="card-img-mask-stats-icon"><svg-icon icon-class="zishu" /></div>
-                  <span class="card-img-mask-stats-text"> {{ item.word_count}}</span>
-                </span>
-    
-              </div>
-    
-              <span class="card-img-mask-stats-reading-time">{{ item.read_time}}</span>
-    
-            </div>
-    
-    
-    
-            <div class="footer">
-              <a class="title"><span>{{ item.title}}</span></a>
-              <div class="author-wrapper">
-                <a class="author">
-                  <svg-icon class="author-avatar" icon-class="author" />
-                  <span class="name"> {{ item.author_name}}</span>
-                </a>
-                <!-- <span class="like-wrapper like-active">
-                     <span  class="like-lottie" style="width: 16px; height: 16px;" ></span>
-                      <svg-icon class="reds-icon" style="width: 16px; height: 16px;" icon-class="visits"/>
-                      <span class="count">12</span>
-                    </span> -->
-              </div>
-            </div>
+
+
+
+  <Waterfall  v-if="list.length>0" :list="list" :breakpoints="breakpoints" style="background-color: var(--bg);"
+    :delay="300">
+    <template #item="{ item,index }">
+      <div class="waterfall-card">
+
+        <LazyImg class="lazy-img" :url="item.src" style="border-radius: 8px" @click="goViewAticle(item.id)" />
+
+
+        <div class="card-img-mask-stats">
+          <div class="card-img-mask-stats-left">
+            <span class="card-img-mask-stats-item">
+              <div class="card-img-mask-stats-icon"><svg-icon icon-class="visits" /></div>
+              <span class="card-img-mask-stats-text"> {{ item.visits}}</span>
+            </span>
+            <span class="card-img-mask-stats-item">
+              <div class="card-img-mask-stats-icon"><svg-icon icon-class="zishu" /></div>
+              <span class="card-img-mask-stats-text"> {{ item.word_count}}</span>
+            </span>
+
           </div>
-        </template>
-      </Waterfall>
-       <!-- 渲染内容 结束-->
+
+          <span class="card-img-mask-stats-reading-time">{{ item.read_time}}</span>
+
+        </div>
+
+
+
+        <div class="footer">
+          <a class="title"><span>{{ item.title}}</span></a>
+          <div class="author-wrapper">
+            <a class="author">
+              <svg-icon class="author-avatar" icon-class="author" />
+              <span class="name"> {{ item.author_name}}</span>
+            </a>
+            <!-- <span class="like-wrapper like-active">
+                 <span  class="like-lottie" style="width: 16px; height: 16px;" ></span>
+                  <svg-icon class="reds-icon" style="width: 16px; height: 16px;" icon-class="visits"/>
+                  <span class="count">12</span>
+                </span> -->
+          </div>
+        </div>
+      </div>
+    </template>
+  </Waterfall>
+  <Transition name="fade" v-else>
+  <div  class="home-skeleton" ref="skeletonContainerRef">
+    <!-- <div class="home-skeleton"  :style=" {height: home_skeleton_height + 'px'}" ref="skeletonContainerRef"> -->
+
+    <div class="item" v-for="(item, index)  in 5" :key="item"
+      :style="{ backgroundColor: '#f0f9f4', width:skeleton_width + 'px'}">
+
+      <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height + 'px'" animated />
+      <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" height="24px" animated style="margin-top: 12px;" />
+      <Skeleton bg="#e4e4e4" width="120px" height="24px" animated style="margin: 12px 0px;" />
+
+
+    </div>
+  </div>
+
+  
+
+</Transition>
+
+
+  <!-- 骨架屏 -->
+  <!-- <transition name="fade"> -->
     
 
-  </transition>
+  <!-- </transition> -->
 
 </template>
 
@@ -77,7 +84,7 @@
   import Skeleton from '@/components/skeleton.vue'
 
   const router = useRouter();
-  const is_loading=ref(true)
+  const is_Loading=ref(true)
   const list = ref([]);
 
   onMounted(() => {
@@ -93,7 +100,7 @@
       .then(response => {
         setTimeout(() => {
            list.value = response.data; // 数据加载完毕，关闭骨架屏
-           is_loading.value=false;
+          //  is_Loading.value=false;
         }, 3000); // 假设加载时间是3秒
 
       })
@@ -154,15 +161,15 @@
 
 
 
-  const waterfallSkeletonContainerRef = ref();
+  const skeletonContainerRef = ref();
   const skeleton_width = ref(236);
   const skeleton_height = ref(236); // 默认高度
   // const skeleton_item= ref(5);
 
   function skeletonHandleResize() {
 
-    if (waterfallSkeletonContainerRef.value) {
-      const skeleton_container_width = waterfallSkeletonContainerRef.value.offsetWidth;
+    if (skeletonContainerRef.value) {
+      const skeleton_container_width = skeletonContainerRef.value.offsetWidth;
 
       switch (true) {
         case (skeleton_container_width > 1424):
@@ -215,14 +222,6 @@
 
 
 <style scoped>
-
-/* 骨架屏缩放动画 */
-.waterfall-container {
-  transition: all 0.3s ease;
-  /* animation: grow-in 0.1s forwards; */
-}
- 
-
   .waterfall-card {
     position: relative;
 
@@ -391,15 +390,26 @@
   }
 
 
+  .fade-enter-active,.fade-leave-active {
+    /* // 过度效果 */
+    transition:opacity 2s;
+  }
+  /* // 从一开始就来一个透明度为0 */
+  /* // fade-leave-to  过渡的结束样式 */
+  .fade-enter,.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity:0;
+  }
+
+
   /* 骨架屏 */
-  .waterfall-skeleton {
+  .home-skeleton {
     width: 100%;
     max-width: 1260px;
     height: auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    transition: all 0.3s ease;
+
     .item {
       width: 236px;
       margin-left: 5px;
@@ -414,16 +424,6 @@
     }
   }
 
-
-  /* 骨架屏缩放动画 */
-  .scale-down-enter-active, .scale-down-leave-active {
-  transition: all 0.3s ease;
-}
- 
-.scale-down-enter-from, .scale-down-leave-to {
-  opacity: 0;
-  transform: scale(0.3);
-} 
 
 
   /* .fade-enter-from,

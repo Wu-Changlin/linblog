@@ -531,7 +531,7 @@ onUnmounted(() => {
     background-color: #ecf5ff;
     border-radius: 3px;
     cursor: pointer;
-    z-index: 8;
+    /* z-index: 3; */
     /* margin-right: 10px; */
 	margin-top: 3px;
     right: 15px;

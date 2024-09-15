@@ -1,0 +1,20 @@
+[{
+  "title":"标题一",
+  "image":"https://img1.baidu.com/it/u=1290439506,2867352752&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=450",
+  "vui_carousel_color":"bisque"
+},
+{
+  "title":"标题二",
+  "image":"https://img1.baidu.com/it/u=1968056694,654014724&fm=253&fmt=auto?w=800&h=450",
+  "vui_carousel_color":"red"
+},
+{
+  "title":"标题三",
+  "image":"https://img0.baidu.com/it/u=2518818718,2818020477&fm=253&fmt=auto?w=800&h=450",
+  "vui_carousel_color":"pink"
+},
+{
+  "title":"标题四",
+  "image":"https://img1.baidu.com/it/u=715214091,4275190383&fm=253&fmt=auto?w=759&h=427",
+  "vui_carousel_color":"pink"
+}]
