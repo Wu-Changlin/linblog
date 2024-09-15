@@ -200,14 +200,14 @@
       width: 100%;
         h2 {
           width: 100%;
-          max-width:1260px;
+         /* max-width:1260px;*/
           border-bottom: 3px solid #2ECC71;
         }
    
 
         .website-content-count{
           width: 100%;
-          max-width:1260px;
+         /* max-width:1260px;*/
           user-select: none;
           -webkit-user-select: none;
           align-items: center;
@@ -220,7 +220,7 @@
   
         .run-time-count{
           width: 100%;
-          max-width:1260px;
+         /* max-width:1260px;*/
           /* box-sizing: border-box; */
 
           user-select: none;
@@ -235,7 +235,7 @@
 
         .tag-count{
           width: 100%;
-          max-width:1260px;
+         /* max-width:1260px;*/
           user-select: none;
           -webkit-user-select: none;
           align-items: center;
@@ -250,7 +250,7 @@
        
         .contribution-calendar-count{
           width: 100%;
-          max-width:1260px;
+         /* max-width:1260px;*/
           user-select: none;
           -webkit-user-select: none;
           align-items: center;
@@ -269,7 +269,7 @@
     .contribution-activity-count {
         display: flex;
         width: 100%;
-        max-width:1260px;
+       /* max-width:1260px;*/
         user-select: none;
         -webkit-user-select: none;
         align-items: center;

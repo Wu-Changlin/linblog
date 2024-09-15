@@ -7,16 +7,19 @@
           v-for="(item, index) in data.show_tag_data" :key="index" @click="clickTag(item.tag_id)">
           {{ item.tag_name }}
         </div>
-      </div>
-    </div>
 
-    <!-- 上下指向图标 开始-->
-    <div class="arrow-more-tag-bnt-container" v-if="data.tagBtn" @click="clickTagBtn()">
+        <!-- 上下指向图标 开始-->
+    <div class="tag-item"   v-if="data.tagBtn" @click="clickTagBtn()">
       <div>
         <svg-icon class="svg-icon" :icon-class="data.tagBtnType?'arrow-up':'arrow-down'" />
       </div>
     </div>
     <!-- 上下指向图标 结束-->
+
+      </div>
+    </div>
+
+    
 
 
 
@@ -27,8 +30,8 @@
     <div class="arrow-more-tag-container" :style="{display:data.tagWrap?'block':'none'}">
 
       <div class="arrow-more-tag-content-container">
-        <div class="tag-content">
-          <div :class=" {'tag-item':true,'active':data.tagActive==item.tag_id?true:''}"
+        <div class="arrow-more-tag-content">
+          <div :class=" {'arrow-more-tag-item':true,'active':data.tagActive==item.tag_id?true:''}"
             v-for="(item, index) in data.show_arrow_more_tag_data" :key="index" @click="clickTag(item.tag_id)"> {{
             item.tag_name }}</div>
         </div>
@@ -36,18 +39,44 @@
 
     </div>
     <!-- 点击显示更多 结束-->
-  <div style="visibility:hidden; position: absolute;top:-9999px;left:-9999px;">
-    <div class="tag-container">
 
-      <div class="content-container">
-        <div class="tag-content" ref="tagWidthRet" style="overflow: hidden;">
-          <div class="tag-item" v-for="(item, index) in data.list" :key="index"> {{ item.tag_name }}</div>
+    <!-- 隐藏标签栏 开始-->
+  <div style="visibility:hidden; position: absolute;top:-9999px;left:-9999px;">
+    
+
+   
+      <div class="hidden-tag-container">
+
+        <div class="hidden-content-container">
+          <div class="hidden-tag-content" ref="hiddenTagContentRet"  style="overflow: hidden;">
+             
+            
+            <!-- <div class="hidden-tag-item">
+              <div>
+                <svg-icon class="svg-icon" icon-class="arrow-up" />
+              </div>
+            </div> -->
+
+
+            <div class="hidden-tag-item" v-for="(item, index) in data.list" :key="index">
+              {{ item.tag_name }}
+            </div>
+
+           
+
+         
+
+
+          </div>
         </div>
+    
+    
+    
       </div>
 
-    </div>
-  </div>
 
+  </div>
+  <!-- 隐藏标签栏 结束-->
 
 </template>
 
@@ -57,7 +86,7 @@
   import { useRouter } from "vue-router";
   const router = useRouter();
 
-  const tagWidthRet = ref();//获取标签容器dom宽度
+  const hiddenTagContentRet = ref();//获取隐藏标签容器dom宽度，用于计算每行显示标签数量
 
   const data = reactive({
     tagHeight: 0,
@@ -72,7 +101,6 @@
     tag_item_dom_width_count: 0,//统计标签dom宽度
     list: [
       { tag_id: 1, tag_name: "All" },
-      { tag_id: 53, tag_name: "c" },
       { tag_id: 2, tag_name: "C++" },
       { tag_id: 3, tag_name: "Java" },
       { tag_id: 4, tag_name: "Python" },
@@ -124,6 +152,7 @@
       // { tag_id: 50, tag_name: "r" },
       // { tag_id: 51, tag_name: "d" },
       // { tag_id: 52, tag_name: "sas" },
+      // { tag_id: 53, tag_name: "c" },
     ],
     showAll: false,
 
@@ -151,25 +180,36 @@
 
   //每行最多标签数量
   function maxItemsPerLines() {
-    const tagContainer = tagWidthRet.value;              //标签容器dom
+    
+    const tagContainer = hiddenTagContentRet.value;              //标签容器dom
     const tagItem = Array.from(tagContainer.children); //标签容器内所有子项标签dom
+   
+
+
+
     let tag_container_width = tagContainer.offsetWidth;//标签容器宽度
+
+    tag_container_width=tag_container_width-46;
+   
+
     let tag_item_width_count = 0;
     let tag_item_count = 0;
     let i = 0;
     const all_tag_item_num = tagItem.length;//标签个数
-
+   
     if (all_tag_item_num > 0) {
      
       for (i; i < all_tag_item_num; i++) {
         const tag_item_dom = tagItem[i];                    //标签容器dom
         tag_item_width_count += tag_item_dom.offsetWidth;//标签宽度相加
+        
         if (tag_item_width_count <= tag_container_width) {//判断标签dom宽度和小于等于标签容器宽度，标签数量加1
-          // console.log('tag_item_dom_width_count:',tag_item_dom_width_count);
+       
+          // console.log('i:',i,',offsetWidth:',tag_item_dom.offsetWidth,',tag_item_width_count:',tag_item_width_count);
           tag_item_count += 1;
         }
       }
-     
+      
       data.show_tag_count=tag_item_count;//赋值，页面实际渲染标签数量
       data.tag_item_dom_width_count=tag_item_width_count;//赋值，页面标签dom总宽度
       // console.log('data.show_tag_data:',data.show_tag_data);
@@ -182,7 +222,7 @@
         data.tagBtn = true; //显示指向图标容器
 
       }
-
+     
     }
 
 
@@ -198,7 +238,7 @@
     data.tagBtnType = !data.tagBtnType;
     if (data.tagBtnType) {
 
-      if (data.tag_item_dom_width_count > tagWidthRet.value.offsetWidth) {//判断标签dom总宽度大于标签容器dom宽度（有溢出），截取指向更多标签数据
+      if (data.tag_item_dom_width_count > hiddenTagContentRet.value.offsetWidth) {//判断标签dom总宽度大于标签容器dom宽度（有溢出），截取指向更多标签数据
         //截取指向更多标签数据
         data.show_arrow_more_tag_data = data.list.slice(data.show_tag_count, data.list.length);
       }
@@ -226,11 +266,14 @@
     position: fixed;
     z-index: 9;
     width: 100%;
-    max-width: 1285px;
+    max-width: 1260px;
+    background-color: var(--bg);
+   
     .content-container {
       /* backdrop-filter: blur(20px); */
       /* width: calc(100vw - 24px); */
-      width: calc(100% - 30px);
+      width: 100%;
+      max-width: 1260px;
       display: flex;
       position: relative;
       user-select: none;
@@ -245,7 +288,6 @@
 
     
     }
-
 
       .tag-content {
         display: flex;
@@ -264,7 +306,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          padding: 0 16px;
+          padding: 0 15px;
           cursor: pointer;
           -webkit-user-select: none;
           user-select: none;
@@ -282,8 +324,10 @@
 
 
     .arrow-more-tag-bnt-container {
-      display: flex;
-      width: 30px;
+      display: block;
+      position: relative;
+      /* width: 20px; */
+      /* max-width: 100%; */
       /* height: 100%; */
       height: 72px;
       justify-content: center;
@@ -291,12 +335,12 @@
       cursor: pointer;
       -webkit-user-select: none;
       user-select: none;
-      margin-right: 10px;
+       right:10px ;
       background-color: var(--bg);
 
       .svg-icon {
-        justify-content: center;
-        align-items: center;
+        /* justify-content: center;
+        align-items: center; */
         width: 16px;
         height: 16px;
       }
@@ -304,6 +348,76 @@
 
 
 
+
+  }
+
+
+
+  /* 隐藏标签栏 渲染全部标签*/
+  .hidden-tag-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    -webkit-user-select: none;
+    position: fixed;
+    z-index: 9;
+    width: 100%;
+    max-width: 1260px;
+    background-color: var(--bg);
+   
+    .hidden-content-container {
+      /* backdrop-filter: blur(20px); */
+      /* width: calc(100vw - 24px); */
+      width: 100%;
+      /* max-width: 1261px; */
+      display: flex;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+      align-items: center;
+      font-size: 16px;
+      background-color: var(--bg);
+      color: var(--text);
+      height: 40px;
+      white-space: nowrap;
+      height: 72px;
+
+    
+    }
+
+    .hidden-tag-content {
+        display: flex;
+        color: var(--text);
+        /*这是关键属性，flex模式允许换行 */
+        /* flex-wrap: wrap; */
+
+        .active {
+          background-color: rgba(0, 0, 0, 0.03);
+          border-radius: 999px;
+          color: var(--text);
+        }
+
+        .hidden-tag-item {
+          height: 40px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 0 15px;
+          cursor: pointer;
+          -webkit-user-select: none;
+          user-select: none;
+
+
+          /*鼠标移入效果*/
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+            border-radius: 999px;
+            color: var(--text);
+          }
+        }
+
+      }
 
   }
 
@@ -319,7 +433,8 @@
     /* transform: translateY(100%); */
     z-index: 10;
     width: 100%;
-    max-width: 1285px;
+    max-width: 1260px;
+    /* max-width: 1285px; */
 
     .arrow-more-tag-content-container {
 
@@ -335,7 +450,7 @@
       white-space: nowrap;
       height: auto;
 
-      .tag-content {
+      .arrow-more-tag-content {
         display: flex;
         color: var(--text);
         /*这是关键属性，flex模式允许换行 */
@@ -347,12 +462,12 @@
           color: var(--text);
         }
 
-        .tag-item {
+        .arrow-more-tag-item {
           height: 40px;
           display: flex;
           justify-content: center;
           align-items: center;
-          padding: 0 16px;
+          padding: 0 15px;
           cursor: pointer;
           -webkit-user-select: none;
           user-select: none;

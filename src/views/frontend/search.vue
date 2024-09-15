@@ -1,34 +1,21 @@
 <template>
-
-  <div class="archives-page">
-    <div class="archives-container">
-   
-  
-      <!-- 标签统计栏 开始-->
-      <h2>标签</h2>
-      <div class="tag-count">
-        <div class="tag-count-content">
-          <TagCount @child-click-tag="clickTag"></TagCount>
-        </div>
-      </div>
+  <div class="search-page">
+    <div class="search-container">
+      <!-- 搜索结果栏 开始-->
      
-   
-      <!-- 标签统计栏 结束-->
-      <!-- 点击标签结果栏 开始-->
-     
-       <div v-if="tag_name" class="contribution-activity-count">
-        <div  class="contribution-activity-count-content">
-          <div class="text-left"> <h3>标签：{{tag_name}} </h3></div>
+       <div v-if="search_content" class="search-content-container">
+        <div  class="search-content-container-content">
+          <div class="text-left"> <h3>关键词：{{search_content}} </h3></div>
           <div class="line"></div>
-          <div class="text-right"> <span>结果：找到{{ tag_number}}个</span></div>
+          <div class="text-right"> <span>结果：找到{{ search_content_number}}个</span></div>
         </div>
        </div>
     
-      <div   v-if="tag_name" style="width: 100%;">
+      <div   v-if="search_content" style="width: 100%;">
         <Waterfall></Waterfall>
        </div>
       
-      <!-- 点击标签结果栏 结束-->
+      <!--  搜索结果栏 结束-->
     </div>
    
   </div>
@@ -42,6 +29,7 @@
 const route = useRoute();
 
 const search_content=ref('');
+const search_content_number=ref(0);
 
 // 使用ref来存储watch返回的函数 监听路由传参keyword
 const stopKeywordWatch = ref(null);
@@ -108,86 +96,24 @@ const stopKeywordWatch = ref(null);
   
   <style scoped>
   
-  .archives-page {
+  .search-page {
     overflow-x: hidden;/* 禁止容器x轴方向滚动 */
   
   }
-  .archives-container {
+  .search-container {
       overflow-x: hidden;/* 禁止容器x轴方向滚动 */
       display: flex;
       flex-direction: column;
       padding: 0 12px;
       padding-top: 72px;
       width: 100%;
-        h2 {
-          width: 100%;
-          max-width:1260px;
-          border-bottom: 3px solid #2ECC71;
-        }
-   
-
-        .website-content-count{
-          width: 100%;
-          max-width:1260px;
-          user-select: none;
-          -webkit-user-select: none;
-          align-items: center;
-          justify-content: center;
-          .website-content-count-content{
-            padding: 20px;
-            
-          }
-        }
-  
-        .run-time-count{
-          width: 100%;
-          max-width:1260px;
-          /* box-sizing: border-box; */
-
-          user-select: none;
-          -webkit-user-select: none;
-          align-items: center;
-          justify-content: center;
-          .run-time-count-content{
-            padding: 20px 
-          }
-        }
-  
-
-        .tag-count{
-          width: 100%;
-          max-width:1260px;
-          user-select: none;
-          -webkit-user-select: none;
-          align-items: center;
-          justify-content: center;
-          .tag-count-content{
-            padding: 20px;
-            /* box-sizing: border-box; */
-          }
-
-        }
-        
-       
-        .contribution-calendar-count{
-          width: 100%;
-          max-width:1260px;
-          user-select: none;
-          -webkit-user-select: none;
-          align-items: center;
-          justify-content: center;
-          .contribution-calendar-count-content{
-            padding: 20px;
-            overflow: hidden;
-          }
-        }
-
  
+
     }
 
 
     /* 动态栏 开始*/
-    .contribution-activity-count {
+    .search-content-container {
         display: flex;
         width: 100%;
         max-width:1260px;
@@ -196,7 +122,7 @@ const stopKeywordWatch = ref(null);
         align-items: center;
         justify-content: center;
         
-        .contribution-activity-count-content {
+        .search-content-container-content {
           display: flex;
           align-items: center;
           padding: 20px;

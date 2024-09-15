@@ -315,7 +315,6 @@ onUnmounted(() => {
  .article-page {
 	flex:1;
     overflow-x: hidden;/* 禁止容器x轴方向滚动 */
-	
 
 	padding-top: 72px;
 	width: 100%;
@@ -336,7 +335,7 @@ onUnmounted(() => {
 
 	.article-content{
 		width: 100%;
-		max-width: 1280px;
+		/* max-width: 1280px; */
 		
 		white-space: normal; /* 允许空白符号，但不保留 */
 		overflow-wrap: break-word; /* 在长单词或URL地址内部进行换行 */

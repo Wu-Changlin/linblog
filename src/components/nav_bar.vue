@@ -62,13 +62,13 @@
 			<div v-if="show_right_search==false" class="header-container-right-icon">
 
 
-				<button class="reds-button-new large primary has-icon pure-icon">
-					<span class="reds-button-new-box">
+				<!-- <button class="reds-button-new large primary has-icon pure-icon"> -->
+				
 
-						<NavTheme class="reds-icon reds-button__icon"></NavTheme>
+						<NavTheme></NavTheme>
 
-					</span>
-				</button>
+					
+				<!-- </button> -->
 
 
 			</div>
@@ -151,7 +151,7 @@ function handleInput(){
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		width: 100vw;
+		width: 100%;
 		height: 72px;
 		position: fixed;
 		left: 0;
@@ -303,104 +303,7 @@ function handleInput(){
 
 			.header-container-right-icon {
 				display: flex;
-
-				.reds-button-new {
-					height: 40px !important;
-					color: var(--color-secondary-label);
-					font-size: 16px;
-					line-height: 120%;
-					padding: 0 16px;
-					background: transparent
-				}
-
-				.reds-button-new.has-icon.pure-icon.large {
-					padding: 0 10px;
-				}
-
-				.reds-button-new.has-icon.pure-icon {
-					border-radius: 50%
-				}
-
-				.reds-button-new.large.has-icon {
-					padding-left: 16px
-				}
-
-				.reds-button-new.large {
-					font-size: 16px;
-					font-weight: 600;
-					line-height: 16px;
-					padding: 0 24px;
-					height: 40px
-				}
-
-
-
-
-				.reds-button-new {
-					position: relative;
-					cursor: pointer;
-					-webkit-user-select: none;
-					user-select: none;
-					white-space: nowrap;
-					outline: none;
-					background: none;
-					border: none;
-					vertical-align: middle;
-					text-align: center;
-					display: inline-block;
-					padding: 0;
-					border-radius: 100px;
-					font-weight: 500
-				}
-
-
-				.reds-button-new-box {
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					position: relative;
-					font-weight: 500
-				}
-
-
-				.reds-button-new.has-icon.pure-icon .reds-button-new-box {
-					padding: 0
-				}
-
-				.reds-button-new .reds-button-new-box {
-					font-weight: 400
-				}
-
-				.reds-button-new-box {
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					position: relative;
-					font-weight: 500
-				}
-
-				/* height: 72px;
-				width: 85px; */
-
-				/* .icon-item {
-					margin-left: auto;
-					display: flex;
-					width: 100%;
-					height: 100%;
-					align-items: center;
-					justify-content: content;
-
-					>div {
-						margin-right: 10px;
-
-						.svg-icon {
-							width: 32px;
-							height: 32px;
-						}
-
-					}
-
-				} */
+				margin-right: 10px;
 			}
 
 

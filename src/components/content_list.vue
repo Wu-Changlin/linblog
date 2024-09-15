@@ -12,7 +12,7 @@
     <div class="feeds-container">
 
      
-      <ContentBanner></ContentBanner>
+      <!-- <ContentBanner></ContentBanner> -->
       <Waterfall></Waterfall>
     </div>
 
@@ -75,8 +75,9 @@ const list = ref([
   margin: 0 auto;
   padding-left: 12px;
   padding-right: 12px;
+  max-width: 1260px;
   /* 修改盒子大小属性 */
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
  
 
   .feeds-container {
