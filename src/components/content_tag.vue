@@ -1,217 +1,163 @@
 <template>
-  <div class="tag-container">
-
-    <div class="content-container">
-      <div class="tag-content">
-        <div :class=" {'tag-item':true,'active':data.tagActive==item.tag_id?true:''}"
-          v-for="(item, index) in data.show_tag_data" :key="index" @click="clickTag(item.tag_id)">
-          {{ item.tag_name }}
-        </div>
-
-        <!-- 上下指向图标 开始-->
-    <div class="tag-item"   v-if="data.tagBtn" @click="clickTagBtn()">
-      <div>
-        <svg-icon class="svg-icon" :icon-class="data.tagBtnType?'arrow-up':'arrow-down'" />
-      </div>
-    </div>
-    <!-- 上下指向图标 结束-->
-
-      </div>
-    </div>
-
-    
 
 
 
-  </div>
 
+      <div class="tag-container">
 
-    <!-- 点击显示更多 开始-->
-    <div class="arrow-more-tag-container" :style="{display:data.tagWrap?'block':'none'}">
-
-      <div class="arrow-more-tag-content-container">
-        <div class="arrow-more-tag-content">
-          <div :class=" {'arrow-more-tag-item':true,'active':data.tagActive==item.tag_id?true:''}"
-            v-for="(item, index) in data.show_arrow_more_tag_data" :key="index" @click="clickTag(item.tag_id)"> {{
-            item.tag_name }}</div>
-        </div>
-      </div>
-
-    </div>
-    <!-- 点击显示更多 结束-->
-
-    <!-- 隐藏标签栏 开始-->
-  <div style="visibility:hidden; position: absolute;top:-9999px;left:-9999px;">
-    
-
-   
-      <div class="hidden-tag-container">
-
-        <div class="hidden-content-container">
-          <div class="hidden-tag-content" ref="hiddenTagContentRet"  style="overflow: hidden;">
-             
-            
-            <!-- <div class="hidden-tag-item">
-              <div>
-                <svg-icon class="svg-icon" icon-class="arrow-up" />
-              </div>
-            </div> -->
-
-
-            <div class="hidden-tag-item" v-for="(item, index) in data.list" :key="index">
+        <div class="content-container">
+          <div class="tag-content">
+            <div :class=" {'tag-item':true,'active':data.active_tag_id==item.tag_id?true:''}"
+              v-for="(item, index) in data.show_tag_data" :key="index" @click="clickTag(item)">
               {{ item.tag_name }}
             </div>
 
-           
-
-         
-
+            <!-- 上下指向图标 开始-->
+            <div class="tag-item" v-if="data.tagBtn" @click="clickTagBtn()">
+              <div>
+                <svg-icon class="svg-icon" :icon-class="data.tagBtnType?'arrow-up':'arrow-down'" />
+              </div>
+            </div>
+            <!-- 上下指向图标 结束-->
 
           </div>
         </div>
-    
-    
-    
       </div>
 
 
-  </div>
-  <!-- 隐藏标签栏 结束-->
+      <!-- 点击显示更多 开始-->
+      <div class="arrow-more-tag-container" :style="{display:data.tagWrap?'block':'none'}">
 
+        <div class="arrow-more-tag-content-container">
+          <div class="arrow-more-tag-content">
+            <div :class=" {'arrow-more-tag-item':true,'active':data.active_tag_id==item.tag_id?true:''}"
+              v-for="(item, index) in data.show_arrow_more_tag_data" :key="index" @click="clickTag(item)"> {{
+              item.tag_name }}</div>
+          </div>
+        </div>
+
+      </div>
+      <!-- 点击显示更多 结束-->
+
+      <!-- 隐藏标签栏 开始-->
+     
+ 
+        <div class="hidden-tag-container" style="visibility:hidden; position: absolute;top:-9999px;left:-9999px;">
+
+          <div class="hidden-content-container">
+            <div class="hidden-tag-content" ref="hiddenTagContentRet" style="overflow: hidden;">
+
+              <div class="hidden-tag-item"  ref="hiddenTagItemRet" v-for="(item, index) in data.list" :key="index">
+                {{ item.tag_name }}
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+  
+      <!-- 隐藏标签栏 结束-->
+ 
 </template>
 
 
 <script setup>
-  import { reactive, ref, nextTick, onMounted, onUnmounted } from 'vue';
+  import { reactive, ref, nextTick, onMounted, onUnmounted, watch } from 'vue';
+  import axios from 'axios';
+  import Skeleton from '@/components/skeleton.vue'
   import { useRouter } from "vue-router";
   const router = useRouter();
 
-  const hiddenTagContentRet = ref();//获取隐藏标签容器dom宽度，用于计算每行显示标签数量
-
+  const hiddenTagContentRet = ref(null);//获取隐藏标签容器dom宽度，用于计算每行显示标签数量
+  const hiddenTagItemRet = ref(null); // 创建一个引用
   const data = reactive({
     tagHeight: 0,
     tagBtn: false,
     tagNoWrap: false,
     tagBtnType: false,
     tagWrap: false,
-    tagActive: 1,//默认选中tag_id=1
+    active_tag_id: 1,//默认选中tag_id=1
     show_tag_count: 0,//页面实际渲染标签数量
     show_tag_data: [],//页面实际渲染标签数据
     show_arrow_more_tag_data: [],//显示更多标签数据
     tag_item_dom_width_count: 0,//统计标签dom宽度
-    list: [
-      { tag_id: 1, tag_name: "All" },
-      { tag_id: 2, tag_name: "C++" },
-      { tag_id: 3, tag_name: "Java" },
-      { tag_id: 4, tag_name: "Python" },
-      { tag_id: 5, tag_name: "PHP" },
-      { tag_id: 6, tag_name: "Go" },
-      { tag_id: 7, tag_name: "Ruby" },
-      { tag_id: 8, tag_name: "Node.js" },
-      { tag_id: 9, tag_name: "C#" },
-      { tag_id: 10, tag_name: "html" },
-      { tag_id: 11, tag_name: "html5" },
-      { tag_id: 12, tag_name: "css" },
-      { tag_id: 13, tag_name: "css3" },
-      { tag_id: 14, tag_name: "js" },
-      { tag_id: 15, tag_name: "ts" },
-      { tag_id: 16, tag_name: "vue2" },
-      { tag_id: 17, tag_name: "vue3" },
-      { tag_id: 18, tag_name: "jq" },
-      { tag_id: 19, tag_name: "React" },
-      { tag_id: 20, tag_name: "Swift" },
-      { tag_id: 21, tag_name: "Kotlin" },
-      { tag_id: 22, tag_name: "Fortran" },
-      { tag_id: 23, tag_name: "MATLAB" },
-      { tag_id: 24, tag_name: "r" },
-      { tag_id: 25, tag_name: "d" },
-      { tag_id: 26, tag_name: "sas" },
-      { tag_id: 27, tag_name: "c" },
-      { tag_id: 28, tag_name: "C++" },
-      { tag_id: 29, tag_name: "Java" },
-      { tag_id: 30, tag_name: "Python" },
-      { tag_id: 31, tag_name: "PHP" },
-      { tag_id: 32, tag_name: "Go" },
-      { tag_id: 33, tag_name: "Ruby" },
-      { tag_id: 34, tag_name: "Node.js" },
-      { tag_id: 35, tag_name: "C#" },
-      { tag_id: 36, tag_name: "html" },
-      { tag_id: 37, tag_name: "html5" },
-      { tag_id: 38, tag_name: "css" },
-      { tag_id: 39, tag_name: "css3" },
-      { tag_id: 40, tag_name: "js" },
-      { tag_id: 41, tag_name: "ts" },
-      { tag_id: 42, tag_name: "vue2" },
-      { tag_id: 43, tag_name: "vue3" },
-      // { tag_id: 44, tag_name: "jq" },
-      // { tag_id: 45, tag_name: "React" },
-      // { tag_id: 46, tag_name: "Swift" },
-      // { tag_id: 47, tag_name: "Kotlin" },
-      // { tag_id: 48, tag_name: "Fortran" },
-      // { tag_id: 49, tag_name: "MATLAB" },
-      // { tag_id: 50, tag_name: "r" },
-      // { tag_id: 51, tag_name: "d" },
-      // { tag_id: 52, tag_name: "sas" },
-      // { tag_id: 53, tag_name: "c" },
-    ],
+    list: [{}],
     showAll: false,
 
   })
 
 
-  function clickTag(tag_id) {
+  function clickTag(item) {
     // console.log('tag_id:', tag_id);
-    data.tagActive = tag_id;
+    data.active_tag_id = item.tag_id;
   }
+  const is_loading = ref(true)
+  // 使用ref来存储watch返回的函数 监听hiddenTagContentRet.value，执行maxItemsPerLines函数
+  const stopHiddenTagContentRetWatch = ref(null);
 
 
   onMounted(() => {
     //     console.log('挂载完毕');
-    //初始化每行最多标签数量
-    maxItemsPerLines();
+
+
+    fetchTag();
+
     //监听窗口响应式每行最多标签数量
     window.addEventListener('resize', maxItemsPerLines);//监听窗口缩放
+    //初始化每行最多标签数量
+    //  maxItemsPerLines();
   })
 
 
+  const fetchTag=async()=>{
+  // 如果你想使用axios来模拟请求，可以这样做
+  axios.get('/data/frontend/content_tag.json', { responseType: 'json' })
+      .then(response => {
+       console.log('data.active_tag_id:')
+        data.list = response.data; // 数据加载完毕，关闭骨架屏
+        maxItemsPerLines();
+        
+      })
+      .catch(error => {
+
+        console.error('Error fetching mock data:', error);
+      });
+  }
+
   onUnmounted(() => {
-    window.removeEventListener('resize', maxItemsPerLines)
+    window.removeEventListener('resize', maxItemsPerLines);
+    // stopHiddenTagContentRetWatch.value(); // 如果watch返回了一个停止监听的函数，调用它
   })//离开页面时移除监听窗口缩放
 
   //每行最多标签数量
   function maxItemsPerLines() {
+    nextTick(()=>{
+
+      ////标签容器宽度
+      let tag_container_width = hiddenTagContentRet.value.offsetWidth
+     
+      const tagItem = hiddenTagItemRet.value; // 获取所有 <div> 元素的引用
     
-    const tagContainer = hiddenTagContentRet.value;              //标签容器dom
-    const tagItem = Array.from(tagContainer.children); //标签容器内所有子项标签dom
-   
-
-
-
-    let tag_container_width = tagContainer.offsetWidth;//标签容器宽度
-
-    tag_container_width=tag_container_width-46;
-   
-
-    let tag_item_width_count = 0;
+        tag_container_width=tag_container_width-46;
+ let tag_item_width_count = 0;
     let tag_item_count = 0;
     let i = 0;
     const all_tag_item_num = tagItem.length;//标签个数
-   
     if (all_tag_item_num > 0) {
-     
+
       for (i; i < all_tag_item_num; i++) {
         const tag_item_dom = tagItem[i];                    //标签容器dom
         tag_item_width_count += tag_item_dom.offsetWidth;//标签宽度相加
-        
+
         if (tag_item_width_count <= tag_container_width) {//判断标签dom宽度和小于等于标签容器宽度，标签数量加1
-       
+
           // console.log('i:',i,',offsetWidth:',tag_item_dom.offsetWidth,',tag_item_width_count:',tag_item_width_count);
           tag_item_count += 1;
         }
       }
-      
-      data.show_tag_count=tag_item_count;//赋值，页面实际渲染标签数量
-      data.tag_item_dom_width_count=tag_item_width_count;//赋值，页面标签dom总宽度
+
+      data.show_tag_count = tag_item_count;//赋值，页面实际渲染标签数量
+      data.tag_item_dom_width_count = tag_item_width_count;//赋值，页面标签dom总宽度
       // console.log('data.show_tag_data:',data.show_tag_data);
       if (data.tag_item_dom_width_count <= tag_container_width) {//判断标签dom小于等于标签容器dom宽（没有溢出），隐藏指向图标容器  
         data.show_tag_data = data.list;
@@ -219,17 +165,35 @@
       } else {//溢出标签容器dom，显示指向图标容器
         //截取页面渲染所需标签数据
         data.show_tag_data = data.list.slice(0, data.show_tag_count);
-        data.tagBtn = true; //显示指向图标容器
+         //显示指向图标容器
+        data.tagBtn = true;
+        //截取指向更多标签数据
+        data.show_arrow_more_tag_data = data.list.slice(data.show_tag_count, data.list.length);
 
       }
-     
+      // console.log('data.show_tag_data', data.show_tag_data);
     }
 
 
+          //  divElements.forEach((element) => {
+          //     totalWidth += element.offsetWidth; // 累加每个 <div> 元素的宽度 offsetWidth 返回元素的宽度（包括元素宽度、内边距和边框，不包括外边距）
+           
+          //       // console.log('element.offsetWidth:',element.offsetWidth);
+          //     });
+   
+
+
+    })
+  
+
+    // let tag_container_width = tagContainer.offsetWidth;//标签容器宽度
+    // //减去指向图标的宽度  
+    // tag_container_width = tag_container_width;
+
+
+   
 
   }
-
-
 
 
   //点击标签按钮事件；下折叠false，上展开true。    
@@ -238,12 +202,6 @@
     data.tagBtnType = !data.tagBtnType;
     if (data.tagBtnType) {
 
-      if (data.tag_item_dom_width_count > hiddenTagContentRet.value.offsetWidth) {//判断标签dom总宽度大于标签容器dom宽度（有溢出），截取指向更多标签数据
-        //截取指向更多标签数据
-        data.show_arrow_more_tag_data = data.list.slice(data.show_tag_count, data.list.length);
-      }
-      // console.log('data.tag_item_dom_width_count', data.tag_item_dom_width_count);
-      // console.log('data.show_arrow_more_tag_data', data.show_arrow_more_tag_data);
       data.tagWrap = true;
     } else {
 
@@ -255,8 +213,6 @@
 </script>
 
 <style scoped>
-
-
   .tag-container {
     display: flex;
     justify-content: space-between;
@@ -266,14 +222,13 @@
     position: fixed;
     z-index: 9;
     width: 100%;
-    max-width: 1260px;
+    /* max-width: 1244px; */
     background-color: var(--bg);
-   
+
     .content-container {
       /* backdrop-filter: blur(20px); */
       /* width: calc(100vw - 24px); */
-      width: 100%;
-      max-width: 1260px;
+     
       display: flex;
       position: relative;
       user-select: none;
@@ -286,67 +241,41 @@
       white-space: nowrap;
       height: 72px;
 
-    
+
     }
 
-      .tag-content {
-        display: flex;
+    .tag-content {
+      display: flex;
+      color: var(--text);
+      /*这是关键属性，flex模式允许换行 */
+      /* flex-wrap: wrap; */
+      overflow: hidden;
+      .active {
+        background-color: rgba(0, 0, 0, 0.03);
+        border-radius: 999px;
         color: var(--text);
-        /*这是关键属性，flex模式允许换行 */
-        /* flex-wrap: wrap; */
+      }
 
-        .active {
+      .tag-item {
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 15px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        user-select: none;
+
+
+        /*鼠标移入效果*/
+        &:hover {
           background-color: rgba(0, 0, 0, 0.03);
           border-radius: 999px;
           color: var(--text);
         }
-
-        .tag-item {
-          height: 40px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 0 15px;
-          cursor: pointer;
-          -webkit-user-select: none;
-          user-select: none;
-
-
-          /*鼠标移入效果*/
-          &:hover {
-            background-color: rgba(0, 0, 0, 0.03);
-            border-radius: 999px;
-            color: var(--text);
-          }
-        }
-
       }
 
-
-    .arrow-more-tag-bnt-container {
-      display: block;
-      position: relative;
-      /* width: 20px; */
-      /* max-width: 100%; */
-      /* height: 100%; */
-      height: 72px;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      -webkit-user-select: none;
-      user-select: none;
-       right:10px ;
-      background-color: var(--bg);
-
-      .svg-icon {
-        /* justify-content: center;
-        align-items: center; */
-        width: 16px;
-        height: 16px;
-      }
     }
-
-
 
 
   }
@@ -355,24 +284,20 @@
 
   /* 隐藏标签栏 渲染全部标签*/
   .hidden-tag-container {
-    display: flex;
+   
     justify-content: space-between;
     align-items: center;
     user-select: none;
     -webkit-user-select: none;
-    position: fixed;
-    z-index: 9;
-    width: 100%;
-    max-width: 1260px;
-    background-color: var(--bg);
+    position: absolute;
    
+    width: 100%;
+    max-width: 1244px;
+    background-color: var(--bg);
+
     .hidden-content-container {
       /* backdrop-filter: blur(20px); */
-      /* width: calc(100vw - 24px); */
       width: 100%;
-      /* max-width: 1261px; */
-      display: flex;
-      position: relative;
       user-select: none;
       -webkit-user-select: none;
       align-items: center;
@@ -383,48 +308,48 @@
       white-space: nowrap;
       height: 72px;
 
-    
+
     }
 
     .hidden-tag-content {
-        display: flex;
+      display: flex;
+      color: var(--text);
+      /*这是关键属性，flex模式允许换行 */
+      /* flex-wrap: wrap; */
+ 
+      .active {
+        background-color: rgba(0, 0, 0, 0.03);
+        border-radius: 999px;
         color: var(--text);
-        /*这是关键属性，flex模式允许换行 */
-        /* flex-wrap: wrap; */
+      }
 
-        .active {
+      .hidden-tag-item {
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 15px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        user-select: none;
+
+
+        /*鼠标移入效果*/
+        &:hover {
           background-color: rgba(0, 0, 0, 0.03);
           border-radius: 999px;
           color: var(--text);
         }
-
-        .hidden-tag-item {
-          height: 40px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 0 15px;
-          cursor: pointer;
-          -webkit-user-select: none;
-          user-select: none;
-
-
-          /*鼠标移入效果*/
-          &:hover {
-            background-color: rgba(0, 0, 0, 0.03);
-            border-radius: 999px;
-            color: var(--text);
-          }
-        }
-
       }
+
+    }
 
   }
 
 
 
   /* 指向更多标签 开始*/
-.arrow-more-tag-container {
+  .arrow-more-tag-container {
     margin-top: 72px;
     display: none;
     display: flex;
@@ -433,11 +358,10 @@
     /* transform: translateY(100%); */
     z-index: 10;
     width: 100%;
-    max-width: 1260px;
-    /* max-width: 1285px; */
+    
 
     .arrow-more-tag-content-container {
-
+      overflow: hidden;
       display: flex;
       position: absolute;
       user-select: none;
@@ -485,6 +409,17 @@
     }
 
   }
-/* 指向更多标签 结束*/
 
+  /* 指向更多标签 结束*/
+
+
+  /* 骨架屏缩放动画 */
+  .scale-down-enter-active, .scale-down-leave-active {
+  transition: all 0.8s ease;
+}
+ 
+.scale-down-enter-from, .scale-down-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
+} 
 </style>

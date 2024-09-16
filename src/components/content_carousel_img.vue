@@ -1,18 +1,20 @@
 <template>
  
+
     
     <transition name="scale-down" mode="out-in">
         <!-- 骨架屏 开始-->
             <div v-if="is_loading" key="loading" class="content-banner-skeleton" ref="contentBannerSkeletonContainerRef">
               <!-- <div class="home-skeleton"  :style=" {height: home_skeleton_height + 'px'}" ref="skeletonContainerRef"> -->
               
-                <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height + 'px'" animated /><!-- 图片占位 -->
+                <Skeleton bg="#e4e4e4" style="display:flex;" :width="skeleton_width + 'px'" :height="skeleton_height + 'px'" animated /><!-- 图片占位 -->
                 
                
             </div>
 <!-- 骨架屏 结束-->
  <!-- 轮播图 开始-->
             <div v-else class="carousel-container">
+               
                 <div class="carousel-content" @mouseover="pauseTimer" @mouseout="resumeTimer">
                     <div class="carousel-inner" :style="{'transform': `translateX(-${data.active_carousel_index * 100}%)` }">
                         <div class="item"  v-for="index in data.list" >
@@ -56,11 +58,6 @@ import axios from 'axios';
         // 轮播图数据(json格式)
         list:[{}]
     })
-
-
-
-  
-
 
 
 
@@ -191,44 +188,14 @@ import axios from 'axios';
 <style scoped>
 
 
- /* 骨架屏 */
- .content-banner-skeleton {
-    padding: 0;
-    width: 100%;
-    margin: 0 auto;
-    max-width: 1200px;
-    margin-top: 72px;
-    transition: all 0.3s ease;
-    margin-bottom: 5px;
-
-
-      .skeleton~.skeleton {
-        display: flex;
-        position: relative;
-        
-      }
-    /* } */
-    
-  }
-
-
-  /* 骨架屏缩放动画 */
-  .scale-down-enter-active, .scale-down-leave-active {
-  transition: all 0.3s ease;
-}
- 
-.scale-down-enter-from, .scale-down-leave-to {
-  opacity: 0;
-  transform: scale(0.3);
-} 
-
 
     .carousel-container{
         padding: 0;
         width: 100%;
-        margin: 0 auto;
-        max-width: 1200px;
-        margin-top: 72px;
+        margin: 0;
+        max-width: 1244px;
+       
+        /* margin-top: 72px;  */
     }
     /* 轮播图 开始*/
     .carousel-content{
@@ -238,6 +205,7 @@ import axios from 'axios';
         padding-top: 56.25%;
         position: relative;
         overflow: hidden; 
+        
     }
     
     .carousel-inner{
@@ -395,6 +363,21 @@ import axios from 'axios';
     /* 轮播图 结束*/
     
     
+ /* 骨架屏 */
+ .content-banner-skeleton{
+    margin: 5px;
+ }
+
+/* 骨架屏缩放动画 */
+.scale-down-enter-active, .scale-down-leave-active {
+transition: all 0.8s ease;
+}
+
+.scale-down-enter-from, .scale-down-leave-to {
+opacity: 0;
+transform: scale(0.8);
+} 
+
     
     
     </style>

@@ -5,7 +5,7 @@
             
           
           <a :style="{backgroundColor: getDarkRandomColor()} " 
-          :class=" {'tag-count-item':true,'active':data.active_id==item.tag_id?true:'','no-active':data.active_id!=item.tag_id && data.active_id!=-1?true:''}"
+          :class=" {'tag-count-item':true,'active':data.active_tag_count_tag_id==item.tag_id?true:'','no-active':data.active_tag_count_tag_id!=item.tag_id && data.active_tag_count_tag_id!=-1?true:''}"
            v-for="(item, index) in data.list" :key="index" @click="clickTag(item.tag_id,item.tag_name)">
             {{ item.tag_name }}
           </a>
@@ -21,7 +21,7 @@
   const tagRef = ref();//获取元素高度
 
    const data=reactive({
-      active_id:-1,
+      active_tag_count_tag_id:-1,
       list: [
         { tag_id: 1, tag_name: "c" },
         { tag_id: 2, tag_name: "C++" },
@@ -87,12 +87,12 @@
     // console.log('tag_id:',tag_id,',tag_name:',tag_name);
     
 
-    if (data.active_id==tag_id) {
-        data.active_id = -1;
+    if (data.active_tag_count_tag_id==tag_id) {
+        data.active_tag_count_tag_id = -1;
       } else {
-        data.active_id = tag_id;
+        data.active_tag_count_tag_id = tag_id;
       }
-      console.log('tag_id:',tag_id,', data.active_id:', data.active_id);
+      console.log('tag_id:',tag_id,', data.active_tag_count_tag_id:', data.active_tag_count_tag_id);
 
     emit('child-click-tag',tag_id,tag_name);
     // console.log('data.tagActive:',data.tagActive);

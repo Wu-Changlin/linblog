@@ -3,14 +3,15 @@
   <div class="feeds-page">
   
     
-   
-    <ContentTag></ContentTag>
+
+    <div  style="margin-top: 72px;">
+      <ContentTag></ContentTag>
+
+    </div>
     
-   
-    <div class="loading-container"></div>
+
 
     <div class="feeds-container">
-
      
       <ContentCarouselImg></ContentCarouselImg>
       <Waterfall></Waterfall>
@@ -42,24 +43,30 @@ const router = useRouter();
 
 .feeds-page {
   flex: 1;
-  padding-top: 72px;
+  /* padding-top: 72px; */
   width: 100%;
-  margin: 0 auto;
-  padding-left: 12px;
-  padding-right: 12px;
-  max-width: 1260px;
+  margin: 0;
+  /* padding:0px 12px; */
+  /* max-width: 1244px; */
   /* 修改盒子大小属性 */
-  /* box-sizing: border-box; */
- 
+  padding:0px 12px;
+  background-color: var(--bg);
 
   .feeds-container {
+    /* top: 72px; */
     position: relative;
+    margin: 0;
+    /* width: 100% - 24px; */
     transition: width 0.5s;
-    margin: 0 auto;
-    width: 100%;
-
+    padding-top: 72px;
+    background-color: var(--bg);
+    /* max-width: 1236px; */
   }
+
+ 
 }
+
+
 
 
 

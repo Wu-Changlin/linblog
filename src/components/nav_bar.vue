@@ -171,19 +171,12 @@ function handleInput(){
 			height: 72px;
 			/* padding: 0 16px 0 16px; */
 			padding: 0;
+			margin: 0;
 
 			.header-logo {
 				flex: 1;
 				width: auto;
 				height: 32px
-			}
-
-			.tool-box {
-				width: 24px;
-				height: 70px;
-				position: absolute;
-				left: 0;
-				top: 0;
 			}
 
 			/* 移除输入框在点击时边框的变化 */
@@ -299,14 +292,15 @@ function handleInput(){
 				margin-left: 20px
 			}
 
-			;
+		
 
 			.header-container-right-icon {
-				display: flex;
-				margin-right: 10px;
+				display: block;
+				right: 30px;
+		
+				position: fixed;
+					
 			}
-
-
 
 
 			.reds-button-new {

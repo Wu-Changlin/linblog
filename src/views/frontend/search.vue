@@ -59,7 +59,7 @@ const stopKeywordWatch = ref(null);
   
    onUnmounted(() => {
       
-    stopKeywordWatch.value (); // 如果watch返回了一个停止监听的函数，调用它
+    stopKeywordWatch.value(); // 如果watch返回了一个停止监听的函数，调用它
    });
 
  

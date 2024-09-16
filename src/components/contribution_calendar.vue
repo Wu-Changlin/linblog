@@ -39,8 +39,8 @@
 
                 <div v-if="item != undefined">
                   <li :data-level="item.level" :data-years="item.year" :data-date="item.date"
-                    :data-date-number="item.date_number" :data-selected="item.id===data.active_id?true:false"
-                    :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.level!=data.hoverLevel ,'active':item.id===data.active_id,'no-active':data.is_selected==true&&item.id!=data.active_id}"
+                    :data-date-number="item.date_number" :data-selected="item.id===data.active_date_id?true:false"
+                    :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.level!=data.hoverLevel ,'active':item.id===data.active_date_id,'no-active':data.is_selected==true&&item.id!=data.active_date_id}"
                     @click="handleClick(item)">
 
                   </li>
@@ -104,7 +104,7 @@
       infos: [],  //存放每一天的数据（year，month，date，状态数量，isToday标记） 
       hoverLevel: -1,//等级高亮
       is_selected: false,//是否开启选择模式
-      active_id: -1,//已选中id
+      active_date_id: -1,//已选中日期id
       monthBar: [],//12列对应的月份，比如第三列开始是五月份，则令monthBar[2]="5月"，算法实现见下面method
       calculate_month_data: [],//计算月份栏的数据源
       year_contribution_count:0,//年贡献次数
@@ -335,11 +335,11 @@
    const the_year_of_the_selected_date=ref();
   //点击日期格子
   function handleClick(item) {
-      if (data.active_id == item.id) {
-        data.active_id = -1;
+      if (data.active_date_id == item.id) {
+        data.active_date_id = -1;
         data.is_selected = false;
       } else {
-        data.active_id = item.id;
+        data.active_date_id = item.id;
         data.is_selected = true;
       }
       // console.log('item:', JSON.stringify(item));

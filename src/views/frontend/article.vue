@@ -12,11 +12,31 @@
 				<div class="article-page">
 					<div class="article-title">博客搭建</div>
 					<div class="article-metadata"> 
-						<svg-icon icon-class="author"/><span>作者</span>
-						<svg-icon icon-class="category"/><span>前端 </span>
-						<svg-icon icon-class="tag"/><span>标签1  标签1 </span>
-						<svg-icon icon-class="created_at"/><span>2018-09-13 23:29:17 </span>
-						<svg-icon icon-class="visits"/><span>100 </span>
+                        <div class="article-metadata-item">
+                            <svg-icon icon-class="author"/><span>作者</span>
+                        </div>
+                        <div class="article-metadata-item">
+                            <svg-icon icon-class="category"/><span>前端 </span>
+                        </div>
+
+                        <div class="article-metadata-item">
+                            <svg-icon icon-class="tag"/><span>标签1  标签1 </span>
+                        </div>
+                            
+                        <div class="article-metadata-item">
+                            <svg-icon icon-class="created_at"/><span>2018-09-13 23:29:17 </span>
+
+                        </div>
+
+                        <div class="article-metadata-item">
+                            <svg-icon icon-class="visits"/><span>100 </span>
+
+                        </div>
+                            
+                        
+                       
+						
+						
 						<!-- <span>字数</span>
 						<span>所需阅读时间</span> -->
 					</div>
@@ -28,6 +48,7 @@
 				<!-- 博文内容 结束-->
 				
 
+                <!-- 上下篇链接 开始-->
 				<div style="margin: 20px auto;width: fit-content;">----- <span style="color: white;background-color: black;padding: 0 5px;font-size: .7rem;">END</span> -----</div>
 
 
@@ -53,13 +74,13 @@
 						<p>vscode插件</p>
 					</div>
 				</div>
-
+                <!-- 上下篇链接 结束-->
         		
 			</div>
 
 
 
-
+<!-- 目录组件 开始-->
 			<FloatingBtnSets  :style="{ right: article_ccatalog_right + 'px' }">
 				<div class="article-catalog-slot" @click="showArticleCatalog" :style="{ visibility: show_article_catalog_icon ?'visible':'hidden'}"> 
 					<div class="btn-wrapper">
@@ -76,6 +97,7 @@
 				</div>
 				
 			</FloatingBtnSets>
+            <!-- 目录组件 结束-->
 			<!-- <Footer></Footer> -->
 			
 		</div>
@@ -98,10 +120,6 @@ import ArticleCatalog from "@/components/article_catalog.vue";
 import {ref,reactive,onMounted,onUnmounted} from "vue";
 
 
-
-
-
-
 /*黑色主题*/
 import 'highlight.js/styles/atom-one-dark.css';
 /*白色主题*/
@@ -114,14 +132,7 @@ import 'highlight.js/lib/common';
 const vHighlight  = {
   mounted(el) {
     let blocks = el.querySelectorAll('pre code');
-    // blocks.forEach((block)=>{
-    //   block.setAttribute('style', 'margin-top: 8px;');
-	//   hljs.highlightElement(block);
-	 
-    // })
-
-
-
+   
 	//行号和代码块 pre添加flex属性 复制功能
 		const pre =el.querySelectorAll('pre');
 	pre.forEach((block) => {
@@ -356,8 +367,15 @@ onUnmounted(() => {
 		align-items: center;
 		border-bottom: 1px dotted #999; 
 		margin-bottom:10px;
-		span{
-			margin-right: 10px;
+        flex-direction: row;
+        flex-wrap: wrap;
+      
+  .article-metadata-item {
+    display: flex;
+       margin-right: 10px;
+       justify-content: center; 
+		align-items: center;
+ 
 		}
 
 	}

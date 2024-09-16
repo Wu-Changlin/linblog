@@ -1,3 +1,4 @@
+
 <template>
   <transition name="scale-down" mode="out-in">
 <!-- 骨架屏 开始-->
@@ -25,7 +26,7 @@
             <LazyImg class="lazy-img" :url="item.src" style="border-radius: 8px" @click="goViewAticle(item.id)" />
     
     
-            <div class="card-img-mask-stats">
+          <div class="card-img-mask-stats">
               <div class="card-img-mask-stats-left">
                 <span class="card-img-mask-stats-item">
                   <div class="card-img-mask-stats-icon"><svg-icon icon-class="visits" /></div>
@@ -42,7 +43,8 @@
     
             </div>
     
-    
+  
+
     
             <div class="footer">
               <a class="title"><span>{{ item.title}}</span></a>
@@ -158,7 +160,7 @@
   const skeleton_width = ref(236);
   const skeleton_height = ref(236); // 默认高度
   // const skeleton_item= ref(5);
-
+ //控制骨架屏尺寸
   function skeletonHandleResize() {
 
     if (waterfallSkeletonContainerRef.value) {
@@ -231,8 +233,10 @@
 
     }
 
-    .card-img-mask-stats {
-      position: absolute;
+
+
+    .card-img-mask-stats{
+    position: absolute;
       padding: 3px 3px;
       bottom: 90px;
       left: 0;
@@ -243,20 +247,17 @@
       height: 20px;
       border-bottom-right-radius: 6px;
       border-bottom-left-radius: 6px;
-      /* background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .8) 100%); */
+      background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .8) 100%);
       color: var(--card_bg);
       font-size: 13px;
-      /* line-height: 18px; */
+      line-height: 18px;
       opacity: 1;
       display: -webkit-flex;
       display: flex;
       align-items: center;
       justify-content: space-between;
-    }
-
-
-
-
+      
+  
     .card-img-mask-stats-left {
       min-width: 0;
       flex: 1;
@@ -291,6 +292,24 @@
       align-items: center;
 
     }
+
+
+    .card-img-mask-stats-reading-time{
+      display: flex;
+      justify-items: center;
+      align-items: center;
+    }
+
+
+	}
+
+
+    
+
+
+
+
+  
 
 
 
@@ -417,14 +436,13 @@
 
   /* 骨架屏缩放动画 */
   .scale-down-enter-active, .scale-down-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.8s ease;
 }
  
 .scale-down-enter-from, .scale-down-leave-to {
   opacity: 0;
-  transform: scale(0.3);
+  transform: scale(0.8);
 } 
-
 
   /* .fade-enter-from,
   .fade-leave-to {
