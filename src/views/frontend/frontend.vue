@@ -1,9 +1,16 @@
 <template>
 
-  <div style="padding-top: 200px;">前端</div>
+	<CntentList>
+    <ContentCarouselImg></ContentCarouselImg>
+  </CntentList>	
 
 </template>
 
-<script>
 
+<script setup>
+import CntentList from "@/components/content_list.vue";
+import ContentCarouselImg from '@/components/content_carousel_img.vue';
 </script>
+
+<style scoped>
+</style>

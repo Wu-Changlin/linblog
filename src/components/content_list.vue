@@ -12,8 +12,9 @@
 
 
     <div class="feeds-container">
-     
-      <ContentCarouselImg></ContentCarouselImg>
+      <slot></slot>
+      <!-- 注意这里的插槽，用于存放兄弟组件 如轮播图组件-->
+    
       <Waterfall></Waterfall>
     </div>
 
@@ -28,9 +29,7 @@
 import { reactive ,ref} from 'vue';
 import { useRouter } from "vue-router";
 import ContentTag from '@/components/content_tag.vue';
-import ContentCarouselImg from '@/components/content_carousel_img.vue';
 import Waterfall from '@/components/waterfall.vue'
-
 
 
 const router = useRouter();
