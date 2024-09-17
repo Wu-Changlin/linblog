@@ -23,7 +23,7 @@
   </template>
   
   <script setup>
-import { ref,reactive,defineEmits,onMounted,onUnmounted,inject,defineProps,watch} from 'vue';
+import { ref,reactive,onMounted,onUnmounted,inject,watch} from 'vue';
 
 
  // 接收爷爷的响应式数据  默认选中当年年份

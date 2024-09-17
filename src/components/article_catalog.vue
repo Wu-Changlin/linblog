@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { reactive, ref,nextTick,defineProps } from "vue";
+import { reactive, ref,nextTick } from "vue";
 
  
 

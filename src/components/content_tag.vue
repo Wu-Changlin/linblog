@@ -63,10 +63,16 @@
 
 <script setup>
   import { reactive, ref, nextTick, onMounted, onUnmounted, watch } from 'vue';
+  // import { useRoute } from "vue-router";
   import axios from 'axios';
   import Skeleton from '@/components/skeleton.vue'
-  import { useRouter } from "vue-router";
-  const router = useRouter();
+
+  import { useRoute, useRouter } from 'vue-router';
+const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
+const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
+
+
+// 当我们需要根据当前路由的信息来决定组件的渲染逻辑时，可以使用useRoute；而当我们需要进行路由跳转、导航等操作时，则应该使用useRouter。
 
   const hiddenTagContentRet = ref(null);//获取隐藏标签容器dom宽度，用于计算每行显示标签数量
   const hiddenTagItemRet = ref(null); // 创建一个引用
@@ -81,15 +87,24 @@
     show_tag_data: [],//页面实际渲染标签数据
     show_arrow_more_tag_data: [],//显示更多标签数据
     tag_item_dom_width_count: 0,//统计标签dom宽度
-    list: [{}],
+    list: [],
     showAll: false,
 
   })
+
+  console.log('active_tag_id:',data.active_tag_id);
 
 
   function clickTag(item) {
     // console.log('tag_id:', tag_id);
     data.active_tag_id = item.tag_id;
+
+    const current_route_name = route.name;//获取当前路由的名称
+   
+    console.log('clickTag-active_tag_id:',data.active_tag_id);
+
+    router.push({name: current_route_name, query: { tag_id: item.tag_name}, key: new Date().getTime() });
+
   }
   const is_loading = ref(true)
   // 使用ref来存储watch返回的函数 监听hiddenTagContentRet.value，执行maxItemsPerLines函数
@@ -113,7 +128,7 @@
   // 如果你想使用axios来模拟请求，可以这样做
   axios.get('/data/frontend/content_tag.json', { responseType: 'json' })
       .then(response => {
-       console.log('data.active_tag_id:')
+      
         data.list = response.data; // 数据加载完毕，关闭骨架屏
         maxItemsPerLines();
         

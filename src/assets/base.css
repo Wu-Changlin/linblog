@@ -60,6 +60,8 @@ html[data-theme='dark'] {
     --color-secondary-label: hsla(0,0%,100%,0.8);
     --color-background: #0a0a0a;
     
+    --color-active-background: hsla(0, 0%, 100%, 0.04);
+    --color-primary-label: #fff;
 }
 
 
@@ -72,6 +74,13 @@ html[data-theme='dark'] {
     --elevation-low-background: #fff;
     --color-secondary-label: rgba(51,51,51,0.8);
     --color-background: #fff;
+
+    --color-primary-label: #333;
+
+    --color-active-background: rgba(0, 0, 0, 0.03);
+    
+
+    
 
 
     --bg: #fff;

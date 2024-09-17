@@ -126,7 +126,7 @@ function handleInput(){
 		//带参数跳转
 
 		if (search_keyword) {
-			router.push({ name: 'search', query: { keyword: search_keyword.value }, key: new Date().getTime() });
+			router.push({ name: 'search', query: {keyword: search_keyword.value }, key: new Date().getTime() });
 
 		} else {
 			console.log('请输入搜索内容')
@@ -218,9 +218,9 @@ function handleInput(){
 					height: 100%;
 					font-size: 16px;
 					line-height: 120%;
-					color: #333;
-					background: rgba(0, 0, 0, 0.03);
-					border: #333;
+					color: var(--color-primary-label);
+					background: var(--color-active-background);
+					border: none;
 					border-radius: 999px;
 
 					@media screen and (max-width: 695px) {
@@ -242,8 +242,7 @@ function handleInput(){
 					align-items: center;
 					justify-content: center;
 					height: 100%;
-					color: rgba(51, 51, 51, 0.8);
-
+					color: var(--color-secondary-label);
 
 					@media screen and (max-width: 695px) {
 
@@ -258,7 +257,7 @@ function handleInput(){
 						align-items: center;
 						justify-content: center;
 						cursor: pointer;
-						color: rgba(51, 51, 51, 0.8);
+						color: var(--color-secondary-label);
 
 					}
 
@@ -270,7 +269,7 @@ function handleInput(){
 						align-items: center;
 						justify-content: center;
 						cursor: pointer;
-						color: rgba(51, 51, 51, 0.8);
+						color: var(--color-secondary-label);
 					}
 
 
@@ -369,7 +368,9 @@ function handleInput(){
                   font-weight: normal;
                   font-stretch: normal;
                   letter-spacing: 0px;
-                  color: #333333;
+                  color: var(--color-border);
+				  background: var(--color-active-background);
+
                   /* border: 1px solid #494d59; */
                   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 				  z-index: 12;

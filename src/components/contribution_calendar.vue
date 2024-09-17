@@ -92,7 +92,7 @@
 } -->
 
 <script setup>
-  import { defineEmits,onMounted, onUnmounted, ref, reactive } from "vue";
+  import { onMounted, onUnmounted, ref, reactive } from "vue";
   import YearSelect from '@/components/year_select.vue'
 
 

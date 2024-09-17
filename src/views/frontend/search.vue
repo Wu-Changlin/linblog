@@ -107,7 +107,6 @@ const stopKeywordWatch = ref(null);
       padding: 0 12px;
       padding-top: 72px;
       width: 100%;
- 
 
     }
 

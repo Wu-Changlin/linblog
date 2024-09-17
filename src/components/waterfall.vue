@@ -8,10 +8,15 @@
       class="item"
        v-for="(item, index)  in 5" 
        :key="item"
-      :style="{ backgroundColor: '#f0f9f4', width:skeleton_width + 'px'}" >
-        <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height + 'px'" animated /><!-- 图片占位 -->
-        <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" height="24px" animated style="margin-top: 12px;" /><!-- 标题占位 -->
-        <Skeleton bg="#e4e4e4" width="120px" height="24px" animated style="margin: 12px 0px;" /><!-- 作者 -->
+      :style="{background: 'rgba(0, 0, 0, 0.04)', width:skeleton_width + 'px'}" >
+      
+      <!-- 图片占位 -->
+      <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height + 'px'" animated  style="border-radius: 8px;"/>
+      <!-- 标题占位 -->
+      <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" height="24px" animated style="margin-top: 12px;" />
+      <!-- 作者 -->
+      <Skeleton bg="#e4e4e4" width="120px" height="24px" animated style="margin: 12px 0px;" />
+
       </div>
       
     </div>
@@ -168,27 +173,27 @@
 
       switch (true) {
         case (skeleton_container_width > 1424):
-          skeleton_width.value = (skeleton_container_width - 50) / 5;
+          skeleton_width.value = (skeleton_container_width - 60) / 5;
           skeleton_height.value = skeleton_width.value;
           return 5;
 
         case (skeleton_container_width > 1192 && skeleton_container_width <= 1424):
-          skeleton_width.value = (skeleton_container_width - 50) / 5;
+          skeleton_width.value = (skeleton_container_width - 60) / 5;
           skeleton_height.value = skeleton_width.value;
           return 5;
 
         case (skeleton_container_width > 960 && skeleton_container_width <= 1192):
-          skeleton_width.value = (skeleton_container_width - 50) / 4;
+          skeleton_width.value = (skeleton_container_width - 60) / 4;
           skeleton_height.value = skeleton_width.value;
           return 4;
 
         case (skeleton_container_width > 696 && skeleton_container_width <= 960):
-          skeleton_width.value = (skeleton_container_width - 50) / 3;
+          skeleton_width.value = (skeleton_container_width - 60) / 3;
           skeleton_height.value = skeleton_width.value;
           return 3;
 
         case (skeleton_container_width > 400 && skeleton_container_width <= 696):
-          skeleton_width.value = (skeleton_container_width - 50) / 2;
+          skeleton_width.value = (skeleton_container_width - 60) / 2;
           skeleton_height.value = skeleton_width.value;
           return 2;
 
@@ -218,12 +223,7 @@
 
 <style scoped>
 
-/* 骨架屏缩放动画 */
-.waterfall-container {
-  transition: all 0.3s ease;
-  /* animation: grow-in 0.1s forwards; */
-}
- 
+
 
   .waterfall-card {
     position: relative;
@@ -303,13 +303,6 @@
 
 	}
 
-
-    
-
-
-
-
-  
 
 
 
@@ -410,21 +403,29 @@
   }
 
 
+  /* 缩放动画 */
+  .waterfall-container {
+  transition: all 0.3s ease;
+  /* animation: grow-in 0.1s forwards; */
+}
+
+
+
   /* 骨架屏 */
   .waterfall-skeleton {
     width: 100%;
-    max-width: 1260px;
+    max-width: 1244px;
     height: auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     transition: all 0.3s ease;
+   
     .item {
       width: 236px;
-      margin-left: 5px;
-      margin-right: 5px;
+      margin-left: 6px;
+      margin-right: 6px;
       margin-bottom: 10px;
-
       .skeleton~.skeleton {
         display: flex;
         position: relative;
@@ -432,6 +433,10 @@
       }
     }
   }
+
+
+
+ 
 
 
   /* 骨架屏缩放动画 */

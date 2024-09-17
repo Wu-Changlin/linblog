@@ -24,7 +24,6 @@
 <script setup>
 import NavBar from "@/components/nav_bar.vue";
 import SideBar from "@/components/side_bar.vue";
-import CntentList from "@/components/content_list.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import Footer from "@/components/footer.vue";
 
