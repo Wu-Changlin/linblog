@@ -468,7 +468,7 @@
     padding-inline-start: 0px;
     grid-auto-flow: column;
     /*生成7*53的格子后，设置为竖向排布*/
-    margin: 21px 20px 21px 30px;
+    margin: 21px 20px 21px 35px;
   }
 
   .months {
@@ -478,7 +478,7 @@
     font-size: 8px;
     /* color: #aaa; */
     padding-inline-start: 0px;
-    margin: 21px 20px 21px 0px;
+    margin: 21px 20px 21px 35px;
 
   }
 
@@ -555,14 +555,19 @@
     padding: 5px;
     position: absolute;
     z-index: 8;
-    bottom: 125%;
-    left: 50%;
+    /* bottom: 125%;
+    left: 50%; 
+    transform: translateX(-50%);*/
+    display: block;
     /* display: inline-block; */
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    transform: translateX(-50%);
+    /*span 标签是一个内联元素，默认情况下不支持 width 属性，因此无法直接应用 translateX 的效果,
+    解决方法：将 span 标签转换为块级元素或内联块元素，可以通过设置 display: block; 或 display: inline-block; 实现。 */
+    -webkit-transform: translate(-35px, -200%);
+    -moz-transform:translate(-35px, -200%);
+    -o-transform: translate(-35px, -200%);
+    -ms-transform: translate(-35px, -200%);
+    transform: translate(-35px, -200%);
+    /* -35px是父容器的左侧边距 */
     opacity: 0;
     transition: opacity 0.3s;
     text-align: center;
@@ -585,9 +590,14 @@
     position: absolute;
     top: 100%;
     left: 50%;
+    opacity: 0.5;
     border-width: 8px;
     border-style: solid;
-    border-color: #28282817 transparent transparent transparent;
+    border-color: #000 transparent transparent transparent;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
     transform: translateX(-50%);
   }
 
