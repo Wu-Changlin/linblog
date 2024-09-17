@@ -468,7 +468,7 @@
     padding-inline-start: 0px;
     grid-auto-flow: column;
     /*生成7*53的格子后，设置为竖向排布*/
-    margin: 20px 20px 5px 20px;
+    margin: 21px 20px 21px 30px;
   }
 
   .months {
@@ -478,7 +478,7 @@
     font-size: 8px;
     /* color: #aaa; */
     padding-inline-start: 0px;
-    margin: 21px 20px 21px 20px;
+    margin: 21px 20px 21px 0px;
 
   }
 
@@ -557,6 +557,11 @@
     z-index: 8;
     bottom: 125%;
     left: 50%;
+    /* display: inline-block; */
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
     transform: translateX(-50%);
     opacity: 0;
     transition: opacity 0.3s;
