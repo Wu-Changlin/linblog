@@ -222,13 +222,14 @@
     position: fixed;
     z-index: 9;
     width: 100%;
-    /* max-width: 1244px; */
+    max-width: 1244px;
     background-color: var(--bg);
 
     .content-container {
       /* backdrop-filter: blur(20px); */
       /* width: calc(100vw - 24px); */
-     
+      width: 100%;
+      /* max-width: 1244px; */
       display: flex;
       position: relative;
       user-select: none;
@@ -249,7 +250,9 @@
       color: var(--text);
       /*这是关键属性，flex模式允许换行 */
       /* flex-wrap: wrap; */
-      overflow: hidden;
+      width: 100%;
+      /* max-width: 1244px; */
+      /* overflow: hidden; */
       .active {
         background-color: rgba(0, 0, 0, 0.03);
         border-radius: 999px;
@@ -307,8 +310,6 @@
       height: 40px;
       white-space: nowrap;
       height: 72px;
-
-
     }
 
     .hidden-tag-content {
@@ -359,7 +360,7 @@
     z-index: 10;
     width: 100%;
     
-
+    max-width: 1255px;/* 防止元素溢出 */
     .arrow-more-tag-content-container {
       overflow: hidden;
       display: flex;
