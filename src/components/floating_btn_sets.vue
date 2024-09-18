@@ -12,7 +12,7 @@
               <svg-icon :icon-class="data.menu_icon" />
             </div>
 
-            <div :style="{'visibility' : isShow ? 'visible' : 'hidden'}" class="cont" v-for="(menu,index) in menuInfo"
+            <div :style="{'visibility' : isShow ? 'visible' : 'hidden'}" class="cont" v-for="(menu,index) in layoutMenuData"
               :key="index" :ref="setMenuRef(menu.menu_name)">
               <a :href="menu.menu_path">
                 <svg-icon class="svg-icon" :icon-class="menu.menu_name" />
@@ -64,48 +64,98 @@
   // menu_name: string //菜单唯一标识，与路由名保持一致
   // menu_title: string //菜单显示名称
 
-  const menuInfo = ref([
-    {
-      menu_id: 1,
-      menu_name: "index",
-      menu_title: "首页",
-      menu_path: "/",
-    },
-    {
-      menu_id: 2,
-      menu_name: "frontend",
-      menu_title: "前端",
-      menu_path: "/frontend",
-    },
-    {
-      menu_id: 3,
-      menu_name: "backend",
-      menu_title: "后端",
-      menu_path: "/backend",
-    },
+  // const menuInfo = ref([
+  //   {
+  //     menu_id: 1,
+  //     menu_name: "index",
+  //     menu_title: "首页",
+  //     menu_path: "/",
+  //   },
+  //   {
+  //     menu_id: 2,
+  //     menu_name: "frontend",
+  //     menu_title: "前端",
+  //     menu_path: "/frontend",
+  //   },
+  //   {
+  //     menu_id: 3,
+  //     menu_name: "backend",
+  //     menu_title: "后端",
+  //     menu_path: "/backend",
+  //   },
 
-    {
-      menu_id: 4,
-      menu_name: "resource",
-      menu_title: "资源",
-      menu_path: "/resource",
-    },
+  //   {
+  //     menu_id: 4,
+  //     menu_name: "resource",
+  //     menu_title: "资源",
+  //     menu_path: "/resource",
+  //   },
 
-    {
-      menu_id: 5,
-      menu_name: "archives",
-      menu_title: "归档",
-      menu_path: "/archives",
-    },
+  //   {
+  //     menu_id: 5,
+  //     menu_name: "archives",
+  //     menu_title: "归档",
+  //     menu_path: "/archives",
+  //   },
 
-    {
-      menu_id: 6,
-      menu_name: "diary",
-      menu_title: "随笔",
-      menu_path: "/diary",
-    },
+  //   {
+  //     menu_id: 6,
+  //     menu_name: "diary",
+  //     menu_title: "随笔",
+  //     menu_path: "/diary",
+  //   },
 
-  ]);
+  // ]);
+
+
+  const props = defineProps({
+	  layoutMenuData: {
+			type: Array,
+			default:[
+						{
+						menu_id: 1,
+						menu_name: "index",
+						menu_title: "首页",
+						menu_path: "/",
+						},
+						{
+						menu_id: 2,
+						menu_name: "frontend",
+						menu_title: "前端",
+						menu_path: "/frontend",
+						},
+						{
+						menu_id: 3,
+						menu_name: "backend",
+						menu_title: "后端",
+						menu_path: "/backend",
+						},
+
+						{
+						menu_id: 4,
+						menu_name: "resource",
+						menu_title: "资源",
+						menu_path: "/resource",
+						},
+
+						{
+						menu_id: 5,
+						menu_name: "archives",
+						menu_title: "归档",
+						menu_path: "/archives",
+						},
+
+						{
+						menu_id: 6,
+						menu_name: "diary",
+						menu_title: "随笔",
+						menu_path: "/diary",
+						},
+
+					]
+    	},
+    
+});
 
 
   const data = reactive({
@@ -203,21 +253,31 @@
     }
 
     isShow.value = !isShow.value
-    menuRefs.value['index'].classList.remove("index")
-    menuRefs.value['frontend'].classList.remove("frontend")
-    menuRefs.value['backend'].classList.remove("backend")
-    menuRefs.value['resource'].classList.remove("resource")
-    menuRefs.value['archives'].classList.remove("archives")
-    menuRefs.value['diary'].classList.remove("diary")
+     for(let i=0;i<props.layoutMenuData.length;i++){
+      const menu_name=props.layoutMenuData[i].menu_name;
+       menuRefs.value[menu_name].classList.remove(menu_name);
+     }
+   
+    //  menuRefs.value['index'].classList.remove("index")
+    // menuRefs.value['frontend'].classList.remove("frontend")
+    // menuRefs.value['backend'].classList.remove("backend")
+    // menuRefs.value['resource'].classList.remove("resource")
+    // menuRefs.value['archives'].classList.remove("archives")
+    // menuRefs.value['diary'].classList.remove("diary")
     data.menu_icon = 'menu';//显示菜单图标
     if (isShow.value) {
 
-      menuRefs.value['index'].classList.add("index")
-      menuRefs.value['frontend'].classList.add("frontend")
-      menuRefs.value['backend'].classList.add("backend")
-      menuRefs.value['resource'].classList.add("resource")
-      menuRefs.value['archives'].classList.add("archives")
-      menuRefs.value['diary'].classList.add("diary")
+      for(let i=0;i<props.layoutMenuData.length;i++){
+      const menu_name=props.layoutMenuData[i].menu_name;
+       menuRefs.value[menu_name].classList.add(menu_name);
+     }
+
+      // menuRefs.value['index'].classList.add("index")
+      // menuRefs.value['frontend'].classList.add("frontend")
+      // menuRefs.value['backend'].classList.add("backend")
+      // menuRefs.value['resource'].classList.add("resource")
+      // menuRefs.value['archives'].classList.add("archives")
+      // menuRefs.value['diary'].classList.add("diary")
       data.menu_icon = 'close';//显示关闭图标
     }
   };
@@ -534,7 +594,9 @@
     align-items: center;
     justify-content: center;
     border-radius: 6px;
-    right: 50px;
+    right: 40px;
+    top:-3px;
+    opacity: 5;
     visibility: hidden;
 
   }

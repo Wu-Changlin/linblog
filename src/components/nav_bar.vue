@@ -4,7 +4,7 @@
 			<a v-if="show_right_search==false" aria-current="page" href="/" class="router-link-exact-active"
 				id="link-guide">
 				<img crossorigin="anonymous" class="header-logo" style="pointer-events:none;"
-					src="@/assets/img/logo.png">
+					:src="layoutLogData">
 			</a>
 
 			<div :class="{'input-box':true,'minWidthShowSearchClass':show_right_search?true:''}">
@@ -88,6 +88,15 @@
 	const router = useRouter();
 	const search_keyword = ref('');
 	const show_input_focus=ref(false);//搜索候选
+
+	const props = defineProps({
+		layoutLogData: {
+			type: String,
+			default: "/logo.png",
+    	},
+    
+	});
+
 
 function handleInput(){
 	//  console.log('search_keyword.value:',search_keyword.value);

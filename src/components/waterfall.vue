@@ -76,24 +76,18 @@
   </transition>
 
 </template>
-
 <script setup>
-  import { reactive, ref, onMounted, onUnmounted } from 'vue';
+  import { reactive, ref, onMounted, onUnmounted ,watch} from 'vue';
   import axios from 'axios';
-  import { useRouter } from "vue-router";
+  import {useRoute, useRouter } from "vue-router";
   import { LazyImg, Waterfall } from "vue-waterfall-plugin-next";
   import "vue-waterfall-plugin-next/dist/style.css";
   import Skeleton from '@/components/skeleton.vue'
 
   const router = useRouter();
+  const route = useRoute();
   const is_loading=ref(true)
   const list = ref([]);
-
-
- 
-
- 
-
 
   onMounted(() => {
     // 假设JSON文件与组件在同一目录下
@@ -108,7 +102,7 @@
       .then(response => {
         setTimeout(() => {
            list.value = response.data; // 数据加载完毕，关闭骨架屏
-          //  is_loading.value=false;
+           is_loading.value=false;
         }, 3000); // 假设加载时间是3秒
 
       })
@@ -124,6 +118,42 @@
 
   });
 
+  const route_query_tag_id=ref(0);
+
+// 使用ref来存储watch返回的函数 route_query_tag_id
+const stopTagIdWatch = ref(null);
+
+   onMounted(() => {
+      
+       // 设置一个watch监听器
+       // 立即监听，并存储取消监听的函数。
+       //如果兄弟组件处于同一个路由下，可以使用路由参数或查询参数进行值的传递。
+       //例如content_tag.vue和waterfall.vue处于同一个路由index.vue下，可以使用route.query.tag_id获取值。
+       //为什么使用监听route.query.tag_id？
+       //1.当用户在content_tag.vue使用查询参数进行值的传递时，waterfall.vue本页面无法获知查询参数更新。
+       //2.当用户在content_tag.vue使用查询参数进行相同值（重复点击同一个标签）的传递时，应从缓存中取数据非请求数据。
+       stopTagIdWatch.value = watch(
+       () => route.query.tag_id,
+       (newValue, oldValue) => {
+        if(newValue){//如有路由查询参数更新,那么重新赋值且把新查询参数值作为条件请求数据
+          route_query_tag_id.value = newValue;
+          //console.log('newValue <= oldValue :',newValue,'<=' ,oldValue,',route_query_tag_id:',route_query_tag_id.value);
+        }else{//如有路由查询参数没有更新，那么情景1：缓存有查询参数值数据，从缓存中取数据，后刷新页面；情景2：缓存没有查询参数值数据，请求数据，后刷新页面。
+
+        }
+       
+        
+       },
+       // { immediate: true }
+     );
+   
+   });
+   
+
+   
+
+
+
 
 
 
@@ -134,9 +164,14 @@
     //   router.push("/testDemo");
     // };
     //带参数跳转
-
+   
     if (article_id) {
-      router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
+      // router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
+     let routeUrl = router.resolve({ name: 'article', query: { id: article_id },params: {key: article_id},key: new Date().getTime() });
+     console.log('routeUrl',routeUrl);
+     window.open(routeUrl.href, '_blank');//打开新窗口
+
+     
     } else {
       console.log('非法请求')
     }
@@ -222,7 +257,8 @@
 
 
   onUnmounted(() => {
-    window.removeEventListener('resize', skeletonHandleResize);
+    window.removeEventListener('resize', skeletonHandleResize);//移除骨架屏监听
+    stopTagIdWatch.value(); // 如果watch返回了一个停止监听的函数，调用它
   });
 
 

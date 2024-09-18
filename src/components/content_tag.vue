@@ -92,19 +92,17 @@ const router = useRouter();//进行路由的导航操作。返回的是路由的
 
   })
 
-  console.log('active_tag_id:',data.active_tag_id);
+
 
 
   function clickTag(item) {
     // console.log('tag_id:', tag_id);
     data.active_tag_id = item.tag_id;
 
-    const current_route_name = route.name;//获取当前路由的名称
-   
     // console.log('clickTag-active_tag_id:',data.active_tag_id);
 
     //  /index ===>  /index?tag_id=Java  路由携参跳转（当前页只添加路由参没有跳转）
-    router.push({name: current_route_name, query: { tag_id: item.tag_name}, key: new Date().getTime() });
+    router.push({name: current_route_name.value, query: { tag_id: item.tag_name}, key: new Date().getTime() });
 
     data.tagWrap = false;//关闭显示更多标签数据
     data.tagBtnType = false;//指向下折叠false
@@ -114,10 +112,10 @@ const router = useRouter();//进行路由的导航操作。返回的是路由的
   // 使用ref来存储watch返回的函数 监听hiddenTagContentRet.value，执行maxItemsPerLines函数
   const stopHiddenTagContentRetWatch = ref(null);
 
-
+  const current_route_name=ref('index');
   onMounted(() => {
     //     console.log('挂载完毕');
-
+    current_route_name.value = route.name;//获取当前路由的名称
 
     fetchTag();
 

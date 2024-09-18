@@ -3,7 +3,7 @@
     <div class="side-bar">
 
         <ul class="channel-list">
-			<li  v-for="(menu,index) in menuInfo"  :data-menu_path="menu.menu_path" :data-active_menu_path="data.active_menu_path" :class="{'active-channel': data.active_menu_path==menu.menu_path?true:''}"  @click="clickMenu(menu.menu_path)">
+			<li  v-for="(menu,index) in layoutMenuData"  :data-menu_path="menu.menu_path" :data-active_menu_path="data.active_menu_path" :class="{'active-channel': data.active_menu_path==menu.menu_path?true:''}"  @click="clickMenu(menu.menu_path)">
 				<a class="link-wrapper":href="menu.menu_path">
 					<svg-icon  class="svg_icon"  style="width: 1em; height: 1em; margin-right: 8px;"  :icon-class="menu.menu_name" />
 					<span class="channel"> {{menu.menu_title}}</span>
@@ -20,48 +20,62 @@ import { reactive, ref,onMounted } from 'vue';
 // menu_name: string //菜单唯一标识，与路由名保持一致
 // menu_title: string //菜单显示名称
 
-const menuInfo = ref([
-    {
-        menu_id:1,
-        menu_name: "index",
-        menu_title:"首页",
-        menu_path: "/index",
-    },
-    {
-      menu_id:2,
-      menu_name: "frontend",
-      menu_title:"前端",
-      menu_path: "/frontend",
-    },
-    {
-      menu_id:3,
-      menu_name: "backend",
-      menu_title:"后端",
-      menu_path: "/backend",
-    },
 
-    {
-      menu_id:4,
-      menu_name: "resource",
-      menu_title:"资源",
-      menu_path: "/resource",
-    },
+const props = defineProps({
+	layoutMenuData: {
+			type: Array,
+			default:[
+						{
+						menu_id: 1,
+						menu_name: "index",
+						menu_title: "首页",
+						menu_path: "/",
+						},
+						{
+						menu_id: 2,
+						menu_name: "frontend",
+						menu_title: "前端",
+						menu_path: "/frontend",
+						},
+						{
+						menu_id: 3,
+						menu_name: "backend",
+						menu_title: "后端",
+						menu_path: "/backend",
+						},
 
-    {
-      menu_id:5,
-      menu_name: "archives",
-      menu_title:"归档",
-      menu_path: "/archives",
-    },
+						{
+						menu_id: 4,
+						menu_name: "resource",
+						menu_title: "资源",
+						menu_path: "/resource",
+						},
 
-    {
-      menu_id:6,
-      menu_name: "diary",
-      menu_title:"随笔",
-      menu_path: "/diary",
-    },
+						{
+						menu_id: 5,
+						menu_name: "archives",
+						menu_title: "归档",
+						menu_path: "/archives",
+						},
+
+						{
+						menu_id: 6,
+						menu_name: "diary",
+						menu_title: "随笔",
+						menu_path: "/diary",
+						},
+
+					],
+    	},
     
-]);
+});
+
+
+
+  const menuInfo = ref(
+	
+);
+
 
 
 
