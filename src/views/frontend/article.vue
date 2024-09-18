@@ -109,26 +109,6 @@
 </template>
 
 
-
-<script>
-    
-import { useRoute, useRouter } from 'vue-router';
- 
- export default {
-   created() {
-     const router = useRouter();
-     const route = useRoute();
-  
-     // 检查路由参数中的id是否存在
-     if (!route.query.id) {
-       // 如果不存在，导航到404页面
-       router.push('/404');
-     }
-   },
- };
-</script>
-
-
 <script setup>
 import NavBar from "@/components/nav_bar.vue";
 import SideBar from "@/components/side_bar.vue";

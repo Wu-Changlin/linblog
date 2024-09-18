@@ -6,16 +6,18 @@
       
       <div
       class="item"
-       v-for="(item, index)  in 5" 
+       v-for="(item, index)  in 10" 
        :key="item"
+        :data-item='item'
+      :data-index='index'
       :style="{background: 'rgba(0, 0, 0, 0.04)', width:skeleton_width + 'px'}" >
-      
+     
       <!-- 图片占位 -->
-      <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height + 'px'" animated  style="border-radius: 8px;"/>
+      <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height*0.7 + 'px'" animated  style="border-radius: 8px;"/>
       <!-- 标题占位 -->
       <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" height="24px" animated style="margin-top: 12px;" />
       <!-- 作者 -->
-      <Skeleton bg="#e4e4e4" width="120px" height="24px" animated style="margin: 12px 0px;" />
+      <Skeleton bg="#e4e4e4" :width="skeleton_width*0.25 + 'px'" height="24px" animated style="margin: 12px 0px;" />
 
       </div>
       
@@ -87,6 +89,12 @@
   const is_loading=ref(true)
   const list = ref([]);
 
+
+ 
+
+ 
+
+
   onMounted(() => {
     // 假设JSON文件与组件在同一目录下
     // import('./mock-data.json').then(res => {
@@ -94,13 +102,13 @@
     // }).catch(error => {
     //   console.error('Error fetching mock data:', error);
     // });
-
+   
     // 如果你想使用axios来模拟请求，可以这样做
     axios.get('/data/frontend/index.json', { responseType: 'json' })
       .then(response => {
         setTimeout(() => {
            list.value = response.data; // 数据加载完毕，关闭骨架屏
-           is_loading.value=false;
+          //  is_loading.value=false;
         }, 3000); // 假设加载时间是3秒
 
       })

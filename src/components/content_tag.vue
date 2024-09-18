@@ -63,11 +63,11 @@
 
 <script setup>
   import { reactive, ref, nextTick, onMounted, onUnmounted, watch } from 'vue';
-  // import { useRoute } from "vue-router";
+  import { useRoute, useRouter } from 'vue-router';
   import axios from 'axios';
   import Skeleton from '@/components/skeleton.vue'
 
-  import { useRoute, useRouter } from 'vue-router';
+  
 const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
 const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
 
@@ -101,9 +101,13 @@ const router = useRouter();//进行路由的导航操作。返回的是路由的
 
     const current_route_name = route.name;//获取当前路由的名称
    
-    console.log('clickTag-active_tag_id:',data.active_tag_id);
+    // console.log('clickTag-active_tag_id:',data.active_tag_id);
 
+    //  /index ===>  /index?tag_id=Java  路由携参跳转（当前页只添加路由参没有跳转）
     router.push({name: current_route_name, query: { tag_id: item.tag_name}, key: new Date().getTime() });
+
+    data.tagWrap = false;//关闭显示更多标签数据
+    data.tagBtnType = false;//指向下折叠false
 
   }
   const is_loading = ref(true)

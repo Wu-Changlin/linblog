@@ -64,6 +64,13 @@ const routes=[
         path:'/article',
         name:"article",
         component:()=>import('@/views/frontend/article.vue'),
+        beforeEnter: (to, from, next) => {
+            if (!to.query.id || to.path === '/article/') {
+              next('/404');
+            } else {
+              next();
+            }
+        }
     },  
     
     {

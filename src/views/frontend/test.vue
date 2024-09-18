@@ -192,52 +192,51 @@
     const skeleton_height = ref(236); // 默认高度
     // const skeleton_item= ref(5);
    //控制骨架屏尺寸
-    function skeletonHandleResize() {
-  
-      if (waterfallSkeletonContainerRef.value) {
-        const skeleton_container_width = waterfallSkeletonContainerRef.value.offsetWidth;
-  
-        switch (true) {
-          case (skeleton_container_width > 1424):
-            skeleton_width.value = (skeleton_container_width - 50) / 5;
-            skeleton_height.value = skeleton_width.value;
-            return 5;
-  
-          case (skeleton_container_width > 1192 && skeleton_container_width <= 1424):
-            skeleton_width.value = (skeleton_container_width - 50) / 5;
-            skeleton_height.value = skeleton_width.value;
-            return 5;
-  
-          case (skeleton_container_width > 960 && skeleton_container_width <= 1192):
-            skeleton_width.value = (skeleton_container_width - 50) / 4;
-            skeleton_height.value = skeleton_width.value;
-            return 4;
-  
-          case (skeleton_container_width > 696 && skeleton_container_width <= 960):
-            skeleton_width.value = (skeleton_container_width - 50) / 3;
-            skeleton_height.value = skeleton_width.value;
-            return 3;
-  
-          case (skeleton_container_width > 400 && skeleton_container_width <= 696):
-            skeleton_width.value = (skeleton_container_width - 50) / 2;
-            skeleton_height.value = skeleton_width.value;
-            return 2;
-  
-          default:
-            skeleton_width.value = skeleton_container_width - 10;
-            skeleton_height.value = skeleton_width.value;
-            return 1;
-        }
-  
-  
-        // switch
-  
-        // skeleton_width.value = `${width}px`;
-        // skeleton_height.value = `${height}px`;
-      }
-    }
-  
-  
+   function skeletonHandleResize() {
+
+if (waterfallSkeletonContainerRef.value) {
+  const skeleton_container_width = waterfallSkeletonContainerRef.value.offsetWidth;
+
+  switch (true) {
+    case (skeleton_container_width > 1424):
+      skeleton_width.value = (skeleton_container_width - 60) / 5;
+      skeleton_height.value = skeleton_width.value;
+      return 5;
+
+    case (skeleton_container_width > 1192 && skeleton_container_width <= 1424):
+      skeleton_width.value = (skeleton_container_width - 60) / 5;
+      skeleton_height.value = skeleton_width.value;
+      return 5;
+
+    case (skeleton_container_width > 960 && skeleton_container_width <= 1192):
+      skeleton_width.value = (skeleton_container_width - 60) / 4;
+      skeleton_height.value = skeleton_width.value;
+      return 4;
+
+    case (skeleton_container_width > 696 && skeleton_container_width <= 960):
+      skeleton_width.value = (skeleton_container_width - 60) / 3;
+      skeleton_height.value = skeleton_width.value;
+      return 3;
+
+    case (skeleton_container_width > 400 && skeleton_container_width <= 696):
+      skeleton_width.value = (skeleton_container_width - 60) / 2;
+      skeleton_height.value = skeleton_width.value;
+      return 2;
+
+    default:
+      skeleton_width.value = skeleton_container_width - 10;
+      skeleton_height.value = skeleton_width.value;
+      return 1;
+  }
+
+
+  // switch
+
+  // skeleton_width.value = `${width}px`;
+  // skeleton_height.value = `${height}px`;
+}
+}
+
   
     onUnmounted(() => {
       window.removeEventListener('resize', skeletonHandleResize);
@@ -248,9 +247,32 @@
   
   
   <style scoped>
-  
-  
-  
+.feeds-page {
+  flex: 1;
+  /* padding-top: 72px; */
+  width: 100%;
+  margin: 0;
+  /* padding:0px 12px; */
+  /* max-width: 1244px; */
+  /* 修改盒子大小属性 */
+  padding:0px 12px;
+  background-color: var(--bg);
+
+  .feeds-container {
+    /* top: 72px; */
+    position: relative;
+    margin: 0;
+    /* width: 100% - 24px; */
+    transition: width 0.5s;
+    padding-top: 72px;
+    background-color: var(--bg);
+    /* max-width: 1236px; */
+  }
+
+ 
+}
+
+
     .waterfall-card {
       position: relative;
   
@@ -327,7 +349,7 @@
       }
   
   
-      }
+    }
   
   
   
@@ -440,7 +462,7 @@
     /* 骨架屏 */
     .waterfall-skeleton {
       width: 100%;
-      max-width: 1260px;
+      max-width: 1244px;
       height: auto;
       display: flex;
       flex-direction: row;
@@ -449,16 +471,10 @@
      
       .item {
         width: 236px;
-        margin-left: 5px;
-        margin-right: 5px;
+        margin-left: 6px;
+        margin-right: 6px;
         margin-bottom: 10px;
-          /* padding: 0px 8px 0px; */
-         
-          background-color: red;
         .skeleton~.skeleton {
-        
-    background-color: yellow;
-  
           display: flex;
           position: relative;
           /* margin: 12px 12px; */
