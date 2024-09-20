@@ -6,9 +6,9 @@
       
       <div
       class="item"
-       v-for="(item, index)  in 10" 
-       :key="item"
-        :data-item='item'
+      v-for="(item, index)  in 10" 
+      :key="item"
+      :data-item='item'
       :data-index='index'
       :style="{background: 'rgba(0, 0, 0, 0.04)', width:skeleton_width + 'px'}" >
      
@@ -25,12 +25,12 @@
 
 <!-- 骨架屏 结束-->
  <!-- 渲染内容 开始-->
-      <Waterfall  v-else  key="waterfall-container" class="waterfall-container" v-if="list.length>0" :list="list" :breakpoints="breakpoints" style="background-color: var(--bg);"
+      <Waterfall  v-else  key="waterfall-container" class="waterfall-container" v-if="data.list.length>0" :list="data.list" :breakpoints="breakpoints" style="background-color: var(--bg);"
         :delay="300">
         <template #item="{ item,index }">
           <div class="waterfall-card">
     
-            <LazyImg class="lazy-img" :url="item.src" style="border-radius: 8px" @click="goViewAticle(item.id)" />
+            <LazyImg class="lazy-img" :url="item.cover" style="border-radius: 8px" @click="goViewAticle(item.id)" />
     
     
           <div class="card-img-mask-stats">
@@ -87,31 +87,52 @@
   const router = useRouter();
   const route = useRoute();
   const is_loading=ref(true)
-  const list = ref([]);
+
+
+
+  const data = reactive({
+    list: [],
+  })
+
+
+
+
+  const props = defineProps({
+    parentPageArticleListData: {//父页面传标签数据
+      type: Array
+    },
+    isloading:{
+      type:Boolean,
+      default:true
+    }
+  });
+
+  if(props.isloading){
+    is_loading.value=props.isloading;
+  }
+
+// 使用ref来存储watch返回的函数
+const stopPparentPageArticleListData = ref(null);
+
+//监听父页面所传数据。当有新值时，把父页面所传数据赋值到当前页面的data.list   
+stopPparentPageArticleListData.value = watch(
+       () =>props.parentPageArticleListData,
+       (newValue, oldValue) => {
+        if(newValue){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
+          data.list = props.parentPageArticleListData;
+          is_loading.value=false;
+          //console.log('newValue <= oldValue :',newValue,'<=' ,oldValue,',route_query_tag_id:',route_query_tag_id.value);
+        }
+       
+        
+       },
+       // { immediate: true }
+     );
+
+
+
 
   onMounted(() => {
-    // 假设JSON文件与组件在同一目录下
-    // import('./mock-data.json').then(res => {
-    //   items.value = res.data;
-    // }).catch(error => {
-    //   console.error('Error fetching mock data:', error);
-    // });
-   
-    // 如果你想使用axios来模拟请求，可以这样做
-    axios.get('/data/frontend/index.json', { responseType: 'json' })
-      .then(response => {
-        setTimeout(() => {
-           list.value = response.data; // 数据加载完毕，关闭骨架屏
-           is_loading.value=false;
-        }, 3000); // 假设加载时间是3秒
-
-      })
-      .catch(error => {
-
-        console.error('Error fetching mock data:', error);
-      });
-
-
     //控制骨架屏尺寸
     skeletonHandleResize(); // 初始化尺寸
     window.addEventListener('resize', skeletonHandleResize);
@@ -120,35 +141,6 @@
 
   const route_query_tag_id=ref(0);
 
-// 使用ref来存储watch返回的函数 route_query_tag_id
-const stopTagIdWatch = ref(null);
-
-   onMounted(() => {
-      
-       // 设置一个watch监听器
-       // 立即监听，并存储取消监听的函数。
-       //如果兄弟组件处于同一个路由下，可以使用路由参数或查询参数进行值的传递。
-       //例如content_tag.vue和waterfall.vue处于同一个路由index.vue下，可以使用route.query.tag_id获取值。
-       //为什么使用监听route.query.tag_id？
-       //1.当用户在content_tag.vue使用查询参数进行值的传递时，waterfall.vue本页面无法获知查询参数更新。
-       //2.当用户在content_tag.vue使用查询参数进行相同值（重复点击同一个标签）的传递时，应从缓存中取数据非请求数据。
-       stopTagIdWatch.value = watch(
-       () => route.query.tag_id,
-       (newValue, oldValue) => {
-        if(newValue){//如有路由查询参数更新,那么重新赋值且把新查询参数值作为条件请求数据
-          route_query_tag_id.value = newValue;
-          //console.log('newValue <= oldValue :',newValue,'<=' ,oldValue,',route_query_tag_id:',route_query_tag_id.value);
-        }else{//如有路由查询参数没有更新，那么情景1：缓存有查询参数值数据，从缓存中取数据，后刷新页面；情景2：缓存没有查询参数值数据，请求数据，后刷新页面。
-
-        }
-       
-        
-       },
-       // { immediate: true }
-     );
-   
-   });
-   
 
    
 
@@ -258,7 +250,7 @@ const stopTagIdWatch = ref(null);
 
   onUnmounted(() => {
     window.removeEventListener('resize', skeletonHandleResize);//移除骨架屏监听
-    stopTagIdWatch.value(); // 如果watch返回了一个停止监听的函数，调用它
+    stopPparentPageArticleListData.value(); // 如果watch返回了一个停止监听的函数，调用它
   });
 
 

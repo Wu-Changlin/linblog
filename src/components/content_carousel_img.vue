@@ -17,8 +17,8 @@
                
                 <div class="carousel-content" @mouseover="pauseTimer" @mouseout="resumeTimer">
                     <div class="carousel-inner" :style="{'transform': `translateX(-${data.active_carousel_index * 100}%)` }">
-                        <div class="item"  v-for="index in data.list" >
-                            <img    :src="index.image" >
+                        <div class="item"  v-for="(item,index) in data.list" >
+                            <img    :src="item.carousel_img" >
                         </div> 
                     </div>
                 </div>
@@ -49,45 +49,58 @@
 
 
 <script setup>
-import { ref, reactive,onMounted,onUnmounted } from 'vue'
-import axios from 'axios';
- import Skeleton from '@/components/skeleton.vue'
+import { ref, reactive,onMounted,onUnmounted ,watch} from 'vue'
+import Skeleton from '@/components/skeleton.vue';
+
+ const is_loading=ref(true);//骨架屏
     const data=reactive( {
         active_carousel_index:0, //当前轮播下标
         is_prev:false, //是否点击上一张(控制吃豆人朝向)
         // 轮播图数据(json格式)
-        list:[{}]
+        list:[]
     })
 
 
+   
 
-    const is_loading=ref(true)
-  const list = ref([]);
+const props = defineProps({
+  parentPageCarouselImgData: {//父页面传轮播图数据
+    type: Array
+  },
+  isloading:{
+    type:Boolean,
+    default:true
+  }
+});
+
+
+if(props.isloading){
+    is_loading.value=props.isloading;
+}
+
+
+// 使用ref来存储watch返回的函数
+const stopParentPageCarouselImgData = ref(null);
+
+//监听父页面所传轮播图数据。当有新值时，把父页面所传数据赋值到当前页面的data.list   
+stopParentPageCarouselImgData.value = watch(
+     () =>props.parentPageCarouselImgData,
+     (newValue, oldValue) => {
+      if(newValue){//如有父页面所传轮播图数据数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
+        data.list = props.parentPageCarouselImgData;
+        is_loading.value=false;
+        //console.log('newValue <= oldValue :',newValue,'<=' ,oldValue,',route_query_tag_id:',route_query_tag_id.value);
+      }
+     
+      
+     },
+     // { immediate: true }
+   );
+ 
 
   onMounted(() => {
-    // 假设JSON文件与组件在同一目录下
-    // import('./mock-data.json').then(res => {
-    //   items.value = res.data;
-    // }).catch(error => {
-    //   console.error('Error fetching mock data:', error);
-    // });
 
-    // 如果你想使用axios来模拟请求，可以这样做
-    axios.get('/data/frontend/content_carousel_img.json', { responseType: 'json' })
-      .then(response => {
-        setTimeout(() => {
-            data.list = response.data; // 数据加载完毕，关闭骨架屏
-           is_loading.value=false;
-        }, 3000); // 假设加载时间是3秒
-
-      })
-      .catch(error => {
-
-        console.error('Error fetching mock data:', error);
-      });
-
-
-    // //控制骨架屏尺寸
+    //控制骨架屏尺寸
     skeletonHandleResize(); // 初始化尺寸
     window.addEventListener('resize', skeletonHandleResize);
 
@@ -119,7 +132,8 @@ import axios from 'axios';
 
 
   onUnmounted(() => {
-    window.removeEventListener('resize', skeletonHandleResize);
+    window.removeEventListener('resize', skeletonHandleResize);//移除骨架屏监听
+    stopParentPageCarouselImgData.value(); // 如果watch返回了一个停止监听的函数，调用它
   });
 
 

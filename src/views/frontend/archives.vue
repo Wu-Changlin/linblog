@@ -126,6 +126,26 @@
     tag_name.value=activity_tag_name;
   }
   
+
+ const archives_contribution_year_date=ref([
+        {
+            contribution_year: 2024,
+            contribution_year_id: 1,
+        },
+        {
+            contribution_year: 2023,
+            contribution_year_id: 2,
+        },
+        {
+            contribution_year: 2022,
+            contribution_year_id: 3,
+        },
+        {
+            contribution_year:2021,
+            contribution_year_id: 4,
+
+        },
+    ]);
   //爷组件 孙子组件传值  直接把数据传递出去给孙子传
   /* 孙组件向爷爷组件传值:
   步骤:
@@ -143,7 +163,7 @@
   
   provide('contributionYear', select_contribution_year);//爷传孙，默认选中当年年份
   
-   
+  provide('archivesContributionYearData', archives_contribution_year_date);//爷传孙，年份列表
   let stopWatch = null;
    
   // 设置一个watch监听器
@@ -156,7 +176,7 @@
     stopWatch(); // 如果watch返回了一个停止监听的函数，调用它
   });
   
-  
+  //获取年贡献信息
   function watchselect_contribution_year(oldValue,newValue){
     // console.log(`select_contribution_year from ${oldValue} to ${newValue}`);
   }
@@ -165,7 +185,7 @@
   let contribution_day_date_data =ref();
   let contribution_day_number_data =ref();
   let is_selected_data=ref();
-  //由ContributionCalendar子组件发到父组件的点击贡献图某日数据
+  //获取选中日期贡献信息（由ContributionCalendar子组件发到父组件的点击贡献图某日数据）
   function clickContributionDay(contribution_day_year,contribution_day_month,contribution_day_date,contribution_day_number,is_selected){
  
     is_selected_data.value=is_selected;

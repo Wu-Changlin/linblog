@@ -3,13 +3,13 @@
 		<NavBar  :layoutLogData="layout_log"></NavBar>
 
 		<div class="main">
-			<SideBar :layoutMenuData="layout_list"></SideBar>
+			<SideBar :layoutMenuData="layout_menu_list_data"></SideBar>
 
 			<div class="main-content with-side-bar">	
 				<router-view />
 			</div>
 
-			<FloatingBtnSets :layoutMenuData="layout_list"></FloatingBtnSets>
+			<FloatingBtnSets :layoutMenuData="layout_menu_list_data"></FloatingBtnSets>
 			<!-- <Footer></Footer> -->
 			
 		</div>
@@ -23,16 +23,18 @@
 
 <script setup>
 import { reactive, ref,onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter } from "vue-router";
 import NavBar from "@/components/nav_bar.vue";
 import SideBar from "@/components/side_bar.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import Footer from "@/components/footer.vue";
-import { useRouter } from "vue-router";
-import axios from 'axios';
+
+
 
 
 const layout_log=ref();
-const layout_list=ref();
+const layout_menu_list_data=ref();
 //获取菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 onMounted(() => {
     // 假设JSON文件与组件在同一目录下
@@ -47,9 +49,9 @@ onMounted(() => {
       .then(response => {
         // setTimeout(() => {
 			layout_log.value = response.data.log_data; // 数据加载完毕，关闭骨架屏
-			layout_list.value = response.data.menu_data; // 数据加载完毕，关闭骨架屏
+			layout_menu_list_data.value = response.data.menu_data; // 数据加载完毕，关闭骨架屏
         // }, 3000); // 假设加载时间是3秒
-		console.log('111layout_list.value :',layout_list.value);
+		
 
       })
       .catch(error => {
