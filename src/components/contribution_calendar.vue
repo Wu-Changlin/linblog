@@ -1,16 +1,9 @@
 <template>
 
-  <div style="display: flex;margin-top:24px;margin-bottom: 16px;">
-    <h3 style="flex: 1;">最近一年贡献：{{ data.year_contribution_count}} 次</h3>
-
-    <div>
-      <YearSelect @child-click-contribution-year="clickContributionYear" :theYearOfTheSelectedDate="the_year_of_the_selected_date"></YearSelect>
-    </div>
-
-  </div>
-
+  
+  
   <div class="contribution-calendar-container">
-    <div class="contribution-table">
+    <div class="contribution-table" style="max-width: 100%; overflow-y: hidden;overflow-x: auto;">
 
       <div class="contribution-table-container">
         <div class="contribution-table-content">
@@ -25,7 +18,7 @@
           </ul>
 
 
-          <div style="margin-right: auto;overflow: auto;">
+          <div>
             <!-- 月份 开始-->
             <ul class="months">
               <li class="li-month" v-for="(item,index) in data.monthBar"><span>{{item}}</span></li>
@@ -33,23 +26,45 @@
             <!-- 月份 结束-->
             <!-- 贡献格子 开始-->
             <ul class="graph">
+             
+                <!-- <div v-for="(item, index) in data.infos" :key="index">
 
-              <!-- <div class="item tooltip"  v-for="(item, index) in contribution_year_data.infos" :key="index"> -->
-              <div class="item tooltip" v-for="(item, index) in data.infos" :key="index">
+                  <div v-if="item != undefined">
+                    <el-tooltip content="Top center" placement="top">
+                    <li :data-level="item.level" :data-years="item.year" :data-date="item.date"
+                      :data-date-number="item.date_number" :data-selected="item.id===data.active_date_id?true:false"
+                      :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.level!=data.hoverLevel ,'active':item.id===data.active_date_id,'no-active':data.is_selected==true&&item.id!=data.active_date_id}"
+                      @click="handleClick(item)">
+                      
+                    </li>
+                  </el-tooltip>
+                    <span>
+                      {{ item.month }} -{{item.date}} : {{item.number}}次贡献
+                       
+                    </span>
+                    
+                  </div>
+  
+                </div> -->
 
-                <div v-if="item != undefined">
-                  <li :data-level="item.level" :data-years="item.year" :data-date="item.date"
-                    :data-date-number="item.date_number" :data-selected="item.id===data.active_date_id?true:false"
-                    :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.level!=data.hoverLevel ,'active':item.id===data.active_date_id,'no-active':data.is_selected==true&&item.id!=data.active_date_id}"
-                    @click="handleClick(item)">
 
-                  </li>
+                <div v-for="(item, index) in data.infos" :key="index">
 
-                  <span class="tooltiptext"> {{ item.month }} -{{item.date}} :
-                    {{item.number}}次贡献</span>
+                  <div v-if="item != undefined">
+                  
+                    <span v-tooltip.top="item.tooltip_content">
+                    <!-- <Tooltip :content="item.month"> -->
+                    <li :data-level="item.level" :data-years="item.year" :data-date="item.date"
+                      :data-date-number="item.date_number" :data-selected="item.id===data.active_date_id?true:false"
+                      :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.level!=data.hoverLevel ,'active':item.id===data.active_date_id,'no-active':data.is_selected==true&&item.id!=data.active_date_id}"
+                      @click="handleClick(item)">
+                      
+                    </li>
+                    </span>
+                  </div>
+                
                 </div>
-
-              </div>
+  
             </ul>
             <!-- 贡献格子 结束-->
 
@@ -92,11 +107,42 @@
 } -->
 
 <script setup>
-  import { onMounted, onUnmounted, ref, reactive } from "vue";
-  import YearSelect from '@/components/year_select.vue'
+  import { onMounted, onUnmounted, ref, reactive,inject,watch } from "vue";
+
+  import { useRoute, useRouter } from 'vue-router';
+
+  const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
+  const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
+ 
 
 
+  const contributionYearInject = inject('contributionYear');
+  const yearDropdownPageUpdateYearject = inject('yearDropdownPageUpdateYear');
+  
   const emit = defineEmits(['child-click-contribution-day']);
+
+
+  const current_route_query_year=ref(null);
+
+  
+  const stopWatchYearDropdownPageUpdateYear = ref(null);
+   
+   // 设置一个watch监听器,用于监听year_dropdown把父页面所传年份值改为选中年份值。
+   stopWatchYearDropdownPageUpdateYear.value = watch(current_route_query_year, (newValue, oldValue) => {
+    console.log('current_route_query_year:',current_route_query_year,',newValue:',newValue)
+    
+    });
+
+
+onMounted(() => {
+
+  current_route_query_year.value=route.query.year;
+  console.log('111yearDropdownPageUpdateYearject:',yearDropdownPageUpdateYearject)
+
+});
+
+
+
 
   const data = reactive(
     {
@@ -111,7 +157,18 @@
     }
   );
 
- 
+
+
+
+
+   
+   // 组件销毁前清除watch
+   onUnmounted(() => {
+    stopWatchYearDropdownPageUpdateYear.value(); // 如果watch返回了一个停止监听的函数，调用它
+   });
+
+  
+  // console.log(JSON.stringify(data.infos))
 
   //初始化执行输出近一年信息
   lastYear();
@@ -150,6 +207,7 @@
     //月份计算
     //  if(contribution_year_data.value.infos){
     if (data.infos) {
+     
       // console.log('contribution_year_data.infos:',JSON.stringify(contribution_year_data.value.infos))
       //  let [firstElement] = contribution_year_data.value.infos; //使用解构赋值取得第一个元素；
       let [firstElement] = data.infos; //使用解构赋值取得第一个元素；
@@ -269,8 +327,9 @@
         level: level,  //今日数据量对应的等级
         date_number: i,    //天数
         id: i,
+        tooltip_content:`${year}-${month}-${day}，${i} 次贡献`
       };
-
+       
       month_day = {
         month: month,
         date: day,
@@ -281,7 +340,6 @@
 
       // contribution_year_data.value.infos.push(day_info); //push数组末尾添加
       data.infos.push(day_info); //push数组末尾添加
-
 
     }
   }
@@ -332,9 +390,9 @@
 
   }
 
-  //选定日期的年份
-   const the_year_of_the_selected_date=ref();
-  //点击日期格子
+  //
+  
+  //点击日期格子。把父页面所传年份值改为点击日期的年份值
   function handleClick(item) {
       if (data.active_date_id == item.id) {
         data.active_date_id = -1;
@@ -344,11 +402,13 @@
         data.is_selected = true;
       }
       // console.log('item:', JSON.stringify(item));
-     
-      the_year_of_the_selected_date.value= item.year;
+      contributionYearInject.value=item.year;//子修改父的传值 （选中当年年份改为当前所选年份）响应式 
+    
        emit('child-click-contribution-day',item.year,item.month,item.date,item.number,data.is_selected);//子传父
       // {"year":2023,"month":11,"date":18,"number":10,"level":0,"isToday":false}
       // alert(item.month + "-" + item.date+'，博文：'+item.number)
+      // router.push({ name: current_route_name.value, query: { tag_id: item.tag_name }, key: new Date().getTime() });
+
     }
 
 
@@ -393,43 +453,20 @@
     width: 100%;
     border-top-left-radius: 0.375rem;
     border-top-right-radius: 0.375rem;
-    border: var(--borderWidth-thin, 1px) solid var(--borderColor-default) ;
+    border: var(--borderWidth-thin, 1px) solid var(--borderColor-default);
+    
   }
 
   .contribution-table {
     display: flex;
     max-width: 100%;
 
-    /* 手机端显示滚动条 */
-    @media screen and (max-width: 695px) {
-      /* margin-right: auto; */
-      overflow: hidden;
-
-    }
-
-    @media screen and (min-width: 696px) and (max-width: 959px) {
-      /* margin-right: auto; */
-      overflow: hidden;
-
-    }
-
+    
   }
 
   .contribution-table-container {
     max-width: 100%;
-
-    /* 手机端显示滚动条 */
-    @media screen and (max-width: 695px) {
-      overflow-y: hidden;
-      overflow-x: "auto";
-
-    }
-
-    @media screen and (min-width: 696px) and (max-width: 959px) {
-      overflow-y: hidden;
-      overflow-x: "auto";
-
-    }
+   
   }
 
 
@@ -522,6 +559,8 @@
   /* 提示条  开始*/
   .tooltip {
     position: relative;
+    overflow: visible;
+   
   }
 
 
@@ -531,21 +570,21 @@
     background-color: #282828;
     color: #f1f1f1;
     border-radius: 5px;
+    z-index: 8;
     padding: 5px;
     position: absolute;
-    z-index: 8;
-    /* bottom: 125%;
+    bottom: 125%;
     left: 50%; 
-    transform: translateX(-50%);*/
-    display: block;
+    transform: translateX(-50%);
+    /* display: block; */
     /* display: inline-block; */
     /*span 标签是一个内联元素，默认情况下不支持 width 属性，因此无法直接应用 translateX 的效果,
     解决方法：将 span 标签转换为块级元素或内联块元素，可以通过设置 display: block; 或 display: inline-block; 实现。 */
-    -webkit-transform: translate(-35px, -200%);
+    /* -webkit-transform: translate(-35px, -200%);
     -moz-transform:translate(-35px, -200%);
     -o-transform: translate(-35px, -200%);
     -ms-transform: translate(-35px, -200%);
-    transform: translate(-35px, -200%);
+    transform: translate(-35px, -200%); */
     /* -35px是父容器的左侧边距 */
     opacity: 0;
     transition: opacity 0.3s;
@@ -558,6 +597,7 @@
     white-space: pre;
     pointer-events: none;
   }
+  
 
   .tooltip:hover .tooltiptext {
     visibility: visible;

@@ -56,6 +56,19 @@
       <!-- 贡献统计栏 开始-->
       <h2>贡献</h2>
       <div class="contribution-calendar-count">
+        <div style="display: flex;margin-top:24px;margin-bottom: 16px;">
+          <!-- <h3 style="flex: 1;">最近一年贡献：{{ data.year_contribution_count}} 次</h3> -->
+          <h3 style="flex: 1;">最近一年贡献：111 次</h3>
+      
+          <!-- <div>
+            <YearDropdown @child-click-contribution-year="clickContributionYear" :theYearOfTheSelectedDate="the_year_of_the_selected_date"></YearDropdown>
+          </div> -->
+
+          <div>
+            <YearDropdown  :yearDropdown="year_dropdown_data"></YearDropdown>
+          </div>
+          
+        </div>
         <div class="contribution-calendar-count-content">
           <ContributionCalendar @child-click-contribution-day="clickContributionDay"></ContributionCalendar>
         </div>
@@ -73,13 +86,13 @@
           <div class="line"></div>
           <div class="text-right"> 
             <span v-if="!is_selected_data">
-              {{ select_contribution_year}} 
+              {{ select_contribution_year }} 
             </span>
             <span v-if="is_selected_data==true">
                 {{select_contribution_year}} 
               -{{contribution_day_month_data?contribution_day_month_data:'' }}
               -{{contribution_day_date_data?contribution_day_date_data:'' }}
-              ,贡献{{contribution_day_number_data?contribution_day_number_data:''}}次
+              ，贡献{{contribution_day_number_data?contribution_day_number_data:''}}次
             </span>
           </div>
         </div>
@@ -90,7 +103,7 @@
         <Waterfall></Waterfall>
        </div>
      
-
+       
        <!-- 动态栏 结束 -->
        <!-- <Waterfall></Waterfall> -->
       
@@ -105,17 +118,17 @@
   </template>
   
   <script setup>
+  import { ref, reactive,onMounted, provide ,watch,onUnmounted} from "vue";
   import WebsiteContentCount from '@/components/website_content_count.vue';  
   import WebsiteRunTiem from '@/components/website_run_tiem.vue';
   import ContributionCalendar from '@/components/contribution_calendar.vue';
   import TagCount from '@/components/tag_count.vue';
   import Waterfall from '@/components/waterfall.vue';
+  import YearDropdown from '@/components/year_dropdown.vue'
   
-  
-  import { ref, reactive,onMounted, provide ,watch,onUnmounted} from "vue";
 
 
-  
+
 
   let tag_name=ref('');
   let tag_number=ref(0);
@@ -127,7 +140,7 @@
   }
   
 
- const archives_contribution_year_date=ref([
+ const year_dropdown_data=ref([
         {
             contribution_year: 2024,
             contribution_year_id: 1,
@@ -160,32 +173,51 @@
   */
   //爷组件传值 子组件以 inject接收
   let select_contribution_year =ref(2024);
+  let year_dropdown_page_update_year =ref(2024);
+
   
   provide('contributionYear', select_contribution_year);//爷传孙，默认选中当年年份
+  provide('yearDropdownPageUpdateYear', year_dropdown_page_update_year);//爷传孙，默认选中当年年份
+
+
+  watch(year_dropdown_page_update_year, (newValue, oldValue) => {
+    console.log(`归档year_dropdown_page_update_year from ${oldValue} to ${newValue}`);
+    // console.log('归档year_dropdown_page_update_year:',year_dropdown_page_update_year.value)
+     
+  });
   
-  provide('archivesContributionYearData', archives_contribution_year_date);//爷传孙，年份列表
-  let stopWatch = null;
+ 
+  let stopWatch = ref(null);
    
   // 设置一个watch监听器
-  stopWatch = watch(select_contribution_year, (newValue, oldValue) => {
-    watchselect_contribution_year(oldValue,newValue)
+  stopWatch.value = watch(select_contribution_year, (newValue, oldValue) => {
+    // console.log(`select_contribution_year from ${oldValue} to ${newValue}`);
+    if(newValue){
+      getClickYearContributionData(newValue)
+    }
+     
   });
   
   // 组件销毁前清除watch
   onUnmounted(() => {
-    stopWatch(); // 如果watch返回了一个停止监听的函数，调用它
+    stopWatch.value(); // 如果watch返回了一个停止监听的函数，调用它
   });
   
-  //获取年贡献信息
-  function watchselect_contribution_year(oldValue,newValue){
-    // console.log(`select_contribution_year from ${oldValue} to ${newValue}`);
+  //获取点击年份的贡献数据（获取年贡献信息）
+  function getClickYearContributionData(newValue){
+   
+    // console.log(`getClickYearContributionData(newValue):`,newValue);
+  
   }
+
+
+  
   
   let contribution_day_month_data =ref();
   let contribution_day_date_data =ref();
   let contribution_day_number_data =ref();
   let is_selected_data=ref();
-  //获取选中日期贡献信息（由ContributionCalendar子组件发到父组件的点击贡献图某日数据）
+  //获取选中日期贡献信息（由contribution_calendar子组件发到父组件的点击贡献图某日数据）
   function clickContributionDay(contribution_day_year,contribution_day_month,contribution_day_date,contribution_day_number,is_selected){
  
     is_selected_data.value=is_selected;

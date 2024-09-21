@@ -24,24 +24,36 @@
   
   <script setup>
 import { ref,reactive,onMounted,onUnmounted,inject,watch} from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
+const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
+
 
 
 //选中年份数据来源
-//1.默认值来源，组件逻辑操作放在爷页面，孙页面仅渲染数据。爷页面请求接口得到默认选中年份值，
-//  把默认选中年份值传到孙页面；孙页面渲染选中年份（annex_title，active_contribution_year）。
-//2.当用户在父页面选中贡献图中某个日期格子，把日期格子的年份传到子页面；子页面更新选中年份（annex_title，active_contribution_year）。
-//3.当用户在当前页点击选择下拉框中的某一年份，更新选中年份（annex_title，active_contribution_year）。
-// （子页面传值到父页面，父页面以选中年份值为条件生成某年贡献图）
-// （孙修改爷的传值 （选中当年年份改为当前所选年份），爷页面以选中年份值为条件请求接口获取某年贡献信息）
+//1.默认值来源，组件逻辑操作放在父页面，子页面仅渲染数据。父页面请求接口得到默认选中年份值，
+//  把默认选中年份值传到子页面；子页面渲染选中年份（annex_title，active_contribution_year）。
+//2.当用户在兄弟页面（contribution_calendar）选中贡献图中某个日期格子，监听contribution_calendar把父页面所传年份值改为点击日期的年份值，
+//  本页面更新选中年份（annex_title，active_contribution_year）。
+//3.当用户在本页点击选择下拉框中的某一年份，更新选中年份（annex_title，active_contribution_year）。
+//  子修改父的传值 （把父页面所传年份值改为当前所选年份），父页面以选中年份值为条件请求接口获取某年贡献信息。
+// （兄弟页面（contribution_calendar）监听本页把父页面所传年份值改为当前所选年份，生成以选中年份值为条件生成某年贡献图）；
+//  当父页面把获取某年贡献传值到子页面(contribution_calendar)，兄弟页面渲染页面。
+
  // 接收爷爷的响应式选中年份数据  选中年份默认值是当年
 const contributionYearInject = inject('contributionYear');
 
-//  接收爷爷的响应式年份列表数据
-const archivesContributionYearDataInject=inject("archivesContributionYearData");
+const yearDropdownPageUpdateYearject = inject('yearDropdownPageUpdateYear');
 
 //子传父
-const emit = defineEmits(['child-click-contribution-year']);
+// const emit = defineEmits(['child-click-contribution-year']);
 
+//选定日期的年份(当用户在父页面选中贡献图中某个日期格子，把日期格子的年份传到子页面，子页面更新选中年份（annex_title）)
+const props = defineProps({
+    theYearOfTheSelectedDate: Number,
+    yearDropdown:Array
+});
 
 
 const	data =reactive({
@@ -53,42 +65,51 @@ const	data =reactive({
 });
 
 
+
+const stopWatchContributionCalendarPageUpdateYear = ref(null);
+   
+// 设置一个watch监听器,用于监听contribution_calendar把父页面所传年份值改为点击日期的年份值。
+stopWatchContributionCalendarPageUpdateYear.value = watch(contributionYearInject, (newValue, oldValue) => {
+    if(newValue){
+        data.annex_title=contributionYearInject.value;
+        data.active_contribution_year=contributionYearInject.value;
+    }    
+});
+
+  
+
 if(contributionYearInject){
     data.annex_title=contributionYearInject.value;
     data.active_contribution_year=contributionYearInject.value;
-
 }
 
-if(archivesContributionYearDataInject){
-    data.list=archivesContributionYearDataInject.value;
+if(props.yearDropdown){
+    data.list=props.yearDropdown;
 }
 
-//选定日期的年份(当用户在父页面选中贡献图中某个日期格子，把日期格子的年份传到子页面，子页面更新选中年份（annex_title）)
-const props = defineProps({
-    theYearOfTheSelectedDate: Number
-});
 
 
 // 使用ref来存储watch返回的函数
-const stopWatch = ref(null);
+// const stopWatch = ref(null);
    
-
+const current_route_name=ref(null);
 onMounted(() => {
     //点击外部下拉菜单关闭
     window.addEventListener('click', closeselectDown); // 监听全局点击事件
+    current_route_name.value=route.name;
     // 设置一个watch监听器
     // 立即监听，并存储取消监听的函数
-    stopWatch.value = watch(
-    () => props.theYearOfTheSelectedDate,
-    (newValue, oldValue) => {
-        // console.log(111);
-        // console.log('props.theYearOfTheSelectedDate:',props.theYearOfTheSelectedDate)
-        data.active_contribution_year = props.theYearOfTheSelectedDate;
-        data.annex_title=props.theYearOfTheSelectedDate;
-      // 你可以在这里根据newValue做出响应
-    },
-    // { immediate: true }
-  );
+//     stopWatch.value = watch(
+//     () => props.theYearOfTheSelectedDate,
+//     (newValue, oldValue) => {
+//         // console.log(111);
+//         // console.log('props.theYearOfTheSelectedDate:',props.theYearOfTheSelectedDate)
+//         data.active_contribution_year = props.theYearOfTheSelectedDate;
+//         data.annex_title=props.theYearOfTheSelectedDate;
+//       // 你可以在这里根据newValue做出响应
+//     },
+//     // { immediate: true }
+//   );
 
 });
 
@@ -106,7 +127,8 @@ function closeselectDown(e){
 
 onUnmounted(() => {
     window.removeEventListener('click', closeselectDown);// 移除全局点击事件监听
-    stopWatch.value (); // 如果watch返回了一个停止监听的函数，调用它
+    stopWatchContributionCalendarPageUpdateYear.value(); // 如果watch返回了一个停止监听的函数，调用它
+   
 });
 
 //显示/隐藏
@@ -119,8 +141,15 @@ function changeSelect (contribution_year){
     data.active_contribution_year = contribution_year;
     data.annex_title=contribution_year;
     data.is_show_select=false;
-    emit('child-click-contribution-year',contribution_year);//子传父 
-    contributionYearInject.value=contribution_year;//孙修改爷的传值 （选中当年年份改为当前所选年份）响应式 
+    // emit('child-click-contribution-year',contribution_year);//子传父 
+    contributionYearInject.value=contribution_year;//孙修改父的传值 （选中当年年份改为当前所选年份）响应式 
+    
+    // tab=overview&from=2024-09-01&to=2024-09-21
+    //路由携参跳转
+    router.push({ name: current_route_name.value, query: {year : contribution_year, from:`${contribution_year}-01-01`,to:`${contribution_year}-12-31` }, key: new Date().getTime() });
+    yearDropdownPageUpdateYearject.value=contribution_year;
+    console.log('yearDropdownPageUpdateYearject.value:', yearDropdownPageUpdateYearject.value);
+   
 }
    
  

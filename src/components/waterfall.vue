@@ -121,7 +121,7 @@ stopPparentPageArticleListData.value = watch(
         if(newValue){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
           data.list = props.parentPageArticleListData;
           is_loading.value=false;
-          //console.log('newValue <= oldValue :',newValue,'<=' ,oldValue,',route_query_tag_id:',route_query_tag_id.value);
+         
         }
        
         
@@ -138,15 +138,6 @@ stopPparentPageArticleListData.value = watch(
     window.addEventListener('resize', skeletonHandleResize);
 
   });
-
-  const route_query_tag_id=ref(0);
-
-
-   
-
-
-
-
 
 
   //去看博文

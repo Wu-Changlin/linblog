@@ -7,7 +7,8 @@ import 'element-plus/dist/index.css'; // //引入样式文件index.css
 
 
 
-
+// 安装tooltip
+import tooltip from '@/components/tooltip/directive.js';
 
 
 //引入样式文件base.css
@@ -33,4 +34,5 @@ app.component('svg-icon', SvgIcon);
 
 app.use(router)
     .use(ElementPlus)
+    .use(tooltip)
 app.mount('#app')
