@@ -1,7 +1,30 @@
 <template>
 
   <div class="archives-page">
-    <div class="archives-container">
+    
+  <div class="archives-container">
+    <transition name="scale-down" mode="out-in">
+      <!-- 骨架屏 开始-->
+          <div v-if="is_loading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef">
+            
+            <div
+            class="item"
+            v-for="(item, index)  in 3" 
+            :key="item"
+            :data-item='item'
+            :data-index='index'
+            :style="{background: 'rgba(0, 0, 0, 0.04)', width: '100%',display: 'flex'}" >
+           
+            <!-- 图片占位 -->
+            <Skeleton bg="#e4e4e4" width="100%" height="24px" animated  style=" border-bottom: 3px solid #2ECC71;display: flex;"/>
+            <!-- 标题占位 -->
+            <Skeleton bg="#e4e4e4" width="100%" height="300px" animated style="margin-top: 5px;display: flex;" />
+
+            </div>
+            
+          </div>
+      
+    <div v-else>
       <!-- 网站统计栏 开始-->
       <h2>网站统计</h2>
         <!-- 网站内容 开始-->
@@ -9,7 +32,7 @@
           <p>内容统计：</p>
        
           <div class="website-content-count-content">
-            <WebsiteContentCount></WebsiteContentCount>
+            <WebsiteContentCount :parentPageWebsiteContentCountData="website_content_count_data"></WebsiteContentCount>
           </div>
   
         </div>
@@ -19,7 +42,7 @@
           
           <p>本站已运行：</p>
           <div class="run-time-count-content">
-            <WebsiteRunTiem></WebsiteRunTiem>
+            <WebsiteRunTiem :parentPageWebsiteCreationTime="data.website_creation_time" ></WebsiteRunTiem>
           </div>
          
   
@@ -31,25 +54,26 @@
       <h2>标签</h2>
       <div class="tag-count">
         <div class="tag-count-content">
-          <TagCount @child-click-tag="clickTag"></TagCount>
+          <TagCount @getTagCountPageClickTagArticleDataEmit="getTagCountPageClickTagArticleData" :parentPageTagCountData="tag_count_data"></TagCount>
         </div>
       </div>
      
    
       <!-- 标签统计栏 结束-->
       <!-- 点击标签结果栏 开始-->
-     
-       <div v-if="tag_name" class="contribution-activity-count">
-        <div  class="contribution-activity-count-content">
+      
+       <div v-if="tag_name" class="active-tag-count">
+        <div  class="active-tag-count-content">
           <div class="text-left"> <h3>标签：{{tag_name}} </h3></div>
           <div class="line"></div>
           <div class="text-right"> <span>结果：找到{{ tag_number}}个</span></div>
         </div>
        </div>
-    
+
       <div   v-if="tag_name" style="width: 100%;">
-        <Waterfall></Waterfall>
-       </div>
+
+          <Waterfall :parentPageArticleListData="click_tag_all_article_data" :isloading="is_loading_click_tag_all_article"></Waterfall>
+      </div>
       
       <!-- 点击标签结果栏 结束-->
   
@@ -63,9 +87,10 @@
           <!-- <div>
             <YearDropdown @child-click-contribution-year="clickContributionYear" :theYearOfTheSelectedDate="the_year_of_the_selected_date"></YearDropdown>
           </div> -->
+          
 
           <div>
-            <YearDropdown  :yearDropdown="year_dropdown_data"></YearDropdown>
+            <YearDropdown  :yearDropdown="contribution_calendar_count_data.contribution_year_list" @yearDropdownPageUpdateYearEmit="getClickYearContributionData"></YearDropdown>
           </div>
           
         </div>
@@ -73,7 +98,6 @@
           <ContributionCalendar @child-click-contribution-day="clickContributionDay"></ContributionCalendar>
         </div>
       </div>
-      
       <!-- 贡献统计栏 结束-->
   
       <!-- 动态栏 开始-->
@@ -106,15 +130,14 @@
        
        <!-- 动态栏 结束 -->
        <!-- <Waterfall></Waterfall> -->
-      
-  
+    
     </div>
+
    
-  
-   
+
+  </transition>
+</div>
   </div>
-
-
   </template>
   
   <script setup>
@@ -124,41 +147,17 @@
   import ContributionCalendar from '@/components/contribution_calendar.vue';
   import TagCount from '@/components/tag_count.vue';
   import Waterfall from '@/components/waterfall.vue';
-  import YearDropdown from '@/components/year_dropdown.vue'
-  
+  import YearDropdown from '@/components/year_dropdown.vue';
+  import Skeleton from '@/components/skeleton.vue';
+
+  import axios from 'axios';
+  const is_loading=ref(true)
+  const contribution_day_month_data =ref();
+  const contribution_day_date_data =ref();
+  const contribution_day_number_data =ref();
+  const is_selected_data=ref();
 
 
-
-
-  let tag_name=ref('');
-  let tag_number=ref(0);
-  // console.log('tag_name',tag_name);
-
-  function clickTag(activity_tag_id,activity_tag_name){
-    // console.log('activity_tag_id',activity_tag_id,',activity_tag_name:',activity_tag_name);
-    tag_name.value=activity_tag_name;
-  }
-  
-
- const year_dropdown_data=ref([
-        {
-            contribution_year: 2024,
-            contribution_year_id: 1,
-        },
-        {
-            contribution_year: 2023,
-            contribution_year_id: 2,
-        },
-        {
-            contribution_year: 2022,
-            contribution_year_id: 3,
-        },
-        {
-            contribution_year:2021,
-            contribution_year_id: 4,
-
-        },
-    ]);
   //爷组件 孙子组件传值  直接把数据传递出去给孙子传
   /* 孙组件向爷爷组件传值:
   步骤:
@@ -175,51 +174,40 @@
   let select_contribution_year =ref(2024);
   let year_dropdown_page_update_year =ref(2024);
 
-  
+
   provide('contributionYear', select_contribution_year);//爷传孙，默认选中当年年份
+  
+
   provide('yearDropdownPageUpdateYear', year_dropdown_page_update_year);//爷传孙，默认选中当年年份
 
 
-  watch(year_dropdown_page_update_year, (newValue, oldValue) => {
-    console.log(`归档year_dropdown_page_update_year from ${oldValue} to ${newValue}`);
-    // console.log('归档year_dropdown_page_update_year:',year_dropdown_page_update_year.value)
-     
-  });
-  
- 
-  let stopWatch = ref(null);
+  // let stopWatch = ref(null);
    
-  // 设置一个watch监听器
-  stopWatch.value = watch(select_contribution_year, (newValue, oldValue) => {
-    // console.log(`select_contribution_year from ${oldValue} to ${newValue}`);
-    if(newValue){
-      getClickYearContributionData(newValue)
-    }
+  // // 设置一个watch监听器
+  // stopWatch.value = watch(select_contribution_year, (newValue, oldValue) => {
+  //   // console.log(`select_contribution_year from ${oldValue} to ${newValue}`);
+  //   if(newValue){
+  //     getClickYearContributionData(newValue)
+  //   }
      
-  });
+  // });
   
-  // 组件销毁前清除watch
-  onUnmounted(() => {
-    stopWatch.value(); // 如果watch返回了一个停止监听的函数，调用它
-  });
+  // // 组件销毁前清除watch
+  // onUnmounted(() => {
+  //   stopWatch.value(); // 如果watch返回了一个停止监听的函数，调用它
+  // });
   
   //获取点击年份的贡献数据（获取年贡献信息）
-  function getClickYearContributionData(newValue){
-   
-    // console.log(`getClickYearContributionData(newValue):`,newValue);
+  function getClickYearContributionData(active_year){
+    is_selected_data.value=false;
+    console.log(`P-yearDropdownPageUpdateYear:`,active_year);
+    year_dropdown_page_update_year.value=active_year;
   
   }
 
-
-  
-  
-  let contribution_day_month_data =ref();
-  let contribution_day_date_data =ref();
-  let contribution_day_number_data =ref();
-  let is_selected_data=ref();
   //获取选中日期贡献信息（由contribution_calendar子组件发到父组件的点击贡献图某日数据）
   function clickContributionDay(contribution_day_year,contribution_day_month,contribution_day_date,contribution_day_number,is_selected){
- 
+    
     is_selected_data.value=is_selected;
     // console.log('contribution_day_year：',contribution_day_year,',contribution_day_month:',contribution_day_month,',contribution_day_date:',contribution_day_date,',contribution_day_date:',contribution_day_number)
     if(is_selected==true){
@@ -234,6 +222,89 @@
  
   }
 
+  const tag_name=ref('');
+  const tag_number=ref(0);
+  const click_tag_all_article_data=ref([]);
+  const is_loading_click_tag_all_article=ref(true);
+  //获取tag_count页选中标签下的博文数据
+  function getTagCountPageClickTagArticleData(active_tag_id,active_tag_name){
+    //1.空值，关闭博文瀑布流 2.有值，获取数据渲染博文瀑布流
+    tag_name.value=active_tag_name;
+
+    if(tag_name.value){//如果tag_name存在，那么获取数据。
+      axios.get('/data/frontend/click_tag_all_article.json',{tag_id:active_tag_id,tag_name:active_tag_name}, { responseType: 'json' })
+      .then(response => {
+
+        tag_number.value=response.data.click_tag_all_article_count;
+        click_tag_all_article_data.value=response.data.article_list_data;
+        is_loading_click_tag_all_article.value=false;
+        // setTimeout(() => {
+			
+        // }, 3000); // 假设加载时间是3秒
+      })
+      .catch(error => {
+        console.error('Error fetching mock data:', error);
+      });
+    }
+    
+
+    
+
+  }
+  
+  
+  const data = reactive(   
+{
+      page_head_title:"归档",
+      page_head_keyword:"关键字",
+      page_head_description:"描述归档",
+      website_creation_time:"2023-01-01T00:00:00",
+      
+    }
+  );
+
+
+  
+
+
+  const website_content_count_data=ref([]);
+  const tag_count_data=ref([]);
+  const contribution_calendar_count_data=ref([]);
+
+  onMounted(() => {
+    // 假设JSON文件与组件在同一目录下
+    // import('./mock-data.json').then(res => {
+    //   items.value = res.data;
+    // }).catch(error => {
+    //   console.error('Error fetching mock data:', error);
+    // });
+   
+    // 如果你想使用axios来模拟请求，可以这样做
+    axios.get('/data/frontend/archives.json', { responseType: 'json' })
+      .then(response => {
+
+        website_content_count_data.value=response.data.website_content_count_data;
+        tag_count_data.value=response.data.tag_count_data;
+        contribution_calendar_count_data.value=response.data.contribution_calendar_count_data;
+        is_loading.value=false;
+        // setTimeout(() => {
+			// index_tag_data.value = response.data.tag_data; // 数据加载完毕，关闭骨架屏
+			// index_article_list_data.value = response.data.article_list_data; // 数据加载完毕，关闭骨架屏
+			// flag.value=true;
+			// is_loading.value=false;
+			// console.log('response.data:',response.data);
+        // }, 3000); // 假设加载时间是3秒
+		
+
+      })
+      .catch(error => {
+
+        console.error('Error fetching mock data:', error);
+      });
+
+
+	//   fetchTag();
+  });
 
   </script>
   
@@ -318,7 +389,7 @@
 
 
     /* 动态栏 开始*/
-    .contribution-activity-count {
+    .contribution-activity-count ,.active-tag-count {
         display: flex;
         width: 100%;
        /* max-width:1260px;*/
@@ -327,7 +398,7 @@
         align-items: center;
         justify-content: center;
         
-        .contribution-activity-count-content {
+        .contribution-activity-count-content,.active-tag-count-content {
           display: flex;
           align-items: center;
           padding: 20px;

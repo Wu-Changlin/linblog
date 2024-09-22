@@ -152,7 +152,7 @@ const vHighlight  = {
 	//行号和代码块 pre添加flex属性 复制功能
 		const pre =el.querySelectorAll('pre');
 	pre.forEach((block) => {
-		block.setAttribute('style', 'display: flex;max-width: 1285px;width:100%;');
+		block.setAttribute('style', 'display: flex;max-width: 1260px;width:100%;');
 		//创建一个 'code' 元素来包含DOM 元素
 		const code=block.querySelector('code');//获取pre父元素下的code子元素对象
 		//'block' 是一个 DOM 元素，直接获取其内部文本即可

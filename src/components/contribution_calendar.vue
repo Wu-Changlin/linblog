@@ -3,7 +3,7 @@
   
   
   <div class="contribution-calendar-container">
-    <div class="contribution-table" style="max-width: 100%; overflow-y: hidden;overflow-x: auto;">
+    <div class="contribution-table" style="max-width: 100%; overflow-y: hidden;overflow-x: auto;"   @scroll="contributionTableScrollRemoveTooltipEvent ">
 
       <div class="contribution-table-container">
         <div class="contribution-table-content">
@@ -53,7 +53,7 @@
                   <div v-if="item != undefined">
                   
                     <span v-tooltip.top="item.tooltip_content">
-                    <!-- <Tooltip :content="item.month"> -->
+
                     <li :data-level="item.level" :data-years="item.year" :data-date="item.date"
                       :data-date-number="item.date_number" :data-selected="item.id===data.active_date_id?true:false"
                       :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.level!=data.hoverLevel ,'active':item.id===data.active_date_id,'no-active':data.is_selected==true&&item.id!=data.active_date_id}"
@@ -98,7 +98,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <!-- 
@@ -106,40 +105,69 @@
     border-bottom: var(--borderWidth-thin, 1px) solid var(--borderColor-default, var(--color-border-default)) !important;
 } -->
 
+
+
+
 <script setup>
   import { onMounted, onUnmounted, ref, reactive,inject,watch } from "vue";
-
   import { useRoute, useRouter } from 'vue-router';
+
+
+  //移动端点击文本提示区域，
+  //  移入出现随屏幕滚动文本提示，移出没消失（正常移入时应固定显示在日期格子上方，移出消失）；
+  //  直到下一次点击文本提示才消失。
+  //贡献图滚动移除tooltip文本提示事件
+  const contributionTableScrollRemoveTooltipEvent  = (event) => {
+    // console.log("event.target.scrollLeft  :",event.target.scrollLeft );
+  // 假设当滚动超过1px时移除提示
+  if (event.target.scrollLeft  > 1) {
+   
+    // const zc_tooltip = document.querySelector('.zc-tooltip');
+    // if (zc_tooltip) {
+    
+    //   zc_tooltip.remove(); // 如果元素存在，则将其移除。移除后卡住页面
+    // }
+
+    // 获取所有的.zc-tooltip元素
+    const tooltips = document.querySelectorAll('.zc-tooltip');
+    
+    // 获取最后一个.zc-tooltip元素
+    const lastTooltip = tooltips[tooltips.length - 1];
+     // 把最后一个.zc-tooltip元素的display属性设置为none隐藏
+    lastTooltip.setAttribute('style', 'display: none;');
+    // console.log('last:',lastTooltip);
+
+    // console.log('zc_tooltip:',zc_tooltip);
+  }
+};
+ 
 
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
  
-
-
+  
   const contributionYearInject = inject('contributionYear');
   const yearDropdownPageUpdateYearject = inject('yearDropdownPageUpdateYear');
   
-  const emit = defineEmits(['child-click-contribution-day']);
-
-
-  const current_route_query_year=ref(null);
-
+  const emit = defineEmits(['childClickContributionDay']);
   
-  const stopWatchYearDropdownPageUpdateYear = ref(null);
+ 
+ 
+  const stopWatchRouteQueryYear = ref(null);
    
-   // 设置一个watch监听器,用于监听year_dropdown把父页面所传年份值改为选中年份值。
-   stopWatchYearDropdownPageUpdateYear.value = watch(current_route_query_year, (newValue, oldValue) => {
-    console.log('current_route_query_year:',current_route_query_year,',newValue:',newValue)
-    
+   // 设置一个watch监听器,用于监听year_dropdown把父页面所传年份值(yearDropdownPageUpdateYear)改为选中年份值。
+   stopWatchRouteQueryYear.value =  watch(() => route.query.year, (new_year, old_year) => {
+
+    if(new_year && parseInt(new_year)=== parseInt(yearDropdownPageUpdateYearject.value)){
+      // 当路由查询参数发生变化时，这里会被调用
+      data.is_selected=false,//因页面同源原有数据没有刷新，所以初始化是否开启选择模式
+      data.active_date_id=-1,//因页面同源原有数据没有刷新，所以初始已选中日期id
+      clickContributionYear(new_year);//生成年份贡献图
+      // console.log('R-new_year:', new_year, ',R-old_year:', old_year);
+      // console.log('R-yearDropdownPageUpdateYearject:',yearDropdownPageUpdateYearject.value)
+    }
+
     });
-
-
-onMounted(() => {
-
-  current_route_query_year.value=route.query.year;
-  console.log('111yearDropdownPageUpdateYearject:',yearDropdownPageUpdateYearject)
-
-});
 
 
 
@@ -153,7 +181,7 @@ onMounted(() => {
       active_date_id: -1,//已选中日期id
       monthBar: [],//12列对应的月份，比如第三列开始是五月份，则令monthBar[2]="5月"，算法实现见下面method
       calculate_month_data: [],//计算月份栏的数据源
-      year_contribution_count:0,//年贡献次数
+      
     }
   );
 
@@ -164,7 +192,10 @@ onMounted(() => {
    
    // 组件销毁前清除watch
    onUnmounted(() => {
-    stopWatchYearDropdownPageUpdateYear.value(); // 如果watch返回了一个停止监听的函数，调用它
+    stopWatchRouteQueryYear.value(); // 如果watch返回了一个停止监听的函数，调用它
+     // 移除贡献图滚动移除tooltip文本提示事件监听
+    contributionTableScrollRemoveTooltipEvent=0;
+
    });
 
   
@@ -290,8 +321,7 @@ onMounted(() => {
   * cycle_days_start_time   循环循环天数的开始时间
   */
   function getDaylist(cycle_days, cycle_days_start_time) {
-    data.year_contribution_count=Math.floor(Math.random() * 100); //这里是随机设置年贡献次数，后续开发要替换为自己计算的真实次数
-
+   
     let day_info = {};         //用来存放某一天的数据对象 日期格子（年月日、isToday、level）      
 
     //天数数据用于推算月份
@@ -312,22 +342,28 @@ onMounted(() => {
       const year = pastDate.getFullYear();
       const month = (pastDate.getMonth() + 1).toString().padStart(2, '0');
       const day = pastDate.getDate().toString().padStart(2, '0');
+ // console.log('i序号:',i,',年月日:',year,month,day);
+      let level =0;
+     
+    // if(pastDate.getTime()>new Date().getTime()){
+    //    level =0;
+    // }else{
+    //    level = Math.floor(Math.random() * 5);
+    // }
 
-      // console.log('i序号:',i,',年月日:',year,month,day);
-
-
-      let level = Math.floor(Math.random() * 5); //这里是随机设置每天的频率等级，后续开发要替换为自己计算的真实等级（不同等级对应不同颜色方格）
+      //  level = Math.floor(Math.random() * 5); //这里是随机设置每天的频率等级，后续开发要替换为自己计算的真实等级（不同等级对应不同颜色方格）
 
       day_info = {                      //每个格子（天）的info对象
         year: year,      //年
         month: month,     //月
         date: day,        //日
         year_month_date:`${year}-${month}-${day}`,
-        number: i,    //今日的数据量
+        // number: i,    //今日的数据量
+        number: level,    //今日的数据量
         level: level,  //今日数据量对应的等级
         date_number: i,    //天数
         id: i,
-        tooltip_content:`${year}-${month}-${day}，${i} 次贡献`
+        tooltip_content:`${year}-${month}-${day}，${level} 次贡献`
       };
        
       month_day = {
@@ -370,6 +406,7 @@ onMounted(() => {
     if (data.infos) {
 
 
+      console.log(JSON.stringify(data.infos))
       // console.log('contribution_year_data.infos:',JSON.stringify(contribution_year_data.value.infos))
 
       let [firstElement] = data.infos; //使用解构赋值取得第一个元素；
@@ -404,7 +441,7 @@ onMounted(() => {
       // console.log('item:', JSON.stringify(item));
       contributionYearInject.value=item.year;//子修改父的传值 （选中当年年份改为当前所选年份）响应式 
     
-       emit('child-click-contribution-day',item.year,item.month,item.date,item.number,data.is_selected);//子传父
+       emit('childClickContributionDay',item.year,item.month,item.date,item.number,data.is_selected);//子传父
       // {"year":2023,"month":11,"date":18,"number":10,"level":0,"isToday":false}
       // alert(item.month + "-" + item.date+'，博文：'+item.number)
       // router.push({ name: current_route_name.value, query: { tag_id: item.tag_name }, key: new Date().getTime() });

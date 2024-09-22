@@ -44,8 +44,10 @@
             return {
               transform: `translate3d(${tooltipPostiton.value.x}px,${tooltipPostiton.value.y}px,0)`
             }
+          
           })
-  
+
+       
           return {
               tooltipShow,
               showTip,

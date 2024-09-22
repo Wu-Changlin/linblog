@@ -23,8 +23,11 @@
   </template>
   
   <script setup>
-import { ref,reactive,onMounted,onUnmounted,inject,watch} from 'vue';
+import { ref,reactive,onMounted,onUnmounted,inject,watch,provide} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+
+
+
 
 const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
 const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
@@ -37,9 +40,10 @@ const router = useRouter();//进行路由的导航操作。返回的是路由的
 //2.当用户在兄弟页面（contribution_calendar）选中贡献图中某个日期格子，监听contribution_calendar把父页面所传年份值改为点击日期的年份值，
 //  本页面更新选中年份（annex_title，active_contribution_year）。
 //3.当用户在本页点击选择下拉框中的某一年份，更新选中年份（annex_title，active_contribution_year）。
-//  子修改父的传值 （把父页面所传年份值改为当前所选年份），父页面以选中年份值为条件请求接口获取某年贡献信息。
-// （兄弟页面（contribution_calendar）监听本页把父页面所传年份值改为当前所选年份，生成以选中年份值为条件生成某年贡献图）；
+//  子修改父的传值 （把父页面所传年份值(yearDropdownPageUpdateYear)改为当前所选年份），父页面以选中年份值为条件请求接口获取某年贡献信息。
+// （兄弟页面（contribution_calendar）监听查询参数的year且把查询参数的year相等判断yearDropdownPageUpdateYear，生成以选中年份值为条件生成某年贡献图）；
 //  当父页面把获取某年贡献传值到子页面(contribution_calendar)，兄弟页面渲染页面。
+
 
  // 接收爷爷的响应式选中年份数据  选中年份默认值是当年
 const contributionYearInject = inject('contributionYear');
@@ -63,6 +67,14 @@ const	data =reactive({
     list:[],
    
 });
+
+
+
+
+ //把父页面所传数据赋值到当前页面的data.list
+ if (props.yearDropdown) {
+    data.list = props.yearDropdown;
+  }
 
 
 
@@ -131,6 +143,8 @@ onUnmounted(() => {
    
 });
 
+
+const emit = defineEmits(['yearDropdownPageUpdateYearEmit']);
 //显示/隐藏
 function clickSelect(){
     data.is_show_select=!data.is_show_select;
@@ -148,11 +162,10 @@ function changeSelect (contribution_year){
     //路由携参跳转
     router.push({ name: current_route_name.value, query: {year : contribution_year, from:`${contribution_year}-01-01`,to:`${contribution_year}-12-31` }, key: new Date().getTime() });
     yearDropdownPageUpdateYearject.value=contribution_year;
-    console.log('yearDropdownPageUpdateYearject.value:', yearDropdownPageUpdateYearject.value);
-   
+    emit('yearDropdownPageUpdateYearEmit',contribution_year);//子传父 
+    
 }
-   
- 
+
 </script>
   
   

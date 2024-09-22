@@ -5,7 +5,7 @@
             
           
           <a :style="{backgroundColor: getDarkRandomColor()} " 
-          :class=" {'tag-count-item':true,'active':data.active_tag_count_tag_id==item.tag_id?true:'','no-active':data.active_tag_count_tag_id!=item.tag_id && data.active_tag_count_tag_id!=-1?true:''}"
+          :class=" {'tag-count-item':true,'active':item.tag_id === data.active_tag_count_tag_id?true:'','no-active':item.tag_id != data.active_tag_count_tag_id && data.active_tag_count_tag_id>-1?true:''}"
            v-for="(item, index) in data.list" :key="index" @click="clickTag(item.tag_id,item.tag_name)">
             {{ item.tag_name }}
           </a>
@@ -22,80 +22,36 @@
 
    const data=reactive({
       active_tag_count_tag_id:-1,
-      list: [
-        { tag_id: 1, tag_name: "c" },
-        { tag_id: 2, tag_name: "C++" },
-        { tag_id: 3, tag_name: "Java" },
-        { tag_id: 4, tag_name: "Python" },
-        { tag_id: 5, tag_name: "PHP" },
-        { tag_id: 6, tag_name: "Go" },
-        { tag_id: 7, tag_name: "Ruby" },
-        { tag_id: 8, tag_name: "Node.js" },
-        { tag_id: 9, tag_name: "C#" },
-        { tag_id: 10, tag_name: "html" },
-        { tag_id: 11, tag_name: "html5" },
-        { tag_id: 12, tag_name: "css" },
-        { tag_id: 13, tag_name: "css3" },
-        { tag_id: 14, tag_name: "js" },
-        { tag_id: 15, tag_name: "ts" },
-        { tag_id: 16, tag_name: "vue2" },
-        { tag_id: 17, tag_name: "vue3" },
-        { tag_id: 18, tag_name: "jq" },
-        { tag_id: 19, tag_name: "React" },
-        { tag_id: 20, tag_name: "Swift" },
-        { tag_id: 21, tag_name: "Kotlin" },
-        { tag_id: 22, tag_name: "Fortran" },
-        { tag_id: 23, tag_name: "MATLAB" },
-        { tag_id: 24, tag_name: "r" },
-        { tag_id: 25, tag_name: "d" },
-        { tag_id: 26, tag_name: "sas" },
-        { tag_id: 27, tag_name: "c" },
-        { tag_id: 28, tag_name: "C++" },
-        { tag_id: 29, tag_name: "Java" },
-        { tag_id: 30, tag_name: "Python" },
-        { tag_id: 31, tag_name: "PHP" },
-        { tag_id: 32, tag_name: "Go" },
-        { tag_id: 33, tag_name: "Ruby" },
-        { tag_id: 34, tag_name: "Node.js" },
-        { tag_id: 35, tag_name: "C#" },
-        { tag_id: 36, tag_name: "html" },
-        { tag_id: 37, tag_name: "html5" },
-        { tag_id: 38, tag_name: "css" },
-        { tag_id: 39, tag_name: "css3" },
-        { tag_id: 40, tag_name: "js" },
-        { tag_id: 41, tag_name: "ts" },
-        { tag_id: 42, tag_name: "vue2" },
-        { tag_id: 43, tag_name: "vue3" },
-        { tag_id: 44, tag_name: "jq" },
-        { tag_id: 45, tag_name: "React" },
-        { tag_id: 46, tag_name: "Swift" },
-        { tag_id: 47, tag_name: "Kotlin" },
-        { tag_id: 48, tag_name: "Fortran" },
-        { tag_id: 49, tag_name: "MATLAB" },
-        { tag_id: 50, tag_name: "r" },
-        { tag_id: 51, tag_name: "d" },
-        { tag_id: 52, tag_name: "sas" },
-      ],
+      list: [],
   })
 
 
-  const emit = defineEmits(['child-click-tag'])
+  
+const props = defineProps({
+  parentPageTagCountData: {//父页面传标签数据
+      type: Array
+    }
+  });
+
+  if(props.parentPageTagCountData){
+    data.list=props.parentPageTagCountData;
+  }
+
+  const emit = defineEmits(['getTagCountPageClickTagArticleDataEmit'])
 
 
 
   function clickTag(tag_id,tag_name){
     // console.log('tag_id:',tag_id,',tag_name:',tag_name);
-    
-
     if (data.active_tag_count_tag_id==tag_id) {
         data.active_tag_count_tag_id = -1;
+        emit('getTagCountPageClickTagArticleDataEmit',-1,'');
       } else {
         data.active_tag_count_tag_id = tag_id;
+        emit('getTagCountPageClickTagArticleDataEmit',tag_id,tag_name);
+        // console.log('getTagCountPageClickTagArticleDataEmit:',tag_id,'-name:',tag_name);
       }
-      console.log('tag_id:',tag_id,', data.active_tag_count_tag_id:', data.active_tag_count_tag_id);
-
-    emit('child-click-tag',tag_id,tag_name);
-    // console.log('data.tagActive:',data.tagActive);
+      // console.log('tag_id:',tag_id,', data.active_tag_count_tag_id:', data.active_tag_count_tag_id);
   }
 
 
@@ -169,11 +125,15 @@ function getDarkRandomColor() {
             opacity: 5;
             line-height: 50%;
               /*鼠标移入效果*/
-              &:hover{ 
+              /* 防止移动端重复点击同一元素没有取消选中样式 */
+              @media screen and (min-width: 1200px) {
+                &:hover{ 
                 /* background-color: rgba(0, 0, 0, 0.03); */
                 border-radius: 999px;
                 color: var(--text-light-dark);
-              }
+              } 
+            }
+                      
          
           }
 
@@ -186,6 +146,7 @@ function getDarkRandomColor() {
           .no-active {
             /* background-color: rgba(0, 0, 0, 0.03); */
             opacity: 1;
+            border-radius:0 !important;
           }
          
            

@@ -31,12 +31,22 @@
 <script setup>
 import { ref,onMounted,onUnmounted,onBeforeMount} from 'vue';
 
+
+
+const props = defineProps({
+    parentPageWebsiteCreationTime: {//父页面传标签数据
+      type: String
+    }
+  });
+
 const days = ref(0);
 const hours = ref(0);
 const minutes = ref(0);
 const seconds = ref(0);
 const interval = ref(null);
-const startTime = new Date('2023-01-01T00:00:00');
+const startTime = new Date(props.parentPageWebsiteCreationTime?props.parentPageWebsiteCreationTime:'2023-01-01T00:00:00');
+// const startTime = new Date(props.parentPageWebsiteCreationTime);
+
 
 const calculateTime = () => {
     const now = new Date();

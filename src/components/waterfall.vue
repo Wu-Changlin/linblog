@@ -82,7 +82,7 @@
   import {useRoute, useRouter } from "vue-router";
   import { LazyImg, Waterfall } from "vue-waterfall-plugin-next";
   import "vue-waterfall-plugin-next/dist/style.css";
-  import Skeleton from '@/components/skeleton.vue'
+  import Skeleton from '@/components/skeleton.vue';
 
   const router = useRouter();
   const route = useRoute();

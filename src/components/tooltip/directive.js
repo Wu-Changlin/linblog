@@ -7,9 +7,12 @@ import { tokenFun } from '@/utils/token.js'
 function clearEvent(el) {
     if (el._tipHandler) {
         el.removeEventListener('mouseenter', el._tipHandler)
+        // mouseover 
+        // mouseout
     }
     if (el._tipMouseleaveHandler) {
         el.removeEventListener('mouseleave', el._tipMouseleaveHandler)
+        // el.removeEventListener('mouseout', el._tipMouseleaveHandler)
     }
     delete el._tipHandler
     delete el._tipMouseleaveHandler
@@ -17,14 +20,17 @@ function clearEvent(el) {
     delete el._tipInstance
 }
 
+
+
 // 位置定位
 function calculationLocation(el, target, placements) {
     if (!el || !target) return;
     el.tooltipPostiton.y = 0;
     el.tooltipPostiton.x = 0;
-    let el_dom = el.$el.nextElementSibling.getBoundingClientRect()
-    let target_dom = target.getBoundingClientRect()
+    let el_dom = el.$el.nextElementSibling.getBoundingClientRect();
+    let target_dom = target.getBoundingClientRect();
 
+   
     if (placements === "left") {
         el.tooltipPostiton.x = target_dom.x - el_dom.width - 10
         el.tooltipPostiton.y = target_dom.y - el_dom.height / 2 + target_dom.height / 2
@@ -70,7 +76,9 @@ export default {
                             calculationLocation(el._tipInstance, el, placements[0])
                     }
                     window.addEventListener('scroll', el._scrollHandler)
+                   
                 }
+               
                 el._tipMouseleaveHandler = () => {
                     if (el._tipInstance) {
                         el._tipInstance.hiddenTip()
@@ -78,6 +86,8 @@ export default {
                 }
                 el.addEventListener('mouseenter', el._tipHandler)
                 el.addEventListener('mouseleave', el._tipMouseleaveHandler)
+                // el.addEventListener('mouseout', el._tipMouseleaveHandler)
+
             },
             updated(el, binding) {
                 el._tipOptions = binding.value

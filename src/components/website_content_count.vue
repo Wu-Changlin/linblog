@@ -22,17 +22,21 @@
 <script setup>
 import { ref, reactive} from 'vue';
 
-
-
 const data = reactive({
-    list: [
-          { title: '分类', number: 6 },
-          { title: '标签', number: 71 },
-          { title: '文章', number:  20},
-          { title: '字数', number:  20000},
-          { title: '阅读', number:  100},
-    ]
+    list: []
 });
+
+const props = defineProps({
+    parentPageWebsiteContentCountData: {//父页面传标签数据
+      type: Array
+    }
+  });
+
+
+  if(props.parentPageWebsiteContentCountData){
+    data.list=props.parentPageWebsiteContentCountData;
+  }
+
 
 
 </script>
