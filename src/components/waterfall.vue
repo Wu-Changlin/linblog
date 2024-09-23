@@ -30,11 +30,17 @@
         :delay="300">
         <template #item="{ item,index }">
           <div class="waterfall-card">
+            <div class="lazy-img-card-mask">
+
+            
+            <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px" @click="goViewAticle(item.id)"/>
+          
+         
     
-            <LazyImg class="lazy-img" :url="item.cover" style="border-radius: 8px" @click="goViewAticle(item.id)" />
     
+         
     
-          <div class="card-img-mask-stats">
+            <div class="card-img-mask-stats">
               <div class="card-img-mask-stats-left">
                 <span class="card-img-mask-stats-item">
                   <div class="card-img-mask-stats-icon"><svg-icon icon-class="visits" /></div>
@@ -50,9 +56,7 @@
               <span class="card-img-mask-stats-reading-time">{{ item.read_time}}</span>
     
             </div>
-    
-  
-
+            </div>
     
             <div class="footer">
               <a class="title"><span>{{ item.title}}</span></a>
@@ -263,17 +267,17 @@ stopPparentPageArticleListData.value = watch(
   .waterfall-card {
     position: relative;
 
-    .lazy-img {
+    .lazy-img-card-mask{
+      position: relative;
+
+      .lazy-img {
       cursor: pointer;
-
     }
-
-
 
     .card-img-mask-stats{
     position: absolute;
       padding: 3px 3px;
-      bottom: 90px;
+      bottom: 0px;
       left: 0;
       z-index: 2;
       box-sizing: border-box;
@@ -337,6 +341,11 @@ stopPparentPageArticleListData.value = watch(
 
 
 	}
+
+
+    }
+ 
+ 
 
 
 
