@@ -23,7 +23,7 @@
   </template>
   
   <script setup>
-import { ref,reactive,onMounted,onUnmounted,inject,watch,provide} from 'vue';
+import { ref,reactive,onMounted,onUnmounted,inject,watch} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 
@@ -48,14 +48,13 @@ const router = useRouter();//进行路由的导航操作。返回的是路由的
  // 接收爷爷的响应式选中年份数据  选中年份默认值是当年
 const contributionYearInject = inject('contributionYear');
 
-const yearDropdownPageUpdateYearject = inject('yearDropdownPageUpdateYear');
+const yearDropdownPageUpdateYearInject = inject('yearDropdownPageUpdateYear');
 
 //子传父
 // const emit = defineEmits(['child-click-contribution-year']);
 
 //选定日期的年份(当用户在父页面选中贡献图中某个日期格子，把日期格子的年份传到子页面，子页面更新选中年份（annex_title）)
 const props = defineProps({
-    theYearOfTheSelectedDate: Number,
     yearDropdown:Array
 });
 
@@ -77,27 +76,28 @@ const	data =reactive({
   }
 
 
+  if(contributionYearInject){
+    // console.log('contributionYearInject:',contributionYearInject.value)
+    data.annex_title=contributionYearInject.value;
+    data.active_contribution_year=contributionYearInject.value;
+}
+
 
 const stopWatchContributionCalendarPageUpdateYear = ref(null);
    
 // 设置一个watch监听器,用于监听contribution_calendar把父页面所传年份值改为点击日期的年份值。
 stopWatchContributionCalendarPageUpdateYear.value = watch(contributionYearInject, (newValue, oldValue) => {
     if(newValue){
-        data.annex_title=contributionYearInject.value;
-        data.active_contribution_year=contributionYearInject.value;
+        data.annex_title=contributionYearInject;
+        data.active_contribution_year=contributionYearInject;
     }    
+    // console.log('watch-contributionYearInject:',contributionYearInject)
 });
+
 
   
 
-if(contributionYearInject){
-    data.annex_title=contributionYearInject.value;
-    data.active_contribution_year=contributionYearInject.value;
-}
 
-if(props.yearDropdown){
-    data.list=props.yearDropdown;
-}
 
 
 
@@ -161,7 +161,7 @@ function changeSelect (contribution_year){
     // tab=overview&from=2024-09-01&to=2024-09-21
     //路由携参跳转
     router.push({ name: current_route_name.value, query: {year : contribution_year, from:`${contribution_year}-01-01`,to:`${contribution_year}-12-31` }, key: new Date().getTime() });
-    yearDropdownPageUpdateYearject.value=contribution_year;
+    yearDropdownPageUpdateYearInject.value=contribution_year;
     emit('yearDropdownPageUpdateYearEmit',contribution_year);//子传父 
     
 }

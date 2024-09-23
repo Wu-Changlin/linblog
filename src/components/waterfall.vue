@@ -2,7 +2,8 @@
 <template>
   <transition name="scale-down" mode="out-in">
 <!-- 骨架屏 开始-->
-    <div v-if="is_loading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef">
+    <!-- <div v-if="is_loading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef"> -->
+      <div v-if="isloading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef">
       
       <div
       class="item"
@@ -77,7 +78,7 @@
 
 </template>
 <script setup>
-  import { reactive, ref, onMounted, onUnmounted ,watch} from 'vue';
+  import { reactive, ref, onMounted, onUnmounted ,watch,computed} from 'vue';
   import axios from 'axios';
   import {useRoute, useRouter } from "vue-router";
   import { LazyImg, Waterfall } from "vue-waterfall-plugin-next";
@@ -86,7 +87,7 @@
 
   const router = useRouter();
   const route = useRoute();
-  const is_loading=ref(true)
+  // const is_loading=ref(true)
 
 
 
@@ -107,9 +108,10 @@
     }
   });
 
-  if(props.isloading){
-    is_loading.value=props.isloading;
-  }
+  // if(props.isloading){
+  //   is_loading.value=props.isloading;
+  // }
+ 
 
 // 使用ref来存储watch返回的函数
 const stopPparentPageArticleListData = ref(null);
@@ -118,15 +120,19 @@ const stopPparentPageArticleListData = ref(null);
 stopPparentPageArticleListData.value = watch(
        () =>props.parentPageArticleListData,
        (newValue, oldValue) => {
+      
+        // console.log('n-props.parentPageArticleListData:',props.parentPageArticleListData)
         if(newValue){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
           data.list = props.parentPageArticleListData;
-          is_loading.value=false;
+          
+
+          // is_loading.value=false;
          
         }
        
         
        },
-       // { immediate: true }
+       { immediate: true }
      );
 
 
@@ -149,10 +155,12 @@ stopPparentPageArticleListData.value = watch(
     //带参数跳转
    
     if (article_id) {
+      router.push({ name: 'article', query: { id: article_id },params: {key: article_id},key: new Date().getTime() });
+
       // router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
-     let routeUrl = router.resolve({ name: 'article', query: { id: article_id },params: {key: article_id},key: new Date().getTime() });
-     console.log('routeUrl',routeUrl);
-     window.open(routeUrl.href, '_blank');//打开新窗口
+    //  let routeUrl = router.resolve({ name: 'article', query: { id: article_id },params: {key: article_id},key: new Date().getTime() });
+    // //  console.log('routeUrl',routeUrl);
+    //  window.open(routeUrl.href, '_blank');//打开新窗口
 
      
     } else {

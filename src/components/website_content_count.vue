@@ -3,7 +3,7 @@
         <div class="website-content-count-container">
 
             <div class="website-content-count-item" v-for="(item, index) in data.list" :key="index" >
-                <h2 class="website-content-count-item-number">{{ item.number }}</h2> 
+                <h2 class="website-content-count-item-count">{{ item.count }}</h2> 
                
                 <h4 class="website-content-count-item-title">{{ item.title }}</h4>
             </div>
@@ -70,7 +70,7 @@ const props = defineProps({
         float:left;
     }
     
-    .website-content-container .website-content-count-container .website-content-count-item-number
+    .website-content-container .website-content-count-container .website-content-count-item-count
     {
         margin:0;
         font-weight:700;

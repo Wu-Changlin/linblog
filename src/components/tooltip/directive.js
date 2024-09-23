@@ -54,8 +54,10 @@ export default {
         app.directive('tooltip', {
             mounted(el, binding) {
                 clearEvent(el)
+                
                 el._tipOptions = binding.value
                 el._tipHandler = () => {
+                
                     const limitPlacementQueue = allPlacements.filter(placement => binding.modifiers[placement])
                     const placements = limitPlacementQueue.length ? limitPlacementQueue : allPlacements
                     if (!el._tipInstance) {
@@ -72,17 +74,21 @@ export default {
                         calculationLocation(el._tipInstance, el, placements[0])
                     })
                     el._scrollHandler = () => {
-                        if (el._tipInstance.tooltipShow)
+                       
+                        if (el._tipInstance.tooltipShow){
                             calculationLocation(el._tipInstance, el, placements[0])
+                        }
+                       
                     }
-                    window.addEventListener('scroll', el._scrollHandler)
-                   
+                 
+                    window.addEventListener('scroll', el._scrollHandler,true)
                 }
-               
+             
                 el._tipMouseleaveHandler = () => {
                     if (el._tipInstance) {
+                        // 使 tooltip 隐藏
                         el._tipInstance.hiddenTip()
-                    }
+                     }
                 }
                 el.addEventListener('mouseenter', el._tipHandler)
                 el.addEventListener('mouseleave', el._tipMouseleaveHandler)

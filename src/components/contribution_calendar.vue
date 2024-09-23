@@ -1,9 +1,7 @@
 <template>
-
-  
   
   <div class="contribution-calendar-container">
-    <div class="contribution-table" style="max-width: 100%; overflow-y: hidden;overflow-x: auto;"   @scroll="contributionTableScrollRemoveTooltipEvent ">
+    <div class="contribution-table" style="max-width: 100%; overflow-y: hidden;overflow-x: auto;">
 
       <div class="contribution-table-container">
         <div class="contribution-table-content">
@@ -53,13 +51,13 @@
                   <div v-if="item != undefined">
                   
                     <span v-tooltip.top="item.tooltip_content">
-
-                    <li :data-level="item.level" :data-years="item.year" :data-date="item.date"
-                      :data-date-number="item.date_number" :data-selected="item.id===data.active_date_id?true:false"
-                      :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.level!=data.hoverLevel ,'active':item.id===data.active_date_id,'no-active':data.is_selected==true&&item.id!=data.active_date_id}"
+                    
+                    <li :data-level="item.today_contribution_level"  :data-selected="item.today_contribution_id===data.active_date_id?true:false"
+                      :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.today_contribution_level!=data.hoverLevel ,'active':item.today_contribution_id===data.active_date_id,'no-active':data.is_selected==true&&item.today_contribution_id!=data.active_date_id}"
                       @click="handleClick(item)">
                       
                     </li>
+                    
                     </span>
                   </div>
                 
@@ -100,79 +98,63 @@
   </div>
 </template>
 
-<!-- 
-  .border-bottom {
-    border-bottom: var(--borderWidth-thin, 1px) solid var(--borderColor-default, var(--color-border-default)) !important;
-} -->
-
-
-
-
 <script setup>
-  import { onMounted, onUnmounted, ref, reactive,inject,watch } from "vue";
+  import { onMounted, onUnmounted, ref, reactive,inject,watch,computed,watchEffect} from "vue";
   import { useRoute, useRouter } from 'vue-router';
-
-
-  //移动端点击文本提示区域，
-  //  移入出现随屏幕滚动文本提示，移出没消失（正常移入时应固定显示在日期格子上方，移出消失）；
-  //  直到下一次点击文本提示才消失。
-  //贡献图滚动移除tooltip文本提示事件
-  const contributionTableScrollRemoveTooltipEvent  = (event) => {
-    // console.log("event.target.scrollLeft  :",event.target.scrollLeft );
-  // 假设当滚动超过1px时移除提示
-  if (event.target.scrollLeft  > 1) {
-   
-    // const zc_tooltip = document.querySelector('.zc-tooltip');
-    // if (zc_tooltip) {
-    
-    //   zc_tooltip.remove(); // 如果元素存在，则将其移除。移除后卡住页面
-    // }
-
-    // 获取所有的.zc-tooltip元素
-    const tooltips = document.querySelectorAll('.zc-tooltip');
-    
-    // 获取最后一个.zc-tooltip元素
-    const lastTooltip = tooltips[tooltips.length - 1];
-     // 把最后一个.zc-tooltip元素的display属性设置为none隐藏
-    lastTooltip.setAttribute('style', 'display: none;');
-    // console.log('last:',lastTooltip);
-
-    // console.log('zc_tooltip:',zc_tooltip);
-  }
-};
- 
 
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
  
-  
   const contributionYearInject = inject('contributionYear');
-  const yearDropdownPageUpdateYearject = inject('yearDropdownPageUpdateYear');
+  //选定日期的年份(当用户在兄弟页面选中年份，把选中年份值传到父页面，父页面注入子页面更新选中年份（annex_title）)
+  const yearDropdownPageUpdateYearInject = inject('yearDropdownPageUpdateYear');
   
+
+  // const parentPageCurrentYearContributionDataInject = inject('parentPageCurrentYearContributionData');
+  // provide('parentPageCurrentYearContributionData', current_year_contribution_data.value);//爷传孙，默认选中当年年份
+
   const emit = defineEmits(['childClickContributionDay']);
   
  
- 
-  const stopWatchRouteQueryYear = ref(null);
-   
-   // 设置一个watch监听器,用于监听year_dropdown把父页面所传年份值(yearDropdownPageUpdateYear)改为选中年份值。
-   stopWatchRouteQueryYear.value =  watch(() => route.query.year, (new_year, old_year) => {
+  //父页面传值
+const props = defineProps({
+  parentPageCurrentYearContributionData:Array
+});
 
-    if(new_year && parseInt(new_year)=== parseInt(yearDropdownPageUpdateYearject.value)){
+
+
+    const stopWatchContributionDataOrCurrentRouteQueryYear = ref(null);
+    const parent_page_current_year_contribution_data = ref('');
+
+// 计算属性来监听路由查询参数中的 year
+const current_route_query_year=ref();
+current_route_query_year.value= computed(() => route.query.year);
+
+// console.log('current_route_query_year:',current_route_query_year.value);
+
+
+stopWatchContributionDataOrCurrentRouteQueryYear.value=watch([props.parentPageCurrentYearContributionData, current_route_query_year.value], 
+ ([newContributionData, newRouteQueryYear ], [oldContributionData, oldRouteQueryYear ]) => {
+     
+      if(newContributionData){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
+          parent_page_current_year_contribution_data.value=props.parentPageCurrentYearContributionData;
+         
+        }
+      // console.log('Age changed to:', newContributionData);
+      if(newRouteQueryYear && parseInt(newRouteQueryYear)=== parseInt(yearDropdownPageUpdateYearInject.value)){
       // 当路由查询参数发生变化时，这里会被调用
       data.is_selected=false,//因页面同源原有数据没有刷新，所以初始化是否开启选择模式
       data.active_date_id=-1,//因页面同源原有数据没有刷新，所以初始已选中日期id
-      clickContributionYear(new_year);//生成年份贡献图
+      // console.log('newRouteQueryYear:',newRouteQueryYear)
+      clickContributionYear(newRouteQueryYear);//生成年份贡献图
       // console.log('R-new_year:', new_year, ',R-old_year:', old_year);
-      // console.log('R-yearDropdownPageUpdateYearject:',yearDropdownPageUpdateYearject.value)
+      
     }
-
-    });
-
-
+    }, { immediate: true }
+  );
 
 
-  const data = reactive(
+const data = reactive(
     {
 
       infos: [],  //存放每一天的数据（year，month，date，状态数量，isToday标记） 
@@ -185,18 +167,6 @@
     }
   );
 
-
-
-
-
-   
-   // 组件销毁前清除watch
-   onUnmounted(() => {
-    stopWatchRouteQueryYear.value(); // 如果watch返回了一个停止监听的函数，调用它
-     // 移除贡献图滚动移除tooltip文本提示事件监听
-    contributionTableScrollRemoveTooltipEvent=0;
-
-   });
 
   
   // console.log(JSON.stringify(data.infos))
@@ -251,6 +221,8 @@
       // console.log('first_element_week:'+Object(first_element_week));
 
       getMonthBar(last_year_first_day_week);
+// 计算属性来合并数组，把父页所传更新数据赋值到渲染数据
+      mergedArray(data.infos, parent_page_current_year_contribution_data.value);
 
     }
 
@@ -343,7 +315,7 @@
       const month = (pastDate.getMonth() + 1).toString().padStart(2, '0');
       const day = pastDate.getDate().toString().padStart(2, '0');
  // console.log('i序号:',i,',年月日:',year,month,day);
-      let level =0;
+      // let level =0;
      
     // if(pastDate.getTime()>new Date().getTime()){
     //    level =0;
@@ -351,18 +323,16 @@
     //    level = Math.floor(Math.random() * 5);
     // }
 
-      //  level = Math.floor(Math.random() * 5); //这里是随机设置每天的频率等级，后续开发要替换为自己计算的真实等级（不同等级对应不同颜色方格）
+    let level = Math.floor(Math.random() * 5); //这里是随机设置每天的频率等级，后续开发要替换为自己计算的真实等级（不同等级对应不同颜色方格）
 
       day_info = {                      //每个格子（天）的info对象
         year: year,      //年
         month: month,     //月
         date: day,        //日
         year_month_date:`${year}-${month}-${day}`,
-        // number: i,    //今日的数据量
-        number: level,    //今日的数据量
-        level: level,  //今日数据量对应的等级
-        date_number: i,    //天数
-        id: i,
+        today_contribution_count: level,    //今日的数据量
+        today_contribution_level: level,  //今日数据量对应的等级
+        today_contribution_id: i,
         tooltip_content:`${year}-${month}-${day}，${level} 次贡献`
       };
        
@@ -386,7 +356,7 @@
   function clickContributionYear(year) {
     //赋空值（或者monthBar_data.monthBar.length=0），清除原有数据（防止变成追加数据）
     data.infos = [];
-
+   
     //平年、闰年
     let contribution_year_date_num = 365
     if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
@@ -406,7 +376,7 @@
     if (data.infos) {
 
 
-      console.log(JSON.stringify(data.infos))
+      // console.log(JSON.stringify(data.infos))
       // console.log('contribution_year_data.infos:',JSON.stringify(contribution_year_data.value.infos))
 
       let [firstElement] = data.infos; //使用解构赋值取得第一个元素；
@@ -418,9 +388,14 @@
       let contribution_year_first_day_week = new Date(firstElement.year + '-' + firstElement.month + '-' + firstElement.date).getDay();
 
       // console.log('contribution_year_first_day_week:',contribution_year_first_day_week);
-
+      
       getMonthBar(contribution_year_first_day_week)
+// 计算属性来合并数组，把父页所传更新数据赋值到渲染数据
+// console.log('infos:',JSON.stringify(props.parentPageCurrentYearContributionData));
+mergedArray(data.infos, parent_page_current_year_contribution_data.value);
 
+// console.log(JSON.stringify(data.infos))
+     
     }
 
 
@@ -431,17 +406,17 @@
   
   //点击日期格子。把父页面所传年份值改为点击日期的年份值
   function handleClick(item) {
-      if (data.active_date_id == item.id) {
+      if (data.active_date_id == item.today_contribution_id) {
         data.active_date_id = -1;
         data.is_selected = false;
       } else {
-        data.active_date_id = item.id;
+        data.active_date_id = item.today_contribution_id;
         data.is_selected = true;
       }
       // console.log('item:', JSON.stringify(item));
       contributionYearInject.value=item.year;//子修改父的传值 （选中当年年份改为当前所选年份）响应式 
     
-       emit('childClickContributionDay',item.year,item.month,item.date,item.number,data.is_selected);//子传父
+       emit('childClickContributionDay',item.year,item.month,item.date,item.today_contribution_count,item.today_contribution_id,data.is_selected);//子传父
       // {"year":2023,"month":11,"date":18,"number":10,"level":0,"isToday":false}
       // alert(item.month + "-" + item.date+'，博文：'+item.number)
       // router.push({ name: current_route_name.value, query: { tag_id: item.tag_name }, key: new Date().getTime() });
@@ -449,6 +424,53 @@
     }
 
 
+    // 计算属性来合并数组，把父页所传更新数据赋值到渲染数据
+    function mergedArray(renderingArray,updataArray){
+
+      // console.log('updataArray:',JSON.stringify(updataArray))
+      // 计算属性来合并数组
+      const mergedArray = computed(() => {
+            // 使用Array.prototype.reduce来合并数组
+            return renderingArray.reduce((acc, curr) => {
+              const update = updataArray.find(item => item.year_month_date === curr.year_month_date);
+              return [...acc, { ...curr, ...update }];
+            }, []);
+          });
+
+
+          data.infos=mergedArray.value;
+   
+    // console.log('infos:',JSON.stringify(data.infos));
+
+
+          // 计算属性来合并数组
+
+
+  //     computed: {
+  //   commonDates() {
+  //     const datesSet = new Set();
+  //     this.array1.forEach(item => datesSet.add(item.year_month_date));
+  //     return this.array2.filter(item => datesSet.has(item.year_month_date));
+  //   }
+  // }
+
+   
+//     // 更新a数组中含有的元素
+//     props.parentPageCurrentYearContributionData.forEach(bItem => {
+      
+//   const aItem =  data.infos.find(aItem => aItem.year_month_date === bItem.year_month_date);
+  
+//   if (aItem) {
+//     console.log('??:', aItem.number);
+//     aItem.number = bItem.number;
+//     aItem.level = bItem.level;
+   
+//   }
+// });
+
+    }
+
+    
 
   //获取下周周日  周日0 => 周六6
   function getNextSunday(today) {
@@ -479,6 +501,14 @@
     }
     return newArr
   }
+
+
+ // 组件销毁前清除watch
+ onUnmounted(() => {
+    // 如果watch返回了一个停止监听的函数，调用它
+    stopWatchContributionDataOrCurrentRouteQueryYear.value(); 
+
+   });
 
 </script>
 
@@ -576,20 +606,26 @@
     /*记得把list的圆点效果去掉*/
     margin: 1.5px;
     border-radius: 3px;
-  }
-
-  .li-day:hover {
+    @media screen and (min-width: 1200px) {
+  &:hover {
     /*添加hover强调效果*/
 
     /* filter: brightness(100%);
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 1); */
 
-    -webkit-box-shadow: 1px 1px 13px #20232e, -1px -1px 13px #545b78;
+       /* 防止移动端重复点击同一元素没有取消选中样式 */
+    
+        -webkit-box-shadow: 1px 1px 13px #20232e, -1px -1px 13px #545b78;
     box-shadow: 1px 1px 13px #20232e, -1px -1px 13px #545b78;
     /* color: #d6d6d6; */
     -webkit-transition: 500ms;
     transition: 500ms;
+          
+
+    
+  }
+}
   }
 
 

@@ -17,7 +17,6 @@
   import {ref, computed} from 'vue'
   export default {
       setup(){
-  
           // 显示弹框
           const tooltipShow = ref(false)
   

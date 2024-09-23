@@ -107,24 +107,6 @@
 	
 
 </template>
-<script>
-    
-    import { useRoute, useRouter } from 'vue-router';
-     
-     export default {
-       created() {
-         const router = useRouter();
-         const route = useRoute();
-         console.log('route.query.key:',route.params.key);
-         // 检查路由参数中的id是否存在
-        //  if (!route.query.id) {
-        //    // 如果不存在，导航到404页面
-        //    router.push('/404');
-        //  }
-       },
-     };
-    </script>
-    
 
 <script setup>
 import NavBar from "@/components/nav_bar.vue";
@@ -135,6 +117,16 @@ import ArticleCatalog from "@/components/article_catalog.vue";
 import {ref,reactive,onMounted,onUnmounted} from "vue";
 import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
+
+
+
+         // 检查路由参数中的id是否存在
+        //  if (!route.query.id) {
+        //    // 如果不存在，导航到404页面
+        //    router.push('/404');
+        //  }
+    
+  
 
 /*黑色主题*/
 import 'highlight.js/styles/atom-one-dark.css';
@@ -283,6 +275,9 @@ function mediaQuery() {
 
 
 onMounted(()=>{
+    getArticleDetail
+    console.log('11111.params:',route.params);
+     console.log('route.query:',route.query);
 	mediaQuery();//初始化（防止刷新失效）
 //     console.log('挂载完毕');
 	window.addEventListener('resize',mediaQuery);  //监听窗口大小变化	
