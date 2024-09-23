@@ -32,7 +32,7 @@
                     <li :data-level="item.level" :data-years="item.year" :data-date="item.date"
                       :data-date-number="item.date_number" :data-selected="item.id===data.active_date_id?true:false"
                       :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.level!=data.hoverLevel ,'active':item.id===data.active_date_id,'no-active':data.is_selected==true&&item.id!=data.active_date_id}"
-                      @click="handleClick(item)">
+                      @click="clickContributiondate(item)">
                       
                     </li>
                   </el-tooltip>
@@ -54,7 +54,7 @@
                     
                     <li :data-level="item.today_contribution_level"  :data-selected="item.today_contribution_id===data.active_date_id?true:false"
                       :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.today_contribution_level!=data.hoverLevel ,'active':item.today_contribution_id===data.active_date_id,'no-active':data.is_selected==true&&item.today_contribution_id!=data.active_date_id}"
-                      @click="handleClick(item)">
+                      @click="clickContributiondate(item)">
                       
                     </li>
                     
@@ -105,6 +105,17 @@
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
  
+
+//路由名
+const current_route_name=ref(null); 
+onMounted(() => {
+
+    current_route_name.value=route.name;
+
+});
+
+
+
   const contributionYearInject = inject('contributionYear');
   //选定日期的年份(当用户在兄弟页面选中年份，把选中年份值传到父页面，父页面注入子页面更新选中年份（annex_title）)
   const yearDropdownPageUpdateYearInject = inject('yearDropdownPageUpdateYear');
@@ -129,31 +140,6 @@ const props = defineProps({
 // 计算属性来监听路由查询参数中的 year
 const current_route_query_year=ref();
 current_route_query_year.value= computed(() => route.query.year);
-
-// console.log('current_route_query_year:',current_route_query_year.value);
-
-
-stopWatchContributionDataOrCurrentRouteQueryYear.value=watch([props.parentPageCurrentYearContributionData, current_route_query_year.value], 
- ([newContributionData, newRouteQueryYear ], [oldContributionData, oldRouteQueryYear ]) => {
-     
-      if(newContributionData){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
-          parent_page_current_year_contribution_data.value=props.parentPageCurrentYearContributionData;
-         
-        }
-      // console.log('Age changed to:', newContributionData);
-      if(newRouteQueryYear && parseInt(newRouteQueryYear)=== parseInt(yearDropdownPageUpdateYearInject.value)){
-      // 当路由查询参数发生变化时，这里会被调用
-      data.is_selected=false,//因页面同源原有数据没有刷新，所以初始化是否开启选择模式
-      data.active_date_id=-1,//因页面同源原有数据没有刷新，所以初始已选中日期id
-      // console.log('newRouteQueryYear:',newRouteQueryYear)
-      clickContributionYear(newRouteQueryYear);//生成年份贡献图
-      // console.log('R-new_year:', new_year, ',R-old_year:', old_year);
-      
-    }
-    }, { immediate: true }
-  );
-
-
 const data = reactive(
     {
 
@@ -166,6 +152,32 @@ const data = reactive(
       
     }
   );
+
+// console.log('current_route_query_year:',current_route_query_year.value);
+  // 在访问属性之前检查变量是否已初始化
+
+
+stopWatchContributionDataOrCurrentRouteQueryYear.value=watch([props.parentPageCurrentYearContributionData, current_route_query_year.value], 
+ ([newContributionData, newRouteQueryYear ], [oldContributionData, oldRouteQueryYear ]) => {
+      if(newContributionData){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
+          parent_page_current_year_contribution_data.value=props.parentPageCurrentYearContributionData;
+        }
+      // console.log('Age changed to:', newContributionData);
+      if(newRouteQueryYear && parseInt(newRouteQueryYear)=== parseInt(yearDropdownPageUpdateYearInject.value)){
+      // 当路由查询参数发生变化时，这里会被调用
+     
+      data.is_selected=false,//因页面同源原有数据没有刷新，所以初始化是否开启选择模式
+      data.active_date_id=-1,//因页面同源原有数据没有刷新，所以初始已选中日期id
+      // console.log('newRouteQueryYear:',newRouteQueryYear)
+      clickContributionYear(newRouteQueryYear);//生成年份贡献图
+      // console.log('R-new_year:', new_year, ',R-old_year:', old_year);
+      
+    }
+    }, { immediate: true }
+  );
+
+
+
 
 
   
@@ -405,7 +417,7 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
   //
   
   //点击日期格子。把父页面所传年份值改为点击日期的年份值
-  function handleClick(item) {
+  function clickContributiondate(item) {
       if (data.active_date_id == item.today_contribution_id) {
         data.active_date_id = -1;
         data.is_selected = false;
@@ -413,11 +425,14 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
         data.active_date_id = item.today_contribution_id;
         data.is_selected = true;
       }
+
       // console.log('item:', JSON.stringify(item));
       contributionYearInject.value=item.year;//子修改父的传值 （选中当年年份改为当前所选年份）响应式 
-    
-       emit('childClickContributionDay',item.year,item.month,item.date,item.today_contribution_count,item.today_contribution_id,data.is_selected);//子传父
-      // {"year":2023,"month":11,"date":18,"number":10,"level":0,"isToday":false}
+      emit('childClickContributionDay',item.year,item.month,item.date,item.today_contribution_count,item.today_contribution_id,data.is_selected);//子传父
+     //路由携参跳转
+     router.push({ name: current_route_name.value, query: {year : item.year, from:item.year_month_date,to:item.year_month_date }, key: new Date().getTime() });
+   
+       // {"year":2023,"month":11,"date":18,"number":10,"level":0,"isToday":false}
       // alert(item.month + "-" + item.date+'，博文：'+item.number)
       // router.push({ name: current_route_name.value, query: { tag_id: item.tag_name }, key: new Date().getTime() });
 
@@ -437,36 +452,7 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
             }, []);
           });
 
-
           data.infos=mergedArray.value;
-   
-    // console.log('infos:',JSON.stringify(data.infos));
-
-
-          // 计算属性来合并数组
-
-
-  //     computed: {
-  //   commonDates() {
-  //     const datesSet = new Set();
-  //     this.array1.forEach(item => datesSet.add(item.year_month_date));
-  //     return this.array2.filter(item => datesSet.has(item.year_month_date));
-  //   }
-  // }
-
-   
-//     // 更新a数组中含有的元素
-//     props.parentPageCurrentYearContributionData.forEach(bItem => {
-      
-//   const aItem =  data.infos.find(aItem => aItem.year_month_date === bItem.year_month_date);
-  
-//   if (aItem) {
-//     console.log('??:', aItem.number);
-//     aItem.number = bItem.number;
-//     aItem.level = bItem.level;
-   
-//   }
-// });
 
     }
 

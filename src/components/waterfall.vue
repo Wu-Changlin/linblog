@@ -155,7 +155,7 @@ stopPparentPageArticleListData.value = watch(
     //带参数跳转
    
     if (article_id) {
-      router.push({ name: 'article', query: { id: article_id },params: {key: article_id},key: new Date().getTime() });
+      router.push({ name: 'article', query: { id: article_id },key: new Date().getTime() });
 
       // router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
     //  let routeUrl = router.resolve({ name: 'article', query: { id: article_id },params: {key: article_id},key: new Date().getTime() });
@@ -344,6 +344,13 @@ stopPparentPageArticleListData.value = watch(
     .footer {
       padding: 12px;
 
+
+      /* Chrome, Safari, 新版 Edge */
+      .title::-webkit-line-clamp {
+          -webkit-line-clamp: 2;
+      }
+      
+     /* 旧版 IE */
       .title {
         margin-bottom: 8px;
         word-break: break-all;

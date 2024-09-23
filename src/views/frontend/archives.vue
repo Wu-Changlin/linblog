@@ -5,20 +5,18 @@
   <div class="archives-container">
     <transition name="scale-down" mode="out-in">
       <!-- 骨架屏 开始-->
-          <div v-if="is_loading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef">
+          <div v-if="is_loading" key="loading" class="archives-skeleton" ref="waterfallSkeletonContainerRef">
             
             <div
             class="item"
             v-for="(item, index)  in 3" 
             :key="item"
-            :data-item='item'
-            :data-index='index'
-            :style="{background: 'rgba(0, 0, 0, 0.04)', width: '100%',display: 'flex'}" >
+            :style="{background: 'rgba(0, 0, 0, 0.04)', width: '100%',maxWidth: '1260px',paddingTop: '20px',}" >
            
-            <!-- 图片占位 -->
-            <Skeleton bg="#e4e4e4" width="100%" height="24px" animated  style=" border-bottom: 3px solid #2ECC71;display: flex;"/>
             <!-- 标题占位 -->
-            <Skeleton bg="#e4e4e4" width="100%" height="300px" animated style="margin-top: 5px;display: flex;" />
+            <Skeleton bg="#e4e4e4" width="100%" height="32px" animated  style="border-bottom: 3px solid #2ECC71;max-width: 1260px;display: flex;"/>
+            <!-- 内容占位 -->
+            <Skeleton bg="#e4e4e4" width="100%" height="300px" animated style="margin-top: 5px; max-width: 1260px;display: flex;" />
 
             </div>
             
@@ -177,6 +175,13 @@
 
   const select_contribution_year =ref(2024);
   const year_dropdown_page_update_year =ref(2024);
+  provide('contributionYear', select_contribution_year);//父传子，默认选中当年年份
+  
+
+  provide('yearDropdownPageUpdateYear', year_dropdown_page_update_year);//父传子，默认选中当年年份
+
+
+
 
   const is_loading_contribution_article_list_data=ref(true);
 
@@ -226,12 +231,6 @@
 	//   fetchTag();
   });
 
-
-
-  provide('contributionYear', select_contribution_year);//父传子，默认选中当年年份
-  
-
-  provide('yearDropdownPageUpdateYear', year_dropdown_page_update_year);//父传子，默认选中当年年份
 
 
 
@@ -342,6 +341,13 @@
   
   <style scoped>
   
+
+  .archives-skeleton{
+    padding: 0 12px;
+  }
+
+
+
   .archives-page {
     overflow-x: hidden;/* 禁止容器x轴方向滚动 */
   
@@ -459,6 +465,15 @@
 
 /* 动态栏 结束*/
 
-     
+  /* 骨架屏缩放动画 */
+  .scale-down-enter-active, .scale-down-leave-active {
+  transition: all 0.8s ease;
+}
+ 
+.scale-down-enter-from, .scale-down-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
+} 
+
 </style>
   
