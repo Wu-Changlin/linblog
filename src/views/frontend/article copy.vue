@@ -57,7 +57,7 @@
                             <span>所需阅读时间</span> -->
                         </div>
                         <div class="article-container">
-                            <div  v-highlight class="article-content" v-html="data.article_content"></div>
+                            <div v-if="valueHtml"  v-highlight class="article-content" v-html="data.article_content"></div>
     
                         </div>
                     </div>
@@ -122,6 +122,10 @@
             
               </transition>
         
+
+		
+		
+		
 	</div>
 	
 
@@ -133,13 +137,10 @@ import SideBar from "@/components/side_bar.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import ArticleCatalog from "@/components/article_catalog.vue";
 // import Footer from "@/components/footer.vue";
-import {ref,reactive,onMounted,onUnmounted,nextTick,watch} from "vue";
+import {ref,reactive,onMounted,onUnmounted} from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import axios from "axios";
 import Skeleton from '@/components/skeleton.vue';
-import Prism from "prismjs"; 
-// import 'prismjs/themes/prism.css';
-// import "prismjs/themes/prism-tomorrow.min.css"
 const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
 const router=useRouter();
 
@@ -186,12 +187,7 @@ onMounted(()=>{
             data.article_content=response.data.article_content;
 
             is_loading.value=false;//取消骨架屏
-
-          
-        
-             
-         
-          
+           
     // setTimeout(() => {
 			// index_tag_data.value = response.data.tag_data; // 数据加载完毕，关闭骨架屏
 			// index_article_list_data.value = response.data.article_list_data; // 数据加载完毕，关闭骨架屏
@@ -206,62 +202,111 @@ onMounted(()=>{
 
         console.error('Error fetching mock data:', error);
       });
-     
-    
+
 	mediaQuery();//初始化（防止刷新失效）
 //     console.log('挂载完毕');
 	window.addEventListener('resize',mediaQuery);  //监听窗口大小变化	
-
-
-
-  
-  
-  
-    
 }) 
+
+/*黑色主题*/
+import 'highlight.js/styles/atom-one-dark.css';
+/*白色主题*/
+// import 'highlight.js/styles/stackoverflow-light.css';
+import hljs from "highlight.js";
+// 批量引入常用语言库
+import 'highlight.js/lib/common';
 
 
 const vHighlight  = {
   mounted(el) {
     let blocks = el.querySelectorAll('pre code');
-    
-    //添加line-numbers类名到自己的项目，在这里我添加到了v-html要解析的那个标签上，
-    //因为后台返回的编辑数据都是在该标签内渲染，所以该标签属于pre标签的祖先元素，
-    //你也可以将line-numbers类名添加到该div的祖先父级元素中，又或者可以添加到body上，
-    //但建议添加到这个v-html要渲染的签上，因为只有该标签内的数据是要被渲染解析的。
-
-	
-	//添加class用于显示行号，全局代码高亮。
-    const pre =el.querySelectorAll('pre');
+   
+	//行号和代码块 pre添加flex属性 复制功能
+		const pre =el.querySelectorAll('pre');
 	pre.forEach((block) => {
-        block.classList.add('line-numbers');
-        Prism.highlightAll()// 全局代码高亮
-         // Prism.highlightElement(block);
-    })
+		block.setAttribute('style', 'display: flex;max-width: 1260px;width:100%;');
+		//创建一个 'code' 元素来包含DOM 元素
+		const code=block.querySelector('code');//获取pre父元素下的code子元素对象
+		//'block' 是一个 DOM 元素，直接获取其内部文本即可
+		
+		//插入复制功能
+        let copy = document.createElement('div')
+        copy.classList.add('hljs-copy')
+        copy.innerText = '复制'
+        //添加点击事件
+        copy.addEventListener('click', () => {
+            //创建一个输入框
+            let textarea = document.createElement('textarea')
+            document.body.appendChild(textarea);
+            textarea.setAttribute('readonly', 'readonly')
+            textarea.value =code.innerText;
+            textarea.select();
+            if (document.execCommand('copy')) {
+                document.execCommand('copy');
+                copy.innerText = '复制成功'
+            }
+            document.body.removeChild(textarea);
+        })
 
-    // data-prismjs-copy="复制" 
-    // data-prismjs-copy-error="复制失败" 
-    // data-prismjs-copy-success="复制成功"
+        block.appendChild(copy);
 
-// 	blocks.forEach((block) => {
-       
+        //鼠标移入显示复制按钮
+        el.addEventListener('mouseout', () => {
+            copy.innerText = '复制';
+            // copy.style.display = "none";
+			copy.style.display = "block";
+        })
+        el.addEventListener('mouseover', () => {
+            copy.style.display = "block";
 
-//     // 高亮代码块
-//     // Prism.highlightElement(block);
-//   })
+        })
+
+	})
+
+
+	blocks.forEach((block) => {
+	block.setAttribute('style', 'flex: 1;');
+    // 高亮代码块
+    hljs.highlightElement(block);
+
+  
+      // 获取代码块内容
+      const code = block.innerText;
+ 
+      // 将代码块内容分割成行
+      const lines = code.split('\n');
+ 
+      // 创建包含行号的伪元素
+      const lineNumberContainer = document.createElement('ul');
+      lineNumberContainer.className = 'number-container';
+ 
+      // 循环创建并添加行号
+      lines.forEach((line, index) => {
+        const lineNumber = index + 1;
+        const lineNumberElement = document.createElement('li');
+        lineNumberElement.className = 'line-number';
+        lineNumberElement.textContent = lineNumber;
+        lineNumberContainer.appendChild(lineNumberElement);
+      })
+ 
+      // 将伪元素插入代码块前面
+      block.parentNode.insertBefore(lineNumberContainer, block);
+    
+  })
 
   }
 }
 
 
 
+
+const valueHtml = ref(`<pre id="w-e-element-18" data-slate-node="element"><code id="w-e-element-19" data-slate-node="element"><span id="w-e-text-20" data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true" class="token keyword">let</span></span><span data-slate-leaf="true"><span data-slate-string="true"> hello </span></span><span data-slate-leaf="true"><span class="token operator" data-slate-string="true">=</span></span><span data-slate-leaf="true"><span data-slate-string="true"> </span></span><span data-slate-leaf="true"><span class="token string" data-slate-string="true">'Hello World!'</span></span><span data-slate-leaf="true"><span class="token punctuation" data-slate-string="true">;</span></span><span data-slate-leaf="true"><span data-slate-string="true">
+console</span></span><span data-slate-leaf="true"><span class="token punctuation" data-slate-string="true">.</span></span><span data-slate-leaf="true"><span data-slate-string="true" class="token function">log</span></span><span data-slate-leaf="true"><span class="token punctuation" data-slate-string="true">(</span></span><span data-slate-leaf="true"><span data-slate-string="true">hello</span></span><span data-slate-leaf="true"><span class="token punctuation" data-slate-string="true">)</span></span><span data-slate-leaf="true"><span class="token punctuation" data-slate-string="true">;</span></span></span></code></pre>`);
+
 const container_name=ref('.article-content');
 
 
-          
-window.onload = function() {
-    Prism.highlightAll(); // 高亮页面内所有代码块
-  };
+
 
 ////目录显示隐藏开关
 const show_article_catalog=ref(false);
@@ -316,20 +361,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-
-:deep(div.code-toolbar > .toolbar) {
-        opacity: 1;
-      }
-      :deep(.toolbar .toolbar-item span,
-      .toolbar .toolbar-item button ){
-        border-radius: 0 !important;
-        margin: 0 6px;
-      }
-      :deep( .copy-to-clipboard-button:hover) {
-        cursor: pointer;
-      }
-
-
 .container {
 	padding: 0;
 	max-width: 1728px;

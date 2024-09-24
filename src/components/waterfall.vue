@@ -283,7 +283,7 @@ stopPparentPageArticleListData.value = watch(
       box-sizing: border-box;
       /* padding: 0px 8px 0px; */
       width: 100%;
-      height: 20px;
+      height: 25px;
       border-bottom-right-radius: 6px;
       border-bottom-left-radius: 6px;
       background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .8) 100%);
@@ -337,6 +337,11 @@ stopPparentPageArticleListData.value = watch(
       display: flex;
       justify-items: center;
       align-items: center;
+    }
+
+    .svg-icon{
+      width: 18px;
+      height: 18px;
     }
 
 

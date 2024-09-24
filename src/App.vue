@@ -6,8 +6,11 @@
 
 </template>
 
-<script>
-</script>
+<!-- app.vue -->
+<script setup>
+
+  </script>
+  
 
 <style>
 
