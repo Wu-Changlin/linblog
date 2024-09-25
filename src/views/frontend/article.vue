@@ -143,29 +143,6 @@ const router=useRouter();
 
 
 
-const layout_article_count=ref(0);
-const layout_article_list_data=ref();
-//获取搜索关键字匹配所用数据源  提供一个获取数据的方法
-const getSearchKeywordMatchData= ()=>{
-	axios.get('/data/frontend/all_article.json', { responseType: 'json' })
-      .then(response => {
-        // setTimeout(() => {
-			layout_article_count.value = response.data.article_count; // 博文数量
-			layout_article_list_data.value = response.data.article_list; // 博文列表
-        // }, 3000); // 假设加载时间是3秒
-		
-
-      })
-      .catch(error => {
-
-        console.error('Error fetching mock data:', error);
-      });
-}
-
-
-// 使用 provide 向下传递方法
-
-provide('getSearchKeywordMatchData', getSearchKeywordMatchData);
 
 
 
@@ -192,6 +169,8 @@ const data=reactive({
 
 
 onMounted(()=>{
+    //匹配关键字数据源
+    getSearchKeywordMatchData();
     // getArticleDetail
      //两重校验路由查询参数，路由表加页面;否: 导航到404页面。 
      if(current_route_query){
@@ -237,6 +216,34 @@ onMounted(()=>{
 
  
 }) 
+
+
+
+const layout_article_count=ref(0);
+const layout_article_list_data=ref();
+//获取搜索关键字匹配所用数据源  提供一个获取数据的方法
+const getSearchKeywordMatchData= ()=>{
+	axios.get('/data/frontend/all_article.json', { responseType: 'json' })
+      .then(response => {
+        // setTimeout(() => {
+			layout_article_count.value = response.data.article_count; // 博文数量
+			layout_article_list_data.value = response.data.article_list; // 博文列表
+        // }, 3000); // 假设加载时间是3秒
+		
+
+      })
+      .catch(error => {
+
+        console.error('Error fetching mock data:', error);
+      });
+}
+
+
+// 使用 provide 向下传递方法
+
+provide('getSearchKeywordMatchData', getSearchKeywordMatchData);
+
+
 
 const vHighlight  = {
     mounted(el) {
