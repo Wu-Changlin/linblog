@@ -57,8 +57,8 @@
                             <span>所需阅读时间</span> -->
                         </div>
                         <div class="article-container">
-                            <div  v-highlight class="article-content" v-html="data.article_content"></div>
-    
+                            <div v-highlight class="article-content" v-html="data.article_content"></div>
+                            
                         </div>
                     </div>
                     <!-- 博文内容 结束-->
@@ -133,13 +133,11 @@ import SideBar from "@/components/side_bar.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import ArticleCatalog from "@/components/article_catalog.vue";
 // import Footer from "@/components/footer.vue";
-import {ref,reactive,onMounted,onUnmounted,nextTick,watch} from "vue";
+import {ref,reactive,onMounted,onUnmounted,nextTick,watch,onUpdated} from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import axios from "axios";
 import Skeleton from '@/components/skeleton.vue';
-import Prism from "prismjs"; 
-// import 'prismjs/themes/prism.css';
-// import "prismjs/themes/prism-tomorrow.min.css"
+import Prism from "prismjs";
 const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
 const router=useRouter();
 
@@ -186,12 +184,8 @@ onMounted(()=>{
             data.article_content=response.data.article_content;
 
             is_loading.value=false;//取消骨架屏
+   
 
-          
-        
-             
-         
-          
     // setTimeout(() => {
 			// index_tag_data.value = response.data.tag_data; // 数据加载完毕，关闭骨架屏
 			// index_article_list_data.value = response.data.article_list_data; // 数据加载完毕，关闭骨架屏
@@ -212,19 +206,12 @@ onMounted(()=>{
 //     console.log('挂载完毕');
 	window.addEventListener('resize',mediaQuery);  //监听窗口大小变化	
 
-
-
-  
-  
-  
-    
+ 
 }) 
 
-
 const vHighlight  = {
-  mounted(el) {
+    mounted(el) {
     let blocks = el.querySelectorAll('pre code');
-    
     //添加line-numbers类名到自己的项目，在这里我添加到了v-html要解析的那个标签上，
     //因为后台返回的编辑数据都是在该标签内渲染，所以该标签属于pre标签的祖先元素，
     //你也可以将line-numbers类名添加到该div的祖先父级元素中，又或者可以添加到body上，
@@ -235,20 +222,33 @@ const vHighlight  = {
     const pre =el.querySelectorAll('pre');
 	pre.forEach((block) => {
         block.classList.add('line-numbers');
-        Prism.highlightAll()// 全局代码高亮
-         // Prism.highlightElement(block);
+       
+        // 使用正则表达式检查class类字符串是否包含language类名
+        const languageRegex = /language="([^"]+)"/;
+        if (!languageRegex.test(block.className)) {
+            // 如果没有language类名，那么在元素中添加一个类名是language-html
+            block.classList.add('language-html')
+        }
+
+         Prism.highlightAll()// 全局代码高亮
     })
 
     // data-prismjs-copy="复制" 
     // data-prismjs-copy-error="复制失败" 
     // data-prismjs-copy-success="复制成功"
 
-// 	blocks.forEach((block) => {
+	blocks.forEach((block) => {
        
+        block.classList.add('line-numbers');
+        if (!block.className) {
+          // 如果没有设置language类，则设置默认样式
+           
+          block.classList.add('language-html')
+        }
 
-//     // 高亮代码块
-//     // Prism.highlightElement(block);
-//   })
+    // 高亮代码块
+    // Prism.highlightElement(block);
+  })
 
   }
 }
@@ -257,11 +257,6 @@ const vHighlight  = {
 
 const container_name=ref('.article-content');
 
-
-          
-window.onload = function() {
-    Prism.highlightAll(); // 高亮页面内所有代码块
-  };
 
 ////目录显示隐藏开关
 const show_article_catalog=ref(false);
@@ -305,13 +300,13 @@ function mediaQuery() {
 }
 
 
-
-
 onUnmounted(() => {
 	window.removeEventListener('resize', mediaQuery);
 })//离开页面时移除监听窗口大小变化	
 
-
+onUpdated(() => {
+    Prism.highlightAll(); //修改内容后重新渲染
+});
 
 </script>
 
@@ -389,14 +384,20 @@ onUnmounted(() => {
         
 	}
 
-	.article-content{
+	 .article-content{
 		width: 100%;
 		/* max-width: 1280px; */
-		
 		white-space: normal; /* 允许空白符号，但不保留 */
 		overflow-wrap: break-word; /* 在长单词或URL地址内部进行换行 */
 		overflow: hidden; /* 隐藏溢出容器的内容 */
-	}
+	} 
+
+    :deep(.article-content p) {
+  color: red;
+  font-size: 16px;
+  line-height: 1.5;
+  /* 添加其他需要的样式 */
+}
 
 
 	.article-title{
@@ -404,6 +405,7 @@ onUnmounted(() => {
 		justify-content: center;
 		font-size: 32px;
 		margin: 20px 0px;
+        text-align: center;
 	}
 
 	.article-metadata{

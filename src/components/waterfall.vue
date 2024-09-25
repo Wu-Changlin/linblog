@@ -30,16 +30,13 @@
         :delay="300">
         <template #item="{ item,index }">
           <div class="waterfall-card">
-            <div class="lazy-img-card-mask">
 
-            
+            <div v-if="!item.url" class="lazy-img-card-mask">
+
+              
             <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px" @click="goViewAticle(item.id)"/>
           
-         
-    
-    
-         
-    
+
             <div class="card-img-mask-stats">
               <div class="card-img-mask-stats-left">
                 <span class="card-img-mask-stats-item">
@@ -57,6 +54,15 @@
     
             </div>
             </div>
+
+            <div v-else class="lazy-img-card-mask">
+
+                <a :href="item.url" target="_blank">
+              
+                  <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px"/>
+            
+                </a>
+              </div>
     
             <div class="footer">
               <a class="title"><span>{{ item.title}}</span></a>

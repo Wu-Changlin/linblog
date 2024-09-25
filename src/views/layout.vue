@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
-		<NavBar  :layoutLogData="layout_log"></NavBar>
-
+		<NavBar  :layoutLogData="layout_log" :layoutArticleCount="layout_article_count" :layoutArticleListData="layout_article_list_data"></NavBar>
+		
 		<div class="main">
 			<SideBar :layoutMenuData="layout_menu_list_data"></SideBar>
 
@@ -22,7 +22,7 @@
 
 
 <script setup>
-import { reactive, ref,onMounted } from 'vue';
+import { reactive, ref,onMounted,provide} from 'vue';
 import axios from 'axios';
 import { useRouter } from "vue-router";
 import NavBar from "@/components/nav_bar.vue";
@@ -30,6 +30,30 @@ import SideBar from "@/components/side_bar.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import Footer from "@/components/footer.vue";
 
+
+const layout_article_count=ref(0);
+const layout_article_list_data=ref();
+//获取搜索关键字匹配所用数据源  提供一个获取数据的方法
+function getSearchKeywordMatchData(){
+	axios.get('/data/frontend/all_article.json', { responseType: 'json' })
+      .then(response => {
+        // setTimeout(() => {
+			layout_article_count.value = response.data.article_count; // 博文数量
+			layout_article_list_data.value = response.data.article_list; // 博文列表
+        // }, 3000); // 假设加载时间是3秒
+		
+
+      })
+      .catch(error => {
+
+        console.error('Error fetching mock data:', error);
+      });
+}
+
+
+// 使用 provide 向下传递方法
+
+provide('getSearchKeywordMatchData', getSearchKeywordMatchData);
 
 
 
@@ -52,6 +76,10 @@ onMounted(() => {
 			layout_menu_list_data.value = response.data.menu_data; // 数据加载完毕，关闭骨架屏
         // }, 3000); // 假设加载时间是3秒
 		
+		// setTimeout(() => {
+			//在组件挂载后调用方法获取数据
+			getSearchKeywordMatchData();
+		// }, 3000); // 延迟3秒
 
       })
       .catch(error => {

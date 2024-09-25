@@ -74,7 +74,8 @@ onMounted(() => {
         // setTimeout(() => {
 			resource_tag_data.value = response.data.tag_data; // 数据加载完毕，关闭骨架屏
 			resource_article_list_data.value = response.data.article_list_data; // 数据加载完毕，关闭骨架屏
-			flag.value=true;
+			
+      flag.value=true;
 			is_loading.value=false;
 			// console.log('111resource_article_list_data:',resource_article_list_data)
         // }, 3000); // 假设加载时间是3秒
