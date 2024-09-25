@@ -34,7 +34,7 @@ import Footer from "@/components/footer.vue";
 const layout_article_count=ref(0);
 const layout_article_list_data=ref();
 //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
-function getSearchKeywordMatchData(){
+const getSearchKeywordMatchData= ()=>{
 	axios.get('/data/frontend/all_article.json', { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {

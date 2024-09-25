@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<NavBar></NavBar>
+		<NavBar  :layoutArticleCount="layout_article_count" :layoutArticleListData="layout_article_list_data"></NavBar>
 
 
         <transition name="scale-down" mode="out-in">
@@ -128,18 +128,47 @@
 </template>
 
 <script setup>
-import NavBar from "@/components/nav_bar.vue";
-import SideBar from "@/components/side_bar.vue";
-import FloatingBtnSets from "@/components/floating_btn_sets.vue";
-import ArticleCatalog from "@/components/article_catalog.vue";
 // import Footer from "@/components/footer.vue";
-import {ref,reactive,onMounted,onUnmounted,nextTick,watch,onUpdated} from "vue";
+import {ref,reactive,onMounted,onUnmounted,nextTick,watch,onUpdated,provide } from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import axios from "axios";
 import Skeleton from '@/components/skeleton.vue';
 import Prism from "prismjs";
+import NavBar from "@/components/nav_bar.vue";
+import SideBar from "@/components/side_bar.vue";
+import FloatingBtnSets from "@/components/floating_btn_sets.vue";
+import ArticleCatalog from "@/components/article_catalog.vue";
 const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
 const router=useRouter();
+
+
+
+const layout_article_count=ref(0);
+const layout_article_list_data=ref();
+//获取搜索关键字匹配所用数据源  提供一个获取数据的方法
+const getSearchKeywordMatchData= ()=>{
+	axios.get('/data/frontend/all_article.json', { responseType: 'json' })
+      .then(response => {
+        // setTimeout(() => {
+			layout_article_count.value = response.data.article_count; // 博文数量
+			layout_article_list_data.value = response.data.article_list; // 博文列表
+        // }, 3000); // 假设加载时间是3秒
+		
+
+      })
+      .catch(error => {
+
+        console.error('Error fetching mock data:', error);
+      });
+}
+
+
+// 使用 provide 向下传递方法
+
+provide('getSearchKeywordMatchData', getSearchKeywordMatchData);
+
+
+
 
 const is_loading=ref(true);
 const current_route_query=ref(null); 

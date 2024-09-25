@@ -27,15 +27,18 @@
 
 					<div class="select-container">
 						<div class="select-list">
-
+							<span>
+								总匹配：{{ data.search_keyword_match_count}}项
+							</span>
 							<!-- 下拉框列表 -->
 							<ul>
-								<li>
-									总匹配：{{ data.search_keyword_match_count}}项
-								</li>
-								<li v-for="(item,index) in data.Files" :key="item.value"
-									@click="changeSelect(item.contribution_year)">
-									{{ item.contribution_year }}
+						
+
+								<li v-for="(item,index) in data.search_keyword_match_data" :key="item.index"
+									@click="goViewAticle(item.id)">
+									<p v-html="item.result_article_title_match_data"></p>
+									<span v-html="item.result_article_content_match_data"> </span> 
+								
 								</li>
 							</ul>
 						</div>
@@ -143,17 +146,18 @@
 
 	function handleInput() {
 		if (search_keyword.value == '') {
-			console.log('请输入内容...')
+			console.log('请输入内容...');
+			searchInit();
 		} else if (search_keyword.value.search(/^\s+$/) >= 0) {
 			// 检测输入值全是空白的情况
-			// searchInit();
+			searchInit();
 			// var itemDiv = tmpDiv.cloneNode(true);
 			// itemDiv.innerText = '请输入有效内容...';
 			// searchResults.appendChild(itemDiv);
 			console.log('请输入有效内容...')
 		} else {
 			// 合法输入值的情况
-			// searchInit();
+			searchInit();
 
 			//数据为空或者值小于1或者数组长度小于1，即数据异常重新请求接口获取新数据
 			if (!article_count.value || article_count.value < 1 || !article_list.value || article_list.length < 1) {
@@ -167,6 +171,13 @@
 
 	}
 
+
+	//初始化关键字数据和关闭匹配关键字列表
+	function searchInit(){
+		show_input_focus.value = false;//隐藏
+		data.search_keyword_match_data=[];
+		data.search_keyword_match_count=0;
+	}
 
 	function searchMatching(search_value) {
 		// 忽略输入大小写
@@ -221,7 +232,7 @@
 				match_count++;  //成功匹配计数加一
 
 				match_data = {
-
+					id:article_list.value[i]['id'],
 					result_article_title_match_data: result_article_title_match_data,
 					result_article_content_match_data: result_article_content_match_data
 				};
@@ -271,6 +282,33 @@
 		}
 
 	}
+
+
+
+	  //去看博文
+	  function goViewAticle(article_id) {
+    //直接跳转
+    // const handleChange = () => {
+    //   router.push("/testDemo");
+    // };
+    //带参数跳转
+   
+    if (article_id) {
+      router.push({ name: 'article', query: { id: article_id },key: new Date().getTime() });
+
+      // router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
+    //  let routeUrl = router.resolve({ name: 'article', query: { id: article_id },params: {key: article_id},key: new Date().getTime() });
+    // //  console.log('routeUrl',routeUrl);
+    //  window.open(routeUrl.href, '_blank');//打开新窗口
+
+     
+    } else {
+      console.log('非法请求')
+    }
+
+
+
+  }
 
 
 	onUnmounted(() => {
@@ -495,27 +533,17 @@
 			}
 
 
-			.sug-container-wrapper{
-                margin-top: 8px;
-                width: 100%;
-                background-color: var(--elevation-high-background);
-                box-shadow: var(--elevation-high-shadow);
-                border-radius: 12px;
-                overflow: scroll
-            }
-
+	
 
 
 			.select-container {
 				width: 100%;
 				height: 100%;
-				font-size: 14px;
-				font-weight: normal;
-				font-stretch: normal;
-				letter-spacing: 0px;
-				color: var(--color-border);
-				background: var(--color-active-background);
-
+				margin-top: 10px;
+				background-color: var(--bg);
+				border-radius: 5px;
+				border: 1px solid #E4E7ED;
+				border-radius: 6px;
 				/* border: 1px solid #494d59; */
 				transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 				z-index: 12;
@@ -525,10 +553,9 @@
 			.select-list {
 				margin-top: 10px;
 				background-color: var(--bg);
-				z-index: 9;
+				z-index: 12;
 				border-radius: 5px;
-				border: 1px solid #E4E7ED;
-
+				/* border: 1px solid #E4E7ED; */
 				/* transform: translate(-100%, -30%); */
 				border-radius: 6px;
 			}
@@ -542,10 +569,11 @@
 			.select-container li {
 				/* width:68px; */
 				padding: 0 3px;
-				height: 34px;
+				height: 50px;
+				padding: 5px;
 				/* line-height:34px; */
 				white-space: nowrap;
-				background-color:#ffffff;
+				background-color: var(--bg);
 				white-space: nowrap;
 				text-overflow: ellipsis;
 				overflow: hidden;
@@ -555,9 +583,9 @@
 			}
 
 			.select-container li:hover {
-				background-color: rgba(0, 0, 0, 0.03);
+				background-color: var(--color-active-background);
 				border-radius: 999px;
-				color: var(--blue);
+				color: var(--txt);
 
 			}
 
