@@ -46,7 +46,14 @@ const routes=[
             {
                 path:'/search',
                 name:"search",
-                component:()=>import('@/views/frontend/search.vue')
+                component:()=>import('@/views/frontend/search.vue'),
+                beforeEnter: (to, from, next) => {//使用Vue Router的前置守卫（beforeEach）来检查路由并重定向到404页面。
+                    if (!to.query.keyword || to.path === '/search/') {//当用户尝试访问/article且没有查询参数id或者路由地址确实是/article/时，会被重定向到/404路由。
+                      next('/404');
+                    } else {
+                      next();
+                    }
+                }
             },
 
             {

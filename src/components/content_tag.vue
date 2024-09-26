@@ -168,7 +168,7 @@
       ////标签容器宽度
       let tag_container_width = hiddenTagContentRet.value.offsetWidth
 
-      console.log('tag_container_width:',tag_container_width);
+      // console.log('tag_container_width:',tag_container_width);
       const tagItem = hiddenTagItemRet.value; // 获取所有 <div> 元素的引用
 
       tag_container_width = tag_container_width - 46;

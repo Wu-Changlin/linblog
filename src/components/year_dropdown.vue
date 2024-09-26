@@ -1,6 +1,6 @@
 
 <template>
-    <div class="select-container" ref="dropdown">
+    <div class="select-container" ref="dropdownRef">
         <div class="select-comtent">
             <div class="year-dropdown dropdown"  @click="clickSelect()">
                 <div class="text">{{ data.annex_title }} </div>
@@ -126,10 +126,10 @@ onMounted(() => {
 });
 
 //下拉菜单对象
-const dropdown=ref(null);
+const dropdownRef=ref(null);
 //点击外部下拉菜单关闭
 function closeselectDown(e){
-    if (dropdown.value && !dropdown.value.contains(e.target)) {
+    if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
         // /如果点击的不是下拉框内部，则关闭下拉框
         data.is_show_select=false;
       }

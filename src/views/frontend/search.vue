@@ -41,6 +41,7 @@ const search_keyword_count=ref(0);
 
 const is_loading = ref(true);
 const search_page_search_article_list_data=ref([]);//关键词文章列表
+const i=ref(0)
 //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
 function getSearchKeywordMatchData(){
 	axios.post('/data/frontend/search_keyword.json',{search_keyword:search_page_search_keyword.value}, { responseType: 'json' })
@@ -48,6 +49,12 @@ function getSearchKeywordMatchData(){
         // setTimeout(() => {
           search_keyword_count.value = response.data.search_keyword_count; // 博文数量
           search_page_search_article_list_data.value = response.data.search_keyword_article_list_data; // 博文列表
+          //模拟多次搜索返回随机数量
+          let sliced_atart = Math.floor(Math.random() * 5);
+          const data_count=search_page_search_article_list_data.value.length;
+          search_page_search_article_list_data.value=search_page_search_article_list_data.value.slice(sliced_atart, data_count);
+          search_keyword_count.value = data_count-sliced_atart; // 博文数量
+
 
           is_loading.value=false;
         // }, 3000); // 假设加载时间是3秒

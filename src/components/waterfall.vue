@@ -165,12 +165,12 @@ stopPparentPageArticleListData.value = watch(
     //带参数跳转
    
     if (article_id) {
-      router.push({ name: 'article', query: { id: article_id },key: new Date().getTime() });
+      // router.push({ name: 'article', query: { id: article_id },key: new Date().getTime() });
 
       // router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
-    //  let routeUrl = router.resolve({ name: 'article', query: { id: article_id },params: {key: article_id},key: new Date().getTime() });
-    // //  console.log('routeUrl',routeUrl);
-    //  window.open(routeUrl.href, '_blank');//打开新窗口
+     let routeUrl = router.resolve({ name: 'article', query: { id: article_id },key: new Date().getTime() });
+    //  console.log('routeUrl',routeUrl);
+     window.open(routeUrl.href, '_blank');//打开新窗口
 
      
     } else {

@@ -6,7 +6,7 @@
 				<img crossorigin="anonymous" class="header-logo" style="pointer-events:none;" :src="layoutLogData">
 			</a>
 
-			<div :class="{'input-box':true,'minWidthShowSearchClass':show_right_search?true:''}">
+			<div :class="{'input-box':true,'minWidthShowSearchClass':show_right_search?true:''}" ref="searchInputRef">
 				<input type="text" v-model="search_keyword" @input="handleInput()"
 					:class="{'search-input':true,'minWidthShowSearchClass':show_right_search?true:''}"
 					placeholder="请输入搜索内容" />
@@ -22,7 +22,7 @@
 					</div>
 				</div>
 
-				<div v-if="show_input_focus"
+				<div v-if="match_keyword_list"
 					style="display: flex;position: fixed;z-index: 12;width: 100%;height: 300px;">
 
 					<div class="select-container">
@@ -80,13 +80,44 @@
 
 <script setup>
 	import { ref, reactive, onMounted, onUnmounted, watch, computed, inject } from "vue";
-	import { useRouter } from "vue-router";
+	import { useRouter ,useRoute } from "vue-router";
 	import NavTheme from './nav_theme.vue';
 	import axios from 'axios';
 	import { debounce, throttle} from '@/hooks/debounce_throttle.js';
 	const router = useRouter();
+	const route=useRoute();
 	const search_keyword = ref('');
-	const show_input_focus = ref(false);//搜索候选
+	const match_keyword_list = ref(false);//搜索候选
+
+
+	const stopKeywordWatch=ref(null);
+	onMounted(() => {
+		if(route.query.keyword){
+			search_keyword.value = route.query.keyword;
+			stopKeywordWatch.value = watch(
+       () => route.query.keyword,
+       (newValue, oldValue) => {
+        if(newValue){//如有路由传参更新,那么重新赋值
+			search_keyword.value = newValue;
+        
+        }
+       
+        
+       },
+       // { immediate: true }
+     );
+
+		}
+		
+      // console.log('onMounted, search_content.value :', search_content.value );
+       // 设置一个watch监听器
+       // 立即监听，并存储取消监听的函数
+      
+	 //点击外部关闭匹配关键字列表
+	window.addEventListener('click', closeMatchKeywordListDown); // 监听全局点击事件
+
+		// stopWatch.value();
+	})
 
 	const props = defineProps({
 		layoutLogData: {
@@ -148,7 +179,7 @@
 
 //初始化关键字数据和关闭匹配关键字列表
 function searchInit(){
-		show_input_focus.value = false;//隐藏
+		match_keyword_list.value = false;//隐藏
 		data.search_keyword_match_data=[];
 		data.search_keyword_match_count=0;
 	}
@@ -157,7 +188,7 @@ function searchInit(){
 
 
 	function handleInput() {
-		// debounce(() => {//防抖
+		debounce(() => {//防抖
 		if (search_keyword.value == '') {
 			// console.log('请输入内容...');
 			searchInit();
@@ -178,19 +209,18 @@ function searchInit(){
 
 				// console.log('false_article_count:',article_count.value);
 			}
-			// 在标题、内容中查找
-			debounce(() => {searchMatching(search_keyword.value);}, 2000);
-		}
-
 		
+			// 在标题、内容中查找
+			searchMatching(search_keyword.value)
+		}	
 
-//   }, 3000);
+  }, 3000);
 
 	}
 
 
 
-	
+	//匹配搜索关键字
 	function searchMatching(search_value) {
 		// 忽略输入大小写
 		//  const input = new RegExp(search_value, 'i'); 
@@ -257,7 +287,7 @@ function searchInit(){
 
 		data.search_keyword_match_count = match_count;
 		if(data.search_keyword_match_count>0){
-			show_input_focus.value = true;
+			match_keyword_list.value = true;
 		}else{
 			searchInit();
 		}
@@ -304,13 +334,20 @@ function searchInit(){
 			// itemDiv.innerText = '请输入有效内容...';
 			// searchResults.appendChild(itemDiv);
 		} else {
+
 			router.push({ name: 'search', query: { keyword: search_keyword.value }, key: new Date().getTime() });
+			searchInit();
+			
 		}
 	
 
 		
 
 	}
+
+
+
+
 
 
 
@@ -323,12 +360,12 @@ function searchInit(){
     //带参数跳转
    
     if (article_id) {
-      router.push({ name: 'article', query: { id: article_id },key: new Date().getTime() });
+    //   router.push({ name: 'article', query: { id: article_id },key: new Date().getTime() });
 
       // router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
-    //  let routeUrl = router.resolve({ name: 'article', query: { id: article_id },params: {key: article_id},key: new Date().getTime() });
-    // //  console.log('routeUrl',routeUrl);
-    //  window.open(routeUrl.href, '_blank');//打开新窗口
+     let routeUrl = router.resolve({ name: 'article', query: { id: article_id },key: new Date().getTime() });
+    //  console.log('routeUrl',routeUrl);
+     window.open(routeUrl.href, '_blank');//打开新窗口
 
      
     } else {
@@ -337,8 +374,20 @@ function searchInit(){
 
   }
 
+  //搜索框对象
+const searchInputRef=ref(null);
+//点击外部下拉菜单关闭
+function closeMatchKeywordListDown(e){
+    if (searchInputRef.value && !searchInputRef.value.contains(e.target)) {
+        // /如果点击的不是下拉框内部，则关闭下拉框
+        match_keyword_list.value=false;
+      }
+}
+
 
 	onUnmounted(() => {
+		window.removeEventListener('click', closeMatchKeywordListDown);// 移除全局点击事件监听
+		stopKeywordWatch.value(); // 如果watch返回了一个停止监听的函数，调用它
 		// stopWatch.value();
 	})
 
