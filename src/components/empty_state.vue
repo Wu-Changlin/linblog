@@ -6,7 +6,7 @@
         <span></span>
       </div>
       <div class="imgWrapper">
-        <img :src="props.imgUrl" width="300" height="300" />
+        <img :src="props.imgUrl" :width="imgWidth" :height="imgHeight" />
         <div class="infoWrapper">
           <slot name="content">{{ props.title }}</slot>
         </div>
@@ -36,6 +36,14 @@
       type: String,
       default: "/empty-state.png",
     },
+    imgWidth: {
+      type: String,
+      default: "300px",
+    },
+    imgHeight: {
+      type: String,
+      default: "300px",
+    },
   });
   let loadingClass = ref("so-loading");
   
@@ -58,6 +66,7 @@
   .so_null {
     position: relative;
     width: 100%;
+    /* overflow-y: hidden;禁止容器y轴方向滚动 */
   
     .imgWrapper {
       position: absolute;

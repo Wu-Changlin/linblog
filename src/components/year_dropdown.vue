@@ -107,7 +107,7 @@ stopWatchContributionCalendarPageUpdateYear.value = watch(contributionYearInject
 const current_route_name=ref(null);
 onMounted(() => {
     //点击外部下拉菜单关闭
-    window.addEventListener('click', closeselectDown); // 监听全局点击事件
+    window.addEventListener('click', closeSelectDown); // 监听全局点击事件
     current_route_name.value=route.name;
     // 设置一个watch监听器
     // 立即监听，并存储取消监听的函数
@@ -128,7 +128,7 @@ onMounted(() => {
 //下拉菜单对象
 const dropdownRef=ref(null);
 //点击外部下拉菜单关闭
-function closeselectDown(e){
+function closeSelectDown(e){
     if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
         // /如果点击的不是下拉框内部，则关闭下拉框
         data.is_show_select=false;
@@ -138,7 +138,7 @@ function closeselectDown(e){
 
 
 onUnmounted(() => {
-    window.removeEventListener('click', closeselectDown);// 移除全局点击事件监听
+    window.removeEventListener('click', closeSelectDown);// 移除全局点击事件监听
     stopWatchContributionCalendarPageUpdateYear.value(); // 如果watch返回了一个停止监听的函数，调用它
    
 });

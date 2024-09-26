@@ -72,13 +72,14 @@ onMounted(() => {
     axios.get('/data/frontend/frontend.json', { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {
-          frontend_tag_data.value = response.data.tag_data; 
-          frontend_article_list_data.value = response.data.article_list_data; 
-          frontend_carousel_img_data.value = response.data.carousel_img_data; 
+          // frontend_tag_data.value = response.data.tag_data; 
           
-			flag.value=true;
+          // frontend_carousel_img_data.value = response.data.carousel_img_data; 
+          frontend_article_list_data.value = response.data.article_list_data; 
+          
+			// flag.value=true;
 			is_loading.value=false;
-			console.log('response.data.tag_data:',response.data.tag_data)
+			// console.log('response.data.tag_data:',response.data.tag_data)
         // }, 3000); // 假设加载时间是3秒
 		
 
@@ -97,6 +98,27 @@ onMounted(() => {
   function getChildClickTag(id){
 	is_loading.value=true;
 	// console.log('getChildClickTag:',id);
+     // 如果你想使用axios来模拟请求，可以这样做
+     axios.get('/data/frontend/frontend.json', { responseType: 'json' })
+      .then(response => {
+        // setTimeout(() => {
+          frontend_tag_data.value = response.data.tag_data; 
+          frontend_article_list_data.value = response.data.article_list_data; 
+          frontend_carousel_img_data.value = response.data.carousel_img_data; 
+          
+			flag.value=true;
+			is_loading.value=false;
+			// console.log('response.data.tag_data:',response.data.tag_data)
+        // }, 3000); // 假设加载时间是3秒
+		
+
+      })
+      .catch(error => {
+
+        console.error('Error fetching mock data:', error);
+      });
+
+  
   }
 
 </script>
