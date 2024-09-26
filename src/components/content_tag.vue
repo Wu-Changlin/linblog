@@ -66,7 +66,7 @@
   import { useRoute, useRouter } from 'vue-router';
   import axios from 'axios';
   import Skeleton from '@/components/skeleton.vue'
-
+	import { debounce, throttle} from '@/hooks/debounce_throttle.js';
 
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
@@ -143,7 +143,7 @@
         maxItemsPerLines();
     })
     //监听窗口响应式每行最多标签数量
-    window.addEventListener('resize', maxItemsPerLines);//监听窗口缩放
+    window.addEventListener('resize', 	throttle(() => {maxItemsPerLines()}, 600));//监听窗口缩放 加节流
     //初始化每行最多标签数量
     //  maxItemsPerLines();
   })
@@ -158,6 +158,7 @@
 
   //每行最多标签数量
   function maxItemsPerLines() {
+    
     // nextTick(() => {
       data.show_tag_data=[];
       data.show_arrow_more_tag_data=[];
@@ -167,6 +168,7 @@
       ////标签容器宽度
       let tag_container_width = hiddenTagContentRet.value.offsetWidth
 
+      console.log('tag_container_width:',tag_container_width);
       const tagItem = hiddenTagItemRet.value; // 获取所有 <div> 元素的引用
 
       tag_container_width = tag_container_width - 46;

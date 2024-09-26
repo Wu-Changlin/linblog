@@ -1,20 +1,25 @@
 <template>
+
   <div class="search-page">
     <div class="search-container">
       <!-- 搜索结果栏 开始-->
      
-       <div v-if="search_content" class="search-content-container">
+       <div v-if="search_page_search_article_list_data.length>0" class="search-content-container">
         <div  class="search-content-container-content">
-          <div class="text-left"> <h3>关键词：{{search_content}} </h3></div>
+          <div class="text-left"> <h3>关键词：{{search_page_search_keyword}} </h3></div>
           <div class="line"></div>
-          <div class="text-right"> <span>结果：找到{{ search_content_number}}个</span></div>
+          <div class="text-right"> <span>结果：找到{{ search_keyword_count}}个</span></div>
         </div>
        </div>
-    
-      <div   v-if="search_content" style="width: 100%;">
-        <Waterfall></Waterfall>
-       </div>
-      
+
+
+<div>
+  <Waterfall style="padding-top: 72px;" v-if="search_page_search_article_list_data.length>0" :parentPageArticleListData="search_page_search_article_list_data"  :isloading="is_loading"></Waterfall>
+  <EmptyState v-else :height="`568px`" :title="`没有搜索结果`" :imgUrl="'/empty-state.png'"/>
+</div>
+        
+       
+   
       <!--  搜索结果栏 结束-->
     </div>
    
@@ -22,20 +27,46 @@
   </template>
   
   <script setup>
+      import { ref, reactive,onMounted, provide ,watch,onUnmounted} from "vue";
+      import { useRoute } from 'vue-router';
+      import axios from "axios";
   import TagCount from '@/components/tag_count.vue';
   import Waterfall from '@/components/waterfall.vue';
-  import { ref, reactive,onMounted, provide ,watch,onUnmounted} from "vue";
-  import { useRoute } from 'vue-router';
+  import EmptyState from '@/components/empty_state.vue';
+
 const route = useRoute();
 
-const search_content=ref('');
-const search_content_number=ref(0);
+const search_page_search_keyword=ref('');
+const search_keyword_count=ref(0);
+
+const is_loading = ref(true);
+const search_page_search_article_list_data=ref([]);//关键词文章列表
+//获取搜索关键字匹配所用数据源  提供一个获取数据的方法
+function getSearchKeywordMatchData(){
+	axios.post('/data/frontend/search_keyword.json',{search_keyword:search_page_search_keyword.value}, { responseType: 'json' })
+      .then(response => {
+        // setTimeout(() => {
+          search_keyword_count.value = response.data.search_keyword_count; // 博文数量
+          search_page_search_article_list_data.value = response.data.search_keyword_article_list_data; // 博文列表
+
+          is_loading.value=false;
+        // }, 3000); // 假设加载时间是3秒
+		
+
+      })
+      .catch(error => {
+
+        console.error('Error fetching mock data:', error);
+      });
+}
+
+
 
 // 使用ref来存储watch返回的函数 监听路由传参keyword
 const stopKeywordWatch = ref(null);
 
    onMounted(() => {
-      search_content.value = route.query.keyword;
+    search_page_search_keyword.value = route.query.keyword;
       // console.log('onMounted, search_content.value :', search_content.value );
        // 设置一个watch监听器
        // 立即监听，并存储取消监听的函数
@@ -43,7 +74,8 @@ const stopKeywordWatch = ref(null);
        () => route.query.keyword,
        (newValue, oldValue) => {
         if(newValue){//如有路由传参更新,那么重新赋值
-          search_content.value = newValue;
+          search_page_search_keyword.value = newValue;
+          getSearchKeywordMatchData();
           // console.log('newValue <= oldValue :',newValue,'<=' ,oldValue,',search_content:',search_content.value);
         }
        
@@ -51,9 +83,13 @@ const stopKeywordWatch = ref(null);
        },
        // { immediate: true }
      );
+
+     getSearchKeywordMatchData();
    
    });
    
+
+
 
    
   

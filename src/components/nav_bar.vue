@@ -36,8 +36,8 @@
 
 								<li v-for="(item,index) in data.search_keyword_match_data" :key="item.index"
 									@click="goViewAticle(item.id)">
-									<p v-html="item.result_article_title_match_data"></p>
-									<span v-html="item.result_article_content_match_data"> </span> 
+									<div class="match-title" v-html="item.result_article_title_match_data"></div>
+									<div class="match-content" v-html="item.result_article_content_match_data"></div> 
 								
 								</li>
 							</ul>
@@ -83,6 +83,7 @@
 	import { useRouter } from "vue-router";
 	import NavTheme from './nav_theme.vue';
 	import axios from 'axios';
+	import { debounce, throttle} from '@/hooks/debounce_throttle.js';
 	const router = useRouter();
 	const search_keyword = ref('');
 	const show_input_focus = ref(false);//搜索候选
@@ -144,21 +145,33 @@
 		}
 	);
 
+
+//初始化关键字数据和关闭匹配关键字列表
+function searchInit(){
+		show_input_focus.value = false;//隐藏
+		data.search_keyword_match_data=[];
+		data.search_keyword_match_count=0;
+	}
+
+
+
+
 	function handleInput() {
+		// debounce(() => {//防抖
 		if (search_keyword.value == '') {
-			console.log('请输入内容...');
+			// console.log('请输入内容...');
 			searchInit();
 		} else if (search_keyword.value.search(/^\s+$/) >= 0) {
 			// 检测输入值全是空白的情况
 			searchInit();
+			search_keyword.value='请输入有效内容...';
 			// var itemDiv = tmpDiv.cloneNode(true);
 			// itemDiv.innerText = '请输入有效内容...';
 			// searchResults.appendChild(itemDiv);
-			console.log('请输入有效内容...')
 		} else {
+			
 			// 合法输入值的情况
 			searchInit();
-
 			//数据为空或者值小于1或者数组长度小于1，即数据异常重新请求接口获取新数据
 			if (!article_count.value || article_count.value < 1 || !article_list.value || article_list.length < 1) {
 				ParentPageGetSearchKeywordMatchData();
@@ -166,22 +179,22 @@
 				// console.log('false_article_count:',article_count.value);
 			}
 			// 在标题、内容中查找
-			searchMatching(search_keyword.value);
+			debounce(() => {searchMatching(search_keyword.value);}, 2000);
 		}
 
+		
+
+//   }, 3000);
+
 	}
 
 
-	//初始化关键字数据和关闭匹配关键字列表
-	function searchInit(){
-		show_input_focus.value = false;//隐藏
-		data.search_keyword_match_data=[];
-		data.search_keyword_match_count=0;
-	}
 
+	
 	function searchMatching(search_value) {
 		// 忽略输入大小写
 		//  const input = new RegExp(search_value, 'i'); 
+		
 		const input = new RegExp(search_value, 'i');
 		let match_data = {};
 		let match_count = 0;
@@ -201,9 +214,9 @@
 					let result_title_index = title_index;
 					let result_title_array = article_list.value[i]['title'];
 
-					let result_title_keyword_start = result_title_array.slice(result_title_index - step, result_title_index);
-					let result_title_keyword = '<mark>' + result_title_array.slice(result_title_index, result_title_index + len) + '</mark>';
-					let result_title_keyword_end = result_title_array.slice(result_title_index + len, result_title_index + len + step);
+					let result_title_keyword_start = '<span style="color:var(--color-no-match-keyword);">'+result_title_array.slice(result_title_index - step, result_title_index)+ '</span>';
+					let result_title_keyword = '<span style="color: --var(--match-keyword)  !important; font-weight: 700;">' + result_title_array.slice(result_title_index, result_title_index + len) + '</span>';
+					let result_title_keyword_end ='<span style="color:var(--color-no-match-keyword);">'+ result_title_array.slice(result_title_index + len, result_title_index + len + step)+ '</span>';
 
 					result_article_title_match_data = result_title_keyword_start + result_title_keyword + result_title_keyword_end;
 					// console.log('result_title_keyword_start:',result_title_keyword_start)
@@ -212,16 +225,16 @@
 					// console.log('all:',result_title_keyword_start,result_title_keyword,result_title_keyword_end)
 
 				} else {
-					result_article_title_match_data = article_list.value[i]['title'];
+					result_article_title_match_data = '<span style="overflow: hidden;color:var(--color-no-match-keyword);">'+article_list.value[i]['title']+ '</span>';;
 				}
 
 				if (article_content_index !== -1) {
 					let result_article_content_index = article_content_index;
 					let result_article_content_array = article_list.value[i]['article_content'];
 
-					let result_article_content_keyword_start = result_article_content_array.slice(result_article_content_index - step, result_article_content_index);
-					let result_article_content_keyword = '<mark>' + result_article_content_array.slice(result_article_content_index, result_article_content_index + len) + '</mark>';
-					let result_article_content_keyword_end = result_article_content_array.slice(result_article_content_index + len, result_article_content_index + len + step)
+					let result_article_content_keyword_start = '<span style="color:var(--color-no-match-keyword);">'+result_article_content_array.slice(result_article_content_index - step, result_article_content_index)+ '</span>';
+					let result_article_content_keyword = '<span style="color: --var(--match-keyword)  !important; font-weight: 700;">' + result_article_content_array.slice(result_article_content_index, result_article_content_index + len) + '</span>';
+					let result_article_content_keyword_end ='<span style="color:var(--color-no-match-keyword);">'+ result_article_content_array.slice(result_article_content_index + len, result_article_content_index + len + step)+ '</span>';
 					// console.log('result_article_content_keyword_start:',result_article_content_keyword_start)
 					// // console.log('result_article_content_keyword:',result_article_content_keyword)
 					// // console.log('result_article_content_keyword_end:',result_article_content_keyword_end)
@@ -243,8 +256,13 @@
 		}
 
 		data.search_keyword_match_count = match_count;
+		if(data.search_keyword_match_count>0){
+			show_input_focus.value = true;
+		}else{
+			searchInit();
+		}
 
-		show_input_focus.value = true;
+		
 
 	}
 
@@ -274,12 +292,23 @@
 		// };
 		//带参数跳转
 
-		if (search_keyword) {
-			router.push({ name: 'search', query: { keyword: search_keyword.value }, key: new Date().getTime() });
 
+		if (search_keyword.value == '') {
+			// console.log('请输入内容...');
+			searchInit();
+		} else if (search_keyword.value.search(/^\s+$/) >= 0) {
+			// 检测输入值全是空白的情况
+			searchInit();
+			search_keyword.value='请输入有效内容...';
+			// var itemDiv = tmpDiv.cloneNode(true);
+			// itemDiv.innerText = '请输入有效内容...';
+			// searchResults.appendChild(itemDiv);
 		} else {
-			console.log('请输入搜索内容')
+			router.push({ name: 'search', query: { keyword: search_keyword.value }, key: new Date().getTime() });
 		}
+	
+
+		
 
 	}
 
@@ -306,8 +335,6 @@
       console.log('非法请求')
     }
 
-
-
   }
 
 
@@ -319,6 +346,27 @@
 
 
 <style scoped>
+
+
+.match-title{
+	white-space: nowrap;  
+	/* （ 默认 normal 自动换行） */
+   
+   /*2. 超出的部分隐藏*/
+	overflow: hidden;
+	
+   /*3. 文字用省略号替代超出的部分*/
+	text-overflow: ellipsis;
+	padding: 3px;
+}
+
+.match-content{
+	padding-left:  3px;
+	/* 缩进2个字符 */
+	text-indent:2em;
+
+}
+
 	.header-container {
 
 		display: flex;
@@ -547,6 +595,7 @@
 				/* border: 1px solid #494d59; */
 				transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 				z-index: 12;
+				overflow-y: auto; 
 
 			}
 
@@ -568,8 +617,8 @@
 
 			.select-container li {
 				/* width:68px; */
-				padding: 0 3px;
-				height: 50px;
+				/* height: 50px; */
+				height: auto;
 				padding: 5px;
 				/* line-height:34px; */
 				white-space: nowrap;
@@ -579,7 +628,7 @@
 				overflow: hidden;
 				list-style: none;
 				cursor: pointer;
-				text-align: center
+				text-align: start
 			}
 
 			.select-container li:hover {
