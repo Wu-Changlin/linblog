@@ -25,66 +25,79 @@
     </div>
 
 <!-- 骨架屏 结束-->
- <!-- 渲染内容 开始-->
-      <Waterfall  v-else  key="waterfall-container" class="waterfall-container" v-if="data.list.length>0" :list="data.list" :breakpoints="breakpoints" style="background-color: var(--bg);"
-        :delay="300">
-        <template #item="{ item,index }">
-          <div class="waterfall-card">
 
-            <div v-if="!item.url" class="lazy-img-card-mask">
+<template  v-else>
+  <Waterfall  v-if="data.list.length>0" :list="data.list" :breakpoints="breakpoints" :delay="300"  key="waterfall-container" class="waterfall-container">
+    <template #item="{ item,index }">
+      <div class="waterfall-card">
 
-              
-            <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px" @click="goViewAticle(item.id)"/>
-          
+        <!-- 没有item.url元素 非资源页（item.url：外站链接）-->
+        <div v-if="!item.url" class="lazy-img-card-mask"> 
+        <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px" @click="goViewAticle(item.id)"/>
+        <div class="card-img-mask-stats">
+          <div class="card-img-mask-stats-left">
+            <span class="card-img-mask-stats-item">
+              <div class="card-img-mask-stats-icon"><svg-icon icon-class="visits" /></div>
+              <span class="card-img-mask-stats-text"> {{ item.visits}}</span>
+            </span>
+            <span class="card-img-mask-stats-item">
+              <div class="card-img-mask-stats-icon"><svg-icon icon-class="zishu" /></div>
+              <span class="card-img-mask-stats-text"> {{ item.word_count}}</span>
+            </span>
 
-            <div class="card-img-mask-stats">
-              <div class="card-img-mask-stats-left">
-                <span class="card-img-mask-stats-item">
-                  <div class="card-img-mask-stats-icon"><svg-icon icon-class="visits" /></div>
-                  <span class="card-img-mask-stats-text"> {{ item.visits}}</span>
-                </span>
-                <span class="card-img-mask-stats-item">
-                  <div class="card-img-mask-stats-icon"><svg-icon icon-class="zishu" /></div>
-                  <span class="card-img-mask-stats-text"> {{ item.word_count}}</span>
-                </span>
-    
-              </div>
-    
-              <span class="card-img-mask-stats-reading-time">{{ item.read_time}}</span>
-    
-            </div>
-            </div>
-
-            <div v-else class="lazy-img-card-mask">
-
-                <a :href="item.url" target="_blank">
-              
-                  <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px"/>
-            
-                </a>
-              </div>
-    
-            <div class="footer">
-              <a class="title"><span>{{ item.title}}</span></a>
-              <div class="author-wrapper">
-                <a class="author">
-                  <svg-icon class="author-avatar" icon-class="author" />
-                  <span class="name"> {{ item.author_name}}</span>
-                </a>
-                <!-- <span class="like-wrapper like-active">
-                     <span  class="like-lottie" style="width: 16px; height: 16px;" ></span>
-                      <svg-icon class="reds-icon" style="width: 16px; height: 16px;" icon-class="visits"/>
-                      <span class="count">12</span>
-                    </span> -->
-              </div>
-            </div>
           </div>
-        </template>
-      </Waterfall>
+
+          <span class="card-img-mask-stats-reading-time">{{ item.read_time}}</span>
+
+        </div>
+        </div>
+        <!-- 有item.url元素 资源页（item.url：外站链接）-->
+        <div v-else class="lazy-img-card-mask">
+
+            <a :href="item.url" target="_blank">
+          
+              <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px"/>
+        
+            </a>
+          </div>
+
+          <!--  底部信息块（标题和作者） 开始-->
+        <div class="footer">
+          <a class="title"><span>{{ item.title}}</span></a>
+          <div class="author-wrapper">
+            <a class="author">
+              <svg-icon class="author-avatar" icon-class="author" />
+              <span class="name"> {{ item.author_name}}</span>
+            </a>
+            <!-- <span class="like-wrapper like-active">
+                 <span  class="like-lottie" style="width: 16px; height: 16px;" ></span>
+                  <svg-icon class="reds-icon" style="width: 16px; height: 16px;" icon-class="visits"/>
+                  <span class="count">12</span>
+                </span> -->
+          </div>
+        </div>
+        <!--  底部信息块（标题和作者） 结束 -->
+
+      </div>
+    </template>
+  </Waterfall>
+
+
+ 
+  
+</template>
+ <!-- 渲染内容 开始-->
+   
        <!-- 渲染内容 结束-->
     
 
   </transition>
+
+  <EmptyState v-if="!data.list.length" :height="`566px`" :imgUrl="'/empty-state.png'">
+    <template #content>
+      <span style="padding-bottom: 16px;">没有更多数据了</span>
+    </template>
+  </EmptyState>
 
 </template>
 <script setup>
@@ -94,6 +107,7 @@
   import { LazyImg, Waterfall } from "vue-waterfall-plugin-next";
   import "vue-waterfall-plugin-next/dist/style.css";
   import Skeleton from '@/components/skeleton.vue';
+  import EmptyState from '@/components/empty_state.vue';
 
   const router = useRouter();
   const route = useRoute();
@@ -131,11 +145,12 @@ stopPparentPageArticleListData.value = watch(
        () =>props.parentPageArticleListData,
        (newValue, oldValue) => {
       
-        // console.log('n-props.parentPageArticleListData:',props.parentPageArticleListData)
+        console.log('n-props.parentPageArticleListData:',props.parentPageArticleListData)
         if(newValue){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
+          console.log('1-props.parentPageArticleListData:',props.parentPageArticleListData)
           data.list = props.parentPageArticleListData;
           
-
+ console.log('data.v.l',data.list.length);
           // is_loading.value=false;
          
         }
@@ -468,6 +483,7 @@ stopPparentPageArticleListData.value = watch(
   /* 缩放动画 */
   .waterfall-container {
   transition: all 0.3s ease;
+  background-color: var(--bg);
   /* animation: grow-in 0.1s forwards; */
 }
 

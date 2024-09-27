@@ -11,15 +11,8 @@
           <div class="text-right"> <span>结果：找到{{ search_keyword_count}}个</span></div>
         </div>
        </div>
-
-
       <!-- 搜索结果内容 开始-->
-<div>
-  <Waterfall   v-if="search_page_search_article_list_data.length>0" :parentPageArticleListData="search_page_search_article_list_data"  :isloading="is_loading"></Waterfall>
-  <!-- 没有搜索结果占位 开始-->
-    <EmptyState  v-else :height="`566px`" :title="`没有搜索结果`" :imgUrl="'/empty-state.png'"/>
-  <!-- 没有搜索结果占位 开始-->
-</div>
+    <Waterfall   :parentPageArticleListData="search_page_search_article_list_data"  :isloading="is_loading"></Waterfall>
     <!-- 搜索结果内容 结束-->     
       
     </div>
@@ -69,6 +62,7 @@ function getSearchKeywordMatchData(){
           search_page_search_article_list_data.value = response.data.search_keyword_article_list_data; // 博文列表
           //模拟多次搜索返回随机数量
           let sliced_start = Math.floor(Math.random() * 5);
+          
           total_pages.value = sliced_start; //总页数
           const data_count=search_page_search_article_list_data.value.length;
           search_page_search_article_list_data.value=search_page_search_article_list_data.value.slice(sliced_start, data_count);
