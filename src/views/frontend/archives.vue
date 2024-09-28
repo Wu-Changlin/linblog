@@ -40,7 +40,7 @@
               
               <p>本站已运行：</p>
               <div class="run-time-count-content">
-                <WebsiteRunTiem :parentPageWebsiteCreationTime="data.website_creation_time" ></WebsiteRunTiem>
+                <WebsiteRunTime :parentPageWebsiteCreationTime="data.website_creation_time" ></WebsiteRunTime>
               </div>
             
       
@@ -70,7 +70,7 @@
 
           <div   v-if="tag_name" style="width: 100%;">
 
-              <Waterfall :parentPageArticleListData="click_tag_all_article_data" :isloading="is_loading_click_tag_all_article"></Waterfall>
+              <Waterfall :parentPageArticleListData="click_tag_all_article_data" :isLoading="is_loading_click_tag_all_article"></Waterfall>
           </div>
           
           <!-- 点击标签结果栏 结束-->
@@ -119,7 +119,7 @@
           </div>
 
           <div   v-if="select_contribution_year" style="width: 100%; padding: 2px;">
-            <Waterfall :parentPageArticleListData="last_month_article_list_data" :isloading="is_loading_contribution_article_list_data"></Waterfall>
+            <Waterfall :parentPageArticleListData="last_month_article_list_data" :isLoading="is_loading_contribution_article_list_data"></Waterfall>
           </div>
         
           
@@ -138,14 +138,17 @@
   <script setup>
   import { ref, reactive,onMounted, provide ,watch,onUnmounted} from "vue";
   import WebsiteContentCount from '@/components/website_content_count.vue';  
-  import WebsiteRunTiem from '@/components/website_run_tiem.vue';
+  import WebsiteRunTime from '@/components/website_run_time.vue';
   import ContributionCalendar from '@/components/contribution_calendar.vue';
   import TagCount from '@/components/tag_count.vue';
   import Waterfall from '@/components/waterfall.vue';
   import YearDropdown from '@/components/year_dropdown.vue';
   import Skeleton from '@/components/skeleton.vue';
-
   import axios from 'axios';
+  import {useRoute, useRouter } from "vue-router"; 
+  const router = useRouter();
+
+
   const is_loading=ref(true)
   const contribution_day_month_data =ref();
   const contribution_day_date_data =ref();
@@ -313,22 +316,22 @@
   function getTagCountPageClickTagArticleData(active_tag_id,active_tag_name){
     //1.空值，关闭博文瀑布流 2.有值，获取数据渲染博文瀑布流
     tag_name.value=active_tag_name;
+    router.push({ name: 'index', query: { tag_id: active_tag_name }, key: new Date().getTime() });
+    // if(tag_name.value){//如果tag_name存在，那么获取数据。
+    //   axios.post('/data/frontend/click_tag_all_article.json',{tag_id:active_tag_id,tag_name:active_tag_name}, { responseType: 'json' })
+    //   .then(response => {
 
-    if(tag_name.value){//如果tag_name存在，那么获取数据。
-      axios.post('/data/frontend/click_tag_all_article.json',{tag_id:active_tag_id,tag_name:active_tag_name}, { responseType: 'json' })
-      .then(response => {
-
-        tag_number.value=response.data.click_tag_all_article_count;
-        click_tag_all_article_data.value=response.data.article_list_data;
-        is_loading_click_tag_all_article.value=false;
-        // setTimeout(() => {
+    //     tag_number.value=response.data.click_tag_all_article_count;
+    //     click_tag_all_article_data.value=response.data.article_list_data;
+    //     is_loading_click_tag_all_article.value=false;
+    //     // setTimeout(() => {
 			
-        // }, 3000); // 假设加载时间是3秒
-      })
-      .catch(error => {
-        console.error('Error fetching mock data:', error);
-      });
-    }
+    //     // }, 3000); // 假设加载时间是3秒
+    //   })
+    //   .catch(error => {
+    //     console.error('Error fetching mock data:', error);
+    //   });
+    // }
     
 
     

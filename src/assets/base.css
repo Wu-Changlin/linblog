@@ -3,8 +3,6 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    /*不显示滚动条，但是该元素依然可以滚动。*/
-    /* scrollbar-width: none;  */
     list-style-type: none;/* 移除ul下所有li元素的列表项标记（即圆点） */
     
 }
@@ -14,6 +12,33 @@ a {
     text-decoration: none;
     background-color: transparent
 }
+ 
+
+
+/* 最常用的组合，确保主流浏览器兼容性：
+为了确保在所有主流浏览器（如 Chrome、Safari、Firefox、Edge 和 IE）中隐藏滚动条的同时仍然保留滚动功能 */
+
+
+/* 隐藏滚动条的同时仍能滚动 */
+html{
+    overflow: auto; /* 启用滚动功能 */
+    -ms-overflow-style: none; /* 适用于 Internet Explorer 和旧版 Edge */
+    scrollbar-width: none; /* 适用于 Firefox */
+    -webkit-scrollbar:none;/* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/ 
+}
+
+
+/* Webkit 浏览器 */ /* 如果不加html，那么就会使所有的内容都会隐藏滚动条 (或者写在html类中)*/
+/* ::-webkit-scrollbar{
+    display: none; 
+} */
+
+
+/* 解释：
+overflow: auto;: 启用滚动功能，适用于所有浏览器。
+-ms-overflow-style: none;: 隐藏 Internet Explorer 和旧版 Edge 浏览器中的滚动条。
+scrollbar-width: none;: 隐藏 Firefox 浏览器中的滚动条。
+::-webkit-scrollbar { display: none; }: 隐藏 WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条。 */
 
 
 /* 暗色主题 */
@@ -125,6 +150,8 @@ html[data-theme='dark'] {
 
 
 }
+
+
 
 
 html[data-theme='dark'] body {

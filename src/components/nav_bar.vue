@@ -6,10 +6,11 @@
 				<img crossorigin="anonymous" class="header-logo" style="pointer-events:none;" :src="layoutLogData">
 			</a>
 
-			<div :class="{'input-box':true,'minWidthShowSearchClass':show_right_search?true:''}" ref="searchInputRef">
+			<div :class="{'input-box':true,'minWidthShowSearchClass':show_right_search?true:''}"
+				ref="searchInputContainerRef">
 				<input type="text" v-model="search_keyword" @input="handleInput()"
 					:class="{'search-input':true,'minWidthShowSearchClass':show_right_search?true:''}"
-					placeholder="请输入搜索内容" />
+					placeholder="请输入搜索内容" @blur="searchInputBlur" ref="searchInputRef" />
 				<div :class="{'input-button':true,'minWidthShowSearchClass':show_right_search?true:''}">
 
 
@@ -22,30 +23,30 @@
 					</div>
 				</div>
 
-				<div v-if="match_keyword_list"
-					style="display: flex;position: fixed;z-index: 12;width: 100%;height: 300px;">
+				<!-- 匹配关键字列表 开始-->
+				<!-- <div v-if="match_keyword_list" style="display: flex;position: fixed;z-index: 12;width: 100%;height: 300px;"> -->
+				<!-- <div v-if="match_keyword_list"> -->
 
-					<div class="select-container">
-						<div class="select-list">
-							<span>
-								总匹配：{{ data.search_keyword_match_count}}项
-							</span>
-							<!-- 下拉框列表 -->
-							<ul>
-						
+				<!-- <div class="select-container" v-if="match_keyword_list"> -->
+				<div class="select-container" :style="{display:match_keyword_list?'block':'none'}">
+					<div class="select-list">
+						<span>
+							总匹配：{{ data.search_keyword_match_count}}项
+						</span>
+						<!-- 下拉框列表 -->
+						<ul>
+							<li v-for="(item,index) in data.search_keyword_match_data" :key="item.index"
+								@click="goViewArticle(item.id)">
+								<div class="match-title" v-html="item.result_article_title_match_data"></div>
+								<div class="match-content" v-html="item.result_article_content_match_data"></div>
 
-								<li v-for="(item,index) in data.search_keyword_match_data" :key="item.index"
-									@click="goViewAticle(item.id)">
-									<div class="match-title" v-html="item.result_article_title_match_data"></div>
-									<div class="match-content" v-html="item.result_article_content_match_data"></div> 
-								
-								</li>
-							</ul>
-						</div>
+							</li>
+						</ul>
 					</div>
-
 				</div>
 
+				<!-- </div> -->
+				<!-- 匹配关键字列表 结束-->
 
 			</div>
 
@@ -79,46 +80,46 @@
 </template>
 
 <script setup>
-	import { ref, reactive, onMounted, onUnmounted, watch, computed, inject } from "vue";
-	import { useRouter ,useRoute } from "vue-router";
+	import { ref, reactive, onMounted, onUnmounted, watch, computed, inject,provide} from "vue";
+	import { useRouter, useRoute } from "vue-router";
 	import NavTheme from './nav_theme.vue';
 	import axios from 'axios';
-	import { debounce, throttle} from '@/hooks/debounce_throttle.js';
+	import { debounce, throttle } from '@/hooks/debounce_throttle.js';
+	
 	const router = useRouter();
-	const route=useRoute();
+	const route = useRoute();
 	const search_keyword = ref('');
 	const match_keyword_list = ref(false);//搜索候选
+	const count = ref(0);
+	const searchInputRef = ref(null);//搜索框对象
+	const stopWatchRouteQueryKeyword = ref(null);//监听路由查询参数keyword
+	
 
 
-	const stopKeywordWatch=ref(null);
+
+
 	onMounted(() => {
-		if(route.query.keyword){
+		if (route.query.keyword) {
 			search_keyword.value = route.query.keyword;
-			stopKeywordWatch.value = watch(
-       () => route.query.keyword,
-       (newValue, oldValue) => {
-        if(newValue){//如有路由传参更新,那么重新赋值
-			search_keyword.value = newValue;
-        
-        }
-       
-        
-       },
-       // { immediate: true }
-     );
+			stopWatchRouteQueryKeyword.value = watch(() => route.query.keyword, (newValue, oldValue) => {
+				if (newValue) {//如有路由传参更新,那么重新赋值
+					search_keyword.value = newValue;
+
+				}
+
+			},// 		{ immediate: true }
+			);
 
 		}
-		
-      // console.log('onMounted, search_content.value :', search_content.value );
-       // 设置一个watch监听器
-       // 立即监听，并存储取消监听的函数
-      
-	 //点击外部关闭匹配关键字列表
-	window.addEventListener('click', closeMatchKeywordListDown); // 监听全局点击事件
 
-		// stopWatch.value();
+
+		//点击外部关闭匹配关键字列表
+		window.addEventListener('click', clickCloseMatchKeywordListDown); // 监听全局点击事件
+		window.addEventListener('resize', throttle(() => { resizeCloseMatchKeywordListDown() }, 300));//监听窗口缩放 加节流
+		// stopWatch.value=null;
 	})
 
+	//接受父页面数据
 	const props = defineProps({
 		layoutLogData: {
 			type: String,
@@ -134,97 +135,83 @@
 
 	});
 
-	// const stopWatch=ref(null);
-	// stopWatch.value=watch(() => props.layoutArticleListData, (newData) => {
-	//   if (newData) {
-	// 	console.log('article_list.value',article_list.value)
-	//     // article_list.value = processData(newData);
-	// 	article_count.value=props.layoutArticleCount;
-	//   }
-	// }, { immediate: true });
 
+
+
+
+
+	//使用计算属性接受父页面传输数据layoutArticleCount 博文数量
 	const article_count = computed(() => {
 		// 对传入的数据进行处理
 		return props.layoutArticleCount;
 	});
 
+	//使用计算属性接受父页面传输数据layoutArticleListData  所有博文数据
 	const article_list = computed(() => {
 		// 对传入的数据进行处理
 		return props.layoutArticleListData;
 	});
 
 
-	// // 创建一个计算属性来判断props.data是否为空
-	// const isArticleListDataEmpty = computed(() => {
-	//   // 使用Object.keys来检查对象是否为空
-	//   return  !props.layoutArticleListData || props.layoutArticleListData.length === 0 ;
-	// });
-
-
-	// function processData(data) {
-	//   // 实现数据处理逻辑
-	//   return data; // 示例中直接返回，实际可以进行各种转换
-	// }
 	//接受来自父页面的方法（当父页面props传值异常，调用此方法获取数据）
 	const ParentPageGetSearchKeywordMatchData = inject('getSearchKeywordMatchData');
 
 	const data = reactive(
 		{
 
-			search_keyword_match_data: [],  //
-			search_keyword_match_count: 0,
+			search_keyword_match_data: [],  //已匹配关键字数据
+			search_keyword_match_count: 0,  //已匹配关键字个数
 		}
 	);
 
 
-//初始化关键字数据和关闭匹配关键字列表
-function searchInit(){
+	//初始化关键字数据和关闭匹配关键字列表
+	function matchKeywordDataInit() {
 		match_keyword_list.value = false;//隐藏
-		data.search_keyword_match_data=[];
-		data.search_keyword_match_count=0;
+		data.search_keyword_match_data = [];//已匹配关键字数据
+		data.search_keyword_match_count = 0;//已匹配关键字个数
 	}
 
 
 
 
+	//input事件匹配关键字
 	function handleInput() {
 		debounce(() => {//防抖
-		if (search_keyword.value == '') {
-			// console.log('请输入内容...');
-			searchInit();
-		} else if (search_keyword.value.search(/^\s+$/) >= 0) {
-			// 检测输入值全是空白的情况
-			searchInit();
-			search_keyword.value='请输入有效内容...';
-			// var itemDiv = tmpDiv.cloneNode(true);
-			// itemDiv.innerText = '请输入有效内容...';
-			// searchResults.appendChild(itemDiv);
-		} else {
-			
-			// 合法输入值的情况
-			searchInit();
-			//数据为空或者值小于1或者数组长度小于1，即数据异常重新请求接口获取新数据
-			if (!article_count.value || article_count.value < 1 || !article_list.value || article_list.length < 1) {
-				ParentPageGetSearchKeywordMatchData();
+			if (search_keyword.value == '') {
+				// console.log('请输入内容...');
+				matchKeywordDataInit();
+			} else if (search_keyword.value.search(/^\s+$/) >= 0) {
+				// 检测输入值全是空白的情况
+				matchKeywordDataInit();
+				search_keyword.value = '请输入有效内容...';
 
-				// console.log('false_article_count:',article_count.value);
+			} else {
+
+				// 合法输入值的情况
+				matchKeywordDataInit();
+				//数据为空或者值小于1或者数组长度小于1，即数据异常重新请求接口获取新数据
+				if (!article_count.value || article_count.value < 1 || !article_list.value || article_list.length < 1) {
+					ParentPageGetSearchKeywordMatchData();
+
+					// console.log('false_article_count:',article_count.value);
+				}
+
+				// 在标题、内容中查找
+				searchKeywordMatching(search_keyword.value)
 			}
-		
-			// 在标题、内容中查找
-			searchMatching(search_keyword.value)
-		}	
 
-  }, 3000);
+		}, 1000);
 
 	}
 
 
 
 	//匹配搜索关键字
-	function searchMatching(search_value) {
+	function searchKeywordMatching(search_value) {
 		// 忽略输入大小写
 		//  const input = new RegExp(search_value, 'i'); 
-		
+
 		const input = new RegExp(search_value, 'i');
 		let match_data = {};
 		let match_count = 0;
@@ -244,9 +231,9 @@ function searchInit(){
 					let result_title_index = title_index;
 					let result_title_array = article_list.value[i]['title'];
 
-					let result_title_keyword_start = '<span style="color:var(--color-no-match-keyword);">'+result_title_array.slice(result_title_index - step, result_title_index)+ '</span>';
+					let result_title_keyword_start = '<span style="color:var(--color-no-match-keyword);">' + result_title_array.slice(result_title_index - step, result_title_index) + '</span>';
 					let result_title_keyword = '<span style="color: --var(--match-keyword)  !important; font-weight: 700;">' + result_title_array.slice(result_title_index, result_title_index + len) + '</span>';
-					let result_title_keyword_end ='<span style="color:var(--color-no-match-keyword);">'+ result_title_array.slice(result_title_index + len, result_title_index + len + step)+ '</span>';
+					let result_title_keyword_end = '<span style="color:var(--color-no-match-keyword);">' + result_title_array.slice(result_title_index + len, result_title_index + len + step) + '</span>';
 
 					result_article_title_match_data = result_title_keyword_start + result_title_keyword + result_title_keyword_end;
 					// console.log('result_title_keyword_start:',result_title_keyword_start)
@@ -255,16 +242,16 @@ function searchInit(){
 					// console.log('all:',result_title_keyword_start,result_title_keyword,result_title_keyword_end)
 
 				} else {
-					result_article_title_match_data = '<span style="overflow: hidden;color:var(--color-no-match-keyword);">'+article_list.value[i]['title']+ '</span>';;
+					result_article_title_match_data = '<span style="overflow: hidden;color:var(--color-no-match-keyword);">' + article_list.value[i]['title'] + '</span>';;
 				}
 
 				if (article_content_index !== -1) {
 					let result_article_content_index = article_content_index;
 					let result_article_content_array = article_list.value[i]['article_content'];
 
-					let result_article_content_keyword_start = '<span style="color:var(--color-no-match-keyword);">'+result_article_content_array.slice(result_article_content_index - step, result_article_content_index)+ '</span>';
+					let result_article_content_keyword_start = '<span style="color:var(--color-no-match-keyword);">' + result_article_content_array.slice(result_article_content_index - step, result_article_content_index) + '</span>';
 					let result_article_content_keyword = '<span style="color: --var(--match-keyword)  !important; font-weight: 700;">' + result_article_content_array.slice(result_article_content_index, result_article_content_index + len) + '</span>';
-					let result_article_content_keyword_end ='<span style="color:var(--color-no-match-keyword);">'+ result_article_content_array.slice(result_article_content_index + len, result_article_content_index + len + step)+ '</span>';
+					let result_article_content_keyword_end = '<span style="color:var(--color-no-match-keyword);">' + result_article_content_array.slice(result_article_content_index + len, result_article_content_index + len + step) + '</span>';
 					// console.log('result_article_content_keyword_start:',result_article_content_keyword_start)
 					// // console.log('result_article_content_keyword:',result_article_content_keyword)
 					// // console.log('result_article_content_keyword_end:',result_article_content_keyword_end)
@@ -275,7 +262,7 @@ function searchInit(){
 				match_count++;  //成功匹配计数加一
 
 				match_data = {
-					id:article_list.value[i]['id'],
+					id: article_list.value[i]['id'],
 					result_article_title_match_data: result_article_title_match_data,
 					result_article_content_match_data: result_article_content_match_data
 				};
@@ -286,13 +273,13 @@ function searchInit(){
 		}
 
 		data.search_keyword_match_count = match_count;
-		if(data.search_keyword_match_count>0){
+		if (data.search_keyword_match_count > 0) {
 			match_keyword_list.value = true;
-		}else{
-			searchInit();
+		} else {
+			matchKeywordDataInit();
 		}
 
-		
+
 
 	}
 
@@ -300,7 +287,7 @@ function searchInit(){
 
 	//右侧搜索图标
 	const show_right_search = ref(false);
-	//点击显示移动端搜索框相关
+	//点击显示移动端搜索框相关样式
 	function clickShowPhoneSearch() {
 		// console.log('clickShowPhoneSearch');
 		show_right_search.value = true;
@@ -325,96 +312,105 @@ function searchInit(){
 
 		if (search_keyword.value == '') {
 			// console.log('请输入内容...');
-			searchInit();
+			matchKeywordDataInit();
 		} else if (search_keyword.value.search(/^\s+$/) >= 0) {
 			// 检测输入值全是空白的情况
-			searchInit();
-			search_keyword.value='请输入有效内容...';
+			matchKeywordDataInit();
+			search_keyword.value = '请输入有效内容...';
 			// var itemDiv = tmpDiv.cloneNode(true);
 			// itemDiv.innerText = '请输入有效内容...';
 			// searchResults.appendChild(itemDiv);
 		} else {
 
 			router.push({ name: 'search', query: { keyword: search_keyword.value }, key: new Date().getTime() });
-			searchInit();
-			
+			matchKeywordDataInit();
+
 		}
-	
+	}
 
-		
 
+	//去看博文
+	function goViewArticle(article_id) {
+		//直接跳转
+		// const handleChange = () => {
+		//   router.push("/testDemo");
+		// };
+		//带参数跳转
+
+		if (article_id) {
+			//   router.push({ name: 'article', query: { id: article_id },key: new Date().getTime() });
+
+			// router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
+			let routeUrl = router.resolve({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
+			//  console.log('routeUrl',routeUrl);
+			window.open(routeUrl.href, '_blank');//打开新窗口
+
+
+		} else {
+			console.log('非法请求')
+		}
+
+	}
+
+	//搜索框容器对象
+	const searchInputContainerRef = ref(null);
+	//点击非搜索框容器区域时初始化关键字数据和关闭匹配关键字列表
+	function clickCloseMatchKeywordListDown(e) {
+		if (searchInputContainerRef.value && !searchInputContainerRef.value.contains(e.target)) {
+			//初始化关键字数据和关闭匹配关键字列表
+			matchKeywordDataInit();
+		}
 	}
 
 
 
+	//搜索框失去焦点，初始化关键字数据和关闭匹配关键字列表
+	function searchInputBlur() {
+		//初始化关键字数据和关闭匹配关键字列表
+		matchKeywordDataInit();
+	}
 
 
-
-
-	  //去看博文
-	  function goViewAticle(article_id) {
-    //直接跳转
-    // const handleChange = () => {
-    //   router.push("/testDemo");
-    // };
-    //带参数跳转
-   
-    if (article_id) {
-    //   router.push({ name: 'article', query: { id: article_id },key: new Date().getTime() });
-
-      // router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
-     let routeUrl = router.resolve({ name: 'article', query: { id: article_id },key: new Date().getTime() });
-    //  console.log('routeUrl',routeUrl);
-     window.open(routeUrl.href, '_blank');//打开新窗口
-
-     
-    } else {
-      console.log('非法请求')
-    }
-
-  }
-
-  //搜索框对象
-const searchInputRef=ref(null);
-//点击外部下拉菜单关闭
-function closeMatchKeywordListDown(e){
-    if (searchInputRef.value && !searchInputRef.value.contains(e.target)) {
-        // /如果点击的不是下拉框内部，则关闭下拉框
-        match_keyword_list.value=false;
-      }
-}
-
+	//监听窗口缩放初始化关键字数据和关闭匹配关键字列表
+	function resizeCloseMatchKeywordListDown() {
+		const current_width = window.innerWidth;
+		// console.log('current_width:',current_width)
+		if (current_width) {
+			//初始化关键字数据和关闭匹配关键字列表
+			matchKeywordDataInit();
+		}
+	}
 
 	onUnmounted(() => {
-		window.removeEventListener('click', closeMatchKeywordListDown);// 移除全局点击事件监听
-		stopKeywordWatch.value(); // 如果watch返回了一个停止监听的函数，调用它
-		// stopWatch.value();
+		window.removeEventListener('click', clickCloseMatchKeywordListDown);// 移除全局点击事件监听
+		window.removeEventListener('resize', resizeCloseMatchKeywordListDown);//移除监听窗口缩放关闭匹配关键字列表
+
+		stopWatchRouteQueryKeyword.value = null; // 如果watch返回了一个停止监听的函数，调用它
+		// stopWatch.value=null;
 	})
 
 </script>
 
 
 <style scoped>
+	.match-title {
+		white-space: nowrap;
+		/* （ 默认 normal 自动换行） */
 
+		/*2. 超出的部分隐藏*/
+		overflow: hidden;
 
-.match-title{
-	white-space: nowrap;  
-	/* （ 默认 normal 自动换行） */
-   
-   /*2. 超出的部分隐藏*/
-	overflow: hidden;
-	
-   /*3. 文字用省略号替代超出的部分*/
-	text-overflow: ellipsis;
-	padding: 3px;
-}
+		/*3. 文字用省略号替代超出的部分*/
+		text-overflow: ellipsis;
+		padding: 3px;
+	}
 
-.match-content{
-	padding-left:  3px;
-	/* 缩进2个字符 */
-	text-indent:2em;
+	.match-content {
+		padding-left: 3px;
+		/* 缩进2个字符 */
+		text-indent: 2em;
 
-}
+	}
 
 	.header-container {
 
@@ -630,22 +626,26 @@ function closeMatchKeywordListDown(e){
 			}
 
 
-	
+
 
 
 			.select-container {
 				width: 100%;
-				height: 100%;
+				height: 300px;
 				margin-top: 10px;
 				background-color: var(--bg);
 				border-radius: 5px;
-				border: 1px solid #E4E7ED;
+				border: 1px solid var(--bg);
 				border-radius: 6px;
-				/* border: 1px solid #494d59; */
+				border: 1px solid #E4E7ED;
+				/* border: 1px solid red; */
 				transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 				z-index: 12;
-				overflow-y: auto; 
-
+				overflow-y: auto;
+				overflow-x: hidden;
+				display: flex;
+				position: fixed;
+				display: none;
 			}
 
 			.select-list {

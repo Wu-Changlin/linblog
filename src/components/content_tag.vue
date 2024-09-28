@@ -8,7 +8,7 @@
     <div class="content-container">
       <div class="tag-content">
         <div :class=" {'tag-item':true,'active':data.active_tag_id==item.tag_id?true:''}"
-          v-for="(item, index) in data.show_tag_data" :key="index" @click="childClickTag(item)">
+          v-for="(item, index) in data.show_tag_data" :key="index" @click="clickTag(item)">
           {{ item.tag_name }}
         </div>
 
@@ -31,7 +31,7 @@
     <div class="arrow-more-tag-content-container">
       <div class="arrow-more-tag-content">
         <div :class=" {'arrow-more-tag-item':true,'active':data.active_tag_id==item.tag_id?true:''}"
-          v-for="(item, index) in data.show_arrow_more_tag_data" :key="index" @click="childClickTag(item)"> {{
+          v-for="(item, index) in data.show_arrow_more_tag_data" :key="index" @click="clickTag(item)"> {{
           item.tag_name }}</div>
       </div>
     </div>
@@ -71,16 +71,11 @@
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
 
-
-
   const props = defineProps({
     parentPageTagData: {//父页面传标签数据
       type: Array
     }
   });
-
-
-
 
 
   // 当我们需要根据当前路由的信息来决定组件的渲染逻辑时，可以使用useRoute；而当我们需要进行路由跳转、导航等操作时，则应该使用useRouter。
@@ -113,8 +108,8 @@
   //传递事件
   const emit = defineEmits(['childClickTag'])
  
-
-  function childClickTag(item) {
+  //点击标签
+  function clickTag(item) {
     // console.log('tag_id:', tag_id);
     data.active_tag_id = item.tag_id;
     emit('childClickTag',data.active_tag_id);//把子页面选中的标签id传到父页面
@@ -131,7 +126,7 @@
 
 
   // 使用ref来存储watch返回的函数 监听hiddenTagContentRet.value，执行maxItemsPerLines函数
-  const stopHiddenTagContentRetWatch = ref(null);
+  // const stopHiddenTagContentRetWatch = ref(null);
 
   const current_route_name = ref('index');
   onMounted(() => {
@@ -143,7 +138,7 @@
         maxItemsPerLines();
     })
     //监听窗口响应式每行最多标签数量
-    window.addEventListener('resize', 	throttle(() => {maxItemsPerLines()}, 600));//监听窗口缩放 加节流
+    window.addEventListener('resize', 	throttle(() => {maxItemsPerLines()}, 300));//监听窗口缩放 加节流
     //初始化每行最多标签数量
     //  maxItemsPerLines();
   })
@@ -153,7 +148,7 @@
 
   onUnmounted(() => {
     window.removeEventListener('resize', maxItemsPerLines);
-    // stopHiddenTagContentRetWatch.value(); // 如果watch返回了一个停止监听的函数，调用它
+    // stopHiddenTagContentRetWatch.value=null; // 如果watch返回了一个停止监听的函数，调用它
   })//离开页面时移除监听窗口缩放
 
   //每行最多标签数量
@@ -170,7 +165,7 @@
 
       // console.log('tag_container_width:',tag_container_width);
       const tagItem = hiddenTagItemRet.value; // 获取所有 <div> 元素的引用
-
+      //减去指向图标的宽度 46px
       tag_container_width = tag_container_width - 46;
       let tag_item_width_count = 0;
       let tag_item_count = 0;
@@ -212,25 +207,6 @@
         }
         
       }
-
-
-      //  divElements.forEach((element) => {
-      //     totalWidth += element.offsetWidth; // 累加每个 <div> 元素的宽度 offsetWidth 返回元素的宽度（包括元素宽度、内边距和边框，不包括外边距）
-
-      //       // console.log('element.offsetWidth:',element.offsetWidth);
-      //     });
-
-
-
-    // })
-
-
-    // let tag_container_width = tagContainer.offsetWidth;//标签容器宽度
-    // //减去指向图标的宽度  
-    // tag_container_width = tag_container_width;
-
-
-
 
   }
 

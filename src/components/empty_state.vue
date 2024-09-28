@@ -14,7 +14,7 @@
     </div>
   </template>
   <script setup>
-  import { defineProps, ref, watch } from "vue"; //使用语法糖才能使用他们
+  import { defineProps, ref, watch,onUnmounted } from "vue"; //使用语法糖才能使用他们
   const props = defineProps({
     height: {
       type: String,
@@ -58,9 +58,20 @@
     }, 1000);
   };
   changeLoading();
-  watch(loadingClass, () => {
+
+
+  // 使用ref来存储watch返回的函数
+const stopWatchLoadingClass = ref(null);
+
+stopWatchLoadingClass.value =watch(loadingClass, () => {
     if (props.loading) changeLoading();
   });
+
+  onUnmounted(() => {
+    stopWatchLoadingClass.value=null; // 如果watch返回了一个停止监听的函数，调用它
+  });
+
+
   </script>
   <style scoped>
   .so_null {

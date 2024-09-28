@@ -139,7 +139,7 @@ function closeSelectDown(e){
 
 onUnmounted(() => {
     window.removeEventListener('click', closeSelectDown);// 移除全局点击事件监听
-    stopWatchContributionCalendarPageUpdateYear.value(); // 如果watch返回了一个停止监听的函数，调用它
+    stopWatchContributionCalendarPageUpdateYear.value=null; // 如果watch返回了一个停止监听的函数，调用它
    
 });
 

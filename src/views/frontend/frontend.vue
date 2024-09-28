@@ -12,8 +12,8 @@
 
 
     <div class="feeds-container">
-      <ContentCarouselImg :parentPageCarouselImgData="frontend_carousel_img_data" :isloading="is_loading"></ContentCarouselImg>
-      <Waterfall  :parentPageArticleListData="frontend_article_list_data"  :isloading="is_loading" style="margin-top: 10px;" ></Waterfall>
+      <ContentCarouselImg :parentPageCarouselImgData="frontend_carousel_img_data" :isLoading="is_loading"></ContentCarouselImg>
+      <Waterfall  :parentPageArticleListData="frontend_article_list_data"  :isLoading="is_loading" style="margin-top: 10px;" ></Waterfall>
     </div>
 
    

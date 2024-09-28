@@ -134,8 +134,9 @@ function getDarkRandomColor() {
               } 
             }
                       
-         
           }
+
+      
 
           .active {
             /* background-color: rgba(0, 0, 0, 0.03); */

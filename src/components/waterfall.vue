@@ -3,7 +3,7 @@
   <transition name="scale-down" mode="out-in">
 <!-- 骨架屏 开始-->
     <!-- <div v-if="is_loading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef"> -->
-      <div v-if="isloading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef">
+      <div v-if="isLoading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef">
       
       <div
       class="item"
@@ -33,7 +33,7 @@
 
         <!-- 没有item.url元素 非资源页（item.url：外站链接）-->
         <div v-if="!item.url" class="lazy-img-card-mask"> 
-        <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px" @click="goViewAticle(item.id)"/>
+        <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px" @click="goViewArticle(item.id)"/>
         <div class="card-img-mask-stats">
           <div class="card-img-mask-stats-left">
             <span class="card-img-mask-stats-item">
@@ -93,6 +93,36 @@
 
   </transition>
 
+
+  <transition name="scale-down" mode="out-in">
+    <!-- 骨架屏 开始-->
+        <!-- <div v-if="is_loading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef"> -->
+          <div class="waterfall-skeleton"  v-if="isNextPageLoading" key="isNextPageLoading">
+          
+          <div
+          class="item"
+          v-for="(item, index)  in 10" 
+          :key="item"
+          :data-item='item'
+          :data-index='index'
+          :style="{background: 'rgba(0, 0, 0, 0.04)', width:skeleton_width + 'px'}" >
+         
+          <!-- 图片占位 -->
+          <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height*0.7 + 'px'" animated  style="border-radius: 8px;"/>
+          <!-- 标题占位 -->
+          <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" height="24px" animated style="margin-top: 12px;" />
+          <!-- 作者 -->
+          <Skeleton bg="#e4e4e4" :width="skeleton_width*0.25 + 'px'" height="24px" animated style="margin: 12px 0px;" />
+    
+          </div>
+          
+        </div>
+    
+    <!-- 骨架屏 结束-->
+
+
+  </transition>
+
   <EmptyState v-if="!data.list.length" :height="`566px`" :imgUrl="'/empty-state.png'">
     <template #content>
       <span style="padding-bottom: 16px;">没有更多数据了</span>
@@ -101,13 +131,15 @@
 
 </template>
 <script setup>
-  import { reactive, ref, onMounted, onUnmounted ,watch,computed} from 'vue';
+  import { reactive, ref, onMounted, onUnmounted ,watch,computed,inject} from 'vue';
   import axios from 'axios';
-  import {useRoute, useRouter } from "vue-router";
+  import {useRoute, useRouter } from "vue-router"; 
   import { LazyImg, Waterfall } from "vue-waterfall-plugin-next";
   import "vue-waterfall-plugin-next/dist/style.css";
   import Skeleton from '@/components/skeleton.vue';
   import EmptyState from '@/components/empty_state.vue';
+
+
 
   const router = useRouter();
   const route = useRoute();
@@ -126,31 +158,52 @@
     parentPageArticleListData: {//父页面传标签数据
       type: Array
     },
-    isloading:{
+    isLoading:{
       type:Boolean,
       default:true
+    },
+    isNextPageLoading:{
+      type:Boolean,
+      default:false
     }
   });
 
-  // if(props.isloading){
-  //   is_loading.value=props.isloading;
-  // }
- 
+
+
+  watch(
+       () =>props.isNextPageLoading,
+       (newValue, oldValue) => {
+      
+        console.log('newValue, oldValue-props.isNextPageLoading:',props.isNextPageLoading)
+        if(newValue){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
+          // console.log('newValue-props.parentPageArticleListData:',props.parentPageArticleListData)
+         
+          
+//  console.log('data.v.l',data.list.length);
+          // is_loading.value=false;
+         
+        }
+       
+        
+       },
+       { immediate: true }
+     );
+
 
 // 使用ref来存储watch返回的函数
-const stopPparentPageArticleListData = ref(null);
+const  stopParentPageArticleListData = ref(null);
 
 //监听父页面所传数据。当有新值时，把父页面所传数据赋值到当前页面的data.list   
-stopPparentPageArticleListData.value = watch(
+ stopParentPageArticleListData.value = watch(
        () =>props.parentPageArticleListData,
        (newValue, oldValue) => {
       
-        console.log('n-props.parentPageArticleListData:',props.parentPageArticleListData)
+        // console.log('newValue, oldValue-props.parentPageArticleListData:',props.parentPageArticleListData)
         if(newValue){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
-          console.log('1-props.parentPageArticleListData:',props.parentPageArticleListData)
+          // console.log('newValue-props.parentPageArticleListData:',props.parentPageArticleListData)
           data.list = props.parentPageArticleListData;
           
- console.log('data.v.l',data.list.length);
+//  console.log('data.v.l',data.list.length);
           // is_loading.value=false;
          
         }
@@ -170,24 +223,27 @@ stopPparentPageArticleListData.value = watch(
 
   });
 
+ 
+
 
   //去看博文
-  function goViewAticle(article_id) {
+  function goViewArticle(article_id) {
     //直接跳转
     // const handleChange = () => {
     //   router.push("/testDemo");
     // };
     //带参数跳转
-   
     if (article_id) {
-      // router.push({ name: 'article', query: { id: article_id },key: new Date().getTime() });
-
       // router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
-     let routeUrl = router.resolve({ name: 'article', query: { id: article_id },key: new Date().getTime() });
+     let routeUrl =''; 
+     routeUrl= router.resolve({ name: 'article', query: { id: article_id },key: new Date().getTime() });
+     if (route.query.keyword) {//搜索结果页携参跳转到博文页
+       routeUrl = router.resolve({ name: 'article', query: { id: article_id ,keyword:route.query.keyword},key: new Date().getTime() });
+		}  
+
     //  console.log('routeUrl',routeUrl);
      window.open(routeUrl.href, '_blank');//打开新窗口
 
-     
     } else {
       console.log('非法请求')
     }
@@ -274,7 +330,7 @@ stopPparentPageArticleListData.value = watch(
 
   onUnmounted(() => {
     window.removeEventListener('resize', skeletonHandleResize);//移除骨架屏监听
-    stopPparentPageArticleListData.value(); // 如果watch返回了一个停止监听的函数，调用它
+     stopParentPageArticleListData.value=null; // 如果watch返回了一个停止监听的函数，调用它
   });
 
 

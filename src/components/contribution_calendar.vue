@@ -492,7 +492,7 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
  // 组件销毁前清除watch
  onUnmounted(() => {
     // 如果watch返回了一个停止监听的函数，调用它
-    stopWatchContributionDataOrCurrentRouteQueryYear.value(); 
+    stopWatchContributionDataOrCurrentRouteQueryYear.value=null; 
 
    });
 
@@ -500,6 +500,9 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
 
 
 <style scoped>
+
+
+
   .contribution-calendar-container {
     display: flex;
     flex-direction: column;
@@ -513,9 +516,12 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
   .contribution-table {
     display: flex;
     max-width: 100%;
-
+    
     
   }
+
+
+
 
   .contribution-table-container {
     max-width: 100%;

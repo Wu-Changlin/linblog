@@ -127,6 +127,9 @@
 
 </template>
 
+
+
+
 <script setup>
 // import Footer from "@/components/footer.vue";
 import {ref,reactive,onMounted,onUnmounted,nextTick,watch,onUpdated,provide } from "vue";
@@ -142,13 +145,9 @@ const route = useRoute();//用于获取当前路由的信息。返回的是当�
 const router=useRouter();
 
 
-
-
-
-
-
 const is_loading=ref(true);
 const current_route_query=ref(null); 
+
 
 
 const data=reactive({
@@ -215,6 +214,10 @@ onMounted(()=>{
 	window.addEventListener('resize',mediaQuery);  //监听窗口大小变化	
 
  
+
+    
+
+
 }) 
 
 

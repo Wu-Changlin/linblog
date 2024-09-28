@@ -13,7 +13,7 @@
   
 	  <div class="feeds-container">
 		<!-- <ContentCarouselImg></ContentCarouselImg> -->
-		<Waterfall :parentPageArticleListData="index_article_list_data"  :isloading="is_loading"></Waterfall>
+		<Waterfall :parentPageArticleListData="index_article_list_data"  :isLoading="is_loading"></Waterfall>
 	  </div>
   
 	 
@@ -72,8 +72,9 @@ onMounted(() => {
     axios.get('/data/frontend/index.json', { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {
-			index_tag_data.value = response.data.tag_data; // 数据加载完毕，关闭骨架屏
-			index_article_list_data.value = response.data.article_list_data; // 数据加载完毕，关闭骨架屏
+          console.log('index');
+			index_tag_data.value = response.data.tag_data; // 标签数据
+			index_article_list_data.value = response.data.article_list_data; // // 博文列表数据
 			flag.value=true;
 			is_loading.value=false;
 			// console.log('111index_article_list_data:',index_article_list_data)
@@ -91,10 +92,41 @@ onMounted(() => {
   });
 
 
-
-  //获取子页面选中的标签id数据
-  function getChildClickTag(id){
+  
+  //获取子页面选中的标签id数据 
+  // NOTE:　首页的标签数据仅展示一页（没有上拉加载更多），目的：显示页面底部备案信息。 
+  function getChildClickTag(active_tag_id){
 	is_loading.value=true;
+
+  
+  
+  axios.post('/data/frontend/click_tag_all_article.json', { current_tag_id:active_tag_id, page: 1 }, { responseType: 'json' })
+      .then(response => {
+        // setTimeout(() => {
+        console.log('getChildClickTag');
+        index_article_list_data.value = response.data.article_list_data; // // 博文列表
+     
+        // current_page.value= response.data.current_page; //当前页数  
+
+        //点击标签返回随机数量数据
+        let sliced_start = Math.floor(Math.random() * 5);
+        const data_count =  index_article_list_data.value.length;
+        index_article_list_data.value =  index_article_list_data.value.slice(sliced_start, data_count);
+       
+       console.log("sliced_start, data_count:",sliced_start,',', data_count);
+
+        is_loading.value = false;
+        // is_loading.value=false;
+        // }, 3000); // 假设加载时间是3秒
+
+
+      })
+      .catch(error => {
+
+        console.error('Error fetching mock data:', error);
+      });
+
+
 	// console.log('getChildClickTag:',id);
   }
 

@@ -67,15 +67,15 @@ const props = defineProps({
   parentPageCarouselImgData: {//父页面传轮播图数据
     type: Array
   },
-  isloading:{
+  isLoading:{
     type:Boolean,
     default:true
   }
 });
 
 
-if(props.isloading){
-    is_loading.value=props.isloading;
+if(props.isLoading){
+    is_loading.value=props.isLoading;
 }
 
 
@@ -133,7 +133,7 @@ stopParentPageCarouselImgData.value = watch(
 
   onUnmounted(() => {
     window.removeEventListener('resize', skeletonHandleResize);//移除骨架屏监听
-    stopParentPageCarouselImgData.value(); // 如果watch返回了一个停止监听的函数，调用它
+    stopParentPageCarouselImgData.value=null; // 如果watch返回了一个停止监听的函数，调用它
   });
 
 

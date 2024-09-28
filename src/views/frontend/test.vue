@@ -41,7 +41,7 @@
           <template #item="{ item,index }">
             <div class="waterfall-card">
       
-              <LazyImg class="lazy-img" :url="item.src" style="border-radius: 8px" @click="goViewAticle(item.id)" />
+              <LazyImg class="lazy-img" :url="item.src" style="border-radius: 8px" @click="goViewArticle(item.id)" />
       
       
             <div class="card-img-mask-stats">
@@ -146,7 +146,7 @@
   
   
     //去看博文
-    function goViewAticle(article_id) {
+    function goViewArticle(article_id) {
       //直接跳转
       // const handleChange = () => {
       //   router.push("/testDemo");
