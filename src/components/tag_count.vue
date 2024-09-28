@@ -4,9 +4,9 @@
         <div class="tag-count-content-container">
             
           
-          <a :style="{backgroundColor: getDarkRandomColor()} " 
+          <a :style="{backgroundColor:theme=='light'? getLightRandomColor():getDarkRandomColor()} " 
           :class=" {'tag-count-item':true,'active':item.tag_id === data.active_tag_count_tag_id?true:'','no-active':item.tag_id != data.active_tag_count_tag_id && data.active_tag_count_tag_id>-1?true:''}"
-           v-for="(item, index) in data.list" :key="index" @click="clickTag(item.tag_id,item.tag_name)">
+           v-for="(item, index) in data.list" :key="index" @click="clickTag(item.menu_name,item.tag_id,item.tag_name)">
             {{ item.tag_name }}
           </a>
         </div>
@@ -41,34 +41,20 @@ const props = defineProps({
 
 
 
-  function clickTag(tag_id,tag_name){
+  function clickTag(menu_name,tag_id,tag_name){
     // console.log('tag_id:',tag_id,',tag_name:',tag_name);
     if (data.active_tag_count_tag_id==tag_id) {
         data.active_tag_count_tag_id = -1;
         emit('getTagCountPageClickTagArticleDataEmit',-1,'');
       } else {
         data.active_tag_count_tag_id = tag_id;
-        emit('getTagCountPageClickTagArticleDataEmit',tag_id,tag_name);
+        emit('getTagCountPageClickTagArticleDataEmit',menu_name,tag_id,tag_name);
         // console.log('getTagCountPageClickTagArticleDataEmit:',tag_id,'-name:',tag_name);
       }
       // console.log('tag_id:',tag_id,', data.active_tag_count_tag_id:', data.active_tag_count_tag_id);
   }
-
-
-
-  //问题：切换主题随机颜色没有响应
-function getandomColor(){
-  // 从取缓存中取值，给个默认值。
+  //切换主题，随机颜色去除主题背景色
   const theme = ref(localStorage.getItem('theme') || 'light');
-
-  if(theme.value='light'){
-    getLightRandomColor();
-
-  }else{
-    getDarkRandomColor();
-    
-  }
-}
 
 
 // 确保颜色不是白色

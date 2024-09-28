@@ -311,12 +311,12 @@
   const click_tag_all_article_data=ref([]);
   const is_loading_click_tag_all_article=ref(true);
 
-
   //获取tag_count页选中标签下的博文数据
-  function getTagCountPageClickTagArticleData(active_tag_id,active_tag_name){
+  function getTagCountPageClickTagArticleData(active_tag_menu_name,active_tag_id,active_tag_name){
+   
     //1.空值，关闭博文瀑布流 2.有值，获取数据渲染博文瀑布流
     tag_name.value=active_tag_name;
-    router.push({ name: 'index', query: { tag_id: active_tag_name }, key: new Date().getTime() });
+    router.push({ name: active_tag_menu_name, query: { tag_id: active_tag_name }, key: new Date().getTime() });
     // if(tag_name.value){//如果tag_name存在，那么获取数据。
     //   axios.post('/data/frontend/click_tag_all_article.json',{tag_id:active_tag_id,tag_name:active_tag_name}, { responseType: 'json' })
     //   .then(response => {

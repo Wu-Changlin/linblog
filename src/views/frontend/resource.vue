@@ -13,7 +13,7 @@
   
 	  <div class="feeds-container">
 		<!-- <ContentCarouselImg></ContentCarouselImg> -->
-		<Waterfall :parentPageArticleListData="resource_article_list_data"  :isloading="is_loading"></Waterfall>
+		<Waterfall :parentPageArticleListData="resource_article_list_data"  :isLoading="is_loading"></Waterfall>
 	  </div>
   
 	 

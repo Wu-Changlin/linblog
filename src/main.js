@@ -15,7 +15,7 @@ import tooltip from '@/components/tooltip/directive.js';
 import '@/assets/base.css';
 
 // 引入iconfont 图标库
-import './assets/iconfont/iconfont.js';
+import '@/assets/iconfont/iconfont.js';
 
 //封装 svg-icon 组件
 import SvgIcon from '@/components/SvgIcon.vue';

@@ -1,22 +1,16 @@
 <template>
   
   <div class="feeds-page">
-  
-    
-
+ 
     <div  style="margin-top: 72px;">
       <ContentTag :parentPageTagData="frontend_tag_data"  @childClickTag="getChildClickTag" v-if="flag"></ContentTag>
 
     </div>
-    
-
 
     <div class="feeds-container">
       <ContentCarouselImg :parentPageCarouselImgData="frontend_carousel_img_data" :isLoading="is_loading"></ContentCarouselImg>
-      <Waterfall  :parentPageArticleListData="frontend_article_list_data"  :isLoading="is_loading" style="margin-top: 10px;" ></Waterfall>
+      <Waterfall  :parentPageArticleListData="frontend_article_list_data"  :isLoading="is_loading"></Waterfall>
     </div>
-
-   
 
   </div>
 
@@ -72,12 +66,14 @@ onMounted(() => {
     axios.get('/data/frontend/frontend.json', { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {
-          // frontend_tag_data.value = response.data.tag_data; 
+          frontend_tag_data.value = response.data.tag_data; 
           
-          // frontend_carousel_img_data.value = response.data.carousel_img_data; 
+          
+          frontend_carousel_img_data.value = response.data.carousel_img_data; 
           frontend_article_list_data.value = response.data.article_list_data; 
+          console.log('frontend_article_list_data:',frontend_article_list_data.value);
           
-			// flag.value=true;
+			flag.value=true;
 			is_loading.value=false;
 			// console.log('response.data.tag_data:',response.data.tag_data)
         // }, 3000); // 假设加载时间是3秒
@@ -106,7 +102,7 @@ onMounted(() => {
           frontend_article_list_data.value = response.data.article_list_data; 
           frontend_carousel_img_data.value = response.data.carousel_img_data; 
           
-			flag.value=true;
+			flag.value=false;
 			is_loading.value=false;
 			// console.log('response.data.tag_data:',response.data.tag_data)
         // }, 3000); // 假设加载时间是3秒
