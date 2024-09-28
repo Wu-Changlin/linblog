@@ -1,5 +1,5 @@
 <template>
-  
+
   <div class="contribution-calendar-container">
     <div class="contribution-table" style="max-width: 100%; overflow-y: hidden;overflow-x: auto;">
 
@@ -24,15 +24,15 @@
             <!-- 月份 结束-->
             <!-- 贡献格子 开始-->
             <ul class="graph">
-             
-                <!-- <div v-for="(item, index) in data.infos" :key="index">
+
+              <!-- <div v-for="(item, index) in data.infos" :key="index">
 
                   <div v-if="item != undefined">
                     <el-tooltip content="Top center" placement="top">
                     <li :data-level="item.level" :data-years="item.year" :data-date="item.date"
                       :data-date-number="item.date_number" :data-selected="item.id===data.active_date_id?true:false"
                       :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.level!=data.hoverLevel ,'active':item.id===data.active_date_id,'no-active':data.is_selected==true&&item.id!=data.active_date_id}"
-                      @click="clickContributiondate(item)">
+                      @click="clickContributionDay(item)">
                       
                     </li>
                   </el-tooltip>
@@ -46,23 +46,24 @@
                 </div> -->
 
 
-                <div v-for="(item, index) in data.infos" :key="index">
+              <div v-for="(item, index) in data.infos" :key="index">
 
-                  <div v-if="item != undefined">
-                  
-                    <span v-tooltip.top="item.tooltip_content">
-                    
-                    <li :data-level="item.today_contribution_level"  :data-selected="item.today_contribution_id===data.active_date_id?true:false"
+                <div v-if="item != undefined">
+
+                  <span v-tooltip.top="item.tooltip_content">
+
+                    <li :data-level="item.today_contribution_level"
+                      :data-selected="item.today_contribution_id===data.active_date_id?true:false"
                       :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.today_contribution_level!=data.hoverLevel ,'active':item.today_contribution_id===data.active_date_id,'no-active':data.is_selected==true&&item.today_contribution_id!=data.active_date_id}"
-                      @click="clickContributiondate(item)">
-                      
+                      @click="clickContributionDay(item)">
+
                     </li>
-                    
-                    </span>
-                  </div>
-                
+
+                  </span>
                 </div>
-  
+
+              </div>
+
             </ul>
             <!-- 贡献格子 结束-->
 
@@ -73,15 +74,25 @@
 
     </div>
 
-    <div class="operation">
-      <div class="contributions_count_desc">
-        <div class="contributions_count">0</div>
-        <svg-icon class="svg_icon" icon-class="jindutiao" />
-        <div class="contributions_count">4+</div>
-      </div>
-      <div class="legend">
-        <div class="level-desc">少</div>
 
+
+
+
+
+    <div class="contribution-tip-or-level">
+      <!-- <h3 style="flex: 1;">最近一年贡献：{{ data.year_contribution_count}} 次</h3> -->
+
+      <div class="contribution-tip-container">
+        <div class="contribution-tip-content">
+          <div class="contributions_count">0</div>
+          <svg-icon class="svg_icon" icon-class="jindutiao" />
+          <div class="contributions_count">4+</div>
+        </div>
+
+      </div>
+
+      <div class="contribution-level">
+        <div class="level-desc">少</div>
 
         <div v-if="data.is_selected == false" class="level" @mouseover="data.hoverLevel = index"
           @mouseout="data.hoverLevel = -1" v-for="(item, index)  in 5" :data-level="index">
@@ -90,57 +101,57 @@
         <div v-else class="level no-active" v-for="(item, index)  in 5" :data-level="index">
         </div>
 
-
-
         <div class="level-desc">多</div>
       </div>
+
     </div>
+
   </div>
 </template>
 
 <script setup>
-  import { onMounted, onUnmounted, ref, reactive,inject,watch,computed,watchEffect} from "vue";
+  import { onMounted, onUnmounted, ref, reactive, inject, watch, computed, watchEffect } from "vue";
   import { useRoute, useRouter } from 'vue-router';
 
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
- 
 
-//路由名
-const current_route_name=ref(null); 
-onMounted(() => {
 
-    current_route_name.value=route.name;
+  //路由名
+  const current_route_name = ref(null);
+  onMounted(() => {
 
-});
+    current_route_name.value = route.name;
+
+  });
 
 
 
   const contributionYearInject = inject('contributionYear');
   //选定日期的年份(当用户在兄弟页面选中年份，把选中年份值传到父页面，父页面注入子页面更新选中年份（annex_title）)
   const yearDropdownPageUpdateYearInject = inject('yearDropdownPageUpdateYear');
-  
+
 
   // const parentPageCurrentYearContributionDataInject = inject('parentPageCurrentYearContributionData');
   // provide('parentPageCurrentYearContributionData', current_year_contribution_data.value);//爷传孙，默认选中当年年份
 
   const emit = defineEmits(['childClickContributionDay']);
-  
- 
+
+
   //父页面传值
-const props = defineProps({
-  parentPageCurrentYearContributionData:Array
-});
+  const props = defineProps({
+    parentPageCurrentYearContributionData: Array
+  });
 
 
 
-    const stopWatchContributionDataOrCurrentRouteQueryYear = ref(null);
-    const parent_page_current_year_contribution_data = ref('');
+  const stopWatchContributionDataOrCurrentRouteQueryYear = ref(null);
+  const parent_page_current_year_contribution_data = ref('');
 
-// 计算属性来监听路由查询参数中的 year
-const current_route_query_year=ref();
-current_route_query_year.value= computed(() => route.query.year);
-const data = reactive(
+  // 计算属性来监听路由查询参数中的 year
+  const current_route_query_year = ref();
+  current_route_query_year.value = computed(() => route.query.year);
+  const data = reactive(
     {
 
       infos: [],  //存放每一天的数据（year，month，date，状态数量，isToday标记） 
@@ -149,30 +160,30 @@ const data = reactive(
       active_date_id: -1,//已选中日期id
       monthBar: [],//12列对应的月份，比如第三列开始是五月份，则令monthBar[2]="5月"，算法实现见下面method
       calculate_month_data: [],//计算月份栏的数据源
-      
+
     }
   );
 
-// console.log('current_route_query_year:',current_route_query_year.value);
+  // console.log('current_route_query_year:',current_route_query_year.value);
   // 在访问属性之前检查变量是否已初始化
 
 
-stopWatchContributionDataOrCurrentRouteQueryYear.value=watch([props.parentPageCurrentYearContributionData, current_route_query_year.value], 
- ([newContributionData, newRouteQueryYear ], [oldContributionData, oldRouteQueryYear ]) => {
-      if(newContributionData){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
-          parent_page_current_year_contribution_data.value=props.parentPageCurrentYearContributionData;
-        }
+  stopWatchContributionDataOrCurrentRouteQueryYear.value = watch([props.parentPageCurrentYearContributionData, current_route_query_year.value],
+    ([newContributionData, newRouteQueryYear], [oldContributionData, oldRouteQueryYear]) => {
+      if (newContributionData) {//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
+        parent_page_current_year_contribution_data.value = props.parentPageCurrentYearContributionData;
+      }
       // console.log('Age changed to:', newContributionData);
-      if(newRouteQueryYear && parseInt(newRouteQueryYear)=== parseInt(yearDropdownPageUpdateYearInject.value)){
-      // 当路由查询参数发生变化时，这里会被调用
-     
-      data.is_selected=false,//因页面同源原有数据没有刷新，所以初始化是否开启选择模式
-      data.active_date_id=-1,//因页面同源原有数据没有刷新，所以初始已选中日期id
-      // console.log('newRouteQueryYear:',newRouteQueryYear)
-      clickContributionYear(newRouteQueryYear);//生成年份贡献图
-      // console.log('R-new_year:', new_year, ',R-old_year:', old_year);
-      
-    }
+      if (newRouteQueryYear && parseInt(newRouteQueryYear) === parseInt(yearDropdownPageUpdateYearInject.value)) {
+        // 当路由查询参数发生变化时，这里会被调用
+
+        data.is_selected = false,//因页面同源原有数据没有刷新，所以初始化是否开启选择模式
+          data.active_date_id = -1,//因页面同源原有数据没有刷新，所以初始已选中日期id
+          // console.log('newRouteQueryYear:',newRouteQueryYear)
+          clickContributionYear(newRouteQueryYear);//生成年份贡献图
+        // console.log('R-new_year:', new_year, ',R-old_year:', old_year);
+
+      }
     }, { immediate: true }
   );
 
@@ -180,7 +191,7 @@ stopWatchContributionDataOrCurrentRouteQueryYear.value=watch([props.parentPageCu
 
 
 
-  
+
   // console.log(JSON.stringify(data.infos))
 
   //初始化执行输出近一年信息
@@ -215,12 +226,12 @@ stopWatchContributionDataOrCurrentRouteQueryYear.value=watch([props.parentPageCu
     *daysDifference=366 第一个格子的时间：去年今天临近的星期天。   去年今天临近的星期天至今天    
     *i序号： 0 ,年月日： 2023 09 03 ,循环次数： 1 ===> i序号： 365 ,年月日： 2024 09 02 ,循环次数： 366
     */
-    getDaylist(daysDifference, firstMondayDate)
+    getDayList(daysDifference, firstMondayDate)
 
     //月份计算
     //  if(contribution_year_data.value.infos){
     if (data.infos) {
-     
+
       // console.log('contribution_year_data.infos:',JSON.stringify(contribution_year_data.value.infos))
       //  let [firstElement] = contribution_year_data.value.infos; //使用解构赋值取得第一个元素；
       let [firstElement] = data.infos; //使用解构赋值取得第一个元素；
@@ -233,7 +244,7 @@ stopWatchContributionDataOrCurrentRouteQueryYear.value=watch([props.parentPageCu
       // console.log('first_element_week:'+Object(first_element_week));
 
       getMonthBar(last_year_first_day_week);
-// 计算属性来合并数组，把父页所传更新数据赋值到渲染数据
+      // 计算属性来合并数组，把父页所传更新数据赋值到渲染数据
       mergedArray(data.infos, parent_page_current_year_contribution_data.value);
 
     }
@@ -304,8 +315,8 @@ stopWatchContributionDataOrCurrentRouteQueryYear.value=watch([props.parentPageCu
   * cycle_days   循环天数
   * cycle_days_start_time   循环循环天数的开始时间
   */
-  function getDaylist(cycle_days, cycle_days_start_time) {
-   
+  function getDayList(cycle_days, cycle_days_start_time) {
+
     let day_info = {};         //用来存放某一天的数据对象 日期格子（年月日、isToday、level）      
 
     //天数数据用于推算月份
@@ -326,28 +337,28 @@ stopWatchContributionDataOrCurrentRouteQueryYear.value=watch([props.parentPageCu
       const year = pastDate.getFullYear();
       const month = (pastDate.getMonth() + 1).toString().padStart(2, '0');
       const day = pastDate.getDate().toString().padStart(2, '0');
- // console.log('i序号:',i,',年月日:',year,month,day);
+      // console.log('i序号:',i,',年月日:',year,month,day);
       // let level =0;
-     
-    // if(pastDate.getTime()>new Date().getTime()){
-    //    level =0;
-    // }else{
-    //    level = Math.floor(Math.random() * 5);
-    // }
 
-    let level = Math.floor(Math.random() * 5); //这里是随机设置每天的频率等级，后续开发要替换为自己计算的真实等级（不同等级对应不同颜色方格）
+      // if(pastDate.getTime()>new Date().getTime()){
+      //    level =0;
+      // }else{
+      //    level = Math.floor(Math.random() * 5);
+      // }
+
+      let level = Math.floor(Math.random() * 5); //这里是随机设置每天的频率等级，后续开发要替换为自己计算的真实等级（不同等级对应不同颜色方格）
 
       day_info = {                      //每个格子（天）的info对象
         year: year,      //年
         month: month,     //月
         date: day,        //日
-        year_month_date:`${year}-${month}-${day}`,
+        year_month_date: `${year}-${month}-${day}`,
         today_contribution_count: level,    //今日的数据量
         today_contribution_level: level,  //今日数据量对应的等级
         today_contribution_id: i,
-        tooltip_content:`${year}-${month}-${day}，${level} 次贡献`
+        tooltip_content: `${year}-${month}-${day}，${level} 次贡献`
       };
-       
+
       month_day = {
         month: month,
         date: day,
@@ -368,7 +379,7 @@ stopWatchContributionDataOrCurrentRouteQueryYear.value=watch([props.parentPageCu
   function clickContributionYear(year) {
     //赋空值（或者monthBar_data.monthBar.length=0），清除原有数据（防止变成追加数据）
     data.infos = [];
-   
+
     //平年、闰年
     let contribution_year_date_num = 365
     if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
@@ -381,7 +392,7 @@ stopWatchContributionDataOrCurrentRouteQueryYear.value=watch([props.parentPageCu
     // console.log('click_contribution_year_start:',click_contribution_year_start);
     // console.log('click_contribution_year_end:',click_contribution_year_end);
 
-    getDaylist(contribution_year_date_num, click_contribution_year_start)
+    getDayList(contribution_year_date_num, click_contribution_year_start)
 
 
     // if(contribution_year_data.value.infos){
@@ -400,14 +411,14 @@ stopWatchContributionDataOrCurrentRouteQueryYear.value=watch([props.parentPageCu
       let contribution_year_first_day_week = new Date(firstElement.year + '-' + firstElement.month + '-' + firstElement.date).getDay();
 
       // console.log('contribution_year_first_day_week:',contribution_year_first_day_week);
-      
-      getMonthBar(contribution_year_first_day_week)
-// 计算属性来合并数组，把父页所传更新数据赋值到渲染数据
-// console.log('infos:',JSON.stringify(props.parentPageCurrentYearContributionData));
-mergedArray(data.infos, parent_page_current_year_contribution_data.value);
 
-// console.log(JSON.stringify(data.infos))
-     
+      getMonthBar(contribution_year_first_day_week)
+      // 计算属性来合并数组，把父页所传更新数据赋值到渲染数据
+      // console.log('infos:',JSON.stringify(props.parentPageCurrentYearContributionData));
+      mergedArray(data.infos, parent_page_current_year_contribution_data.value);
+
+      // console.log(JSON.stringify(data.infos))
+
     }
 
 
@@ -415,48 +426,48 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
   }
 
   //
-  
+
   //点击日期格子。把父页面所传年份值改为点击日期的年份值
-  function clickContributiondate(item) {
-      if (data.active_date_id == item.today_contribution_id) {
-        data.active_date_id = -1;
-        data.is_selected = false;
-      } else {
-        data.active_date_id = item.today_contribution_id;
-        data.is_selected = true;
-      }
-
-      // console.log('item:', JSON.stringify(item));
-      contributionYearInject.value=item.year;//子修改父的传值 （选中当年年份改为当前所选年份）响应式 
-      emit('childClickContributionDay',item.year,item.month,item.date,item.today_contribution_count,item.today_contribution_id,data.is_selected);//子传父
-     //路由携参跳转
-     router.push({ name: current_route_name.value, query: {year : item.year, from:item.year_month_date,to:item.year_month_date }, key: new Date().getTime() });
-   
-       // {"year":2023,"month":11,"date":18,"number":10,"level":0,"isToday":false}
-      // alert(item.month + "-" + item.date+'，博文：'+item.number)
-      // router.push({ name: current_route_name.value, query: { tag_id: item.tag_name }, key: new Date().getTime() });
-
+  function clickContributionDay(item) {
+    if (data.active_date_id == item.today_contribution_id) {
+      data.active_date_id = -1;
+      data.is_selected = false;
+    } else {
+      data.active_date_id = item.today_contribution_id;
+      data.is_selected = true;
     }
 
+    // console.log('item:', JSON.stringify(item));
+    contributionYearInject.value = item.year;//子修改父的传值 （选中当年年份改为当前所选年份）响应式 
+    emit('childClickContributionDay', item.year, item.month, item.date, item.today_contribution_count, item.today_contribution_id, data.is_selected);//子传父
+    //路由携参跳转
+    router.push({ name: current_route_name.value, query: { year: item.year, from: item.year_month_date, to: item.year_month_date }, key: new Date().getTime() });
 
-    // 计算属性来合并数组，把父页所传更新数据赋值到渲染数据
-    function mergedArray(renderingArray,updataArray){
+    // {"year":2023,"month":11,"date":18,"number":10,"level":0,"isToday":false}
+    // alert(item.month + "-" + item.date+'，博文：'+item.number)
+    // router.push({ name: current_route_name.value, query: { tag_id: item.tag_name }, key: new Date().getTime() });
 
-      // console.log('updataArray:',JSON.stringify(updataArray))
-      // 计算属性来合并数组
-      const mergedArray = computed(() => {
-            // 使用Array.prototype.reduce来合并数组
-            return renderingArray.reduce((acc, curr) => {
-              const update = updataArray.find(item => item.year_month_date === curr.year_month_date);
-              return [...acc, { ...curr, ...update }];
-            }, []);
-          });
+  }
 
-          data.infos=mergedArray.value;
 
-    }
+  // 计算属性来合并数组，把父页所传更新数据赋值到渲染数据
+  function mergedArray(renderingArray, updataArray) {
 
-    
+    // console.log('updataArray:',JSON.stringify(updataArray))
+    // 计算属性来合并数组
+    const mergedArray = computed(() => {
+      // 使用Array.prototype.reduce来合并数组
+      return renderingArray.reduce((acc, curr) => {
+        const update = updataArray.find(item => item.year_month_date === curr.year_month_date);
+        return [...acc, { ...curr, ...update }];
+      }, []);
+    });
+
+    data.infos = mergedArray.value;
+
+  }
+
+
 
   //获取下周周日  周日0 => 周六6
   function getNextSunday(today) {
@@ -489,20 +500,17 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
   }
 
 
- // 组件销毁前清除watch
- onUnmounted(() => {
+  // 组件销毁前清除watch
+  onUnmounted(() => {
     // 如果watch返回了一个停止监听的函数，调用它
-    stopWatchContributionDataOrCurrentRouteQueryYear.value=null; 
+    stopWatchContributionDataOrCurrentRouteQueryYear.value = null;
 
-   });
+  });
 
 </script>
 
 
 <style scoped>
-
-
-
   .contribution-calendar-container {
     display: flex;
     flex-direction: column;
@@ -510,22 +518,17 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
     border-top-left-radius: 0.375rem;
     border-top-right-radius: 0.375rem;
     border: var(--borderWidth-thin, 1px) solid var(--borderColor-default);
-    
+
   }
 
   .contribution-table {
     display: flex;
     max-width: 100%;
-    
-    
   }
-
-
-
 
   .contribution-table-container {
     max-width: 100%;
-   
+
   }
 
 
@@ -534,6 +537,7 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
     display: flex;
   }
 
+  /* 生成日期格子 */
   .graph {
     display: grid;
     grid-template-columns: repeat(53, 21px);
@@ -546,6 +550,7 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
     margin: 21px 20px 21px 35px;
   }
 
+   /* 生成月份格子 */
   .months {
     display: grid;
     grid-template-columns: repeat(53, 21px);
@@ -598,95 +603,30 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
     /*记得把list的圆点效果去掉*/
     margin: 1.5px;
     border-radius: 3px;
-    @media screen and (min-width: 1200px) {
-  &:hover {
-    /*添加hover强调效果*/
 
-    /* filter: brightness(100%);
+    @media screen and (min-width: 1200px) {
+      &:hover {
+        /*添加hover强调效果*/
+
+        /* filter: brightness(100%);
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 1); */
 
-       /* 防止移动端重复点击同一元素没有取消选中样式 */
-    
+        /* 防止移动端重复点击同一元素没有取消选中样式 */
+
         -webkit-box-shadow: 1px 1px 13px #20232e, -1px -1px 13px #545b78;
-    box-shadow: 1px 1px 13px #20232e, -1px -1px 13px #545b78;
-    /* color: #d6d6d6; */
-    -webkit-transition: 500ms;
-    transition: 500ms;
-          
-
-    
-  }
-}
-  }
+        box-shadow: 1px 1px 13px #20232e, -1px -1px 13px #545b78;
+        /* color: #d6d6d6; */
+        -webkit-transition: 500ms;
+        transition: 500ms;
 
 
-  /* 提示条  开始*/
-  .tooltip {
-    position: relative;
-    overflow: visible;
-   
+
+      }
+    }
   }
 
 
-  .tooltiptext {
-    font-size: 10px;
-    visibility: hidden;
-    background-color: #282828;
-    color: #f1f1f1;
-    border-radius: 5px;
-    z-index: 8;
-    padding: 5px;
-    position: absolute;
-    bottom: 125%;
-    left: 50%; 
-    transform: translateX(-50%);
-    /* display: block; */
-    /* display: inline-block; */
-    /*span 标签是一个内联元素，默认情况下不支持 width 属性，因此无法直接应用 translateX 的效果,
-    解决方法：将 span 标签转换为块级元素或内联块元素，可以通过设置 display: block; 或 display: inline-block; 实现。 */
-    /* -webkit-transform: translate(-35px, -200%);
-    -moz-transform:translate(-35px, -200%);
-    -o-transform: translate(-35px, -200%);
-    -ms-transform: translate(-35px, -200%);
-    transform: translate(-35px, -200%); */
-    /* -35px是父容器的左侧边距 */
-    opacity: 0;
-    transition: opacity 0.3s;
-    text-align: center;
-    text-decoration: none;
-    text-shadow: none;
-    text-transform: none;
-    letter-spacing: normal;
-    word-wrap: break-word;
-    white-space: pre;
-    pointer-events: none;
-  }
-  
-
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-  }
-
-  .tooltip .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    opacity: 0.5;
-    border-width: 8px;
-    border-style: solid;
-    border-color: #000 transparent transparent transparent;
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    transform: translateX(-50%);
-  }
-
-
-  /* 提示条  结束*/
 
   .active {
     outline: none;
@@ -701,6 +641,7 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
   .no-active {
     opacity: .3 !important;
   }
+ /* 日期格子等级颜色 开始*/
 
   [data-level="0"] {
     fill: #ebedf0;
@@ -732,51 +673,7 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
     outline: 1px solid rgba(27, 31, 35, 0.06);
   }
 
-
-  .operation {
-    display: flex;
-    /* position: absolute; */
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-    width: 100%;
-    height: 30px;
-    .contributions_count_desc {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 125px;
-      margin-left: 70px;
-
-      .contributions_count {
-        width: 11px;
-        margin: 0 8px;
-      }
-
-      .svg_icon {
-        width: auto;
-      }
-    }
-
-    .legend {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding-right: 60px;
-
-      .level-desc {
-        margin-right: 6px;
-        margin-left: 3px;
-      }
-
-      .level {
-        margin-right: 3px;
-        width: 11px;
-        height: 11px;
-      }
-
-    }
-  }
+  /* 日期格子等级颜色 结束*/
 
   /* 没有悬停变白色  悬停保留原来颜氏*/
   .no-hover-level {
@@ -789,4 +686,70 @@ mergedArray(data.infos, parent_page_current_year_contribution_data.value);
       inset 18px 18px 30px rgba(0, 0, 0, 0.1),
       inset -18px -18px 30px rgba(255, 255, 255, 1);
   }
+
+
+  /* 等级进度提示和等级颜色 开始*/
+
+  .contribution-tip-or-level {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    margin: 10px 0px;
+    height: 30px;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+
+    /* 可视化窗口宽度小于430px 换行加自动高度 */
+    @media screen and (max-width: 430px) {
+      flex-wrap: wrap;
+      height: auto;
+    }
+  }
+
+
+  .contribution-tip-container {
+    flex: 1;
+    width: 100%;
+    padding-left: 60px;
+
+    .contribution-tip-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 125px;
+      overflow: hidden;
+
+      .contributions_count {
+        width: 11px;
+        margin: 0 8px;
+      }
+
+      .svg_icon {
+        width: auto;
+      }
+    }
+  }
+
+  .contribution-level {
+    display: flex;
+    width: 100%;
+    padding-right: 60px;
+    justify-content: end;
+    align-items: center;
+    overflow: hidden;
+
+    .level-desc {
+      margin-right: 6px;
+      margin-left: 3px;
+    }
+
+    .level {
+      margin-right: 3px;
+      width: 11px;
+      height: 11px;
+    }
+  }
+
+  /* 等级进度提示和等级颜色 结束*/
 </style>
