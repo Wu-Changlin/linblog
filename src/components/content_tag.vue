@@ -97,13 +97,29 @@
 
 
 
+ 
   
-  //把父页面所传数据赋值到当前页面的data.list
-  if (props.parentPageTagData) {
+  //把父页面所传数据赋值到当前页面的data.list(赋值仅执行1次)
+  if (props.parentPageTagData) { 
     data.list = props.parentPageTagData;
   }
 
  
+
+  // const i=ref(0)
+  // watch(
+  //     () => props.parentPageTagData,
+  //     (newValue, oldValue) => {
+  //       i.value++;
+  //       console.log(`第${i.value}次，接受父页parentPageTagData`,':',props.parentPageTagData);
+
+  //       if (newValue) {//如有路由传参更新,那么重新赋值
+  //                }
+
+
+  //     },
+  //     { immediate: true }
+  //   );
 
   //传递事件
   const emit = defineEmits(['childClickTag'])
@@ -112,7 +128,7 @@
   function clickTag(item) {
     // console.log('tag_id:', tag_id);
     data.active_tag_id = item.tag_id;
-    emit('childClickTag',data.active_tag_id);//把子页面选中的标签id传到父页面
+    emit('childClickTag', item.tag_id, item.tag_name);//把子页面选中的标签id和标签名称传到父页面
   
     //  /index ===>  /index?tag_id=Java  路由携参跳转（当前页只添加路由参没有跳转）
     router.push({ name: current_route_name.value, query: { tag_id: item.tag_name }, key: new Date().getTime() });
@@ -244,7 +260,7 @@
       /* backdrop-filter: blur(20px); */
       /* width: calc(100vw - 24px); */
       width: 100%;
-      /* max-width: 1244px; */
+      /* max-width: 1260px; */
       display: flex;
       position: relative;
       user-select: none;
@@ -267,7 +283,7 @@
       /* flex-wrap: wrap; */
       width: 100%;
       background-color: var(--bg);
-      /* max-width: 1244px; */
+      /* max-width: 1260px; */
       /* overflow: hidden; */
       .active {
         background-color: rgba(0, 0, 0, 0.03);
@@ -311,7 +327,7 @@
     position: absolute;
 
     width: 100%;
-    max-width: 1244px;
+    max-width: 1260px;
     background-color: var(--bg);
 
     .hidden-content-container {

@@ -207,7 +207,7 @@ stopParentPageCarouselImgData.value = watch(
         padding: 0;
         width: 100%;
         margin: 0;
-        max-width: 1244px;
+        max-width: 1260px;
        
         /* margin-top: 72px;  */
     }

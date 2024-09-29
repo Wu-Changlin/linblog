@@ -18,7 +18,7 @@
 
 
 <script setup>
-import { reactive,ref,onMounted } from 'vue';
+import { reactive,ref,onMounted,inject } from 'vue';
 import {useRoute, useRouter } from "vue-router";
 import axios from 'axios';
   import ContentTag from '@/components/content_tag.vue';
@@ -35,81 +35,52 @@ import axios from 'axios';
   const frontend_article_list_data=ref();
   const frontend_carousel_img_data=ref();
 
+  //来自父页面的当前选中标签id
+  const parent_page_current_active_tag_id = inject('currentActiveTagId');
 
-  
-    // const fetchTag=async()=>{
-  // // 如果你想使用axios来模拟请求，可以这样做
-  // axios.get('/data/frontend/content_tag.json', { responseType: 'json' })
-  //     .then(response => {
-
-  //       data.list = response.data; // 数据加载完毕，关闭骨架屏
-  //       maxItemsPerLines();
-
-  //     })
-  //     .catch(error => {
-
-  //       console.error('Error fetching mock data:', error);
-  //     });
-  // }
-  
-//获取菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
-onMounted(() => {
-    // 假设JSON文件与组件在同一目录下
-    // import('./mock-data.json').then(res => {
-    //   items.value = res.data;
-    // }).catch(error => {
-    //   console.error('Error fetching mock data:', error);
-    // });
-    if(route.query.tag_id){
-      console.log('route.query.tag_id：',route.query.tag_id);
-    }
-   
-    // 如果你想使用axios来模拟请求，可以这样做
-    axios.get('/data/frontend/frontend.json', { responseType: 'json' })
+//获取前端栏页数据（内容标签栏数据、轮播图数据、博文列表数据（瀑布流组件））  
+  function getFrontendPageData(){
+     axios.get('/data/frontend/frontend.json', { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {
           frontend_tag_data.value = response.data.tag_data; 
-          
-          
           frontend_carousel_img_data.value = response.data.carousel_img_data; 
           frontend_article_list_data.value = response.data.article_list_data; 
-          console.log('frontend_article_list_data:',frontend_article_list_data.value);
+          console.log('getFrontendPageData-frontend_article_list_data:',frontend_article_list_data.value);
           
 			flag.value=true;
-			is_loading.value=false;
-			// console.log('response.data.tag_data:',response.data.tag_data)
-        // }, 3000); // 假设加载时间是3秒
-		
 
+			is_loading.value=false;
+		
       })
       .catch(error => {
 
         console.error('Error fetching mock data:', error);
       });
+  }
 
-
-	//   fetchTag();
-  });
-
-  
-  //获取子页面选中的标签id数据
-  function getChildClickTag(active_tag_name){
+    //获取把子页面选中的标签id和标签名称传到父页面或者点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）
+    function getChildClickTag(active_tag_id,active_tag_name){
+     console.log('getChildClickTag(active_tag_id,active_tag_name):',active_tag_name,',',active_tag_name)
+      // flag.value=false; //初始化导致子页面选中的标签id数据出现标签栏闪烁（当前标签栏处于显示状态，出现先隐藏后显示闪烁）
 	is_loading.value=true;
-	// console.log('getChildClickTag:',id);
-     // 如果你想使用axios来模拟请求，可以这样做
-     axios.post('/data/frontend/frontend.json',{tag_name:active_tag_name}, { responseType: 'json' })
+
+     axios.post('/data/frontend/frontend.json',{tag_id:active_tag_id,tag_name:active_tag_name}, { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {
           frontend_tag_data.value = response.data.tag_data; 
           frontend_article_list_data.value = response.data.article_list_data; 
-          frontend_carousel_img_data.value = response.data.carousel_img_data; 
-          
-			flag.value=false;
+          frontend_carousel_img_data.value = response.data.carousel_img_data;
+          const data_count= frontend_article_list_data.value.length;
+          for(let i=0;i<data_count;i++)
+          {
+            frontend_article_list_data.value[i]['title']=`点击${active_tag_name}:`+frontend_article_list_data.value[i]['title']
+          }
+         
+			flag.value=true;//true：显示内容标签栏
+   
 			is_loading.value=false;
-			// console.log('response.data.tag_data:',response.data.tag_data)
-        // }, 3000); // 假设加载时间是3秒
 		
-
       })
       .catch(error => {
 
@@ -118,6 +89,38 @@ onMounted(() => {
 
   
   }
+
+  
+
+onMounted(() => {
+ 
+    // 假设JSON文件与组件在同一目录下
+    // import('./mock-data.json').then(res => {
+    //   items.value = res.data;
+    // }).catch(error => {
+    //   console.error('Error fetching mock data:', error);
+    // });
+    // 如果路由没有查询参数tag_id，那么执行getFrontendPageData。
+    if(!route.query.tag_id){
+      getFrontendPageData();
+    }else{
+    //如果路由有查询参数tag_id(点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）)，
+    //那么执行getChildClickTag。
+    // ！！！注意：因为标签id设置默认为0，所以后端：如果判断标签id是否为空或空值，那么排除标签id=0的情况。
+   let active_tag_name_from_archives_page=route.query.tag_id;
+   let active_tag_id_from_archives_page=0;
+   //如果有来自父页面的当前选中标签id，那么重新赋值。
+   if(parent_page_current_active_tag_id.value){
+    active_tag_id_from_archives_page=parent_page_current_active_tag_id.value
+   }
+      getChildClickTag(active_tag_id_from_archives_page,active_tag_name_from_archives_page);
+    }
+   
+   
+	//   fetchTag();
+  });
+
+  
 
 </script>
 
@@ -128,7 +131,7 @@ onMounted(() => {
   width: 100%;
   margin: 0;
   /* padding:0px 12px; */
-  /* max-width: 1244px; */
+  /* max-width: 1260px; */
   /* 修改盒子大小属性 */
   padding:0px 12px;
   background-color: var(--bg);

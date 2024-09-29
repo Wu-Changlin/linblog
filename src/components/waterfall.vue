@@ -551,12 +551,13 @@ const  stopParentPageArticleListData = ref(null);
   /* 骨架屏 */
   .waterfall-skeleton {
     width: 100%;
-    max-width: 1244px;
+    max-width: 1260px;
     height: auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     transition: all 0.3s ease;
+    padding-top: 10px;
    
     .item {
       width: 236px;

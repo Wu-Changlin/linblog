@@ -136,7 +136,7 @@
   </template>
   
   <script setup>
-  import { ref, reactive,onMounted, provide ,watch,onUnmounted} from "vue";
+  import { ref, reactive,onMounted, provide,inject,watch,onUnmounted} from "vue";
   import WebsiteContentCount from '@/components/website_content_count.vue';  
   import WebsiteRunTime from '@/components/website_run_time.vue';
   import ContributionCalendar from '@/components/contribution_calendar.vue';
@@ -184,6 +184,10 @@
   provide('yearDropdownPageUpdateYear', year_dropdown_page_update_year);//父传子，默认选中当年年份
 
 
+
+
+   // 注入修改当前选中标签id的方法
+   const updateCurrentActiveTagId = inject('updateCurrentActiveTagId');
 
 
   const is_loading_contribution_article_list_data=ref(true);
@@ -314,6 +318,8 @@
   //获取tag_count页选中标签下的博文数据
   function getTagCountPageClickTagArticleData(active_tag_menu_name,active_tag_id,active_tag_name){
    
+
+    updateCurrentActiveTagId(active_tag_id);
     //1.空值，关闭博文瀑布流 2.有值，获取数据渲染博文瀑布流
     tag_name.value=active_tag_name;
     router.push({ name: active_tag_menu_name, query: { tag_id: active_tag_name }, key: new Date().getTime() });

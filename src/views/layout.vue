@@ -50,7 +50,19 @@ const getSearchKeywordMatchArticleListData= ()=>{
       });
 }
 
+const current_active_tag_id=ref(0);
+// 提供数据
+provide('currentActiveTagId',current_active_tag_id);
 
+ 
+ // 修改当前选中标签id的方法
+ function updateCurrentActiveTagId(new_active_tag_id) {
+	current_active_tag_id.value = new_active_tag_id;
+	console.log('current_active_tag_id:',current_active_tag_id.value)
+ }
+
+ // 暴露方法供子组件调用
+ provide('updateCurrentActiveTagId', updateCurrentActiveTagId);
 
 // 使用 provide 向下传递方法
 provide('getSearchKeywordMatchArticleListData', getSearchKeywordMatchArticleListData);

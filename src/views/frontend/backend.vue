@@ -108,7 +108,7 @@ onMounted(() => {
   width: 100%;
   margin: 0;
   /* padding:0px 12px; */
-  /* max-width: 1244px; */
+  /* max-width: 1260px; */
   /* 修改盒子大小属性 */
   padding:0px 12px;
   background-color: var(--bg);
