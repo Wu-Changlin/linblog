@@ -134,7 +134,6 @@
 </template>
 <script setup>
   import { reactive, ref, onMounted, onUnmounted ,watch,computed,inject} from 'vue';
-  import axios from 'axios';
   import {useRoute, useRouter } from "vue-router"; 
   import { LazyImg, Waterfall } from "vue-waterfall-plugin-next";
   import "vue-waterfall-plugin-next/dist/style.css";
@@ -258,6 +257,9 @@ const  stopParentPageArticleListData = ref(null);
 
   //每行显示个数。如没有符合尺寸，默认选择相近条件。
   const breakpoints = ref({
+    2160: {
+      rowPerView: 5
+    },
     1424: {
       rowPerView: 5
     },
@@ -423,16 +425,10 @@ const  stopParentPageArticleListData = ref(null);
       height: 18px;
     }
 
-
 	}
-
 
     }
  
- 
-
-
-
 
     .footer {
       padding: 12px;
@@ -551,7 +547,7 @@ const  stopParentPageArticleListData = ref(null);
   /* 骨架屏 */
   .waterfall-skeleton {
     width: 100%;
-    max-width: 1260px;
+    /* max-width: 1260px; */
     height: auto;
     display: flex;
     flex-direction: row;

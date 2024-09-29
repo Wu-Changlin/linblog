@@ -18,13 +18,12 @@
 
 
 <script setup>
-import { reactive,ref,onMounted,inject } from 'vue';
+import { reactive,ref,onMounted,inject,getCurrentInstance} from 'vue';
 import {useRoute, useRouter } from "vue-router";
-import axios from 'axios';
   import ContentTag from '@/components/content_tag.vue';
   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
-
+  const { proxy } = getCurrentInstance();//axios 代理
   const route = useRoute();
   const router = useRouter();
 
@@ -40,14 +39,13 @@ import axios from 'axios';
 
 //获取前端栏页数据（内容标签栏数据、轮播图数据、博文列表数据（瀑布流组件））  
   function getFrontendPageData(){
-     axios.get('/data/frontend/frontend.json', { responseType: 'json' })
+     proxy.$get('/data/frontend/frontend.json')
       .then(response => {
         // setTimeout(() => {
-          frontend_tag_data.value = response.data.tag_data; 
-          frontend_carousel_img_data.value = response.data.carousel_img_data; 
-          frontend_article_list_data.value = response.data.article_list_data; 
-          console.log('getFrontendPageData-frontend_article_list_data:',frontend_article_list_data.value);
-          
+          frontend_tag_data.value = response.tag_data; 
+          frontend_carousel_img_data.value = response.carousel_img_data; 
+          frontend_article_list_data.value = response.article_list_data; 
+        
 			flag.value=true;
 
 			is_loading.value=false;
@@ -61,16 +59,16 @@ import axios from 'axios';
 
     //获取把子页面选中的标签id和标签名称传到父页面或者点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）
     function getChildClickTag(active_tag_id,active_tag_name){
-     console.log('getChildClickTag(active_tag_id,active_tag_name):',active_tag_name,',',active_tag_name)
+    
       // flag.value=false; //初始化导致子页面选中的标签id数据出现标签栏闪烁（当前标签栏处于显示状态，出现先隐藏后显示闪烁）
 	is_loading.value=true;
 
-     axios.post('/data/frontend/frontend.json',{tag_id:active_tag_id,tag_name:active_tag_name}, { responseType: 'json' })
+     proxy.$post('/data/frontend/frontend.json',{tag_id:active_tag_id,tag_name:active_tag_name})
       .then(response => {
         // setTimeout(() => {
-          frontend_tag_data.value = response.data.tag_data; 
-          frontend_article_list_data.value = response.data.article_list_data; 
-          frontend_carousel_img_data.value = response.data.carousel_img_data;
+          frontend_tag_data.value = response.tag_data; 
+          frontend_article_list_data.value = response.article_list_data; 
+          frontend_carousel_img_data.value = response.carousel_img_data;
           const data_count= frontend_article_list_data.value.length;
           for(let i=0;i<data_count;i++)
           {

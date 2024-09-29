@@ -72,11 +72,12 @@
 
 
 <script setup>
-  import { reactive, ref, nextTick, onMounted, onUnmounted } from 'vue';
-  import axios from 'axios';
+  import { reactive, ref, nextTick, onMounted, onUnmounted ,getCurrentInstance} from 'vue';
+
  import Skeleton from '@/components/skeleton.vue'
   import { useRouter } from "vue-router";
   const router = useRouter();
+  const { proxy } = getCurrentInstance();//axios 代理
 
   const hiddenTagContentRet = ref(null);//获取隐藏标签容器dom宽度，用于计算每行显示标签数量
 
@@ -109,10 +110,10 @@
  
 
      // 如果你想使用axios来模拟请求，可以这样做
-     axios.get('/data/frontend/content_tag.json', { responseType: 'json' })
+     proxy.$get('/data/frontend/content_tag.json')
       .then(response => {
        
-            data.list = response.data; // 数据加载完毕，关闭骨架屏
+            data.list = response; // 数据加载完毕，关闭骨架屏
            is_loading.value=false;
            console.log(' is_loading:');
 

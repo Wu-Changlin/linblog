@@ -22,24 +22,24 @@
 
 
 <script setup>
-import { reactive, ref,onMounted,provide} from 'vue';
-import axios from 'axios';
+import { reactive, ref,onMounted,provide,getCurrentInstance} from 'vue';
 import { useRouter } from "vue-router";
 import NavBar from "@/components/nav_bar.vue";
 import SideBar from "@/components/side_bar.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import Footer from "@/components/footer.vue";
+const { proxy } = getCurrentInstance();//axios 代理
 
 
 const layout_page_article_count=ref(0);
 const layout_page_article_list_data=ref();
 // //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
 const getSearchKeywordMatchArticleListData= ()=>{
-	axios.get('/data/frontend/all_article.json', { responseType: 'json' })
+	proxy.$get('/data/frontend/all_article.json')
       .then(response => {
         // setTimeout(() => {
-			layout_page_article_count.value = response.data.article_count; // 博文数量
-			layout_page_article_list_data.value = response.data.article_list; // 博文列表
+			layout_page_article_count.value = response.article_count; // 博文数量
+			layout_page_article_list_data.value = response.article_list; // 博文列表
         // }, 3000); // 假设加载时间是3秒
 		
 
@@ -49,43 +49,59 @@ const getSearchKeywordMatchArticleListData= ()=>{
         console.error('Error fetching mock data:', error);
       });
 }
+// 使用 provide 向下传递方法
+provide('getSearchKeywordMatchArticleListData', getSearchKeywordMatchArticleListData);
+
+// 修改当前选中标签id 开始
 
 const current_active_tag_id=ref(0);
 // 提供数据
 provide('currentActiveTagId',current_active_tag_id);
 
- 
  // 修改当前选中标签id的方法
  function updateCurrentActiveTagId(new_active_tag_id) {
 	current_active_tag_id.value = new_active_tag_id;
-	console.log('current_active_tag_id:',current_active_tag_id.value)
  }
 
- // 暴露方法供子组件调用
+ // 暴露方法(修改当前选中标签id的方法)供子组件调用
  provide('updateCurrentActiveTagId', updateCurrentActiveTagId);
 
-// 使用 provide 向下传递方法
-provide('getSearchKeywordMatchArticleListData', getSearchKeywordMatchArticleListData);
+// 修改当前选中标签id 结束
+
+// 修改当前选中菜单id 开始
+ const current_active_active_menu_id=ref(1);
+// 提供数据
+provide('currentActiveMenuId',current_active_active_menu_id);
+
+ // 修改当前选中菜单id的方法
+ function updateCurrentActiveMenuId(new_active_menu_id) {
+	current_active_active_menu_id.value = new_active_menu_id;
+ }
+
+ // 暴露方法(修改当前选中菜单id的方法)供子组件调用
+ provide('updateCurrentActiveMenuId', updateCurrentActiveMenuId);
+
+// 修改当前选中菜单id 结束
+
 
 const layout_page_log=ref();
 const layout_page_menu_list_data=ref();
 //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 function getLayoutLogOrMenuListData(){
-	    // 如果你想使用axios来模拟请求，可以这样做
-	axios.get('/data/frontend/page_components.json', { responseType: 'json' })
-      .then(response => {
-        
-			layout_page_log.value = response.data.log_data; // log
-			layout_page_menu_list_data.value = response.data.menu_data; // 菜单数据
-     
-			getSearchKeywordMatchArticleListData();
-	
 
-      })
-      .catch(error => {
+	proxy.$get("/data/frontend/layout.json")
+	.then(response => {
+        layout_page_log.value = response.log_data; // log
+		layout_page_menu_list_data.value = response.menu_data; // 菜单数据
+		getSearchKeywordMatchArticleListData();//匹配关键字数据源
+		// console.log('response.log_data:',response.log_data);
+    })
+	.catch(error => {
 
-        console.error('Error fetching mock data:', error);
-      });
+    	console.error('Error fetching mock data:', error);
+  	});
+
+
 
 }
 

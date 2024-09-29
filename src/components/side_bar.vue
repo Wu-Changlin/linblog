@@ -3,7 +3,7 @@
     <div class="side-bar">
 
         <ul class="channel-list">
-			<li  v-for="(menu,index) in parentPageMenuData"  :data-menu_path="menu.menu_path" :data-active_menu_path="data.active_menu_path" :class="{'active-channel': data.active_menu_path==menu.menu_path?true:''}"  @click="clickMenu(menu.menu_path)">
+			<li  v-for="(menu,index) in parentPageMenuData"  :data-active_menu_path="active_menu_name" :data-menu.menu_path="menu.menu_path" :class="{'active-channel': active_menu_name==menu.menu_name?true:''}">
 				<a class="link-wrapper":href="menu.menu_path">
 					<svg-icon  class="svg_icon"  style="width: 1em; height: 1em; margin-right: 8px;"  :icon-class="menu.menu_name" />
 					<span class="channel"> {{menu.menu_title}}</span>
@@ -16,7 +16,9 @@
 </template>
 
 <script setup>
-import { reactive, ref,onMounted } from 'vue';
+import { reactive, ref,onMounted ,computed} from 'vue';
+import { useRoute,useRouter } from "vue-router";
+const route=useRoute();
 // menu_name: string //菜单唯一标识，与路由名保持一致
 // menu_title: string //菜单显示名称
 
@@ -24,85 +26,13 @@ import { reactive, ref,onMounted } from 'vue';
 const props = defineProps({
 	parentPageMenuData: {
 			type: Array,
-			default:[
-						{
-						menu_id: 1,
-						menu_name: "index",
-						menu_title: "首页",
-						menu_path: "/",
-						},
-						{
-						menu_id: 2,
-						menu_name: "frontend",
-						menu_title: "前端",
-						menu_path: "/frontend",
-						},
-						{
-						menu_id: 3,
-						menu_name: "backend",
-						menu_title: "后端",
-						menu_path: "/backend",
-						},
-
-						{
-						menu_id: 4,
-						menu_name: "resource",
-						menu_title: "资源",
-						menu_path: "/resource",
-						},
-
-						{
-						menu_id: 5,
-						menu_name: "archives",
-						menu_title: "归档",
-						menu_path: "/archives",
-						},
-
-						{
-						menu_id: 6,
-						menu_name: "diary",
-						menu_title: "随笔",
-						menu_path: "/diary",
-						},
-
-					],
     	},
-    
 });
 
+//计算属性active_menu_name来获取路由的名称
+const active_menu_name = computed(() => route.name);
 
 
-  const menuInfo = ref(
-	
-);
-
-
-
-
-const data=reactive( {
-	active_menu_path:'/index', 
-})
-
-
-
-
-
-  onMounted(()=>{
-    //     console.log('挂载完毕');
-		//导航栏菜单选中背景色刷新后消失的原因及解决办法
-		data.active_menu_path =  window.location.pathname;
-		// console.log('window.location.pathname:',window.location.pathname);
-		// window.location.pathname: /archives
-		
-    })
-
-    
-function clickMenu(menu_path){  
-	data.active_menu_path=menu_path;
-	// console.log('menmenu_nameu_id:',menu_path);
-	// console.log('data.active_menu_path:',data.active_menu_path);
-
-}
 </script>
 
 <style scoped>

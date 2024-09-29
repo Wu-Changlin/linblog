@@ -49,7 +49,7 @@ const routes=[
                 path:'/test',
                 name:"test",
                 component:()=>import('@/views/frontend/test.vue'),//引入该路由使用的组件
-            },
+            }
             
         
         
@@ -95,7 +95,7 @@ const routes=[
         path: '/:pathMatch(.*)', // 使用:pathMatch(.*)作为通配符
         redirect: '/404', // 重定向到404页面
         meta: { hidden: true } // 同样，隐藏这个路由
-      },
+      }
       
 
 ]

@@ -132,9 +132,8 @@
 
 <script setup>
 // import Footer from "@/components/footer.vue";
-import {ref,reactive,onMounted,onUnmounted,nextTick,watch,onUpdated,provide } from "vue";
+import {ref,reactive,onMounted,onUnmounted,nextTick,watch,onUpdated,provide,getCurrentInstance } from "vue";
 import { useRoute, useRouter } from 'vue-router';
-import axios from "axios";
 import Skeleton from '@/components/skeleton.vue';
 import Prism from "prismjs";
 import NavBar from "@/components/nav_bar.vue";
@@ -143,7 +142,7 @@ import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import ArticleCatalog from "@/components/article_catalog.vue";
 const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
 const router=useRouter();
-
+const { proxy } = getCurrentInstance();//axios 代理
 
 const is_loading=ref(true);
 const current_route_query=ref(null); 
@@ -172,17 +171,17 @@ onMounted(()=>{
         router.push({path:'/404', });
      }
     
-     axios.get('/data/frontend/article_detail.json', { responseType: 'json' })
+     proxy.$get('/data/frontend/article_detail.json')
       .then(response => {
-            data.menu_title=response.data.menu_title;
-            data.tag_ids_name=response.data.tag_ids_name;    
-            data.visits=response.data.visits;
-            data.word_count=response.data.word_count; 
-            data.read_time=response.data.read_time;
-            data.title=response.data.title;
-            data.author_name=response.data.author_name;
-            data.created_time=response.data.created_time;
-            data.article_content=response.data.article_content;
+            data.menu_title=response.menu_title;
+            data.tag_ids_name=response.tag_ids_name;    
+            data.visits=response.visits;
+            data.word_count=response.word_count; 
+            data.read_time=response.read_time;
+            data.title=response.title;
+            data.author_name=response.author_name;
+            data.created_time=response.created_time;
+            data.article_content=response.article_content;
 
 
             //获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
@@ -192,11 +191,11 @@ onMounted(()=>{
    
 
     // setTimeout(() => {
-			// index_tag_data.value = response.data.tag_data; // 数据加载完毕，关闭骨架屏
-			// index_article_list_data.value = response.data.article_list_data; // 数据加载完毕，关闭骨架屏
+			// index_tag_data.value = response.tag_data; // 数据加载完毕，关闭骨架屏
+			// index_article_list_data.value = response.article_list_data; // 数据加载完毕，关闭骨架屏
 			// flag.value=true;
 			// is_loading.value=false;
-			// console.log('response.data:',response.data);
+			// console.log('response:',response);
         // }, 3000); // 假设加载时间是3秒
 		
 
@@ -221,11 +220,11 @@ const article_page_article_count=ref(0);
 const article_page_article_list_data=ref();
 //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
 const getSearchKeywordMatchArticleListData= ()=>{
-	axios.get('/data/frontend/all_article.json', { responseType: 'json' })
+	proxy.$get('/data/frontend/all_article.json')
       .then(response => {
         // setTimeout(() => {
-			article_page_article_count.value = response.data.article_count; // 博文数量
-			article_page_article_list_data.value = response.data.article_list; // 博文列表
+			article_page_article_count.value = response.article_count; // 博文数量
+			article_page_article_list_data.value = response.article_list; // 博文列表
         // }, 3000); // 假设加载时间是3秒
 		
 
@@ -248,11 +247,11 @@ const article_page_menu_list_data=ref();
 //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 function getLayoutLogOrMenuListData(){
       // 如果你想使用axios来模拟请求，可以这样做
-      axios.get('/data/frontend/page_components.json', { responseType: 'json' })
+      proxy.$get('/data/frontend/layout.json')
       .then(response => {
         // setTimeout(() => {
-			article_page_log.value = response.data.log_data; // log
-			article_page_menu_list_data.value = response.data.menu_data; // 菜单数据
+			article_page_log.value = response.log_data; // log
+			article_page_menu_list_data.value = response.menu_data; // 菜单数据
         // }, 3000); // 假设加载时间是3秒
 		
 		// setTimeout(() => {
@@ -378,6 +377,13 @@ onUpdated(() => {
 </script>
 
 <style scoped>
+
+*{
+    overflow: auto; /* 启用滚动功能 */
+    -ms-overflow-style: none; /* 适用于 Internet Explorer 和旧版 Edge */
+    scrollbar-width: none; /* 适用于 Firefox */
+    -webkit-scrollbar:none;/* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/ 
+}
 
 :deep(div.code-toolbar > .toolbar) {
         opacity: 1;

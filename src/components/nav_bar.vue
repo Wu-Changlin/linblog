@@ -83,7 +83,6 @@
 	import { ref, reactive, onMounted, onUnmounted, watch, computed, inject,provide} from "vue";
 	import { useRouter, useRoute } from "vue-router";
 	import NavTheme from './nav_theme.vue';
-	import axios from 'axios';
 	import { debounce, throttle } from '@/hooks/debounce_throttle.js';
 	
 	const router = useRouter();

@@ -58,22 +58,7 @@
         
       
           <!-- 标签统计栏 结束-->
-          <!-- 点击标签结果栏 开始-->
-          
-          <div v-if="tag_name" class="active-tag-count">
-            <div  class="active-tag-count-content">
-              <div class="text-left"> <h3>标签：{{tag_name}} </h3></div>
-              <div class="line"></div>
-              <div class="text-right"> <span>结果：找到{{ tag_number}}个</span></div>
-            </div>
-          </div>
-
-          <div   v-if="tag_name" style="width: 100%;">
-
-              <Waterfall :parentPageArticleListData="click_tag_all_article_data" :isLoading="is_loading_click_tag_all_article"></Waterfall>
-          </div>
-          
-          <!-- 点击标签结果栏 结束-->
+        
       
           <!-- 贡献统计栏 开始-->
           <h2>贡献</h2>
@@ -136,7 +121,7 @@
   </template>
   
   <script setup>
-  import { ref, reactive,onMounted, provide,inject,watch,onUnmounted} from "vue";
+  import { ref, reactive,onMounted, provide,inject,watch,onUnmounted,getCurrentInstance} from "vue";
   import WebsiteContentCount from '@/components/website_content_count.vue';  
   import WebsiteRunTime from '@/components/website_run_time.vue';
   import ContributionCalendar from '@/components/contribution_calendar.vue';
@@ -144,8 +129,8 @@
   import Waterfall from '@/components/waterfall.vue';
   import YearDropdown from '@/components/year_dropdown.vue';
   import Skeleton from '@/components/skeleton.vue';
-  import axios from 'axios';
   import {useRoute, useRouter } from "vue-router"; 
+  const { proxy } = getCurrentInstance();//axios 代理
   const router = useRouter();
 
 
@@ -195,18 +180,18 @@
   onMounted(() => {
     // 假设JSON文件与组件在同一目录下
     // import('./mock-data.json').then(res => {
-    //   items.value = res.data;
+    //   items.value = res;
     // }).catch(error => {
     //   console.error('Error fetching mock data:', error);
     // });
     
     // 如果你想使用axios来模拟请求，可以这样做
-    axios.get('/data/frontend/archives.json', { responseType: 'json' })
+    proxy.$get('/data/frontend/archives.json')
       .then(response => {
 
-        website_content_count_data.value=response.data.website_content_count_data;
-        tag_count_data.value=response.data.tag_count_data;
-        contribution_calendar_count_data.value=response.data.contribution_calendar_count_data;
+        website_content_count_data.value=response.website_content_count_data;
+        tag_count_data.value=response.tag_count_data;
+        contribution_calendar_count_data.value=response.contribution_calendar_count_data;
 
         current_year_contribution_data.value= contribution_calendar_count_data.value.current_year_contribution_data;
         last_year_contribution_count.value=contribution_calendar_count_data.value.last_year_contribution_count;
@@ -220,11 +205,11 @@
         is_loading.value=false;
         is_loading_contribution_article_list_data.value=false;
         // setTimeout(() => {
-			// index_tag_data.value = response.data.tag_data; // 数据加载完毕，关闭骨架屏
-			// index_article_list_data.value = response.data.article_list_data; // 数据加载完毕，关闭骨架屏
+			// index_tag_data.value = response.tag_data; // 数据加载完毕，关闭骨架屏
+			// index_article_list_data.value = response.article_list_data; // 数据加载完毕，关闭骨架屏
 			// flag.value=true;
 			// is_loading.value=false;
-			// console.log('response.data:',response.data);
+			// console.log('response:',response);
         // }, 3000); // 假设加载时间是3秒
 		
 
@@ -251,12 +236,12 @@
     
     year_dropdown_page_update_year.value=active_year;
    
-    axios.post('/data/frontend/contribution_year_'+active_year+'.json',{year:active_year}, { responseType: 'json' })
+    proxy.$post('/data/frontend/contribution_year_'+active_year+'.json')
       .then(response => {
     
-       current_year_contribution_data.value=response.data.current_year_contribution_data;
-        last_year_contribution_count.value=response.data.last_year_contribution_count;
-        last_month_article_list_data.value=response.data.last_month_article_list_data;
+       current_year_contribution_data.value=response.current_year_contribution_data;
+        last_year_contribution_count.value=response.last_year_contribution_count;
+        last_month_article_list_data.value=response.last_month_article_list_data;
         is_loading_contribution_article_list_data.value=false;
         // setTimeout(() => {
           // console.log('current_year_contribution_data:',JSON.stringify(current_year_contribution_data.value)); 
@@ -286,11 +271,11 @@
       
       // console.log('contribution_day_number_data.value:',contribution_day_number_data.value);
       
-      axios.post('/data/frontend/click_contribution_day.json',{today_contribution_id:active_today_contribution_id}, { responseType: 'json' })
+      proxy.$post('/data/frontend/click_contribution_day.json')
       .then(response => {
        
-        last_month_article_list_data.value=response.data.contribution_article_list_data;
-        last_year_contribution_count.value=response.data.last_year_contribution_count;
+        last_month_article_list_data.value=response.contribution_article_list_data;
+        last_year_contribution_count.value=response.last_year_contribution_count;
        
         is_loading_contribution_article_list_data.value=false;
   
@@ -310,37 +295,13 @@
  
   }
 
-  const tag_name=ref('');
-  const tag_number=ref(0);
-  const click_tag_all_article_data=ref([]);
-  const is_loading_click_tag_all_article=ref(true);
 
   //获取tag_count页选中标签下的博文数据
   function getTagCountPageClickTagArticleData(active_tag_menu_name,active_tag_id,active_tag_name){
-   
-
-    updateCurrentActiveTagId(active_tag_id);
-    //1.空值，关闭博文瀑布流 2.有值，获取数据渲染博文瀑布流
-    tag_name.value=active_tag_name;
+    updateCurrentActiveTagId(active_tag_id); //修改父页面注入的选中标签id，用于菜单栏页获取选中标签id数据
+    //跳转到标签所属的菜单栏页
     router.push({ name: active_tag_menu_name, query: { tag_id: active_tag_name }, key: new Date().getTime() });
-    // if(tag_name.value){//如果tag_name存在，那么获取数据。
-    //   axios.post('/data/frontend/click_tag_all_article.json',{tag_id:active_tag_id,tag_name:active_tag_name}, { responseType: 'json' })
-    //   .then(response => {
-
-    //     tag_number.value=response.data.click_tag_all_article_count;
-    //     click_tag_all_article_data.value=response.data.article_list_data;
-    //     is_loading_click_tag_all_article.value=false;
-    //     // setTimeout(() => {
-			
-    //     // }, 3000); // 假设加载时间是3秒
-    //   })
-    //   .catch(error => {
-    //     console.error('Error fetching mock data:', error);
-    //   });
-    // }
-    
-
-    
+ 
 
   }
   

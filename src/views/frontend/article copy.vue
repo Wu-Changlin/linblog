@@ -139,7 +139,6 @@ import ArticleCatalog from "@/components/article_catalog.vue";
 // import Footer from "@/components/footer.vue";
 import {ref,reactive,onMounted,onUnmounted} from "vue";
 import { useRoute, useRouter } from 'vue-router';
-import axios from "axios";
 import Skeleton from '@/components/skeleton.vue';
 const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
 const router=useRouter();
@@ -174,26 +173,26 @@ onMounted(()=>{
         router.push({path:'/404', });
      }
     
-     axios.get('/data/frontend/article_detail.json', { responseType: 'json' })
+     proxy.$get('/data/frontend/article_detail.json')
       .then(response => {
-            data.menu_title=response.data.menu_title;
-            data.tag_ids_name=response.data.tag_ids_name;    
-            data.visits=response.data.visits;
-            data.word_count=response.data.word_count; 
-            data.read_time=response.data.read_time;
-            data.title=response.data.title;
-            data.author_name=response.data.author_name;
-            data.created_time=response.data.created_time;
-            data.article_content=response.data.article_content;
+            data.menu_title=response.menu_title;
+            data.tag_ids_name=response.tag_ids_name;    
+            data.visits=response.visits;
+            data.word_count=response.word_count; 
+            data.read_time=response.read_time;
+            data.title=response.title;
+            data.author_name=response.author_name;
+            data.created_time=response.created_time;
+            data.article_content=response.article_content;
 
             is_loading.value=false;//取消骨架屏
            
     // setTimeout(() => {
-			// index_tag_data.value = response.data.tag_data; // 数据加载完毕，关闭骨架屏
-			// index_article_list_data.value = response.data.article_list_data; // 数据加载完毕，关闭骨架屏
+			// index_tag_data.value = response.tag_data; // 数据加载完毕，关闭骨架屏
+			// index_article_list_data.value = response.article_list_data; // 数据加载完毕，关闭骨架屏
 			// flag.value=true;
 			// is_loading.value=false;
-			// console.log('response.data:',response.data);
+			// console.log('response:',response);
         // }, 3000); // 假设加载时间是3秒
 		
 

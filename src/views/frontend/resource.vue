@@ -24,56 +24,29 @@
   
   
   <script setup>
-  import { reactive ,ref,onMounted} from 'vue';
+  import { reactive ,ref,onMounted,getCurrentInstance} from 'vue';
   import { useRouter } from "vue-router";
-  import axios from 'axios';
   import ContentTag from '@/components/content_tag.vue';
-//   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
-  
-  
+  const { proxy } = getCurrentInstance();//axios 代理
   
   const router = useRouter();
-
   const flag=ref(false);
   const is_loading = ref(true);
-
   const resource_tag_data=ref();
   const resource_article_list_data=ref();
 
-
-
-  
-    // const fetchTag=async()=>{
-  // // 如果你想使用axios来模拟请求，可以这样做
-  // axios.get('/data/frontend/content_tag.json', { responseType: 'json' })
-  //     .then(response => {
-
-  //       data.list = response.data; // 数据加载完毕，关闭骨架屏
-  //       maxItemsPerLines();
-
-  //     })
-  //     .catch(error => {
-
-  //       console.error('Error fetching mock data:', error);
-  //     });
-  // }
   
 //获取菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 onMounted(() => {
-    // 假设JSON文件与组件在同一目录下
-    // import('./mock-data.json').then(res => {
-    //   items.value = res.data;
-    // }).catch(error => {
-    //   console.error('Error fetching mock data:', error);
-    // });
+  
    
     // 如果你想使用axios来模拟请求，可以这样做
-    axios.get('/data/frontend/resource.json', { responseType: 'json' })
+    proxy.$get('/data/frontend/resource.json')
       .then(response => {
         // setTimeout(() => {
-			resource_tag_data.value = response.data.tag_data; // 标签
-			resource_article_list_data.value = response.data.article_list_data; // 博文列表
+			resource_tag_data.value = response.tag_data; // 标签
+			resource_article_list_data.value = response.article_list_data; // 博文列表
 		
       flag.value=true;
 			is_loading.value=false;
