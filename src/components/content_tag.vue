@@ -237,7 +237,7 @@
     position: fixed;
     z-index: 9;
     width: 100%;
-    max-width: 1244px;
+    max-width: 1260px;
     background-color: var(--bg);
 
     .content-container {
@@ -266,7 +266,7 @@
       /*这是关键属性，flex模式允许换行 */
       /* flex-wrap: wrap; */
       width: 100%;
-
+      background-color: var(--bg);
       /* max-width: 1244px; */
       /* overflow: hidden; */
       .active {
@@ -284,7 +284,7 @@
         cursor: pointer;
         -webkit-user-select: none;
         user-select: none;
-
+        background-color: var(--bg);
 
         /*鼠标移入效果*/
         &:hover {
@@ -375,8 +375,7 @@
     /* transform: translateY(100%); */
     z-index: 10;
     width: 100%;
-
-    max-width: 1255px;
+    max-width: 1260px;
 
     /* 防止元素溢出 */
     .arrow-more-tag-content-container {
@@ -392,13 +391,14 @@
       height: 40px;
       white-space: nowrap;
       height: auto;
+      width: 100%;
 
       .arrow-more-tag-content {
         display: flex;
         color: var(--text);
         /*这是关键属性，flex模式允许换行 */
         flex-wrap: wrap;
-
+        background-color: var(--bg);
         .active {
           background-color: rgba(0, 0, 0, 0.03);
           border-radius: 999px;
@@ -414,7 +414,7 @@
           cursor: pointer;
           -webkit-user-select: none;
           user-select: none;
-
+          background-color: var(--bg);
 
           /*鼠标移入效果*/
           &:hover {

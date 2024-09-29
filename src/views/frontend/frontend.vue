@@ -19,14 +19,13 @@
 
 <script setup>
 import { reactive,ref,onMounted } from 'vue';
-import { useRouter } from "vue-router";
+import {useRoute, useRouter } from "vue-router";
 import axios from 'axios';
   import ContentTag from '@/components/content_tag.vue';
   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
-  
-  
-  
+
+  const route = useRoute();
   const router = useRouter();
 
   const flag=ref(false);
@@ -61,6 +60,9 @@ onMounted(() => {
     // }).catch(error => {
     //   console.error('Error fetching mock data:', error);
     // });
+    if(route.query.tag_id){
+      console.log('route.query.tag_id：',route.query.tag_id);
+    }
    
     // 如果你想使用axios来模拟请求，可以这样做
     axios.get('/data/frontend/frontend.json', { responseType: 'json' })
@@ -91,11 +93,11 @@ onMounted(() => {
 
   
   //获取子页面选中的标签id数据
-  function getChildClickTag(id){
+  function getChildClickTag(active_tag_name){
 	is_loading.value=true;
 	// console.log('getChildClickTag:',id);
      // 如果你想使用axios来模拟请求，可以这样做
-     axios.get('/data/frontend/frontend.json', { responseType: 'json' })
+     axios.post('/data/frontend/frontend.json',{tag_name:active_tag_name}, { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {
           frontend_tag_data.value = response.data.tag_data; 

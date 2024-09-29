@@ -1,6 +1,10 @@
 <template>
+  <div class="container" @scroll="onReachBottom">
+		<NavBar :parentPageLogData="search_page_log"  :parentPageArticleCount="search_page_article_count" :parentPageArticleListData="search_page_article_list_data"></NavBar>
+
+    <div class="main-content with-side-bar">
   <!-- <div class="search-page" ref="getSearchKeywordMatchRef"  @scroll="onReachBottom"> -->
-  <div class="search-page" @scroll="onReachBottom">
+  <div class="search-page">
     <!-- 搜索结果栏 开始-->
     <div class="search-container">
 
@@ -30,6 +34,12 @@
     </div>
     <!-- 没有更多数据占位 结束-->
   </div>
+  
+  </div>
+  <FloatingBtnSets  :parentPageMenuData="search_page_menu_list_data"></FloatingBtnSets>
+</div>
+
+
 </template>
 
 <script setup>
@@ -40,6 +50,61 @@
   import Waterfall from '@/components/waterfall.vue';
   import EmptyState from '@/components/empty_state.vue';
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
+  import NavBar from "@/components/nav_bar.vue";
+  import FloatingBtnSets from "@/components/floating_btn_sets.vue";
+
+
+
+  const search_page_article_count=ref(0);
+const search_page_article_list_data=ref();
+//获取搜索关键字匹配所用数据源  提供一个获取数据的方法
+const getSearchKeywordMatchArticleListData= ()=>{
+	axios.get('/data/frontend/all_article.json', { responseType: 'json' })
+      .then(response => {
+        // setTimeout(() => {
+          search_page_article_count.value = response.data.article_count; // 博文数量
+          search_page_article_list_data.value = response.data.article_list; // 博文列表
+        // }, 3000); // 假设加载时间是3秒
+		
+
+      })
+      .catch(error => {
+
+        console.error('Error fetching mock data:', error);
+      });
+}
+
+
+// 使用 provide 向下传递方法
+provide('getSearchKeywordMatchArticleListData', getSearchKeywordMatchArticleListData);
+
+const search_page_log=ref();
+const search_page_menu_list_data=ref();
+
+//获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
+function getLayoutLogOrMenuListData(){
+      // 如果你想使用axios来模拟请求，可以这样做
+      axios.get('/data/frontend/page_components.json', { responseType: 'json' })
+      .then(response => {
+        // setTimeout(() => {
+			search_page_log.value = response.data.log_data; // log
+			search_page_menu_list_data.value = response.data.menu_data; // 菜单数据
+        // }, 3000); // 假设加载时间是3秒
+		
+		// setTimeout(() => {
+			//在组件挂载后调用方法获取数据
+			getSearchKeywordMatchArticleListData();
+		// }, 3000); // 延迟3秒
+
+      })
+      .catch(error => {
+
+        console.error('Error fetching mock data:', error);
+      });
+
+}
+
+
 
   const route = useRoute();
 
@@ -52,6 +117,7 @@
 
   const is_loading = ref(true);
   const search_page_search_article_list_data = ref([]);//关键词文章列表
+  
   //获取搜索关键字匹配结果   总页数>=当前页数 ，模拟时总页数没有axios赋值，随机数赋值
   function getSearchKeywordMatchData() {
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
@@ -189,7 +255,9 @@
       { immediate: true }
     );
 
-    //  getSearchKeywordMatchData();
+    //获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
+    getLayoutLogOrMenuListData()
+
 
   });
 
@@ -202,26 +270,49 @@
 </script>
 
 <style scoped>
+
+
+.container {
+	padding: 0;
+	max-width: 1728px;
+	background-color: var(--bg);  /* fff*/
+	margin: 0 auto;
+  height: 100vh;
+  
+
+	.main {
+	    display: flex;
+	
+        .main-content {
+            width: 100%;	
+            
+        }
+	}
+}
+
   .search-page {
-    overflow-x: hidden;
-    /* 禁止容器x轴方向滚动 */
-    height: 100vh;
-    /*VUE项目中使用@scroll获取不到事件对象，结果undefined。原因没有给父盒子设置固定高度 */
-  }
-
-  .search-container {
-    overflow-x: hidden;
-    /* 禁止容器x轴方向滚动 */
-    display: flex;
-
-
+	display: flex;
+    overflow-x: hidden;/* 禁止容器x轴方向滚动 */
     flex-direction: column;
-    padding: 0 12px;
-    padding-top: 72px;
-    width: 100%;
+	  flex-wrap:wrap;
+	padding-top: 72px;
+	width: 100%;
+	margin: 0 auto;
+	padding-left: 12px;
+	padding-right: 12px;
+   
 
   }
-
+  .search-container {
+      overflow-x: hidden;/* 禁止容器x轴方向滚动 */
+      display: flex;
+      flex-direction: column;
+	  flex-wrap:wrap;
+      /* padding: 0 12px;
+      padding-top: 72px;
+      width: 100%; */
+        
+	}
 
   /* 动态栏 开始*/
   .search-content-container {

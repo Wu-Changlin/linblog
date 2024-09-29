@@ -25,15 +25,16 @@
 
 <script setup>
 import { reactive,ref,onMounted } from 'vue';
-import { useRouter } from "vue-router";
+import { useRoute,useRouter} from "vue-router";
 import axios from 'axios';
   import ContentTag from '@/components/content_tag.vue';
   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
   
   
-  
+  const route = useRoute();
   const router = useRouter();
+
 
   const flag=ref(false);
   const is_loading = ref(true);
@@ -68,6 +69,9 @@ onMounted(() => {
     //   console.error('Error fetching mock data:', error);
     // });
    
+    if(route.query.tag_id){
+      console.log('route.query.tag_id：',route.query.tag_id);
+    }
     // 如果你想使用axios来模拟请求，可以这样做
     axios.get('/data/frontend/diary.json', { responseType: 'json' })
       .then(response => {
@@ -78,7 +82,7 @@ onMounted(() => {
           
         flag.value=true;
         is_loading.value=false;
-        console.log('response.data.tag_data:',response.data.tag_data)
+        console.log('diary.vue.tag_data:', diary_tag_data.value)
         // }, 3000); // 假设加载时间是3秒
 		
 

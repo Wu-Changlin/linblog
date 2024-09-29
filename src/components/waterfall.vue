@@ -25,7 +25,7 @@
     </div>
 
 <!-- 骨架屏 结束-->
-
+<!-- 渲染内容 开始-->
 <template  v-else>
   <Waterfall  v-if="data.list.length>0" :list="data.list" :breakpoints="breakpoints" :delay="300"  key="waterfall-container" class="waterfall-container">
     <template #item="{ item,index }">
@@ -86,14 +86,13 @@
  
   
 </template>
- <!-- 渲染内容 开始-->
-   
-       <!-- 渲染内容 结束-->
+<!-- 渲染内容 结束-->
     
 
   </transition>
 
 
+  <!-- 下一页骨架屏 开始-->
   <transition name="scale-down" mode="out-in">
     <!-- 骨架屏 开始-->
         <!-- <div v-if="is_loading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef"> -->
@@ -122,12 +121,15 @@
 
 
   </transition>
+  <!-- 下一页骨架屏 结束-->
 
+<!-- 没有更多数据占位 开始-->
   <EmptyState v-if="!data.list.length" :height="`566px`" :imgUrl="'/empty-state.png'">
     <template #content>
       <span style="padding-bottom: 16px;">没有更多数据了</span>
     </template>
   </EmptyState>
+  <!-- 没有更多数据占位 结束-->
 
 </template>
 <script setup>
@@ -170,24 +172,24 @@
 
 
 
-  watch(
-       () =>props.isNextPageLoading,
-       (newValue, oldValue) => {
+//   watch(
+//        () =>props.isNextPageLoading,
+//        (newValue, oldValue) => {
       
-        console.log('newValue, oldValue-props.isNextPageLoading:',props.isNextPageLoading)
-        if(newValue){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
-          // console.log('newValue-props.parentPageArticleListData:',props.parentPageArticleListData)
+//         console.log('newValue, oldValue-props.isNextPageLoading:',props.isNextPageLoading)
+//         if(newValue){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
+//           // console.log('newValue-props.parentPageArticleListData:',props.parentPageArticleListData)
          
           
-//  console.log('data.v.l',data.list.length);
-          // is_loading.value=false;
+// //  console.log('data.v.l',data.list.length);
+//           // is_loading.value=false;
          
-        }
+//         }
        
         
-       },
-       { immediate: true }
-     );
+//        },
+//        { immediate: true }
+//      );
 
 
 // 使用ref来存储watch返回的函数
@@ -540,6 +542,7 @@ const  stopParentPageArticleListData = ref(null);
   .waterfall-container {
   transition: all 0.3s ease;
   background-color: var(--bg);
+  /* padding-top: 10px; */
   /* animation: grow-in 0.1s forwards; */
 }
 

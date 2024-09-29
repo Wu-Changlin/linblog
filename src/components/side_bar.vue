@@ -3,7 +3,7 @@
     <div class="side-bar">
 
         <ul class="channel-list">
-			<li  v-for="(menu,index) in layoutMenuData"  :data-menu_path="menu.menu_path" :data-active_menu_path="data.active_menu_path" :class="{'active-channel': data.active_menu_path==menu.menu_path?true:''}"  @click="clickMenu(menu.menu_path)">
+			<li  v-for="(menu,index) in parentPageMenuData"  :data-menu_path="menu.menu_path" :data-active_menu_path="data.active_menu_path" :class="{'active-channel': data.active_menu_path==menu.menu_path?true:''}"  @click="clickMenu(menu.menu_path)">
 				<a class="link-wrapper":href="menu.menu_path">
 					<svg-icon  class="svg_icon"  style="width: 1em; height: 1em; margin-right: 8px;"  :icon-class="menu.menu_name" />
 					<span class="channel"> {{menu.menu_title}}</span>
@@ -22,7 +22,7 @@ import { reactive, ref,onMounted } from 'vue';
 
 
 const props = defineProps({
-	layoutMenuData: {
+	parentPageMenuData: {
 			type: Array,
 			default:[
 						{

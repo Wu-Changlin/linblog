@@ -43,18 +43,7 @@ const routes=[
                 component:()=>import('@/views/frontend/diary.vue')
             },
 
-            {
-                path:'/search',
-                name:"search",
-                component:()=>import('@/views/frontend/search.vue'),
-                beforeEnter: (to, from, next) => {//使用Vue Router的前置守卫（beforeEach）来检查路由并重定向到404页面。
-                    if (!to.query.keyword || to.path === '/search/') {//当用户尝试访问/search且没有查询参数keyword或者路由地址确实是/search/时，会被重定向到/404路由。
-                      next('/404');
-                    } else {
-                      next();
-                    }
-                }
-            },
+           
 
             {
                 path:'/test',
@@ -78,7 +67,20 @@ const routes=[
               next();
             }
         }
-    },  
+    }, 
+    
+    {
+        path:'/search',
+        name:"search",
+        component:()=>import('@/views/frontend/search.vue'),
+        beforeEnter: (to, from, next) => {//使用Vue Router的前置守卫（beforeEach）来检查路由并重定向到404页面。
+            if (!to.query.keyword || to.path === '/search/') {//当用户尝试访问/search且没有查询参数keyword或者路由地址确实是/search/时，会被重定向到/404路由。
+              next('/404');
+            } else {
+              next();
+            }
+        }
+    },
     
     {
         path:'/404', //添加一个指向404页面组件的路由

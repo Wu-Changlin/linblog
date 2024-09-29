@@ -3,7 +3,7 @@
 		<header class="mask-paper">
 			<a v-if="show_right_search==false" aria-current="page" href="/" class="router-link-exact-active"
 				id="link-guide">
-				<img crossorigin="anonymous" class="header-logo" style="pointer-events:none;" :src="layoutLogData">
+				<img crossorigin="anonymous" class="header-logo" style="pointer-events:none;" :src="parentPageLogData">
 			</a>
 
 			<div :class="{'input-box':true,'minWidthShowSearchClass':show_right_search?true:''}"
@@ -119,42 +119,38 @@
 		// stopWatch.value=null;
 	})
 
-	//接受父页面数据
+	//接受父页面数据(目前有3个页面传值layout.vue、search.vue、article.vue)
 	const props = defineProps({
-		layoutLogData: {
+		parentPageLogData: {
 			type: String,
 			default: "/logo.png",
 		},
-		layoutArticleCount: {
+		parentPageArticleCount: {
 			type: Number,
 		},
 
-		layoutArticleListData: {
+		parentPageArticleListData: {
 			type: Array,
 		},
 
 	});
 
 
-
-
-
-
-	//使用计算属性接受父页面传输数据layoutArticleCount 博文数量
+	//使用计算属性接受父页面传输数据parentPageArticleCount 博文数量
 	const article_count = computed(() => {
 		// 对传入的数据进行处理
-		return props.layoutArticleCount;
+		return props.parentPageArticleCount;
 	});
 
-	//使用计算属性接受父页面传输数据layoutArticleListData  所有博文数据
+	//使用计算属性接受父页面传输数据parentPageArticleListData  所有博文数据
 	const article_list = computed(() => {
 		// 对传入的数据进行处理
-		return props.layoutArticleListData;
+		return props.parentPageArticleListData;
 	});
 
 
 	//接受来自父页面的方法（当父页面props传值异常，调用此方法获取数据）
-	const ParentPageGetSearchKeywordMatchData = inject('getSearchKeywordMatchData');
+	const ParentPageGetSearchKeywordMatchData = inject('getSearchKeywordMatchArticleListData');
 
 	const data = reactive(
 		{
@@ -297,6 +293,7 @@
 	function clickHidePhoneSearch() {
 		// console.log('clickHidePhoneSearch');
 		show_right_search.value = false;
+		
 	}
 
 
@@ -336,10 +333,9 @@
 		//   router.push("/testDemo");
 		// };
 		//带参数跳转
-
+		
 		if (article_id) {
-			//   router.push({ name: 'article', query: { id: article_id },key: new Date().getTime() });
-
+		
 			// router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
 			let routeUrl = router.resolve({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
 			//  console.log('routeUrl',routeUrl);
@@ -366,8 +362,11 @@
 
 	//搜索框失去焦点，初始化关键字数据和关闭匹配关键字列表
 	function searchInputBlur() {
-		//初始化关键字数据和关闭匹配关键字列表
-		matchKeywordDataInit();
+		//如果没有输入关键字，那么初始化关键字数据和关闭匹配关键字列表
+		if(!search_keyword.value){
+			matchKeywordDataInit();
+		}
+		
 	}
 
 
@@ -378,6 +377,12 @@
 		if (current_width) {
 			//初始化关键字数据和关闭匹配关键字列表
 			matchKeywordDataInit();
+		}
+
+		//如果宽度大于1000且移动端样式处于显示状态，那么隐藏移动端搜索框相关样式
+		if(current_width>1000 && show_right_search.value){
+			//隐藏移动端搜索框相关样式
+			show_right_search.value = false;
 		}
 	}
 

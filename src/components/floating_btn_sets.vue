@@ -12,7 +12,7 @@
               <svg-icon :icon-class="data.menu_icon" />
             </div>
 
-            <div :style="{'visibility' : isShow ? 'visible' : 'hidden'}" class="cont" v-for="(menu,index) in layoutMenuData"
+            <div :style="{'visibility' : isShow ? 'visible' : 'hidden'}" class="cont" v-for="(menu,index) in parentPageMenuData"
               :key="index" :ref="setMenuRef(menu.menu_name)">
               <a :href="menu.menu_path">
                 <svg-icon class="svg-icon" :icon-class="menu.menu_name" />
@@ -109,50 +109,8 @@
 
 
   const props = defineProps({
-	  layoutMenuData: {
+	  parentPageMenuData: {
 			type: Array,
-			default:[
-						{
-						menu_id: 1,
-						menu_name: "index",
-						menu_title: "首页",
-						menu_path: "/",
-						},
-						{
-						menu_id: 2,
-						menu_name: "frontend",
-						menu_title: "前端",
-						menu_path: "/frontend",
-						},
-						{
-						menu_id: 3,
-						menu_name: "backend",
-						menu_title: "后端",
-						menu_path: "/backend",
-						},
-
-						{
-						menu_id: 4,
-						menu_name: "resource",
-						menu_title: "资源",
-						menu_path: "/resource",
-						},
-
-						{
-						menu_id: 5,
-						menu_name: "archives",
-						menu_title: "归档",
-						menu_path: "/archives",
-						},
-
-						{
-						menu_id: 6,
-						menu_name: "diary",
-						menu_title: "随笔",
-						menu_path: "/diary",
-						},
-
-					]
     	},
     
 });
@@ -253,8 +211,8 @@
     }
 
     isShow.value = !isShow.value
-     for(let i=0;i<props.layoutMenuData.length;i++){
-      const menu_name=props.layoutMenuData[i].menu_name;
+     for(let i=0;i<props.parentPageMenuData.length;i++){
+      const menu_name=props.parentPageMenuData[i].menu_name;
        menuRefs.value[menu_name].classList.remove(menu_name);
      }
    
@@ -267,8 +225,8 @@
     data.menu_icon = 'menu';//显示菜单图标
     if (isShow.value) {
 
-      for(let i=0;i<props.layoutMenuData.length;i++){
-      const menu_name=props.layoutMenuData[i].menu_name;
+      for(let i=0;i<props.parentPageMenuData.length;i++){
+      const menu_name=props.parentPageMenuData[i].menu_name;
        menuRefs.value[menu_name].classList.add(menu_name);
      }
 
@@ -331,7 +289,8 @@
     grid-gap: 8px;
     gap: 8px;
     right: 5px;
-    bottom: 50px
+    bottom: 50px;
+    z-index: 11;
   }
 
 
@@ -345,7 +304,7 @@
                 box-shadow: var(--elevation-low-shadow); */
     /* border-radius: 50%; */
     cursor: pointer;
-    z-index: 10;
+   
     /* background: var(--elevation-low-background) */
   }
 

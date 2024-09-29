@@ -1,15 +1,15 @@
 <template>
 	<div class="container">
-		<NavBar  :layoutLogData="layout_log" :layoutArticleCount="layout_article_count" :layoutArticleListData="layout_article_list_data"></NavBar>
+		<NavBar  :parentPageLogData="layout_page_log" :parentPageArticleCount="layout_page_article_count" :parentPageArticleListData="layout_page_article_list_data"></NavBar>
 		
 		<div class="main">
-			<SideBar :layoutMenuData="layout_menu_list_data"></SideBar>
+			<SideBar :parentPageMenuData="layout_page_menu_list_data"></SideBar>
 
 			<div class="main-content with-side-bar">	
 				<router-view />
 			</div>
 
-			<FloatingBtnSets :layoutMenuData="layout_menu_list_data"></FloatingBtnSets>
+			<FloatingBtnSets :parentPageMenuData="layout_page_menu_list_data"></FloatingBtnSets>
 			<!-- <Footer></Footer> -->
 			
 		</div>
@@ -31,15 +31,15 @@ import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import Footer from "@/components/footer.vue";
 
 
-const layout_article_count=ref(0);
-const layout_article_list_data=ref();
-//获取搜索关键字匹配所用数据源  提供一个获取数据的方法
-const getSearchKeywordMatchData= ()=>{
+const layout_page_article_count=ref(0);
+const layout_page_article_list_data=ref();
+// //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
+const getSearchKeywordMatchArticleListData= ()=>{
 	axios.get('/data/frontend/all_article.json', { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {
-			layout_article_count.value = response.data.article_count; // 博文数量
-			layout_article_list_data.value = response.data.article_list; // 博文列表
+			layout_page_article_count.value = response.data.article_count; // 博文数量
+			layout_page_article_list_data.value = response.data.article_list; // 博文列表
         // }, 3000); // 假设加载时间是3秒
 		
 
@@ -51,35 +51,23 @@ const getSearchKeywordMatchData= ()=>{
 }
 
 
+
 // 使用 provide 向下传递方法
+provide('getSearchKeywordMatchArticleListData', getSearchKeywordMatchArticleListData);
 
-provide('getSearchKeywordMatchData', getSearchKeywordMatchData);
-
-
-
-const layout_log=ref();
-const layout_menu_list_data=ref();
-//获取菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
-onMounted(() => {
-    // 假设JSON文件与组件在同一目录下
-    // import('./mock-data.json').then(res => {
-    //   items.value = res.data;
-    // }).catch(error => {
-    //   console.error('Error fetching mock data:', error);
-    // });
-   
-    // 如果你想使用axios来模拟请求，可以这样做
-    axios.get('/data/frontend/page_components.json', { responseType: 'json' })
+const layout_page_log=ref();
+const layout_page_menu_list_data=ref();
+//获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
+function getLayoutLogOrMenuListData(){
+	    // 如果你想使用axios来模拟请求，可以这样做
+	axios.get('/data/frontend/page_components.json', { responseType: 'json' })
       .then(response => {
-        // setTimeout(() => {
-			layout_log.value = response.data.log_data; // 数据加载完毕，关闭骨架屏
-			layout_menu_list_data.value = response.data.menu_data; // 数据加载完毕，关闭骨架屏
-        // }, 3000); // 假设加载时间是3秒
-		
-		// setTimeout(() => {
-			//在组件挂载后调用方法获取数据
-			getSearchKeywordMatchData();
-		// }, 3000); // 延迟3秒
+        
+			layout_page_log.value = response.data.log_data; // log
+			layout_page_menu_list_data.value = response.data.menu_data; // 菜单数据
+     
+			getSearchKeywordMatchArticleListData();
+	
 
       })
       .catch(error => {
@@ -87,7 +75,14 @@ onMounted(() => {
         console.error('Error fetching mock data:', error);
       });
 
+}
+
+onMounted(() => {
+	//获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
+	getLayoutLogOrMenuListData();
+   
   });
+
 
 
 
