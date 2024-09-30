@@ -1,29 +1,22 @@
 <template>
-    
+
     <div class="side-bar-catalog">
         <div class="catalog-card" v-if="Object.keys(tocArray).length > 0">
             <div class="catalog-card-header">
                 <!-- <div style="display: flex;align-items: center; justify-content: center; "> -->
-                    <!-- <svg-icon icon-class="catalog" /> -->
-                    <span>目录</span>
+                <!-- <svg-icon icon-class="catalog" /> -->
+                <span>目录</span>
                 <!-- </div> -->
                 <span class="progress">{{ progress }}</span>
             </div>
-    
+
             <div class="catalog-content">
-                <div
-                    v-for="title in tocArray"
-                    :key="title.id"
-                    @click="scrollToView(title.scrollTop)"
-                    :class="[
+                <div v-for="title in tocArray" :key="title.id" @click="scrollToView(title.scrollTop)" :class="[
                         'catalog-item',
                         currentTitle.id == title.id ? 'active' : 'not-active',
-                    ]"
-                    :style="{ marginLeft: title.level * 20 + 'px' }"
-                    v-show="title.isVisible"
-                    :title="title.rawName"
-                >
-                  {{ title.rawName }} 
+                    ]" :style="{ marginLeft: title.level * 20 + 'px' }" v-show="title.isVisible"
+                    :title="title.rawName">
+                    {{ title.rawName }}
                 </div>
             </div>
         </div>
@@ -33,72 +26,74 @@
 </template>
 
 <script setup>
-import { reactive, ref,nextTick,onMounted,onUnmounted } from "vue";
-
- 
-
-const props = defineProps({
-    containerName: {
-        type: String,
-        default: ".article-content",
-    },
-    
-});
+    import { reactive, ref, nextTick, onMounted, onUnmounted } from "vue";
 
 
 
-        //获取目录
-        const tocArray =ref([]);
-        // let titles = reactive(getTitles());
-        let currentTitle = reactive({});
-        let progress = ref(0);
+    const props = defineProps({
+        containerName: {
+            type: String,
+            default: ".article-content",
+        },
 
-        getTitles();
-        // 获取目录的标题
-        function getTitles() {
+    });
 
-            nextTick(()=>{
-                let titles = [];
-                let levels = ['h1','h2','h3','h4','h5','h6'];
-              
-                let articleElement = document.querySelector(props.containerName);
-                if (!articleElement) {
-                    return titles;
+
+
+    //获取目录
+    const tocArray = ref([]);
+    // let titles = reactive(getTitles());
+    // let currentTitle = reactive({});
+    // let progress = ref(0);
+    const currentTitle = reactive({});
+    const progress = ref(0);
+
+    getTitles();
+    // 获取目录的标题
+    function getTitles() {
+
+        nextTick(() => {
+            let titles = [];
+            let levels = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+
+            let articleElement = document.querySelector(props.containerName);
+            if (!articleElement) {
+                return titles;
+            }
+
+
+            let elements = Array.from(articleElement.querySelectorAll("*"));
+
+            // 调整标签等级
+            let tagNames = new Set(
+                elements.map((el) => el.tagName.toLowerCase())
+            );
+            for (let i = levels.length - 1; i >= 0; i--) {
+                if (!tagNames.has(levels[i])) {
+                    levels.splice(i, 1);
                 }
-            
+            }
 
-                let elements = Array.from(articleElement.querySelectorAll("*"));
-                
-                // 调整标签等级
-                let tagNames = new Set(
-                    elements.map((el) => el.tagName.toLowerCase())
-                );
-                for (let i = levels.length - 1; i >= 0; i--) {
-                    if (!tagNames.has(levels[i])) {
-                        levels.splice(i, 1);
-                    }
-                }
+            let serialNumbers = levels.map(() => 0);
+            for (let i = 0; i < elements.length; i++) {
+                const element = elements[i];
+                let tagName = element.tagName.toLowerCase();
+                let level = levels.indexOf(tagName);
+                if (level == -1) continue;
 
-                let serialNumbers = levels.map(() => 0);
-                for (let i = 0; i < elements.length; i++) {
-                    const element = elements[i];
-                    let tagName = element.tagName.toLowerCase();
-                    let level = levels.indexOf(tagName);
-                    if (level == -1) continue;
+                let id = tagName + "-" + element.innerText + "-" + i;
+                let node = {
+                    id,
+                    level,
+                    parent: null,
+                    children: [],
+                    rawName: element.innerText,
+                    scrollTop: element.offsetTop,
+                };
 
-                    let id = tagName + "-" + element.innerText + "-" + i;
-                    let node = {
-                        id,
-                        level,
-                        parent: null,
-                        children: [],
-                        rawName: element.innerText,
-                        scrollTop: element.offsetTop,
-                    };
-
-                    if (tocArray.value.length> 0) {//目录数组长度大于0
+                if (tocArray.value.length > 0) {//目录数组长度大于0
                     let lastNode = tocArray.value.at(-1);
-                       
+
                     // 遇到子标题
                     if (lastNode.level < node.level) {
                         node.parent = lastNode;
@@ -124,159 +119,201 @@ const props = defineProps({
                     }
                 }
 
-                   
-                    serialNumbers[level] += 1;
-                    let serialNumber = serialNumbers.slice(0, level + 1).join(".");
 
-                    node.isVisible = node.parent == null;
-                    // node.isVisible =  null;
-                    // console.log('titles.length,',JSON.stringify(node));
-                   
-                    node.name = serialNumber + ". " + element.innerText;
-                    tocArray.value.push(node);//循环每一条目录加入目录数组
-                }
-            
-                // console.log('tocArray:',JSON.stringify(tocArray.value))
-                //  return titles;  
-            })
+                serialNumbers[level] += 1;
+                let serialNumber = serialNumbers.slice(0, level + 1).join(".");
+
+                node.isVisible = node.parent == null;
+                // node.isVisible =  null;
+                // console.log('titles.length,',JSON.stringify(node));
+
+                node.name = serialNumber + ". " + element.innerText;
+                tocArray.value.push(node);//循环每一条目录加入目录数组
+            }
+
+            // console.log('tocArray:',JSON.stringify(tocArray.value))
+            //  return titles;  
+        })
+    }
+
+
+
+
+
+    function getElementHeightWithMargin(element) {
+        if (element) {
+            var style = window.getComputedStyle(element);
+            return (
+                parseFloat(style.height) +
+                parseFloat(style.marginTop) +
+                parseFloat(style.padding) +
+                parseFloat(style.marginBottom)
+            );
+            // 其他操作
+        } else {
+            console.error('Element does not exist.');
         }
 
-        
-        // 监听滚动事件并更新样式
-     
-        function watchScrollUpdateStyle () {
-            progress.value =
-                parseInt(
-                    (window.scrollY / document.documentElement.scrollHeight) *
-                        100
-                ) + "%";
+    }
 
-            let visibleTitles = [];
 
-            for (let i =  tocArray.value.length - 1; i >= 0; i--) {
-                const title =  tocArray.value[i];
-             
-                if (title.scrollTop <= window.scrollY) {
-                    if (currentTitle.id === title.id) return;
 
-                    Object.assign(currentTitle, title);
 
-                    // 展开节点
-                    setChildrenVisible(title, true);
-                    visibleTitles.push(title);
+    const total_scroll_height = ref(0);
+    //计算减去多余占位高度的总滚动距离长度
+    function surplusHeight() {
+        let articleElement = document.querySelector(props.containerName);
+        //标题占用高度
+        let articleTitleElement = document.querySelector('.article-title');
+        let title_height = getElementHeightWithMargin(articleTitleElement);
+        //元数据占用高度
+        let articleMetadataElement = document.querySelector('.article-metadata');
+        let metadata_height = getElementHeightWithMargin(articleMetadataElement);
+        //多余占用高度=标题占用高度+元数据占用高度+导航栏高度
+        let surplus_height = title_height + metadata_height + 72;
+        total_scroll_height.value = articleElement.scrollHeight - surplus_height;
+        // console.log(`surplus_height:${surplus_height},articleElement.scrollHeight:${articleElement.scrollHeight},total_scroll_height:${total_scroll_height.value},window.scrollY:${window.scrollY}`)
 
-                    // 展开父节点
-                    let parent = title.parent;
-                    while (parent) {
-                        setChildrenVisible(parent, true);
-                        visibleTitles.push(parent);
-                        parent = parent.parent;
-                    }
+    }
 
-                    // 折叠其余节点
-                    for (const t of  tocArray.value) {
-                        if (!visibleTitles.includes(t)) {
-                            setChildrenVisible(t, false);
-                        }
-                    }
 
-                    return;
+    // 监听滚动事件并更新样式
+    function watchScrollUpdateStyle() {
+        progress.value =
+            parseInt(
+                (window.scrollY / total_scroll_height.value) *
+                100
+            ) + "%";
+
+        console.log('window.scrollY:', window.scrollY);
+
+        // console.log('window.scrollY / articleElement.scrollHeight - 150 ',window.scrollY,'/',(articleElement.scrollHeight - 162 ));
+        let visibleTitles = [];
+
+        for (let i = tocArray.value.length - 1; i >= 0; i--) {
+            const title = tocArray.value[i];
+
+            if (title.scrollTop <= window.scrollY) {
+                if (currentTitle.id === title.id) return;
+
+                Object.assign(currentTitle, title);
+
+                // 展开节点
+                setChildrenVisible(title, true);
+                visibleTitles.push(title);
+
+                // 展开父节点
+                let parent = title.parent;
+                while (parent) {
+                    setChildrenVisible(parent, true);
+                    visibleTitles.push(parent);
+                    parent = parent.parent;
                 }
+
+                // 折叠其余节点
+                for (const t of tocArray.value) {
+                    if (!visibleTitles.includes(t)) {
+                        setChildrenVisible(t, false);
+                    }
+                }
+
+                return;
             }
         }
+    }
 
 
-        // 监听滚动事件并更新样式
-        // window.addEventListener("scroll", function () {
-        //     progress.value =
-        //         parseInt(
-        //             (window.scrollY / document.documentElement.scrollHeight) *
-        //                 100
-        //         ) + "%";
+    // 监听滚动事件并更新样式
+    // window.addEventListener("scroll", function () {
+    //     progress.value =
+    //         parseInt(
+    //             (window.scrollY / document.documentElement.scrollHeight) *
+    //                 100
+    //         ) + "%";
 
-        //     let visibleTitles = [];
+    //     let visibleTitles = [];
 
-        //     for (let i =  tocArray.value.length - 1; i >= 0; i--) {
-        //         const title =  tocArray.value[i];
-             
-        //         if (title.scrollTop <= window.scrollY) {
-        //             if (currentTitle.id === title.id) return;
+    //     for (let i =  tocArray.value.length - 1; i >= 0; i--) {
+    //         const title =  tocArray.value[i];
 
-        //             Object.assign(currentTitle, title);
+    //         if (title.scrollTop <= window.scrollY) {
+    //             if (currentTitle.id === title.id) return;
 
-        //             // 展开节点
-        //             setChildrenVisible(title, true);
-        //             visibleTitles.push(title);
+    //             Object.assign(currentTitle, title);
 
-        //             // 展开父节点
-        //             let parent = title.parent;
-        //             while (parent) {
-        //                 setChildrenVisible(parent, true);
-        //                 visibleTitles.push(parent);
-        //                 parent = parent.parent;
-        //             }
+    //             // 展开节点
+    //             setChildrenVisible(title, true);
+    //             visibleTitles.push(title);
 
-        //             // 折叠其余节点
-        //             for (const t of  tocArray.value) {
-        //                 if (!visibleTitles.includes(t)) {
-        //                     setChildrenVisible(t, false);
-        //                 }
-        //             }
+    //             // 展开父节点
+    //             let parent = title.parent;
+    //             while (parent) {
+    //                 setChildrenVisible(parent, true);
+    //                 visibleTitles.push(parent);
+    //                 parent = parent.parent;
+    //             }
 
-        //             return;
-        //         }
-        //     }
-        // });
+    //             // 折叠其余节点
+    //             for (const t of  tocArray.value) {
+    //                 if (!visibleTitles.includes(t)) {
+    //                     setChildrenVisible(t, false);
+    //                 }
+    //             }
 
-        // 设置子节点的可见性
-        function setChildrenVisible(title, isVisible) {
-            for (const child of title.children) {
-                child.isVisible = isVisible;
-            }
+    //             return;
+    //         }
+    //     }
+    // });
+
+    // 设置子节点的可见性
+    function setChildrenVisible(title, isVisible) {
+        for (const child of title.children) {
+            child.isVisible = isVisible;
         }
+    }
 
-        // 滚动到指定的位置
-        function scrollToView(scrollTop) {
-            scrollTop=scrollTop-72;//减去头部导航栏
-            window.scrollTo({ top: scrollTop, behavior: "smooth" });
-        }
-
-       
-
-        onMounted(() => {
-    //     console.log('挂载完毕');
- 
-    //监听窗口响应式每行最多标签数量
-    window.addEventListener("scroll",watchScrollUpdateStyle);
-       //初始化每行最多标签数量
-    
-  })
+    // 滚动到指定的位置
+    function scrollToView(scrollTop) {
+        scrollTop = scrollTop - 72;//减去头部导航栏
+        window.scrollTo({ top: scrollTop, behavior: "smooth" });
+    }
 
 
-  onUnmounted(() => {
-    window.removeEventListener('scroll', watchScrollUpdateStyle)
-  })//离开页面时移除监听窗口缩放
+
+    onMounted(() => {
+        nextTick(() => {
+            surplusHeight();
+        })
+
+        window.addEventListener("scroll", watchScrollUpdateStyle);
+
+
+    })
+
+
+    onUnmounted(() => {
+        window.removeEventListener('scroll', watchScrollUpdateStyle)
+    })//离开页面时移除监听窗口滚动
 
 
 </script>
 
 <style scoped>
-
-.side-bar-catalog {
-		height: calc(100vh - 72px);
-		overflow-y: scroll;
-		background-color: var(--bg);
-		display: flex;
-		flex-direction: column;
-		flex-shrink: 0;
-		/* padding-top: 16px; */
-		margin-top: 72px;
-		position: fixed;
-		overflow: visible;
+    .side-bar-catalog {
+        height: calc(100vh - 72px);
+        overflow-y: scroll;
+        background-color: var(--bg);
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        /* padding-top: 16px; */
+        margin-top: 72px;
+        position: fixed;
+        overflow: visible;
 
         /* 移动端右侧遮罩目录 */
         @media screen and (max-width: 959px) {
-			display: none;
+            display: none;
             position: fixed;
             top: 0;
             right: 0;
@@ -287,114 +324,115 @@ const props = defineProps({
             /* background-color: rgba(0, 0, 0, 0.5);  */
             /* 确保遮罩在其他内容之上 */
             z-index: 10;
-		}
-		
-
-		@media screen and (min-width: 960px) and (max-width: 1191px) {
-			width: calc(-18px + 25vw);
-			margin-left: 12px;
-		}
-
-		@media screen and (min-width: 1192px) and (max-width: 1423px) {
-			width: calc(-16.8px + 20vw);
-			margin-left: 12px;
-		}
-
-		@media screen and (min-width: 1424px) and (max-width: 1727px) {
-			width: calc(-21.33333px + 16.66667vw);
-			margin-left: 16px;
-		}
-
-		@media screen and (min-width: 1728px) {
-			width: 266.66667px;
-			margin-left: 16px;
-		} 
+        }
 
 
-	}  
-    
-   
+        @media screen and (min-width: 960px) and (max-width: 1191px) {
+            width: calc(-18px + 25vw);
+            margin-left: 12px;
+        }
+
+        @media screen and (min-width: 1192px) and (max-width: 1423px) {
+            width: calc(-16.8px + 20vw);
+            margin-left: 12px;
+        }
+
+        @media screen and (min-width: 1424px) and (max-width: 1727px) {
+            width: calc(-21.33333px + 16.66667vw);
+            margin-left: 16px;
+        }
+
+        @media screen and (min-width: 1728px) {
+            width: 266.66667px;
+            margin-left: 16px;
+        }
 
 
-.catalog-card {
-    color: var(--color-secondary-label);
-    /* border-radius: 8px; */
-    box-shadow: 0 3px 8px 6px rgba(7, 17, 27, 0.05);
-    padding: 0px 20px  24px 20px;
-    width: 100%;
-    /* margin-top: 25px; */
-    box-sizing: border-box;
-    height: 100%;
-}
-
-.catalog-card-header {
-    text-align: left !important;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.catalog-icon {
-    font-size: 18px;
-    margin-right: 10px;
-    color: var(--color-primary-label)!important;
-}
-
-.catalog-card-header div > span {
-    font-size: 17px;
-    color: var(--color-primary-label)!important;
-}
-
-/* 阅读进度 */
-.progress {
-    color: dodgerblue;
-    font-style: italic;
-    font-size: 140%;
-}
-
-.catalog-content {
-    max-height: calc(100vh - 120px);
-    overflow: auto;
-    margin-right: -24px;
-    padding-right: 20px;
-    color: var(--color-secondary-label);
-}
-
-.catalog-item {
-    color: var(--color-secondary-label)!important;
-    margin: 5px 0;
-    line-height: 28px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    font-size: 14px;
-    padding: 2px 6px;
-    display: -webkit-box;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-
-    &:hover {
-        background-color: var(--color-active-background)!important;
-        border-radius: 999px;
-        color: var(--color-primary-label)!important;
     }
-}
 
-.active {
-    background-color: var(--color-active-background)!important;
-        border-radius: 999px;
-        color: var(--color-primary-label)!important;
 
-    &:hover {
-        background-color: var(--color-active-background)!important;
-        border-radius: 999px;
-        color: var(--color-primary-label)!important;
+
+
+    .catalog-card {
+        color: var(--color-secondary-label);
+        /* border-radius: 8px; */
+        box-shadow: 0 3px 8px 6px rgba(7, 17, 27, 0.05);
+        padding: 0px 20px 24px 20px;
+        width: 100%;
+        /* margin-top: 25px; */
+        box-sizing: border-box;
+        height: 100%;
+
     }
-}
 
-.not-active{
-    color: var(--color-secondary-label)!important;
-}
+    .catalog-card-header {
+        text-align: left !important;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .catalog-icon {
+        font-size: 18px;
+        margin-right: 10px;
+        color: var(--color-primary-label) !important;
+    }
+
+    .catalog-card-header div>span {
+        font-size: 17px;
+        color: var(--color-primary-label) !important;
+    }
+
+    /* 阅读进度 */
+    .progress {
+        color: dodgerblue;
+        font-style: italic;
+        font-size: 140%;
+    }
+
+    .catalog-content {
+        max-height: calc(100vh - 120px);
+        overflow: auto;
+        margin-right: -24px;
+        padding-right: 20px;
+        color: var(--color-secondary-label);
+    }
+
+    .catalog-item {
+        color: var(--color-secondary-label) !important;
+        margin: 5px 0;
+        line-height: 28px;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        font-size: 14px;
+        padding: 2px 6px;
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+
+        &:hover {
+            background-color: var(--color-active-background) !important;
+            border-radius: 999px;
+            color: var(--color-primary-label) !important;
+        }
+    }
+
+    .active {
+        background-color: var(--color-active-background) !important;
+        border-radius: 999px;
+        color: var(--color-primary-label) !important;
+
+        &:hover {
+            background-color: var(--color-active-background) !important;
+            border-radius: 999px;
+            color: var(--color-primary-label) !important;
+        }
+    }
+
+    .not-active {
+        color: var(--color-secondary-label) !important;
+    }
 </style>

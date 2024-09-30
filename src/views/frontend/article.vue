@@ -24,7 +24,7 @@
              <!-- 渲染内容 开始-->
              <div v-else class="main">
 			 <!-- 目录组件 开始-->
-                <ArticleCatalog :container="container_name" :style="{ display: show_article_catalog  ?'block':'none'}"></ArticleCatalog>
+                <ArticleCatalog :containerName="container_name" :style="{ display: show_article_catalog  ?'block':'none'}"></ArticleCatalog>
                  <!-- 目录组件 结束-->
                 <div class="main-content with-side-bar">
                     <!-- 博文内容 开始-->
