@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { reactive, ref,nextTick } from "vue";
+import { reactive, ref,nextTick,onMounted,onUnmounted } from "vue";
 
  
 
@@ -141,8 +141,10 @@ const props = defineProps({
             })
         }
 
+        
         // 监听滚动事件并更新样式
-        window.addEventListener("scroll", function () {
+     
+        function watchScrollUpdateStyle () {
             progress.value =
                 parseInt(
                     (window.scrollY / document.documentElement.scrollHeight) *
@@ -181,7 +183,50 @@ const props = defineProps({
                     return;
                 }
             }
-        });
+        }
+
+
+        // 监听滚动事件并更新样式
+        // window.addEventListener("scroll", function () {
+        //     progress.value =
+        //         parseInt(
+        //             (window.scrollY / document.documentElement.scrollHeight) *
+        //                 100
+        //         ) + "%";
+
+        //     let visibleTitles = [];
+
+        //     for (let i =  tocArray.value.length - 1; i >= 0; i--) {
+        //         const title =  tocArray.value[i];
+             
+        //         if (title.scrollTop <= window.scrollY) {
+        //             if (currentTitle.id === title.id) return;
+
+        //             Object.assign(currentTitle, title);
+
+        //             // 展开节点
+        //             setChildrenVisible(title, true);
+        //             visibleTitles.push(title);
+
+        //             // 展开父节点
+        //             let parent = title.parent;
+        //             while (parent) {
+        //                 setChildrenVisible(parent, true);
+        //                 visibleTitles.push(parent);
+        //                 parent = parent.parent;
+        //             }
+
+        //             // 折叠其余节点
+        //             for (const t of  tocArray.value) {
+        //                 if (!visibleTitles.includes(t)) {
+        //                     setChildrenVisible(t, false);
+        //                 }
+        //             }
+
+        //             return;
+        //         }
+        //     }
+        // });
 
         // 设置子节点的可见性
         function setChildrenVisible(title, isVisible) {
@@ -197,6 +242,21 @@ const props = defineProps({
         }
 
        
+
+        onMounted(() => {
+    //     console.log('挂载完毕');
+ 
+    //监听窗口响应式每行最多标签数量
+    window.addEventListener("scroll",watchScrollUpdateStyle);
+       //初始化每行最多标签数量
+    
+  })
+
+
+  onUnmounted(() => {
+    window.removeEventListener('scroll', watchScrollUpdateStyle)
+  })//离开页面时移除监听窗口缩放
+
 
 </script>
 
@@ -257,7 +317,7 @@ const props = defineProps({
 
 
 .catalog-card {
-    background: white;
+    color: var(--color-secondary-label);
     /* border-radius: 8px; */
     box-shadow: 0 3px 8px 6px rgba(7, 17, 27, 0.05);
     padding: 0px 20px  24px 20px;
@@ -278,16 +338,17 @@ const props = defineProps({
 .catalog-icon {
     font-size: 18px;
     margin-right: 10px;
-    color: dodgerblue;
+    color: var(--color-primary-label)!important;
 }
 
 .catalog-card-header div > span {
     font-size: 17px;
-    color: #4c4948;
+    color: var(--color-primary-label)!important;
 }
 
+/* 阅读进度 */
 .progress {
-    color: #a9a9a9;
+    color: dodgerblue;
     font-style: italic;
     font-size: 140%;
 }
@@ -297,10 +358,11 @@ const props = defineProps({
     overflow: auto;
     margin-right: -24px;
     padding-right: 20px;
+    color: var(--color-secondary-label);
 }
 
 .catalog-item {
-    color: #666261;
+    color: var(--color-secondary-label)!important;
     margin: 5px 0;
     line-height: 28px;
     cursor: pointer;
@@ -314,17 +376,25 @@ const props = defineProps({
     -webkit-box-orient: vertical;
 
     &:hover {
-        color: #1892ff;
+        background-color: var(--color-active-background)!important;
+        border-radius: 999px;
+        color: var(--color-primary-label)!important;
     }
 }
 
 .active {
-    background-color:  #0c82e9;
-    color: white;
+    background-color: var(--color-active-background)!important;
+        border-radius: 999px;
+        color: var(--color-primary-label)!important;
 
     &:hover {
-        background-color: #0c82e9;
-        color: white;
+        background-color: var(--color-active-background)!important;
+        border-radius: 999px;
+        color: var(--color-primary-label)!important;
     }
+}
+
+.not-active{
+    color: var(--color-secondary-label)!important;
 }
 </style>

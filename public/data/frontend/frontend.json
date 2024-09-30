@@ -2,6 +2,10 @@
   "page_head_title": "前端",
   "page_head_keyword": "关键字",
   "page_head_description": "描述前端",
+  "total_pages":3,
+  "current_page":1,
+  "current_active_tag_id":20,
+  "current_active_tag_name":"html",
   "tag_data": [
     {
       "tag_id": 20,

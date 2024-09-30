@@ -362,10 +362,6 @@ function mediaQuery() {
 }
 
 
-
-
-
-
 onUnmounted(() => {
 	window.removeEventListener('resize', mediaQuery);
 })//离开页面时移除监听窗口大小变化	
@@ -377,13 +373,12 @@ onUpdated(() => {
 </script>
 
 <style scoped>
-
 *{
-    overflow: auto; /* 启用滚动功能 */
-    -ms-overflow-style: none; /* 适用于 Internet Explorer 和旧版 Edge */
-    scrollbar-width: none; /* 适用于 Firefox */
-    -webkit-scrollbar:none;/* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/ 
+ -ms-overflow-style: none; /* 适用于 Internet Explorer 和旧版 Edge */
+ scrollbar-width: none; /* 适用于 Firefox */
+ -webkit-scrollbar:none;/* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/ 
 }
+
 
 :deep(div.code-toolbar > .toolbar) {
         opacity: 1;
@@ -403,8 +398,7 @@ onUpdated(() => {
 	max-width: 1728px;
 	background-color: var(--bg);  /* fff*/
 	margin: 0 auto;
-  
-
+    
 	.main {
 	    display: flex;
 	
@@ -437,14 +431,12 @@ onUpdated(() => {
  .article-page {
 	flex:1;
     overflow-x: hidden;/* 禁止容器x轴方向滚动 */
-
 	padding-top: 72px;
 	width: 100%;
 	margin: 0 auto;
 	padding-left: 12px;
 	padding-right: 12px;
-   
-
+    /* overflow: auto; */
   }
   .article-container {
       overflow-x: hidden;/* 禁止容器x轴方向滚动 */

@@ -31,6 +31,7 @@ import Footer from "@/components/footer.vue";
 const { proxy } = getCurrentInstance();//axios 代理
 
 
+
 const layout_page_article_count=ref(0);
 const layout_page_article_list_data=ref();
 // //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
@@ -95,6 +96,7 @@ function getLayoutLogOrMenuListData(){
 		layout_page_menu_list_data.value = response.menu_data; // 菜单数据
 		getSearchKeywordMatchArticleListData();//匹配关键字数据源
 		// console.log('response.log_data:',response.log_data);
+		
     })
 	.catch(error => {
 
@@ -118,7 +120,11 @@ onMounted(() => {
 
 <style scoped>
 
-
+*{ /*启用滚动功能 */
+    -ms-overflow-style: none; /* 适用于 Internet Explorer 和旧版 Edge */
+    scrollbar-width: none; /* 适用于 Firefox */
+    -webkit-scrollbar:none;/* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/ 
+}
 
 .container {
 	padding: 0;

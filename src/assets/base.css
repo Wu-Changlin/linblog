@@ -19,13 +19,12 @@ a {
 为了确保在所有主流浏览器（如 Chrome、Safari、Firefox、Edge 和 IE）中隐藏滚动条的同时仍然保留滚动功能 */
 
 
-/* 隐藏滚动条的同时仍能滚动 */
+/* 隐藏滚动条(页面择机启用滚动功能) */
 html{
-    overflow: auto; /* 启用滚动功能 */
     -ms-overflow-style: none; /* 适用于 Internet Explorer 和旧版 Edge */
     scrollbar-width: none; /* 适用于 Firefox */
     -webkit-scrollbar:none;/* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/ 
-}
+   }
 
 
 /* Webkit 浏览器 */ /* 如果不加html，那么就会使所有的内容都会隐藏滚动条 (或者写在html类中)*/
@@ -156,11 +155,8 @@ html[data-theme='dark'] {
 
 html[data-theme='dark'] body {
     margin: 0;
+    padding: 0;
     color: #fff;
-    font-size: 14px;
     font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji";
-    font-variant: tabular-nums;
-    /* line-height: 1.5715; */
     background-color: #000;
-    font-feature-settings: tnum;
 }

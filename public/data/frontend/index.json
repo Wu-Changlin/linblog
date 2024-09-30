@@ -2,6 +2,10 @@
   "page_head_title": "首页",
   "page_head_keyword": "关键字",
   "page_head_description": "描述首页",
+  "total_pages":1,
+  "current_page":1,
+  "current_active_tag_id":20,
+  "current_active_tag_name":"html",
   "tag_data": [
     {
       "tag_id": 20,

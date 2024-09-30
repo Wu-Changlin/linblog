@@ -123,13 +123,24 @@
   </transition>
   <!-- 下一页骨架屏 结束-->
 
-<!-- 没有更多数据占位 开始-->
-  <EmptyState v-if="!data.list.length" :height="`566px`" :imgUrl="'/empty-state.png'">
+  <!-- 没有更多数据占位 开始-->
+  <div v-if="isNoMoreData">
+    <EmptyState :height="`200px`" :imgUrl="'/empty-state.png'" :imgWidth="`128px`" :imgHeight="`128px`">
+      <template #content>
+        <span style="padding-bottom: 16px;">没有更多数据了</span>
+      </template>
+    </EmptyState>
+  </div>
+  <!-- 没有更多数据占位 结束-->
+
+
+<!-- 没有数据占位 开始-->
+  <EmptyState v-if="isEmptyArticleListData" :height="`566px`" :imgUrl="'/empty-state.png'">
     <template #content>
-      <span style="padding-bottom: 16px;">没有更多数据了</span>
+      <span style="padding-bottom: 16px;">没有数据</span>
     </template>
   </EmptyState>
-  <!-- 没有更多数据占位 结束-->
+  <!-- 没有数据占位 结束-->
 
 </template>
 <script setup>
@@ -153,8 +164,6 @@
   })
 
 
-
-
   const props = defineProps({
     parentPageArticleListData: {//父页面传标签数据
       type: Array
@@ -165,8 +174,19 @@
     },
     isNextPageLoading:{
       type:Boolean,
-      default:false
-    }
+      default:true
+    },
+    isNoMoreData:{
+      type:Boolean,
+      default:true
+    },
+    isEmptyArticleListData:{
+      type:Boolean,
+      default:true
+    },
+
+
+    
   });
 
 

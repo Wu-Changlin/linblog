@@ -1,10 +1,10 @@
 <template>
-  <div class="search-page-container"  @scroll="onReachBottom">
+  <div class="search-page-container">
 		<NavBar :parentPageLogData="search_page_log"  :parentPageArticleCount="search_page_article_count" :parentPageArticleListData="search_page_article_list_data"></NavBar>
-
+    <div class="main">
     <div class="main-content with-side-bar">
   <!-- <div class="search-page" ref="getSearchKeywordMatchRef"  @scroll="onReachBottom"> -->
-  <div class="search-page">
+  <div class="search-page" ref="getSearchKeywordMatchRef"  @scroll="onReachBottom">
     <!-- 搜索结果栏 开始-->
     <div class="search-container">
 
@@ -33,10 +33,12 @@
       </EmptyState>
     </div>
     <!-- 没有更多数据占位 结束-->
+    <FloatingBtnSets  :parentPageMenuData="search_page_menu_list_data"></FloatingBtnSets>
+ 
   </div>
-  
+ 
   </div>
-  <FloatingBtnSets  :parentPageMenuData="search_page_menu_list_data"></FloatingBtnSets>
+</div>
 </div>
 
 
@@ -52,6 +54,8 @@
   import NavBar from "@/components/nav_bar.vue";
   import FloatingBtnSets from "@/components/floating_btn_sets.vue";
   const { proxy } = getCurrentInstance();//axios 代理
+
+
 
 
   const search_page_article_count=ref(0);
@@ -113,9 +117,6 @@ function getLayoutLogOrMenuListData(){
   //没有更多数据占位图（页面已经渲染到最后一页，没有更多数据可以加载渲染。
   //再次搜索需初始化，否则因没有更多数据占位导致页面无法滚动到底部，上拉加载更多功能失效）
   const is_no_more_data = ref(false);
-
-  
-
   const is_loading = ref(true);
   const search_page_search_article_list_data = ref([]);//关键词文章列表
   
@@ -150,7 +151,7 @@ function getLayoutLogOrMenuListData(){
       });
   }
 
-  //加载下一页数据占位
+  //博文列表（瀑布流）加载下一页数据占位
   const is_next_page_loading = ref(false);
   
 
@@ -261,23 +262,21 @@ function getLayoutLogOrMenuListData(){
 </script>
 
 <style scoped>
-*{
-    overflow: auto; /* 启用滚动功能 */
+*{  
+ 
     -ms-overflow-style: none; /* 适用于 Internet Explorer 和旧版 Edge */
     scrollbar-width: none; /* 适用于 Firefox */
     -webkit-scrollbar:none;/* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/ 
 }
-
+/* 页面内容容器 */
 .search-page-container {
 	padding: 0;
 	background-color: var(--bg);  /* fff*/
 	margin: 0;
   width: 100%;
-  height: 100vh;
- 
+
 	.main {
-	    display: flex;
-	
+	    /* display: flex; */
         .main-content {
             width: 100%;	
             
@@ -287,26 +286,20 @@ function getLayoutLogOrMenuListData(){
 
   .search-page {
 	/* display: flex; */
-  position: relative;
-    overflow-x: hidden;/* 禁止容器x轴方向滚动 */
-    flex-direction: column;
-	  flex-wrap:wrap;
+  /* position: relative; */
+  height: 100vh;
+  
 	padding-top: 72px;
 	width: 100%;
 	margin: 0 auto;
 	padding-left: 12px;
 	padding-right: 12px;
-
+  /* overflow: auto; */
+  overflow:auto;
 
   }
   .search-container {
-      overflow-x: hidden;/* 禁止容器x轴方向滚动 */
-      display: flex;
-      flex-direction: column;
-	  flex-wrap:wrap;
-      /* padding: 0 12px;
-      padding-top: 72px;
-      width: 100%; */
+      width: 100%;
         
 	}
 

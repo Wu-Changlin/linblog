@@ -40,8 +40,11 @@
   const index_tag_data=ref();
   const index_article_list_data=ref();
 
+  function layoutPageOnReachBottom(event) {
+    console.log(`${route.name}页面，元素的像素高度：${event.target.clientHeight}`);
+  }
   
-//获取菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
+//获取首页栏页数据（内容标签栏数据、博文列表数据（瀑布流组件））  
 onMounted(() => {
    
   proxy.$get('/data/frontend/index.json')
@@ -69,9 +72,6 @@ onMounted(() => {
   // NOTE:　首页的标签数据仅展示一页（没有上拉加载更多），目的：显示页面底部备案信息。 
   function getChildClickTag(active_tag_id){
 	is_loading.value=true;
-
-  
-  
   proxy.$post('/data/frontend/click_tag_all_article.json', { current_tag_id:active_tag_id, page: 1 })
       .then(response => {
     
@@ -114,6 +114,8 @@ onMounted(() => {
 	/* 修改盒子大小属性 */
 	padding:0px 12px;
 	background-color: var(--bg);
+  height: 100vh;
+  overflow: auto;
   
 	.feeds-container {
 	  /* top: 72px; */

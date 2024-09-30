@@ -7,7 +7,7 @@
 
     <div class="content-container">
       <div class="tag-content">
-        <div :data-active_tag_name="data.active_tag_name" :data-item-tag-name="item.tag_name" :class=" {'tag-item':true,'active':data.active_tag_name==item.tag_name?true:''}"
+        <div :class="{'tag-item':true,'active':data.active_tag_name==item.tag_name?true:''}"
           v-for="(item, index) in data.show_tag_data" :key="index" @click="clickTag(item)">
           {{ item.tag_name }}
         </div>
@@ -62,7 +62,7 @@
 
 
 <script setup>
-  import { reactive, ref, nextTick, onMounted, onUnmounted, watch,inject } from 'vue';
+  import { reactive, ref, nextTick, onMounted, onUnmounted, watch,inject,computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import Skeleton from '@/components/skeleton.vue'
 	import { debounce, throttle} from '@/hooks/debounce_throttle.js';
@@ -73,6 +73,14 @@
   const props = defineProps({
     parentPageTagData: {//父页面传标签数据
       type: Array
+    },
+    currentActiveTagId:{
+      type: [String, Number],
+      default: 0,
+      required: true
+    },
+    currentActiveTagName:{
+      type:String
     }
   });
 
@@ -87,6 +95,7 @@
     show_more_tag_btn: false,
     more_tag_icon: false,
     show_more_tag_container: false,
+    active_tag_id:0,//默认选中tag_id=0
     active_tag_name: '',//默认选中tag_name=''
     show_tag_count: 0,//页面实际渲染标签数量
     show_tag_data: [],//页面实际渲染标签数据
@@ -101,7 +110,17 @@
     data.list = props.parentPageTagData;
   }
 
- 
+//把父页面所传当前选中标签id数据赋值到当前页面的data.list(赋值仅执行1次)
+  if(props.currentActiveTagId){
+     // 使用计算属性确保id是数字类型，原因在html元素的任何attributes都会被解析成string
+  const numericId = computed(() => Number(props.currentActiveTagId));
+    data.active_tag_id=numericId.value;
+  }
+//把父页面所传当前选中标签名数据赋值到当前页面的data.list(赋值仅执行1次)
+ if(props.currentActiveTagName){
+  console.log('props.currentActiveTagName:',props.currentActiveTagName)
+  data.active_tag_name = props.currentActiveTagName;
+ }
 
   // const i=ref(0)
   // watch(
@@ -144,6 +163,7 @@
       data.show_tag_count=0;
       // data.more_tag_icon = false;//指向下折叠false
       // data.more_tag_icon=false;
+      if(!hiddenTagContentRet.value)return;
       ////标签容器宽度
       let tag_container_width = hiddenTagContentRet.value.offsetWidth
 
@@ -225,7 +245,7 @@
         maxItemsPerLines();
     })
     //监听窗口响应式每行最多标签数量
-    window.addEventListener('resize', 	throttle(() => {maxItemsPerLines()}, 300));//监听窗口缩放 加节流
+    window.addEventListener('resize', throttle(() => {maxItemsPerLines()}, 300));//监听窗口缩放 加节流
     //初始化每行最多标签数量
     //  maxItemsPerLines();
   })
@@ -273,18 +293,18 @@
 
     .tag-content {
       display: flex;
-      color: var(--text);
       /*这是关键属性，flex模式允许换行 */
       /* flex-wrap: wrap; */
       width: 100%;
+      color: var(--color-secondary-label);
       background-color: var(--bg);
       /* max-width: 1260px; */
       /* overflow: hidden; */
       /* background-color: rgba(0, 0, 0, 0.03) 没有效果，需加 !important*/
       .active {
-        background-color: rgba(0, 0, 0, 0.03) !important;
+        background-color: var(--color-active-background)!important;
         border-radius: 999px;
-        color: var(--text);
+        color: var(--color-primary-label)!important;
       }
 
       .tag-item {
@@ -301,9 +321,9 @@
        
         /*鼠标移入效果*/
         &:hover {
-          background-color: rgba(0, 0, 0, 0.03);
+          background-color: var(--color-active-background)!important;
           border-radius: 999px;
-          color: var(--text);
+          color: var(--color-primary-label)!important;
         }
       }
 

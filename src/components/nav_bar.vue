@@ -80,11 +80,11 @@
 </template>
 
 <script setup>
-	import { ref, reactive, onMounted, onUnmounted, watch, computed, inject,provide} from "vue";
+	import { ref, reactive, onMounted, onUnmounted, watch, computed, inject, provide } from "vue";
 	import { useRouter, useRoute } from "vue-router";
 	import NavTheme from './nav_theme.vue';
 	import { debounce, throttle } from '@/hooks/debounce_throttle.js';
-	
+
 	const router = useRouter();
 	const route = useRoute();
 	const search_keyword = ref('');
@@ -92,7 +92,7 @@
 	const count = ref(0);
 	const searchInputRef = ref(null);//搜索框对象
 	const stopWatchRouteQueryKeyword = ref(null);//监听路由查询参数keyword
-	
+
 
 
 
@@ -292,7 +292,7 @@
 	function clickHidePhoneSearch() {
 		// console.log('clickHidePhoneSearch');
 		show_right_search.value = false;
-		
+
 	}
 
 
@@ -318,7 +318,16 @@
 			// searchResults.appendChild(itemDiv);
 		} else {
 
-			router.push({ name: 'search', query: { keyword: search_keyword.value }, key: new Date().getTime() });
+
+			let routeUrl = router.resolve({
+				name: 'search',
+				query: { keyword: search_keyword.value },
+				key: new Date().getTime(),
+			});
+			window.open(routeUrl.href, '_blank');//打开新窗口搜索结果页
+
+
+
 			matchKeywordDataInit();
 
 		}
@@ -332,9 +341,9 @@
 		//   router.push("/testDemo");
 		// };
 		//带参数跳转
-		
+
 		if (article_id) {
-		
+
 			// router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
 			let routeUrl = router.resolve({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
 			//  console.log('routeUrl',routeUrl);
@@ -362,10 +371,10 @@
 	//搜索框失去焦点，初始化关键字数据和关闭匹配关键字列表
 	function searchInputBlur() {
 		//如果没有输入关键字，那么初始化关键字数据和关闭匹配关键字列表
-		if(!search_keyword.value){
+		if (!search_keyword.value) {
 			matchKeywordDataInit();
 		}
-		
+
 	}
 
 
@@ -379,7 +388,7 @@
 		}
 
 		//如果宽度大于1000且移动端样式处于显示状态，那么隐藏移动端搜索框相关样式
-		if(current_width>1000 && show_right_search.value){
+		if (current_width > 1000 && show_right_search.value) {
 			//隐藏移动端搜索框相关样式
 			show_right_search.value = false;
 		}

@@ -1,6 +1,6 @@
 <template>
 
-  <div class="archives-page">
+  <div class="feeds-page">
     
   <div class="archives-container">
     <transition name="scale-down" mode="out-in">
@@ -132,7 +132,7 @@
   import {useRoute, useRouter } from "vue-router"; 
   const { proxy } = getCurrentInstance();//axios 代理
   const router = useRouter();
-
+  const route = useRoute();
 
   const is_loading=ref(true)
   const contribution_day_month_data =ref();
@@ -143,7 +143,6 @@
   const current_year_month=ref();
   const last_month_article_list_data=ref();
   const is_selected_data=ref();
-
 
 
   const data = reactive(   
@@ -310,7 +309,6 @@
   </script>
   
   <style scoped>
-  
 
   .archives-skeleton{
     padding: 0 12px;
@@ -318,8 +316,10 @@
 
 
 
-  .archives-page {
+  .feeds-page {
+    height: 100vh;
     overflow-x: hidden;/* 禁止容器x轴方向滚动 */
+    overflow-y: auto;
   
   }
   .archives-container {

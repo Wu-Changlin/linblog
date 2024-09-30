@@ -5,11 +5,11 @@
       <!-- 菜单按钮 开始-->
     <div class="menu-container">
       <div class="btn-wrapper">
-        <div class="main-box" ref="mainboxRef">
+        <div class="main-box" ref="mainBoxRef">
 
           <div class="content-box" ref="contentBox">
-            <div class="plus" @click="clickMeun" ref="plus">
-              <svg-icon :icon-class="data.menu_icon" />
+            <div class="plus" @click="clickMenu" ref="plus">
+              <svg-icon :icon-class="current_active_menu_icon" />
             </div>
 
             <div :style="{'visibility' : isShow ? 'visible' : 'hidden'}" class="cont" v-for="(menu,index) in parentPageMenuData"
@@ -59,66 +59,17 @@
 </template>
 
 <script setup>
-  import { onMounted, onUnmounted, ref, reactive } from "vue";
+  import { onMounted, onUnmounted, ref, reactive,nextTick } from "vue";
 
   // menu_name: string //菜单唯一标识，与路由名保持一致
   // menu_title: string //菜单显示名称
-
-  // const menuInfo = ref([
-  //   {
-  //     menu_id: 1,
-  //     menu_name: "index",
-  //     menu_title: "首页",
-  //     menu_path: "/",
-  //   },
-  //   {
-  //     menu_id: 2,
-  //     menu_name: "frontend",
-  //     menu_title: "前端",
-  //     menu_path: "/frontend",
-  //   },
-  //   {
-  //     menu_id: 3,
-  //     menu_name: "backend",
-  //     menu_title: "后端",
-  //     menu_path: "/backend",
-  //   },
-
-  //   {
-  //     menu_id: 4,
-  //     menu_name: "resource",
-  //     menu_title: "资源",
-  //     menu_path: "/resource",
-  //   },
-
-  //   {
-  //     menu_id: 5,
-  //     menu_name: "archives",
-  //     menu_title: "归档",
-  //     menu_path: "/archives",
-  //   },
-
-  //   {
-  //     menu_id: 6,
-  //     menu_name: "diary",
-  //     menu_title: "随笔",
-  //     menu_path: "/diary",
-  //   },
-
-  // ]);
-
-
   const props = defineProps({
+
 	  parentPageMenuData: {
 			type: Array,
     	},
     
 });
-
-
-  const data = reactive({
-    menu_icon: 'menu', //菜单图标
-  });
 
 
   const index = ref([])
@@ -128,7 +79,7 @@
   const archives = ref()
 
   const diary = ref()
-  const mainboxRef = ref()
+  const mainBoxRef = ref()
   const plus = ref()
   const isShow = ref(false)
   const isMove = ref(false)
@@ -182,10 +133,10 @@
     // console.log("moveX", moveX, "moveY", moveY)
     //设置触发了移动
     isMove.value = true
-    let style = window.getComputedStyle(mainboxRef.value)
+    let style = window.getComputedStyle(mainBoxRef.value)
     //设置right，bottom值来跟随鼠标移动
-    mainboxRef.value.style.right = (parseFloat(style.right.replace("px", "")) - moveX) + "px"
-    mainboxRef.value.style.bottom = (parseFloat(style.bottom.replace("px", "")) - moveY) + "px"
+    mainBoxRef.value.style.right = (parseFloat(style.right.replace("px", "")) - moveX) + "px"
+    mainBoxRef.value.style.bottom = (parseFloat(style.bottom.replace("px", "")) - moveY) + "px"
     startX = e.clientX
     startY = e.clientY
   }
@@ -198,11 +149,12 @@
   }
 
 
+const current_active_menu_icon=ref('menu')
 
   /**
    * menu点击事件  异步 menuRefs.value 有值，同步menuRefs.value 为空
    */
-  const clickMeun = async () => {
+  const clickMenu = async () => {
     // console.log('点击事件触发', menuRefs.value['index']);
 
     // console.log(menuRefs.value);
@@ -222,7 +174,7 @@
     // menuRefs.value['resource'].classList.remove("resource")
     // menuRefs.value['archives'].classList.remove("archives")
     // menuRefs.value['diary'].classList.remove("diary")
-    data.menu_icon = 'menu';//显示菜单图标
+    current_active_menu_icon.value = 'menu';//显示菜单图标
     if (isShow.value) {
 
       for(let i=0;i<props.parentPageMenuData.length;i++){
@@ -236,7 +188,7 @@
       // menuRefs.value['resource'].classList.add("resource")
       // menuRefs.value['archives'].classList.add("archives")
       // menuRefs.value['diary'].classList.add("diary")
-      data.menu_icon = 'close';//显示关闭图标
+      current_active_menu_icon.value = 'close';//显示关闭图标
     }
   };
 
@@ -248,16 +200,49 @@
 
   // 滚动到页面顶部的函数
   function scrollToTop() {
+    console.log(111);
     // 如果当前正在滚动，则不再执行
     if (isScrolling.value) return;
 
     // 标记开始滚动
     isScrolling.value = true;
+    console.log(222);
+  
+      // let scrollElem = document.querySelector('.search-page-container');
+      let layoutPageScrollElem = document.querySelector('.feeds-page');
+     
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+      if(layoutPageScrollElem){
+        console.log('layoutPageScrollElem:',layoutPageScrollElem.offsetTop)
+        layoutPageScrollElem.scrollTo({ top:0, behavior: 'smooth' });
+      }
+
+      let searchPageScrollElem = document.querySelector('.search-page');
+      if(searchPageScrollElem){
+        console.log('searchPageScrollElem:',searchPageScrollElem.offsetTop)
+        searchPageScrollElem.scrollTo({ top:0, behavior: 'smooth' });
+      }
+      let articlePageScrollElem = document.querySelector('.article-page');
+      if(articlePageScrollElem){
+        console.log('articlePageScrollElem:',articlePageScrollElem.offsetTop)
+        window.scrollTo({ top:0, behavior: 'smooth' });
+      }
+     
+
+  
+
+      // document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+      // document.body.scrollTo({ top: 0, behavior: 'smooth' });
+      
+
+      console.log(333);
+    
+      var scrollTop = document.body.scrollTop || document.documentElement.scrollTop || window.pageYOffset;
+
+
+      console.log('scrollTop',scrollTop)
+
+    console.log(444);
     isScrolling.value = false;
     // if (interval.value) {
     //   clearInterval(interval.value);
@@ -273,7 +258,6 @@
     //     clearInterval(interval.value);
     //   }
     // }, 10); // 每10毫秒执行一次
-
   }
 
 

@@ -1,7 +1,7 @@
 <template>
 
   <div class="contribution-calendar-container">
-    <div class="contribution-table" style="max-width: 100%; overflow-y: hidden;overflow-x: auto;">
+    <div class="contribution-table">
 
       <div class="contribution-table-container">
         <div class="contribution-table-content">
@@ -73,11 +73,6 @@
       </div>
 
     </div>
-
-
-
-
-
 
     <div class="contribution-tip-or-level">
       <!-- <h3 style="flex: 1;">最近一年贡献：{{ data.year_contribution_count}} 次</h3> -->
@@ -511,6 +506,7 @@
 
 
 <style scoped>
+  
   .contribution-calendar-container {
     display: flex;
     flex-direction: column;
@@ -518,17 +514,76 @@
     border-top-left-radius: 0.375rem;
     border-top-right-radius: 0.375rem;
     border: var(--borderWidth-thin, 1px) solid var(--borderColor-default);
-
   }
+
+
+
 
   .contribution-table {
     display: flex;
     max-width: 100%;
+    /* -ms-overflow-style: scrollbar; 
+    -webkit-scrollbar:scrollbar;
+    scrollbar-width: scrollbar;  */
+    height: 100%; /* 容器高度设置为100%，根据实际需求调整 */
+    width: 100%; /* 容器宽度设置为100%，根据实际需求调整 */
+    /* 可以设置为 'auto', 'thin', 'none' 等值 */
+    overflow-y: scroll;
+    overflow-y: hidden;
   }
+
+
+
+  .year-month-day{
+    scrollbar-width: thin; 
+
+ 
+/* 自定义滚动条样式（仅WebKit浏览器） */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #dbeffd;
+  border-radius: 32px;
+   /* 滚动条轨道颜色 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* 滚动条手柄颜色 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* 滚动条手柄hover颜色 */
+}
+
+
+/* 对于IE和Edge */
+
+/* 设置滚动条的宽度 */
+::-ms-track {
+width: 16px;
+cursor: pointer;
+background: transparent; 
+}
+
+/* 设置滚动条的滑块样式 */
+::-ms-thumb {
+width: 10px;  
+background: #888; 
+}
+
+/* 设置滚动条的轨道样式 */
+::-ms-scrollbar {
+width: 16px;  
+background: transparent; 
+}
+  }
+
 
   .contribution-table-container {
     max-width: 100%;
-
   }
 
 
