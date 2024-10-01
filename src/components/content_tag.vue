@@ -162,7 +162,7 @@
       data.show_arrow_more_tag_data=[];
       data.show_tag_count=0;
       // data.more_tag_icon = false;//指向下折叠false
-      // data.more_tag_icon=false;
+      //如果计算标签数量dom对象为空，直接返回
       if(!hiddenTagContentRet.value)return;
       ////标签容器宽度
       let tag_container_width = hiddenTagContentRet.value.offsetWidth
