@@ -179,15 +179,12 @@
 
     // 监听滚动事件并更新样式
     function watchScrollUpdateStyle() {
-        progress.value =
-            parseInt(
-                (window.scrollY / total_scroll_height.value) *
-                100
-            ) + "%";
-
+        // 使用Math.ceil()函数进行向上取整。该函数会将小数直接进位，返回最接近且大于等于原数的整数。
+        progress.value = Math.ceil ((window.scrollY / total_scroll_height.value) *100);
+        progress.value>100 ? progress.value= "100%":progress.value=progress.value+"%";
         // console.log('window.scrollY:', window.scrollY);
 
-        // console.log('window.scrollY / articleElement.scrollHeight - 150 ',window.scrollY,'/',(articleElement.scrollHeight - 162 ));
+        // console.log('window.scrollY / total_scroll_height.value ',window.scrollY,'/',total_scroll_height.value);
         let visibleTitles = [];
 
         for (let i = tocArray.value.length - 1; i >= 0; i--) {

@@ -76,7 +76,6 @@
         current_active_tag_name.value = response.current_active_tag_name;
         //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
 updateCurrentActiveTagIdFunction(current_active_tag_id.value);
-        console.log(' current_active_tag_name.value:', current_active_tag_name.value)
 
         //模拟数据返回随机数量
         let sliced_start = Math.floor(Math.random() * 5) + 1;
@@ -123,11 +122,11 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
         current_active_tag_id.value = response.current_active_tag_id;
         current_active_tag_name.value = response.current_active_tag_name;
         //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
-updateCurrentActiveTagIdFunction(current_active_tag_id.value);
+        updateCurrentActiveTagIdFunction(current_active_tag_id.value);
         //模拟数据返回随机数量
         current_active_tag_id.value = active_tag_id;
         current_active_tag_name.value = active_tag_name;
-        let sliced_start = Math.floor(Math.random() * 5) + 1;
+        let sliced_start =  Math.floor(Math.random() * 5) + 1;
 
         total_pages.value = sliced_start; //总页数
         const data_count = frontend_article_list_data.value.length;
@@ -135,15 +134,17 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
         let article_count = data_count - sliced_start; // 博文数量
 
         //标题添加选中标签名
-
         for (let i = 0; i < article_count; i++) {
-          frontend_article_list_data.value[i]['title'] = `点击${active_tag_name}，总页数:${total_pages.value},第${current_page.value}页：` + frontend_article_list_data.value[i]['title']
+          frontend_article_list_data.value[i]['title'] = `点击${current_active_tag_name.value}，总页数:${total_pages.value},第${current_page.value}页：` + frontend_article_list_data.value[i]['title']
         }
 
         //如果博文列表没有数据，那么显示没有数据占位    
         if (!frontend_article_list_data.value) {
           is_empty_article_list_data.value = true;
         }
+
+
+        
 
         flag.value = true;//true：显示内容标签栏
 
@@ -165,7 +166,9 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
     if (is_no_more_data.value) return;//如果显示没有更多数据占位图（页面已渲染最后一页），那么直接返回
     if (is_next_page_loading.value) return;//如果加载下一页数据占位，那么直接返回
     if(is_empty_article_list_data.value)return;//如果显示没有数据占位图（后台返回空数据），那么直接返回
-    console.log('防抖前-is_next_page_loading.value:', is_next_page_loading.value)
+     
+    console.log(`点击${current_active_tag_name.value}，总页数:${total_pages.value},第${current_page.value}页：`)
+
     //总页数>=当前页数 ，模拟时当前页数没有axios赋值，随总页数（总页数是随机数）赋值
     if (total_pages.value > current_page.value) {
       debounce(() => {//防抖
