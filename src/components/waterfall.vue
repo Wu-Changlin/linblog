@@ -27,6 +27,7 @@
 <!-- 骨架屏 结束-->
 <!-- 渲染内容 开始-->
 <template  v-else>
+ 
   <Waterfall  v-if="data.list.length>0" :list="data.list" :breakpoints="breakpoints" :delay="300"  key="waterfall-container" class="waterfall-container">
     <template #item="{ item,index }">
       <div class="waterfall-card">
@@ -84,7 +85,9 @@
 
 
  
-  
+
+
+
 </template>
 <!-- 渲染内容 结束-->
     
@@ -144,7 +147,7 @@
 
 </template>
 <script setup>
-  import { reactive, ref, onMounted, onUnmounted ,watch,computed,inject} from 'vue';
+  import { reactive, ref, onMounted, onUnmounted ,watch,computed,inject,nextTick} from 'vue';
   import {useRoute, useRouter } from "vue-router"; 
   import { LazyImg, Waterfall } from "vue-waterfall-plugin-next";
   import "vue-waterfall-plugin-next/dist/style.css";
@@ -174,41 +177,21 @@
     },
     isNextPageLoading:{
       type:Boolean,
-      default:true
+      default:false
     },
     isNoMoreData:{
       type:Boolean,
-      default:true
+      default:false
     },
     isEmptyArticleListData:{
       type:Boolean,
-      default:true
+      default:false
     },
-
 
     
   });
 
 
-
-//   watch(
-//        () =>props.isNextPageLoading,
-//        (newValue, oldValue) => {
-      
-//         console.log('newValue, oldValue-props.isNextPageLoading:',props.isNextPageLoading)
-//         if(newValue){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
-//           // console.log('newValue-props.parentPageArticleListData:',props.parentPageArticleListData)
-         
-          
-// //  console.log('data.v.l',data.list.length);
-//           // is_loading.value=false;
-         
-//         }
-       
-        
-//        },
-//        { immediate: true }
-//      );
 
 
 // 使用ref来存储watch返回的函数
@@ -219,32 +202,31 @@ const  stopParentPageArticleListData = ref(null);
        () =>props.parentPageArticleListData,
        (newValue, oldValue) => {
       
-        // console.log('newValue, oldValue-props.parentPageArticleListData:',props.parentPageArticleListData)
+      
         if(newValue){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
           // console.log('newValue-props.parentPageArticleListData:',props.parentPageArticleListData)
           data.list = props.parentPageArticleListData;
           
-//  console.log('data.v.l',data.list.length);
-          // is_loading.value=false;
+
          
         }
-       
         
-       },
-       { immediate: true }
-     );
+       },{ immediate: true }
+     )
 
 
-
+   
+const is_show=ref(false)
 
   onMounted(() => {
     //控制骨架屏尺寸
     skeletonHandleResize(); // 初始化尺寸
     window.addEventListener('resize', skeletonHandleResize);
 
+    
+    
   });
 
- 
 
 
   //去看博文
@@ -357,13 +339,35 @@ const  stopParentPageArticleListData = ref(null);
      stopParentPageArticleListData.value=null; // 如果watch返回了一个停止监听的函数，调用它
   });
 
+ 
+
 
 </script>
 
 
 <style scoped>
 
-
+.website-approve {
+    display: flex;
+	position: fixed;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+    /* display: block; */
+    /* display: none; */
+    margin-top: 12px;
+    z-index: 1;
+ margin-bottom: 0;
+    height: 30px;
+    /* 隐藏 */
+    @media screen and (max-width: 959px) {
+			display: none;
+			/* visibility: hidden; */
+			
+    }
+}
 
   .waterfall-card {
     position: relative;

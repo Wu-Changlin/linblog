@@ -185,7 +185,7 @@
                 100
             ) + "%";
 
-        console.log('window.scrollY:', window.scrollY);
+        // console.log('window.scrollY:', window.scrollY);
 
         // console.log('window.scrollY / articleElement.scrollHeight - 150 ',window.scrollY,'/',(articleElement.scrollHeight - 162 ));
         let visibleTitles = [];

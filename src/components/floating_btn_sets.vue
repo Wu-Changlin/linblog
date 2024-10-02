@@ -200,31 +200,31 @@ const current_active_menu_icon=ref('menu')
 
   // 滚动到页面顶部的函数
   function scrollToTop() {
-    console.log(111);
+  
     // 如果当前正在滚动，则不再执行
     if (isScrolling.value) return;
 
     // 标记开始滚动
     isScrolling.value = true;
-    console.log(222);
+
   
       // let scrollElem = document.querySelector('.search-page-container');
       let layoutPageScrollElem = document.querySelector('.feeds-page');
      
 
       if(layoutPageScrollElem){
-        console.log('layoutPageScrollElem:',layoutPageScrollElem.offsetTop)
+        // console.log('layoutPageScrollElem:',layoutPageScrollElem.offsetTop)
         layoutPageScrollElem.scrollTo({ top:0, behavior: 'smooth' });
       }
 
       let searchPageScrollElem = document.querySelector('.search-page');
       if(searchPageScrollElem){
-        console.log('searchPageScrollElem:',searchPageScrollElem.offsetTop)
+        // console.log('searchPageScrollElem:',searchPageScrollElem.offsetTop)
         searchPageScrollElem.scrollTo({ top:0, behavior: 'smooth' });
       }
       let articlePageScrollElem = document.querySelector('.article-page');
       if(articlePageScrollElem){
-        console.log('articlePageScrollElem:',articlePageScrollElem.offsetTop)
+        // console.log('articlePageScrollElem:',articlePageScrollElem.offsetTop)
         window.scrollTo({ top:0, behavior: 'smooth' });
       }
      

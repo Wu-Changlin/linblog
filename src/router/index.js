@@ -11,6 +11,7 @@ const routes=[
                 path:'/index',
                 name:"index",
                 component:()=>import('@/views/frontend/index.vue'),//引入该路由使用的组件
+             
             },
 
             {
@@ -96,6 +97,8 @@ const routes=[
         redirect: '/404', // 重定向到404页面
         meta: { hidden: true } // 同样，隐藏这个路由
       }
+
+      
       
 
 ]
@@ -107,5 +110,20 @@ const router =createRouter({
 
 
 
+router.beforeEach((to, from, next) => {
+    // 你的导航守卫逻辑  如果目的路由等于来源路由且目的路由是'/index'，那么滚动条置顶。
+    //路由切换实际是组件间的切换，引用相同组件的时候，页面就无法更新。
+    //页面就无法更新导致滚动条位置没变。上一个标签页滚动到底部路由切换后下一个页面滚动条位置没变在底部。
+    if (to.path===from.path && to.path==='/index') {
+        let layoutPageScrollElem = document.querySelector('.feeds-page');
+        if(layoutPageScrollElem){
+            // console.log('layoutPageScrollElem:',layoutPageScrollElem.offsetTop)
+            layoutPageScrollElem.scrollTo({ top:0, behavior: 'smooth' });
+         }
+    //   next('/404'); // 重定向到404页面
+    } else {
+      next(); // 继续正常的导航
+    }
+  });
 
 export default router  //导出路由

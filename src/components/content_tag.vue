@@ -74,17 +74,17 @@
     parentPageTagData: {//父页面传标签数据
       type: Array
     },
-    currentActiveTagId:{
-      type: [String, Number],
-      default: 0,
-      required: true
-    },
+    // currentActiveTagId:{
+    //   type: [String, Number],
+    //   default: 0,
+    //   required: true
+    // },
     currentActiveTagName:{
       type:String
     }
   });
 
-    //来自layout 爷页面的当前选中标签id
+    //注入来自layout页面的当前选中标签id
     const layout_page_current_active_tag_id = inject('currentActiveTagId');
 
   // 当我们需要根据当前路由的信息来决定组件的渲染逻辑时，可以使用useRoute；而当我们需要进行路由跳转、导航等操作时，则应该使用useRouter。
@@ -110,15 +110,15 @@
     data.list = props.parentPageTagData;
   }
 
-//把父页面所传当前选中标签id数据赋值到当前页面的data.list(赋值仅执行1次)
-  if(props.currentActiveTagId){
-     // 使用计算属性确保id是数字类型，原因在html元素的任何attributes都会被解析成string
-  const numericId = computed(() => Number(props.currentActiveTagId));
-    data.active_tag_id=numericId.value;
-  }
+// //把父页面所传当前选中标签id数据赋值到当前页面的data.list(赋值仅执行1次) 目前来自来自layout页面（公共）提供(provide)当前选中标签id数据(inject('currentActiveTagId'))
+//   if(props.currentActiveTagId){
+//      // 使用计算属性确保id是数字类型，原因在html元素的任何attributes都会被解析成string
+//   const numericId = computed(() => Number(props.currentActiveTagId));
+//     data.active_tag_id=numericId.value;
+//   }
 //把父页面所传当前选中标签名数据赋值到当前页面的data.list(赋值仅执行1次)
  if(props.currentActiveTagName){
-  console.log('props.currentActiveTagName:',props.currentActiveTagName)
+  // console.log('props.currentActiveTagName:',props.currentActiveTagName)
   data.active_tag_name = props.currentActiveTagName;
  }
 
@@ -140,12 +140,18 @@
   //传递事件
   const emit = defineEmits(['childClickTag'])
  
+
+  // 注入来自layout页面（公共）提供修改当前选中标签id的方法
+  const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
+
+
   //点击标签
   function clickTag(item) {
     // console.log('tag_id:', tag_id);
     data.active_tag_name = item.tag_name;
     emit('childClickTag', item.tag_id, item.tag_name);//把子页面选中的标签id和标签名称传到父页面
-  
+     //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
+    updateCurrentActiveTagIdFunction(item.tag_id);
     //  /index ===>  /index?tag_id=Java  路由携参跳转（当前页只添加路由参没有跳转）
     router.push({ name: current_route_name.value, query: { tag_id: item.tag_name }, key: new Date().getTime() });
 
@@ -235,9 +241,9 @@
   onMounted(() => {
     //如果路由有查询参数tag_id，那么参数值赋值选中标签名变量。
     //(点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）)
-    if(route.query.tag_id){
-      data.active_tag_name=route.query.tag_id;
-    }
+    // if(route.query.tag_id){
+    //   data.active_tag_name=route.query.tag_id;
+    // }
     current_route_name.value = route.name;//获取当前路由的名称
     
     // fetchTag();

@@ -149,7 +149,7 @@
 
 
 	//接受来自父页面的方法（当父页面props传值异常，调用此方法获取数据）
-	const ParentPageGetSearchKeywordMatchData = inject('getSearchKeywordMatchArticleListData');
+	const ParentPageGetSearchKeywordMatchData = inject('getSearchKeywordMatchArticleListDataFunction');
 
 	const data = reactive(
 		{

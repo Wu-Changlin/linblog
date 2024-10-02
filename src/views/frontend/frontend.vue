@@ -4,13 +4,14 @@
     <!-- <div class="feeds-page"> -->
 
     <div style="margin-top: 72px;">
-      <ContentTag :parentPageTagData="frontend_tag_data" :currentActiveTagId="current_active_tag_id"
+      <ContentTag :parentPageTagData="frontend_tag_data"
         :currentActiveTagName="current_active_tag_name" @childClickTag="getChildClickTag" v-if="flag"></ContentTag>
     </div>
 
     <div class="feeds-container">
-      <ContentCarouselImg :parentPageCarouselImgData="frontend_carousel_img_data" :isLoading="is_loading">
-      </ContentCarouselImg>
+      <!-- <div  style="margin-top: 10px;"> -->
+        <ContentCarouselImg :parentPageCarouselImgData="frontend_carousel_img_data" :isLoading="is_loading"></ContentCarouselImg>
+      <!-- </div> -->
       <Waterfall :parentPageArticleListData="frontend_article_list_data" :isLoading="is_loading"
         :isNextPageLoading="is_next_page_loading" :isNoMoreData="is_no_more_data"
         :isEmptyArticleListData="is_empty_article_list_data"></Waterfall>
@@ -50,11 +51,17 @@
   //博文列表（瀑布流）加载下一页数据占位
   const is_next_page_loading = ref(false);
 
-  //来自父页面的当前选中标签id
+  //注入来自layout页面的当前选中标签id
   const parent_page_current_active_tag_id = inject('currentActiveTagId');
+
+   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
+   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
+
+
 
   //获取前端栏页数据（内容标签栏数据、轮播图数据、博文列表数据（瀑布流组件））  
   function getFrontendPageData() {
+    is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
     proxy.$get('/data/frontend/frontend.json')
       .then(response => {
         // setTimeout(() => {
@@ -67,6 +74,8 @@
 
         current_active_tag_id.value = response.current_active_tag_id;
         current_active_tag_name.value = response.current_active_tag_name;
+        //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
+updateCurrentActiveTagIdFunction(current_active_tag_id.value);
         console.log(' current_active_tag_name.value:', current_active_tag_name.value)
 
         //模拟数据返回随机数量
@@ -99,7 +108,7 @@
 
   //获取把子页面选中的标签id和标签名称传到父页面或者点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）
   function getChildClickTag(active_tag_id, active_tag_name) {
-
+    is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
     // flag.value=false; //初始化导致子页面选中的标签id数据出现标签栏闪烁（当前标签栏处于显示状态，出现先隐藏后显示闪烁）
     is_loading.value = true;
 
@@ -109,25 +118,27 @@
         frontend_tag_data.value = response.tag_data;
         total_pages.value = response.total_pages; //总页数
         current_page.value = response.current_page; //当前页数
-        // frontend_article_list_data.value = response.article_list_data;
+        frontend_article_list_data.value = response.article_list_data;
         frontend_carousel_img_data.value = response.carousel_img_data;
         current_active_tag_id.value = response.current_active_tag_id;
         current_active_tag_name.value = response.current_active_tag_name;
+        //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
+updateCurrentActiveTagIdFunction(current_active_tag_id.value);
         //模拟数据返回随机数量
         current_active_tag_id.value = active_tag_id;
         current_active_tag_name.value = active_tag_name;
         let sliced_start = Math.floor(Math.random() * 5) + 1;
 
-        // total_pages.value = sliced_start; //总页数
-        // const data_count = frontend_article_list_data.value.length;
-        // frontend_article_list_data.value = frontend_article_list_data.value.slice(sliced_start, data_count);
-        // let article_count = data_count - sliced_start; // 博文数量
+        total_pages.value = sliced_start; //总页数
+        const data_count = frontend_article_list_data.value.length;
+        frontend_article_list_data.value = frontend_article_list_data.value.slice(sliced_start, data_count);
+        let article_count = data_count - sliced_start; // 博文数量
 
-        // //标题添加选中标签名
+        //标题添加选中标签名
 
-        // for (let i = 0; i < article_count; i++) {
-        //   frontend_article_list_data.value[i]['title'] = `点击${active_tag_name}，总页数:${total_pages.value},第${current_page.value}页：` + frontend_article_list_data.value[i]['title']
-        // }
+        for (let i = 0; i < article_count; i++) {
+          frontend_article_list_data.value[i]['title'] = `点击${active_tag_name}，总页数:${total_pages.value},第${current_page.value}页：` + frontend_article_list_data.value[i]['title']
+        }
 
         //如果博文列表没有数据，那么显示没有数据占位    
         if (!frontend_article_list_data.value) {
@@ -159,10 +170,10 @@
     if (total_pages.value > current_page.value) {
       debounce(() => {//防抖
         const { scrollTop, scrollHeight, clientHeight, scrollLeft, offsetWidth, scrollWidth } = event.target;
-        const isScrolledToBottom = scrollHeight - (scrollTop + clientHeight) <= 1; // 1像素的误差  距离底部小于1像素
-        const isScrolledToRight = scrollWidth - (scrollLeft + offsetWidth) <= 1; // 1像素的误差    距离底部小于1像素
+        const isScrolledToBottom = scrollHeight - (scrollTop + clientHeight) <= 200; // 200像素的误差  距离底部小于200像素
+        // const isScrolledToRight = scrollWidth - (scrollLeft + offsetWidth) <= 1; // 1像素的误差    距离左边小于1像素
         // console.log('isScrolledToBottom:',isScrolledToBottom,',isScrolledToRight:',isScrolledToRight)
-        //如果同时满足距离底部小于1像素和is_next_page_loading的反值是true条件，那么执行获取下一页数据
+        //如果同时满足距离底部小于200像素和is_next_page_loading的反值是true条件，那么执行获取下一页数据
         if (isScrolledToBottom && !is_next_page_loading.value) {
 
           is_next_page_loading.value = true;

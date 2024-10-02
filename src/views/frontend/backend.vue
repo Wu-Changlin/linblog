@@ -5,7 +5,7 @@
     
 
     <div  style="margin-top: 72px;">
-      <ContentTag :parentPageTagData="backend_tag_data"  @childClickTag="getChildClickTag" v-if="flag"></ContentTag>
+      <ContentTag :parentPageTagData="backend_tag_data" :currentActiveTagName="current_active_tag_name" @childClickTag="getChildClickTag" v-if="flag"></ContentTag>
 
     </div>
     
@@ -43,15 +43,110 @@ import { useRoute,useRouter } from "vue-router";
   const backend_tag_data=ref();
   const backend_article_list_data=ref();
   const backend_carousel_img_data=ref();
+  const total_pages = ref(0); //总页数
+  const current_page = ref(1);//当前页数
+  const current_active_tag_id = ref(1);
+  const current_active_tag_name = ref('');
+  const is_empty_article_list_data = ref(false);
 
+  //没有更多数据占位图（页面已经渲染到最后一页，没有更多数据可以加载渲染。
+  //点击标签需初始化，否则因没有更多数据占位导致页面无法滚动到底部，上拉加载更多功能失效）
+  const is_no_more_data = ref(false);
+  //博文列表（瀑布流）加载下一页数据占位
+  const is_next_page_loading = ref(false);
 
-  function layoutPageOnReachBottom(event) {
-    console.log(`${route.name}页面，元素的像素高度：${event.target.clientHeight}`);
-  }
-
-
-  //来自父页面的当前选中标签id
+  //注入来自layout页面的当前选中标签id
   const parent_page_current_active_tag_id = inject('currentActiveTagId');
+
+   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
+   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
+
+
+    //触底上拉加载更多数据
+  //   function layoutPageOnReachBottom(event) {
+  //   // console.log(`${route.name}页面，元素的像素高度：${event.target.clientHeight}`);
+  //   if (is_loading.value) return;//如果正在加载数据，那么直接返回
+  //   if (is_no_more_data.value) return;//如果显示没有更多数据占位图（页面已渲染最后一页），那么直接返回
+  //   if (is_next_page_loading.value) return;//如果加载下一页数据占位，那么直接返回
+  //   if(is_empty_article_list_data.value)return;//如果显示没有数据占位图（后台返回空数据），那么直接返回
+  //   console.log('防抖前-is_next_page_loading.value:', is_next_page_loading.value)
+  //   //总页数>=当前页数 ，模拟时当前页数没有axios赋值，随总页数（总页数是随机数）赋值
+  //   if (total_pages.value > current_page.value) {
+  //     debounce(() => {//防抖
+  //       const { scrollTop, scrollHeight, clientHeight, scrollLeft, offsetWidth, scrollWidth } = event.target;
+  //       const isScrolledToBottom = scrollHeight - (scrollTop + clientHeight) <= 200; // 200像素的误差  距离底部小于200像素
+  //       // const isScrolledToRight = scrollWidth - (scrollLeft + offsetWidth) <= 1; // 1像素的误差    距离左边小于1像素
+  //       // console.log('isScrolledToBottom:',isScrolledToBottom,',isScrolledToRight:',isScrolledToRight)
+  //       //如果同时满足距离底部小于200像素和is_next_page_loading的反值是true条件，那么执行获取下一页数据
+  //       if (isScrolledToBottom && !is_next_page_loading.value) {
+
+  //         is_next_page_loading.value = true;
+
+  //         console.log('满足距离value=true,is_next_page_loading.value:', is_next_page_loading.value)
+  //         setTimeout(() => {
+  //           getActiveTagNextPageData();//获取选中标签下一页数据
+  //         }, 3000)
+
+  //       }
+
+
+  //     }, 1000);
+
+
+  //   } else {//如果当前页数=总页数，那么显示没有更多数据占位图
+  //     is_no_more_data.value = true;//显示没有更多数据
+  //   }
+  // }
+
+
+  // //根据触底获取选中标签下一页数据  
+  // function getActiveTagNextPageData() {
+
+  //   console.log('进入getActiveTagNextPageData,current_page.value:', current_page.value)
+  //   current_page.value++;//当前页数加一
+  //   proxy.$post('/data/frontend/active_tag_next_page_data.json', { tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
+  //     .then(response => {
+  //       // setTimeout(() => {
+  //       is_next_page_loading.value = false;//取消加载中动画
+  //       if (!is_next_page_loading.value) {
+
+
+  //         let backend_article_list_data_next = response.article_list_data_next; // 博文列表
+  //         // current_page.value= response.current_page; //当前页数  
+
+  //         //模拟多次搜索返回随机数量
+  //         let sliced_start = Math.floor(Math.random() * 5);
+  //         const data_count = backend_article_list_data_next.length;
+  //         let sliced_array = backend_article_list_data_next.slice(sliced_start, data_count);
+  //         for (let i = 0; i < sliced_array.length; i++) {
+  //           sliced_array[i]['title'] = `总页数:${total_pages.value},第${current_page.value}页：` + sliced_array[i]['title'];
+  //         }
+  //         // console.log('原：', JSON.stringify(backend_article_list_data.value));
+  //         //数组元素合并
+  //         backend_article_list_data.value = [...backend_article_list_data.value, ...sliced_array]
+  //         // console.log('合并：', JSON.stringify(backend_article_list_data.value));
+
+  //         if (current_page.value == total_pages.value) {//如果当前页数=总页数，那么显示没有更多数据占位图
+  //           is_no_more_data.value = true;//显示没有更多数据
+  //         }
+
+  //         //如果博文列表没有数据，那么显示没有数据占位  
+  //         if (!backend_article_list_data.value) {
+  //           is_empty_article_list_data.value = true;
+  //         }
+  //         console.log('数据合并：is_next_page_loading.value:', is_next_page_loading.value)
+  //         // is_next_page_loading.value = false;//取消加载中动画
+  //       }
+  //     })
+  //     .catch(error => {
+
+  //       console.error('Error fetching mock data:', error);
+  //     });
+
+
+  // }
+
+
 
 //获取后端栏页数据（内容标签栏数据、轮播图数据、博文列表数据（瀑布流组件）） 
   function getBackendPageData(){
@@ -62,7 +157,37 @@ import { useRoute,useRouter } from "vue-router";
             backend_tag_data.value = response.tag_data; 
             backend_article_list_data.value = response.article_list_data; 
             backend_carousel_img_data.value = response.carousel_img_data; 
+            total_pages.value = response.total_pages; //总页数
+            current_page.value = response.current_page; //当前页数
+
+            current_active_tag_id.value = response.current_active_tag_id;
+        current_active_tag_name.value = response.current_active_tag_name;
+        //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
+updateCurrentActiveTagIdFunction(current_active_tag_id.value);
             
+           current_active_tag_id.value = response.current_active_tag_id;
+        current_active_tag_name.value = response.current_active_tag_name;
+        //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
+updateCurrentActiveTagIdFunction(current_active_tag_id.value);
+
+//模拟数据返回随机数量
+let sliced_start = Math.floor(Math.random() * 5) + 1;
+
+total_pages.value = sliced_start; //总页数
+const data_count = backend_article_list_data.value.length;
+backend_article_list_data.value = backend_article_list_data.value.slice(sliced_start, data_count);
+let article_count = data_count - sliced_start; // 博文数量
+
+for (let i = 0; i < article_count; i++) {
+  backend_article_list_data.value[i]['title'] = `总页数:${total_pages.value},第${current_page.value}页：` + backend_article_list_data.value[i]['title'];
+}
+
+//如果博文列表没有数据，那么显示没有数据占位  
+if (!backend_article_list_data.value) {
+  is_empty_article_list_data.value = true;
+}
+
+
           flag.value=true;
           is_loading.value=false;
           // }, 3000); // 假设加载时间是3秒

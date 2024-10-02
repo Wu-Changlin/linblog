@@ -14,7 +14,7 @@
     </div>
   </template>
   <script setup>
-  import { defineProps, ref, watch,onUnmounted } from "vue"; //使用语法糖才能使用他们
+  import { ref, watch,onUnmounted } from "vue"; //使用语法糖才能使用他们
   const props = defineProps({
     height: {
       type: String,

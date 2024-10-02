@@ -1,8 +1,11 @@
 <template>
     <!-- 页脚 开始-->
-    <div class="website-approve" :style="{display: data.show_website_approve ? 'block' : 'none'}">
+
+    <div style="height: 60px;background-color: #313741;color: #fff;text-align: center;padding: 20px 0;">备案</div>
+
+    <!-- <div  class="website-approve">
         <a  class="website-approve-item" href="">  桂ICP 备 20xxxxxx 号 </a>
-    </div>
+    </div> -->
      <!-- 页脚 结束-->
 </template>
 
@@ -11,50 +14,33 @@
 <script setup>
     import {  reactive, onMounted ,onUnmounted} from 'vue';
     
-    const data=reactive({
-        show_website_approve:false, //悬浮内容标签栏 
-        
-    })
 
-
-    /*吸底效果 开始*/
-    //滑动监听
-    const scrollBottom=()=>{
-
-        const distanceToBottom = document.documentElement.offsetHeight - (window.innerHeight + window.scrollY);
-        if(distanceToBottom < 100){//如果距离底部小于100px，那么显示页脚
-            data.show_website_approve=true;
-        }else{
-            data.show_website_approve=false;
-        }
-    
-    }
-
-    onMounted(()=>{
-    //     console.log('挂载完毕');
-        window.addEventListener('scroll',scrollBottom);  //监听窗口滑动到底部
-    })
-
-    
-    onUnmounted(() => {
-      window.removeEventListener('scroll', scrollBottom)
-    })//离开页面时移除监听窗口滑动到底部
-
-
-
-    
 
 </script>
 
 <style scoped>
+a {
+    
+    text-decoration: none;
+    background-color: transparent
+}
+ 
+
+
 .website-approve {
-	position: fixed;
+    /* display: flex; */
+	/* position: relative; */
     justify-content: center;
     align-items: center;
     bottom: 0;
     width: 100%;
-    display: none;
-    margin-top: 30px;
+    overflow: hidden;
+    /* display: block; */
+    /* display: none; */
+    margin-top: 12px;
+    z-index: 1;
+ margin-bottom: 0;
+    height: 30px;
     /* 隐藏 */
     @media screen and (max-width: 959px) {
 			display: none;
@@ -64,9 +50,13 @@
 }
 
 .website-approve-item {
-
-    width: 100%;
+    /* display:flex; */
+    /* position: fixed; */
+    z-index: 1;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
+    margin:0 auto;
     height: 30px;
-    margin-left: 50%;
 }
 </style>

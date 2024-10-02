@@ -7,10 +7,10 @@
 
 			<div class="main-content with-side-bar">	
 				<router-view />
+				
 			</div>
 
 			<FloatingBtnSets :parentPageMenuData="layout_page_menu_list_data"></FloatingBtnSets>
-			<!-- <Footer></Footer> -->
 			
 		</div>
 		
@@ -35,7 +35,7 @@ const { proxy } = getCurrentInstance();//axios 代理
 const layout_page_article_count=ref(0);
 const layout_page_article_list_data=ref();
 // //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
-const getSearchKeywordMatchArticleListData= ()=>{
+const getSearchKeywordMatchArticleListDataFunction= ()=>{
 	proxy.$get('/data/frontend/all_article.json')
       .then(response => {
         // setTimeout(() => {
@@ -51,7 +51,7 @@ const getSearchKeywordMatchArticleListData= ()=>{
       });
 }
 // 使用 provide 向下传递方法
-provide('getSearchKeywordMatchArticleListData', getSearchKeywordMatchArticleListData);
+provide('getSearchKeywordMatchArticleListDataFunction', getSearchKeywordMatchArticleListDataFunction);
 
 // 修改当前选中标签id 开始
 
@@ -60,12 +60,12 @@ const current_active_tag_id=ref(0);
 provide('currentActiveTagId',current_active_tag_id);
 
  // 修改当前选中标签id的方法
- function updateCurrentActiveTagId(new_active_tag_id) {
+ function updateCurrentActiveTagIdFunction(new_active_tag_id) {
 	current_active_tag_id.value = new_active_tag_id;
  }
 
  // 暴露方法(修改当前选中标签id的方法)供子组件调用
- provide('updateCurrentActiveTagId', updateCurrentActiveTagId);
+ provide('updateCurrentActiveTagIdFunction', updateCurrentActiveTagIdFunction);
 
 // 修改当前选中标签id 结束
 
@@ -94,7 +94,7 @@ function getLayoutLogOrMenuListData(){
 	.then(response => {
         layout_page_log.value = response.log_data; // log
 		layout_page_menu_list_data.value = response.menu_data; // 菜单数据
-		getSearchKeywordMatchArticleListData();//匹配关键字数据源
+		getSearchKeywordMatchArticleListDataFunction();//匹配关键字数据源
 		// console.log('response.log_data:',response.log_data);
 		
     })
@@ -107,7 +107,9 @@ function getLayoutLogOrMenuListData(){
 
 }
 
+
 onMounted(() => {
+
 	//获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 	getLayoutLogOrMenuListData();
    

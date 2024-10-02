@@ -61,7 +61,7 @@
   const search_page_article_count=ref(0);
 const search_page_article_list_data=ref();
 //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
-const getSearchKeywordMatchArticleListData= ()=>{
+const getSearchKeywordMatchArticleListDataFunction= ()=>{
 	proxy.$get('/data/frontend/all_article.json', { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {
@@ -79,7 +79,7 @@ const getSearchKeywordMatchArticleListData= ()=>{
 
 
 // 使用 provide 向下传递方法
-provide('getSearchKeywordMatchArticleListData', getSearchKeywordMatchArticleListData);
+provide('getSearchKeywordMatchArticleListDataFunction', getSearchKeywordMatchArticleListDataFunction);
 
 const search_page_log=ref();
 const search_page_menu_list_data=ref();
@@ -96,7 +96,7 @@ function getLayoutLogOrMenuListData(){
 		
 		// setTimeout(() => {
 			//在组件挂载后调用方法获取数据
-			getSearchKeywordMatchArticleListData();
+			getSearchKeywordMatchArticleListDataFunction();
 		// }, 3000); // 延迟3秒
 
       })
@@ -165,10 +165,10 @@ function getLayoutLogOrMenuListData(){
     if (total_pages.value > current_page.value) {
       debounce(() => {//防抖
         const { scrollTop, scrollHeight, clientHeight, scrollLeft, offsetWidth, scrollWidth } = event.target;
-        const isScrolledToBottom = scrollHeight - (scrollTop + clientHeight) <= 1; // 1像素的误差  距离底部小于1像素
-        const isScrolledToRight = scrollWidth - (scrollLeft + offsetWidth) <= 1; // 1像素的误差    距离底部小于1像素
+        const isScrolledToBottom = scrollHeight - (scrollTop + clientHeight) <= 200; // 200像素的误差  距离底部小于200像素
+        // const isScrolledToRight = scrollWidth - (scrollLeft + offsetWidth) <= 1; // 1像素的误差    距离左边小于1像素
         // console.log('isScrolledToBottom:',isScrolledToBottom,',isScrolledToRight:',isScrolledToRight)
-        //如果同时满足距离底部小于1像素和is_next_page_loading的反值是true条件，那么执行获取下一页数据
+        //如果同时满足距离底部小于200像素和is_next_page_loading的反值是true条件，那么执行获取下一页数据
         if (isScrolledToBottom && !is_next_page_loading.value) {
          
           is_next_page_loading.value = true;

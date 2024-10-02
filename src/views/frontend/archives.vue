@@ -169,9 +169,8 @@
 
 
 
-
-   // 注入修改当前选中标签id的方法
-   const updateCurrentActiveTagId = inject('updateCurrentActiveTagId');
+// 注入来自layout页面（公共）提供修改当前选中标签id的方法
+   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
 
   const is_loading_contribution_article_list_data=ref(true);
@@ -297,7 +296,8 @@
 
   //获取tag_count页选中标签下的博文数据
   function getTagCountPageClickTagArticleData(active_tag_menu_name,active_tag_id,active_tag_name){
-    updateCurrentActiveTagId(active_tag_id); //修改父页面注入的选中标签id，用于菜单栏页获取选中标签id数据
+    //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
+    updateCurrentActiveTagIdFunction(active_tag_id); 
     //跳转到标签所属的菜单栏页
     router.push({ name: active_tag_menu_name, query: { tag_id: active_tag_name }, key: new Date().getTime() });
  
