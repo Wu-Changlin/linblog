@@ -60,7 +60,8 @@
 
 <script setup>
   import { onMounted, onUnmounted, ref, reactive,nextTick } from "vue";
-
+  import { useRoute,useRouter} from "vue-router";
+  const route = useRoute();
   // menu_name: string //菜单唯一标识，与路由名保持一致
   // menu_title: string //菜单显示名称
   const props = defineProps({
@@ -198,6 +199,10 @@ const current_active_menu_icon=ref('menu')
   const duration = 500; // 动画总时长，单位毫秒
   const isScrolling = ref(null);
 
+  //滚动class_name
+const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.feeds-page', resource: '.feeds-page', archives: '.feeds-page', diary: '.feeds-page' ,search:'.search-page',article:'.article-page'}
+
+
   // 滚动到页面顶部的函数
   function scrollToTop() {
   
@@ -207,57 +212,14 @@ const current_active_menu_icon=ref('menu')
     // 标记开始滚动
     isScrolling.value = true;
 
-  
-      // let scrollElem = document.querySelector('.search-page-container');
-      let layoutPageScrollElem = document.querySelector('.feeds-page');
-     
 
-      if(layoutPageScrollElem){
-        // console.log('layoutPageScrollElem:',layoutPageScrollElem.offsetTop)
-        layoutPageScrollElem.scrollTo({ top:0, behavior: 'smooth' });
-      }
+    let scrollElem = document.querySelector(class_name[route.name]);
+        if (scrollElem) {
+            scrollElem.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-      let searchPageScrollElem = document.querySelector('.search-page');
-      if(searchPageScrollElem){
-        // console.log('searchPageScrollElem:',searchPageScrollElem.offsetTop)
-        searchPageScrollElem.scrollTo({ top:0, behavior: 'smooth' });
-      }
-      let articlePageScrollElem = document.querySelector('.article-page');
-      if(articlePageScrollElem){
-        // console.log('articlePageScrollElem:',articlePageScrollElem.offsetTop)
-        window.scrollTo({ top:0, behavior: 'smooth' });
-      }
-     
-
-  
-
-      // document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
-      // document.body.scrollTo({ top: 0, behavior: 'smooth' });
-      
-
-      console.log(333);
-    
-      var scrollTop = document.body.scrollTop || document.documentElement.scrollTop || window.pageYOffset;
-
-
-      console.log('scrollTop',scrollTop)
-
-    console.log(444);
     isScrolling.value = false;
-    // if (interval.value) {
-    //   clearInterval(interval.value);
-    // }
-    // interval.value = setInterval(() => {
-    //   const currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
-    //   if (currentScroll > 0) {//滚动过程
-    //     window.scrollTo(0, currentScroll - (currentScroll / duration * 10));
-    //     // console.log('currentScroll -if:'+currentScroll)
-    //   } else {//已滚动到顶部
-    //     isScrolling.value = false;
-    //       //  console.log('currentScroll -else:'+currentScroll)
-    //     clearInterval(interval.value);
-    //   }
-    // }, 10); // 每10毫秒执行一次
+ 
   }
 
 

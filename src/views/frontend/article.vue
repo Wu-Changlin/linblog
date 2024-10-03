@@ -469,6 +469,7 @@
     padding-left: 12px;
     padding-right: 12px;
     /* overflow: auto; */
+    height: 100vh;
   }
 
   .article-container {
