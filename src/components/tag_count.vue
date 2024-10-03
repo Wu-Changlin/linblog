@@ -110,6 +110,7 @@ function getDarkRandomColor() {
             color: var(--text-light-dark);
             opacity: 5;
             line-height: 50%;
+            cursor: pointer;
               /*鼠标移入效果*/
               /* 防止移动端重复点击同一元素没有取消选中样式 */
               @media screen and (min-width: 1200px) {

@@ -27,7 +27,6 @@
   import ContentTag from '@/components/content_tag.vue';
   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
-  import EmptyState from '@/components/empty_state.vue';
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
   const { proxy } = getCurrentInstance();//axios 代理
   const route = useRoute();
@@ -62,6 +61,7 @@
   //获取前端栏页数据（内容标签栏数据、轮播图数据、博文列表数据（瀑布流组件））  
   function getFrontendPageData() {
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
+    is_loading.value=true;
     proxy.$get('/data/frontend/frontend.json')
       .then(response => {
         // setTimeout(() => {
@@ -111,7 +111,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
     // flag.value=false; //初始化导致子页面选中的标签id数据出现标签栏闪烁（当前标签栏处于显示状态，出现先隐藏后显示闪烁）
     is_loading.value = true;
 
-    proxy.$post('/data/frontend/frontend.json', { tag_id: active_tag_id, tag_name: active_tag_name })
+    proxy.$post('/data/frontend/frontend.json', { tag_id: active_tag_id, tag_name: active_tag_name,page:1  })
       .then(response => {
         // setTimeout(() => {
         frontend_tag_data.value = response.tag_data;
@@ -260,7 +260,8 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
     if (!route.query.tag_id) {
       getFrontendPageData();
     } else {
-      //如果路由有查询参数tag_id(点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）)，
+      //如果路由有查询参数tag_id，情景：1.点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）。
+      //2.地址栏输入查询参数tag_id。
       //那么执行getChildClickTag。
       // ！！！注意：因为标签id设置默认为0，所以后端：如果判断标签id是否为空或空值，那么排除标签id=0的情况。
       let active_tag_name_from_archives_page = route.query.tag_id;

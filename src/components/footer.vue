@@ -1,8 +1,9 @@
 <template>
     <!-- 页脚 开始-->
 
-    <div style="height: 60px;background-color: #313741;color: #fff;text-align: center;padding: 20px 0;">备案</div>
-
+    <div class="website-approve">
+    <a :href="websiteApproveUrl">{{websiteApproveTitle}}</a>
+</div>
     <!-- <div  class="website-approve">
         <a  class="website-approve-item" href="">  桂ICP 备 20xxxxxx 号 </a>
     </div> -->
@@ -14,33 +15,37 @@
 <script setup>
     import {  reactive, onMounted ,onUnmounted} from 'vue';
     
+    const props = defineProps({
+        websiteApproveTitle: {
+            type:String
+        },
+        websiteApproveUrl: {
+            type:String
+        },
+    });
 
 
+  
 </script>
 
 <style scoped>
+
 a {
     
     text-decoration: none;
     background-color: transparent
 }
- 
-
 
 .website-approve {
-    /* display: flex; */
-	/* position: relative; */
-    justify-content: center;
     align-items: center;
-    bottom: 0;
-    width: 100%;
-    overflow: hidden;
-    /* display: block; */
-    /* display: none; */
-    margin-top: 12px;
-    z-index: 1;
- margin-bottom: 0;
-    height: 30px;
+    justify-content: center;
+    display: flex; width: 100%;height: 60px;
+    background-color: var(--color-active-background) !important;
+            border-radius: 999px;
+            color: var(--color-primary-label) !important;
+     text-align: center;
+
+
     /* 隐藏 */
     @media screen and (max-width: 959px) {
 			display: none;
@@ -49,14 +54,5 @@ a {
     }
 }
 
-.website-approve-item {
-    /* display:flex; */
-    /* position: fixed; */
-    z-index: 1;
-    bottom: 0;
-    justify-content: center;
-    align-items: center;
-    margin:0 auto;
-    height: 30px;
-}
+
 </style>

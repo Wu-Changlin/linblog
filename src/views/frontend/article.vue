@@ -69,40 +69,38 @@
           <!-- 博文内容 结束-->
 
 
-          <!-- 上下篇链接 开始-->
+          
           <div style="margin: 20px auto;width: fit-content;">----- <span
               style="color: white;background-color: black;padding: 0 5px;font-size: .7rem;">END</span> -----</div>
 
-
+<!-- 本文相关信息 开始-->
           <p class="notice" style="text-indent:0em">
-            博客站点：<a href="https://blog.wuchanglin.com/author/1/" rel="author" class="pjax"><span
-                class="brand">LinBlog</span></a><br>
-            本文链接：<a href="https://blog.wuchanglin.com/archives/2038/"
-              class="pjax">https://blog.wuchanglin.com/archives/2038/</a><br>
-            版权声明：本文章采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
-              target="_blank"><i>&nbsp;<strong>知识共享署名 - 非商业性使用 - 相同方式共享 4.0 国际许可协议&nbsp;</strong></i></a>。
+            博客站点：<a :href="data.website_url" rel="author"><span
+                class="brand">{{data.website_name }}</span></a><br>
+            本文链接：<a :href="data.article_url">{{ data.article_url }}</a><br>
+            版权声明：本文章采用<a rel="license" :href="data.license_url"
+              target="_blank"><i>&nbsp;<strong>{{ data.license_description }} &nbsp;</strong></i></a>。
           </p>
-
-
+<!-- 本文相关信息 开始-->
+ <!-- 上下篇链接 开始-->
           <div class="post-pager">
             <div class="prev">
-              <a href="https://blog.wuchanglin.com/archives/2037/" class="pjax">
-                <h2>2024博客搭建一</h2>
+              <a :href="data.prev_article_url">
+                <h2>{{ data.prev_article_title }}</h2>
               </a>
               <!-- 如果有摘要就输出摘要，没有摘要输出一段文字 -->
-              <p>环境搭建</p>
+              <p>{{ data.prev_article_abstract }}</p>
             </div>
             <div class="next">
-              <a href="https://blog.wuchanglin.com/archives/2039/" class="pjax">
-                <h2>2024博客搭建二</h2>
+              <a :href="data.next_article_url">
+                <h2>{{ data.next_article_title }}</h2>
               </a>
-              <p>vscode插件</p>
+              <p>{{ data.next_article_abstract }}</p>
             </div>
           </div>
           <!-- 上下篇链接 结束-->
 
         </div>
-
 
         <!--右侧浮动按钮组件（添加目录图标插槽） 开始-->
 
@@ -191,21 +189,24 @@
         data.created_time = response.created_time;
         data.article_content = response.article_content;
 
+        data.article_url = response.article_url;
+        data.website_url = response.website_url;
+        data.website_name = response.website_name;
+        data.prev_article_id = response.prev_article_id;
+        data.prev_article_title = response.prev_article_title;
+        data.prev_article_abstract = response.prev_article_abstract;
+        data.prev_article_url = response.prev_article_url;
+        data.next_article_id = response.next_article_id;
+        data.next_article_title = response.next_article_title;
+        data.next_article_abstract = response.next_article_abstract;
+        data.next_article_url = response.next_article_url;
+        data.license_url = response.license_url;
+        data.license_description = response.license_description;
 
         //获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
         getLayoutLogOrMenuListData()
 
         is_loading.value = false;//取消骨架屏
-
-
-        // setTimeout(() => {
-        // index_tag_data.value = response.tag_data; // 数据加载完毕，关闭骨架屏
-        // index_article_list_data.value = response.article_list_data; // 数据加载完毕，关闭骨架屏
-        // flag.value=true;
-        // is_loading.value=false;
-        // console.log('response:',response);
-        // }, 3000); // 假设加载时间是3秒
-
 
       })
       .catch(error => {
