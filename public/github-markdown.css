@@ -721,7 +721,7 @@
   }
   
   .markdown-body table tr:nth-child(2n) {
-    background-color: var(--borderColor-muted);
+    background-color: var(--bgColor-neutral-muted);
   }
   
   .markdown-body table img {

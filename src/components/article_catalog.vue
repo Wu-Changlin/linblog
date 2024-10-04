@@ -320,7 +320,7 @@
             background-color: var(--bg);
             /* background-color: rgba(0, 0, 0, 0.5);  */
             /* 确保遮罩在其他内容之上 */
-            z-index: 10;
+            z-index: 12;
         }
 
 

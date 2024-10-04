@@ -603,12 +603,22 @@ const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.f
     background: var(--bg);
     box-shadow: 10px 10px 20px #bebebe,
       -10px -10px 20px #ffffff;
+    &:hover {
+
+    cursor: pointer;
+    box-shadow:
+      0 0 0 var(--floating_btn_box_shadow_one),
+      0 0 0 var(--floating_btn_box_shadow_two),
+      inset 10px 10px 20px var(--floating_btn_box_shadow_three),
+      inset -10px -10px 20px var(--floating_btn_box_shadow_four);
+
+
+    }
   }
 
   .plus:active {
     transform: rotate(45deg);
     box-shadow:
-
       0 0 0 var(--floating_btn_box_shadow_one),
       0 0 0 var(--floating_btn_box_shadow_two),
       inset 4px 4px 12px var(--floating_btn_box_shadow_three),
