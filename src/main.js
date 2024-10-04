@@ -6,7 +6,9 @@ import ElementPlus from 'element-plus'; //引入ElementPlus依赖
 import 'element-plus/dist/index.css'; // //引入样式文件index.css
 
 //引入Axios 实例
-import http from '@/utils/request.js'
+import http from '@/utils/request.js';
+
+import myMessage from  "@/components/message/message.js";
 
 // 安装tooltip
 import tooltip from '@/components/tooltip/directive.js';
@@ -27,13 +29,16 @@ const app = createApp(App);
 //注册SvgIcon组件
 app.component('svg-icon', SvgIcon);
 
+
 //使用app.use()方法将指定的中间件功能放到指定的路径下，
 //当请求的路径地址与定义的路由相同时，就会执行指定的中间件功能。
 //需要注意的是，如果路由有多个子路由同样也会执行对应的中间件函数。
 
 
+
 app.use(router)
     .use(http)
+    .use(myMessage)
     .use(ElementPlus)
     .use(tooltip)
 app.mount('#app')

@@ -91,6 +91,7 @@ html[data-theme='dark'] {
     --match-keyword:#ffffff;
     --color-no-match-keyword: hsla(0,0%,100%,0.6);
     --color-article-detail-code: hsla(0,0%,100%,0.6);
+    --floating_btn_box_icon:#fff;
 }
 
 
@@ -135,6 +136,8 @@ html[data-theme='dark'] {
     --vui_carousel_bg:#fff;
     --blue:#4298e7;
 
+    --floating_btn_box_icon:rgba(10, 10, 10, 0.98);
+
     --floating_btn_box_shadow_one:rgba(0, 0, 0, 0.2);
     --floating_btn_box_shadow_two:white;
 
@@ -148,7 +151,7 @@ html[data-theme='dark'] {
     --borderWidth-thin: max(1px, 0.0625rem);
    
     --borderColor-default: #d1d9e0;
-
+  
 
 
 }

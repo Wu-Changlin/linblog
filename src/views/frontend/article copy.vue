@@ -199,7 +199,7 @@ onMounted(()=>{
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 
 	mediaQuery();//初始化（防止刷新失效）
@@ -316,7 +316,7 @@ function showArticleCatalog(){
 		// console.log('show_article_catalog.value=true:',show_article_catalog.value)
 	}else{//目录显示，需要隐藏
 		show_article_catalog.value=false;
-		article_ccatalog_right.value=5;		 //目录右边距
+		article_ccatalog_right.value=12;		 //目录右边距
 		// console.log('show_article_catalog.value=flase:',show_article_catalog.value)
 
 	}

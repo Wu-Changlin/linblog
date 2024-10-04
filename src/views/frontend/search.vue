@@ -73,7 +73,7 @@ const getSearchKeywordMatchArticleListDataFunction= ()=>{
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 }
 
@@ -102,7 +102,7 @@ function getLayoutLogOrMenuListData(){
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 
 }
@@ -147,7 +147,7 @@ function getLayoutLogOrMenuListData(){
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
   }
 
@@ -218,7 +218,7 @@ function getLayoutLogOrMenuListData(){
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 
 

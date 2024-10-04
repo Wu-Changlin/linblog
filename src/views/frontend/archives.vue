@@ -180,7 +180,7 @@
     // import('./mock-data.json').then(res => {
     //   items.value = res;
     // }).catch(error => {
-    //   console.error('Error fetching mock data:', error);
+    //   proxy.$Message('请求未找到', 'error');
     // });
     
     // 如果你想使用axios来模拟请求，可以这样做
@@ -214,7 +214,7 @@
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 
 
@@ -246,7 +246,7 @@
         // }, 3000); // 假设加载时间是3秒
       })
       .catch(error => {
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 
   }
@@ -283,7 +283,7 @@
         // }, 3000); // 假设加载时间是3秒
       })
       .catch(error => {
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 
     }else{

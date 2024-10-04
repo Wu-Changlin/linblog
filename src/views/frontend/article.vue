@@ -224,7 +224,7 @@
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 
 
@@ -253,7 +253,7 @@
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
   }
 
@@ -284,7 +284,7 @@
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 
   }

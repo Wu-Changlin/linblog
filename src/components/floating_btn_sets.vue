@@ -31,7 +31,7 @@
     </div>
      <!-- 菜单按钮 结束-->
 
-    
+
     <!-- 置顶按钮 开始-->   
     <div class="top" @click="scrollToTop">
       <div class="btn-wrapper">
@@ -54,6 +54,7 @@
     <!-- 目录按钮 结束-->
 
   </div>
+  
 
   <!-- 浮动按钮集合 结束-->
 </template>
@@ -194,10 +195,7 @@ const current_active_menu_icon=ref('menu')
   };
 
 
-
-  const interval = ref(null);
-  const duration = 500; // 动画总时长，单位毫秒
-  const isScrolling = ref(null);
+  const is_scrolling = ref(null);
 
   //滚动class_name
 const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.feeds-page', resource: '.feeds-page', archives: '.feeds-page', diary: '.feeds-page' ,search:'.search-page'}
@@ -207,10 +205,10 @@ const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.f
   function scrollToTop() {
   
     // 如果当前正在滚动，则不再执行
-    if (isScrolling.value) return;
+    if (is_scrolling.value) return;
 
     // 标记开始滚动
-    isScrolling.value = true;
+    is_scrolling.value = true;
 
 
     let scrollElem = document.querySelector(class_name[route.name]);
@@ -220,7 +218,7 @@ const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.f
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-    isScrolling.value = false;
+    is_scrolling.value = false;
  
   }
 
@@ -228,6 +226,12 @@ const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.f
 </script>
 
 <style scoped>
+  
+
+  .svg-icon{
+    fill:var(--floating_btn_box_icon)
+  }
+
   .floating-btn-sets {
     position: fixed;
     display: flex;
@@ -591,7 +595,7 @@ const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.f
 
 
   .plus {
-    z-index: 1;
+    /* z-index: 1; */
     /* position: absolute; */
     width: 32px;
     height: 32px;

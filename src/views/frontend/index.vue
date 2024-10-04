@@ -66,16 +66,11 @@
    const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
 
-
-
-
-
   //获取首页栏页数据（内容标签栏数据、博文列表数据（瀑布流组件））  
   function getIndexPageData() {
    
     proxy.$get('/data/frontend/index.json')
       .then(response => {
-       
 			index_tag_data.value = response.tag_data; // 标签数据
 			index_article_list_data.value = response.article_list_data; // // 博文列表数据
       current_active_tag_id.value = response.current_active_tag_id;
@@ -87,22 +82,15 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
 
 			flag.value=true;
 			is_loading.value=false;
-     
+  
       })
       .catch(error => {
-
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
+        // proxy.$Message('请求未找到', 'error');
       });
   }
 
 
-
-
-
-
-
-
-  
   //获取子页面选中的标签id数据 
   // NOTE:　首页的标签数据仅展示一页（没有上拉加载更多），目的：显示页面底部备案信息。 
   function getChildClickTag(active_tag_id,active_tag_name){
@@ -111,7 +99,6 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
   proxy.$post('/data/frontend/index.json', { tag_id: active_tag_id, tag_name: active_tag_name, page: 1 })
       .then(response => {
         index_tag_data.value = response.tag_data; // 标签数据
-
         index_article_list_data.value = response.article_list_data; // // 博文列表
         current_active_tag_id.value = response.current_active_tag_id;
         current_active_tag_name.value = response.current_active_tag_name;
@@ -134,8 +121,8 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
        
       })
       .catch(error => {
-
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
+        // proxy.$Message('请求未找到', 'error');
       });
 
 

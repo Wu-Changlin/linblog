@@ -101,7 +101,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
   }
 
@@ -153,7 +153,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 
 
@@ -239,7 +239,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 
 
@@ -254,7 +254,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
     // import('./mock-data.json').then(res => {
     //   items.value = res.data;
     // }).catch(error => {
-    //   console.error('Error fetching mock data:', error);
+    //   proxy.$Message('请求未找到', 'error');
     // });
     // 如果路由没有查询参数tag_id，那么执行getFrontendPageData。
     if (!route.query.tag_id) {

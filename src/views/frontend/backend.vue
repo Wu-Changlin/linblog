@@ -115,7 +115,7 @@ if (!backend_article_list_data.value) {
         })
         .catch(error => {
 
-          console.error('Error fetching mock data:', error);
+          proxy.$Message('请求未找到', 'error');
         });
   }
   is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
@@ -167,7 +167,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
  })
  .catch(error => {
 
-   console.error('Error fetching mock data:', error);
+   proxy.$Message('请求未找到', 'error');
  });
 
   }
@@ -251,7 +251,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 
 

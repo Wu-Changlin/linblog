@@ -47,7 +47,7 @@ const getSearchKeywordMatchArticleListDataFunction= ()=>{
       })
       .catch(error => {
 
-        console.error('Error fetching mock data:', error);
+        proxy.$Message('请求未找到', 'error');
       });
 }
 // 使用 provide 向下传递方法
@@ -100,7 +100,7 @@ function getLayoutLogOrMenuListData(){
     })
 	.catch(error => {
 
-    	console.error('Error fetching mock data:', error);
+    	proxy.$Message('请求未找到', 'error');
   	});
 
 
