@@ -200,7 +200,7 @@ const current_active_menu_icon=ref('menu')
   const isScrolling = ref(null);
 
   //滚动class_name
-const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.feeds-page', resource: '.feeds-page', archives: '.feeds-page', diary: '.feeds-page' ,search:'.search-page',article:'.article-page'}
+const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.feeds-page', resource: '.feeds-page', archives: '.feeds-page', diary: '.feeds-page' ,search:'.search-page'}
 
 
   // 滚动到页面顶部的函数
@@ -216,6 +216,8 @@ const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.f
     let scrollElem = document.querySelector(class_name[route.name]);
         if (scrollElem) {
             scrollElem.scrollTo({ top: 0, behavior: 'smooth' });
+        }else{
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
     isScrolling.value = false;
@@ -234,8 +236,8 @@ const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.f
     width: 40px;
     grid-gap: 8px;
     gap: 8px;
-    right: 5px;
-    bottom: 50px;
+    right: 12px;
+    bottom: 12px;
     z-index: 11;
   }
 
@@ -598,9 +600,9 @@ const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.f
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    background-color: var(--bg);
-    box-shadow: 4px 4px 5px #bebebe,
-      -4px -4px 5px #ffffff;
+    background: var(--bg);
+    box-shadow: 10px 10px 20px #bebebe,
+      -10px -10px 20px #ffffff;
   }
 
   .plus:active {

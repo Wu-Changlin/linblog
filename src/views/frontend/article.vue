@@ -9,16 +9,15 @@
       <!-- <div v-if="is_loading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef"> -->
       <div v-if="is_loading" key="loading" class="article-skeleton" ref="waterfallSkeletonContainerRef">
 
-        <div
-          style="background-color: rgba(0, 0, 0, 0.04);width: 100%;max-width:1260px;height:100%;display:flex; padding-top: 72px;">
+        <!-- <div style="background-color: rgba(0, 0, 0, 0.04);width: 100%;height:100%;display:flex; padding-top: 72px;"> -->
 
-          <!-- 图片占位 -->
-          <Skeleton bg="#e4e4e4" width="238px" height="100%" animated
-            style="display: flex;flex-direction: column;flex-shrink: 0;max-height: 100%;margin-left: 12px;" />
-          <Skeleton bg="#e4e4e4" height="100%" animated style="flex: 1;max-height: 100%;margin: 0px 12px;" />
+          <!-- 目录占位 -->
+          <Skeleton bg="#e4e4e4" width="238px" height="100%"  animated class="article_catalog_skeleton" style="display: flex;flex-direction: column;flex-shrink: 0;margin-left: 12px;" />
+          <!-- 内容占位 -->
+          <Skeleton bg="#e4e4e4" height="100%" animated style="flex: 1;margin: 0px 12px;" />
 
 
-        </div>
+        <!-- </div> -->
 
       </div>
 
@@ -164,7 +163,21 @@
     tag_ids_name: "标签",
     author_name: "原创",
     created_time: "发布时间",
-    article_content: '内容'
+    article_content: "内容",
+   article_url:"本文链接",
+       website_url:"网站链接",
+       website_name:"网站名称",
+       prev_article_id:"上一篇博文id",
+       prev_article_title:"上一篇博文标题",
+       prev_article_abstract:"上一篇博文摘要",
+       prev_article_url:"上一篇博文链接",
+       next_article_id:"下一篇博文id",
+       next_article_title:"下一篇博文标题",
+       next_article_abstract:"下一篇博文摘要",
+       next_article_url:"下一篇博文链接",
+       license_url:"版权url",
+       license_description:"版权描述",
+
   })
 
 
@@ -287,22 +300,7 @@
       //因为后台返回的编辑数据都是在该标签内渲染，所以该标签属于pre标签的祖先元素，
       //你也可以将line-numbers类名添加到该div的祖先父级元素中，又或者可以添加到body上，
       //但建议添加到这个v-html要渲染的签上，因为只有该标签内的数据是要被渲染解析的。
-
-
       //添加class用于显示行号，全局代码高亮。
-      const pre = el.querySelectorAll('pre');
-      pre.forEach((block) => {
-        // block.classList.add('line-numbers');
-
-
-        // 使用正则表达式检查class类字符串是否包含language类名
-        const languageRegex = /language="([^"]+)"/;
-        // if (!languageRegex.test(block.className)) {
-        //     // 如果没有language类名，那么在元素中添加一个类名是language-html
-        //     block.classList.add('language-html')
-        // }
-        //  Prism.highlightAll()// 全局代码高亮
-      })
 
       blocks.forEach((block) => {
         //取语法类名
@@ -391,21 +389,14 @@
 
 <style scoped>
   * {
+        /* 适用于 Internet Explorer 和旧版 Edge */
     -ms-overflow-style: none;
-    /* 适用于 Internet Explorer 和旧版 Edge */
+   /* 适用于 Firefox */
     scrollbar-width: none;
-    /* 适用于 Firefox */
+ /* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/
     -webkit-scrollbar: none;
-    /* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/
-    /* 圆点  */
-    /* list-style-type: circle; */
   }
 
-  /* 使用阿拉伯数字 */
-  /*
-:deep(ol) {
-    list-style-type: decimal; 
-} */
 
   /* 高亮插件 复制按钮样式*/
   :deep(div.code-toolbar > .toolbar) {
@@ -466,10 +457,9 @@
     padding-top: 72px;
     width: 100%;
     margin: 0 auto;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding: 0 12px;
     /* overflow: auto; */
-    height: 100vh;
+    /* height: 100vh; */
   }
 
   .article-container {
@@ -679,9 +669,26 @@
     }
   }
 
+  /* 骨架屏 */
   .article-skeleton {
+    width: 100%;
+    display: flex;
     height: 1000px;
 
+  }
+
+
+  .article_catalog_skeleton{
+    @media screen and (max-width: 695px) {
+        display: none !important;
+        /* visibility: hidden; */
+        
+      }
+      @media screen and (min-width: 696px) and (max-width: 959px) {
+        display: none !important;
+        /* visibility: hidden; */
+        
+      }
   }
 
   /* 骨架屏缩放动画 */
