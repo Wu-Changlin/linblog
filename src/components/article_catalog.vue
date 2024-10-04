@@ -11,7 +11,7 @@
             </div>
 
             <div class="catalog-content">
-                <div v-for="title in tocArray" :key="title.id" @click="scrollToView(title.scrollTop)" :class="[
+                <div v-for="title in tocArray" :key="title.id" @click="scrollToView(title.scrollTop,title.id)" :class="[
                         'catalog-item',
                         currentTitle.id == title.id ? 'active' : 'not-active',
                     ]" :style="{ marginLeft: title.level * 20 + 'px' }" v-show="title.isVisible"
@@ -47,6 +47,10 @@
     // let progress = ref(0);
     const currentTitle = reactive({});
     const progress = ref(0);
+
+
+    const  firstValue=ref();
+    
 
     getTitles();
     // 获取目录的标题
@@ -131,9 +135,17 @@
                 tocArray.value.push(node);//循环每一条目录加入目录数组
             }
 
+            //如果tocArray.value对象有值，那么获取序号为0的值
+            if (Object.keys(tocArray.value).length) {
+    
+    firstValue.value = Object.values(tocArray.value)[0];
+  }
+
             // console.log('tocArray:',JSON.stringify(tocArray.value))
             //  return titles;  
         })
+
+        
     }
 
 
@@ -157,8 +169,9 @@
     }
 
 
-
-
+    //多余占用滚动高度
+    const total_occupy_scroll_height=ref(0);
+    //总滚动高度=可滚动高度-多余占用滚动高度
     const total_scroll_height = ref(0);
     //计算减去多余占位高度的总滚动距离长度
     function surplusHeight() {
@@ -171,6 +184,7 @@
         let metadata_height = getElementHeightWithMargin(articleMetadataElement);
         //多余占用高度=标题占用高度+元数据占用高度+导航栏高度
         let surplus_height = title_height + metadata_height + 72;
+        total_occupy_scroll_height.value=surplus_height;//滚动到指定的位置需减去多余占用高度=标题占用高度+元数据占用高度+导航栏高度
         total_scroll_height.value = articleElement.scrollHeight - surplus_height;
         // console.log(`surplus_height:${surplus_height},articleElement.scrollHeight:${articleElement.scrollHeight},total_scroll_height:${total_scroll_height.value},window.scrollY:${window.scrollY}`)
 
@@ -191,6 +205,7 @@
             const title = tocArray.value[i];
 
             if (title.scrollTop <= window.scrollY) {
+                
                 if (currentTitle.id === title.id) return;
 
                 Object.assign(currentTitle, title);
@@ -220,47 +235,6 @@
     }
 
 
-    // 监听滚动事件并更新样式
-    // window.addEventListener("scroll", function () {
-    //     progress.value =
-    //         parseInt(
-    //             (window.scrollY / document.documentElement.scrollHeight) *
-    //                 100
-    //         ) + "%";
-
-    //     let visibleTitles = [];
-
-    //     for (let i =  tocArray.value.length - 1; i >= 0; i--) {
-    //         const title =  tocArray.value[i];
-
-    //         if (title.scrollTop <= window.scrollY) {
-    //             if (currentTitle.id === title.id) return;
-
-    //             Object.assign(currentTitle, title);
-
-    //             // 展开节点
-    //             setChildrenVisible(title, true);
-    //             visibleTitles.push(title);
-
-    //             // 展开父节点
-    //             let parent = title.parent;
-    //             while (parent) {
-    //                 setChildrenVisible(parent, true);
-    //                 visibleTitles.push(parent);
-    //                 parent = parent.parent;
-    //             }
-
-    //             // 折叠其余节点
-    //             for (const t of  tocArray.value) {
-    //                 if (!visibleTitles.includes(t)) {
-    //                     setChildrenVisible(t, false);
-    //                 }
-    //             }
-
-    //             return;
-    //         }
-    //     }
-    // });
 
     // 设置子节点的可见性
     function setChildrenVisible(title, isVisible) {
@@ -269,10 +243,48 @@
         }
     }
 
+
+    //已选中目录标题
+    const current_title_id=ref('');
     // 滚动到指定的位置
-    function scrollToView(scrollTop) {
-        scrollTop = scrollTop - 72;//减去头部导航栏
-        window.scrollTo({ top: scrollTop, behavior: "smooth" });
+    function scrollToView(scroll_top_to,title_id) {
+        current_title_id.value=title_id;
+        
+        //获取滚动条位置(可以理解为当前高度)
+        let current_height=0;
+        current_height=document.documentElement.scrollTop || window.pageYOffset ||document.body.scrollTop; //兼容写法 
+         // 使用Math.ceil()函数进行向上取整。该函数会将小数直接进位，返回最接近且大于等于原数的整数。
+         // current_height+72  头部导航栏占用高度导致滚动目的位置出现遮盖，所以需减去头部导航栏的高度72。
+         let current_height_add_nav_height=Math.ceil(current_height+72);
+         if(Math.ceil(current_height_add_nav_height)==scroll_top_to)return;//重复点击无效（滚动条位置等于目录标题的目的位置），直接返回
+        // console.log('current_height:',current_height,',scroll_top_to:',scroll_top_to)
+       
+        // HACK 滚动到指定的位置需减去多余占用高度=标题占用高度+元数据占用高度+导航栏高度(初始化)
+        //实际滚动方向高度
+        let  reality_scroll_top=scroll_top_to-total_occupy_scroll_height.value;
+        if(current_height>reality_scroll_top){
+            // HACK 向上滚动 因为向上滚动有头部导航栏占用高度导致滚动目的位置出现遮盖，所以需减去头部导航栏的高度72。
+            // HACK‌ 第一个目录标题的目的位置初始化后实际为1px,出现头部导航栏占用高度导致滚动目的位置出现遮盖，所以需减去头部导航栏的高度72。
+            // HACK‌ 总结凡实际高度小于头部导航栏的高度72，都需要减去头部导航栏占用高度防止出现遮盖。
+            if(reality_scroll_top<=72){
+                scroll_top_to=scroll_top_to-72; 
+                // console.log('上滚动-scroll_top_to-=72:',scroll_top_to)
+            }
+            
+        }else{
+            // HACK 滚动到指定的位置减去多余占用高度(初始化) 
+            // HACK‌ 第一个目录标题的目的位置初始化后实际为1px,出现头部导航栏占用高度导致滚动目的位置出现遮盖，所以需减去头部导航栏的高度72。
+            // HACK‌ 总结凡实际高度小于头部导航栏的高度72，都需要减去头部导航栏占用高度防止出现遮盖。
+            if(reality_scroll_top<=72){
+                scroll_top_to=scroll_top_to-72; 
+                // console.log('下滚动-scroll_top_to-=72:',scroll_top_to)
+            }
+        
+            
+        }
+
+        current_height=0;
+        window.scrollTo({ top: scroll_top_to, behavior: "smooth" });
     }
 
 
@@ -307,6 +319,7 @@
         margin-top: 72px;
         position: fixed;
         overflow: visible;
+   
 
         /* 移动端右侧遮罩目录 */
         @media screen and (max-width: 959px) {

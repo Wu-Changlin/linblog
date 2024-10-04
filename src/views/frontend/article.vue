@@ -454,10 +454,12 @@
     flex: 1;
     overflow-x: hidden;
     /* 禁止容器x轴方向滚动 */
-    padding-top: 72px;
+  
+    padding: 72px 12px 0 12px;
     width: 100%;
     margin: 0 auto;
-    padding: 0 12px;
+    /* padding: 0 12px; */
+   
     /* overflow: auto; */
     /* height: 100vh; */
   }

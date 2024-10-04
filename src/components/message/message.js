@@ -21,11 +21,11 @@ const vnode= createVNode(myMessage,{text, type})
 render(vnode,div);
 
  // 希望1s后消失
-//  clearTimeout(timer)
-//   timer=setTimeout(()=>{
-//    // 清空div里面的内容
-//    render(null,div)
-//   },9000000)
+ clearTimeout(timer)
+   timer=setTimeout(()=>{
+    // 清空div里面的内容
+    render(null,div)
+   },3000)
 }
 
 
