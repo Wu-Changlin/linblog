@@ -22,7 +22,12 @@ import '@/assets/iconfont/iconfont.js';
 
 //封装 svg-icon 组件
 import SvgIcon from '@/components/SvgIcon.vue';
- 
+
+
+//校验方法
+import Verify from "@/utils/verify"
+
+
 const app = createApp(App);
 
 
@@ -41,4 +46,5 @@ app.use(router)
     .use(myMessage)
     .use(ElementPlus)
     .use(tooltip)
+    .use(Verify)
 app.mount('#app')

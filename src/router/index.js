@@ -83,12 +83,21 @@ const routes = [
         }
     },
 
+
+    {
+        path: '/login',//路径
+        name: "login",//路由名称
+        component: () => import('@/views/login.vue'),//引入该路由使用的组件
+    },
+
     {
         path: '/404', //添加一个指向404页面组件的路由
         // name:"404",
         component: () => import('@/views/frontend/404.vue'),
         meta: { hidden: true } // 使用meta字段隐藏侧边栏或导航菜单中的链接（如果适用）
     },
+
+
 
 
     {

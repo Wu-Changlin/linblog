@@ -452,21 +452,18 @@
 
   .article-page {
     flex: 1;
-    overflow-x: hidden;
     /* 禁止容器x轴方向滚动 */
-  
+    overflow-x: hidden;
     padding: 72px 12px 0 12px;
     width: 100%;
     margin: 0 auto;
-    /* padding: 0 12px; */
-   
     /* overflow: auto; */
     /* height: 100vh; */
   }
 
   .article-container {
+       /* 禁止容器x轴方向滚动 */
     overflow-x: hidden;
-    /* 禁止容器x轴方向滚动 */
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
