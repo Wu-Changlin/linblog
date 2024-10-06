@@ -28,7 +28,7 @@
   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
-  const { proxy } = getCurrentInstance();//axios 代理
+  const { proxy } = getCurrentInstance();//组件实例 代理
   const route = useRoute();
   const router = useRouter();
 

@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp  } from 'vue'
 // import './style.css'
 import App from './App.vue';
 import router from './router/index.js'; //引入配置路由文件
@@ -9,6 +9,9 @@ import 'element-plus/dist/index.css'; // //引入样式文件index.css
 import http from '@/utils/request.js';
 
 import myMessage from  "@/components/message/message.js";
+
+import messages from  "@/components/message/messages.js";
+
 
 // 安装tooltip
 import tooltip from '@/components/tooltip/directive.js';
@@ -31,6 +34,10 @@ import Verify from "@/utils/verify"
 const app = createApp(App);
 
 app.config.globalProperties.Verify=Verify;
+
+
+app.provide('$message',messages)
+
 
 //注册SvgIcon组件
 app.component('svg-icon', SvgIcon);

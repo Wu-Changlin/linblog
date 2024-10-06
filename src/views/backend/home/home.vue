@@ -36,7 +36,7 @@
 
     const layoutPageOnReachBottomH = ref(null);
 
-    const { proxy } = getCurrentInstance();//axios 代理
+    const { proxy } = getCurrentInstance();//组件实例 代理
 
     const route = useRoute();
     const router = useRouter();

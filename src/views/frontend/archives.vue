@@ -130,7 +130,7 @@
   import YearDropdown from '@/components/year_dropdown.vue';
   import Skeleton from '@/components/skeleton.vue';
   import {useRoute, useRouter } from "vue-router"; 
-  const { proxy } = getCurrentInstance();//axios 代理
+  const { proxy } = getCurrentInstance();//组件实例 代理
   const router = useRouter();
   const route = useRoute();
 

@@ -53,7 +53,7 @@
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
   import NavBar from "@/components/nav_bar.vue";
   import FloatingBtnSets from "@/components/floating_btn_sets.vue";
-  const { proxy } = getCurrentInstance();//axios 代理
+  const { proxy } = getCurrentInstance();//组件实例 代理
 
 
 

@@ -1,19 +1,10 @@
 <template>
 
   <div class="feeds-page" @scroll="layoutPageOnReachBottoms" ref="layoutPageOnReachBottomH">
-
-
-
-
-    <div style="padding-top: 72px;"></div>
-    <ContentTag :parentPageTagData="index_tag_data" :layoutPageOnReachBottomHe="layoutPageOnReachBottomH"
-      :currentActiveTagName="current_active_tag_name" @childClickTag="getChildClickTag" v-if="flag"></ContentTag>
-
-
-
-
+    <!-- <div style="padding-top: 72px;"></div> -->
 
     <div class="feeds-container">
+      <ContentTag :parentPageTagData="index_tag_data"  :currentActiveTagName="current_active_tag_name" @childClickTag="getChildClickTag" v-if="flag"></ContentTag>
 
       <!-- <ContentCarouselImg></ContentCarouselImg> -->
       <Waterfall :parentPageArticleListData="index_article_list_data" :isLoading="is_loading"></Waterfall>
@@ -35,7 +26,7 @@
 
   const layoutPageOnReachBottomH = ref(null);
 
-  const { proxy } = getCurrentInstance();//axios 代理
+  const { proxy } = getCurrentInstance();//组件实例 代理
 
   const route = useRoute();
   const router = useRouter();
@@ -179,8 +170,6 @@
     overflow: auto;
     /* 底部栏内容高度 */
     margin-bottom: -60px;
-
-    /* position: relative; */
     .feeds-container {
       /* top: 72px; */
       position: relative;

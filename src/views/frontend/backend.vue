@@ -34,7 +34,7 @@ import { useRoute,useRouter } from "vue-router";
   import Waterfall from '@/components/waterfall.vue';
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
 
-  const { proxy } = getCurrentInstance();//axios 代理
+  const { proxy } = getCurrentInstance();//组件实例 代理
   
   
   const router = useRouter();

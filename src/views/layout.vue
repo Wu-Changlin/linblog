@@ -28,7 +28,7 @@ import NavBar from "@/components/nav_bar.vue";
 import SideBar from "@/components/side_bar.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import Footer from "@/components/footer.vue";
-const { proxy } = getCurrentInstance();//axios 代理
+const { proxy } = getCurrentInstance();//组件实例 代理
 
 
 

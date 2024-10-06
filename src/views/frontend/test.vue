@@ -150,7 +150,7 @@
   import '../../../public/typo.css';
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();
-  const { proxy } = getCurrentInstance();//axios 代理
+  const { proxy } = getCurrentInstance();//组件实例 代理
 
   const is_loading = ref(true);
   const current_route_query = ref(null);
