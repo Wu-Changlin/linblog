@@ -30,6 +30,7 @@ import Verify from "@/utils/verify"
 
 const app = createApp(App);
 
+app.config.globalProperties.Verify=Verify;
 
 //注册SvgIcon组件
 app.component('svg-icon', SvgIcon);
@@ -46,5 +47,4 @@ app.use(router)
     .use(myMessage)
     .use(ElementPlus)
     .use(tooltip)
-    .use(Verify)
 app.mount('#app')

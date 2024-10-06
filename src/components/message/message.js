@@ -9,7 +9,6 @@ document.body.appendChild(div)
 
 const $Message = (text,type) => {
     let timer=null
-    console.log(text,type);
  //createVNode 用于创建一个虚拟节点
  // 参数1 支持组件
  // 参数2 表示传递给组件的选项

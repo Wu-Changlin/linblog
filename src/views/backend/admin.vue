@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<NavBar  :parentPageLogData="layout_page_log" :parentPageArticleCount="layout_page_article_count" :parentPageArticleListData="layout_page_article_list_data"></NavBar>
+		<BackendNavBar  :parentPageLogData="layout_page_log"  :parentPageArticleListData="layout_page_article_list_data"></BackendNavBar>
 		
 		<div class="main">
 			<SideBar :parentPageMenuData="layout_page_menu_list_data"></SideBar>
@@ -10,8 +10,6 @@
 				
 			</div>
 
-			<FloatingBtnSets :parentPageMenuData="layout_page_menu_list_data"></FloatingBtnSets>
-			
 		</div>
 		
 		
@@ -24,64 +22,11 @@
 <script setup>
 import { reactive, ref,onMounted,provide,getCurrentInstance} from 'vue';
 import { useRouter } from "vue-router";
-import NavBar from "@/components/nav_bar.vue";
+import BackendNavBar from "@/components/backend/backend_nav_bar.vue";
 import SideBar from "@/components/side_bar.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import Footer from "@/components/footer.vue";
 const { proxy } = getCurrentInstance();//axios 代理
-
-
-
-
-const layout_page_article_count=ref(0);
-const layout_page_article_list_data=ref();
-// //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
-const getSearchKeywordMatchArticleListDataFunction= ()=>{
-	proxy.$get('/data/frontend/all_article.json')
-      .then(response => {
-        // setTimeout(() => {
-			layout_page_article_count.value = response.article_count; // 博文数量
-			layout_page_article_list_data.value = response.article_list; // 博文列表
-        // }, 3000); // 假设加载时间是3秒
-		
-
-      })
-      .catch(error => {
-
-        proxy.$Message('请求未找到', 'error');
-      });
-}
-// 使用 provide 向下传递方法
-provide('getSearchKeywordMatchArticleListDataFunction', getSearchKeywordMatchArticleListDataFunction);
-
-// 修改当前选中标签id 开始
-
-const current_active_tag_id=ref(0);
-// 提供数据
-provide('currentActiveTagId',current_active_tag_id);
-
- // 修改当前选中标签id的方法
- function updateCurrentActiveTagIdFunction(new_active_tag_id) {
-	current_active_tag_id.value = new_active_tag_id;
- }
-
- // 暴露方法(修改当前选中标签id的方法)供子组件调用
- provide('updateCurrentActiveTagIdFunction', updateCurrentActiveTagIdFunction);
-
-// 修改当前选中标签id 结束
-
-// 修改当前选中菜单id 开始
- const current_active_active_menu_id=ref(1);
-// 提供数据
-provide('currentActiveMenuId',current_active_active_menu_id);
-
- // 修改当前选中菜单id的方法
- function updateCurrentActiveMenuId(new_active_menu_id) {
-	current_active_active_menu_id.value = new_active_menu_id;
- }
-
- // 暴露方法(修改当前选中菜单id的方法)供子组件调用
- provide('updateCurrentActiveMenuId', updateCurrentActiveMenuId);
 
 // 修改当前选中菜单id 结束
 
@@ -95,14 +40,13 @@ function getLayoutLogOrMenuListData(){
 	.then(response => {
         layout_page_log.value = response.log_data; // log
 		layout_page_menu_list_data.value = response.menu_data; // 菜单数据
-		getSearchKeywordMatchArticleListDataFunction();//匹配关键字数据源
-		// console.log('response.log_data:',response.log_data);
+
 		
     })
 	.catch(error => {
-
-    	proxy.$Message('请求未找到', 'error');
-  	});
+        console.log('eeror:',error)
+proxy.$Message('请求未找到', 'error');
+});
 
 
 
@@ -118,12 +62,13 @@ onMounted(() => {
 
 
 
-
 </script>
 
 <style scoped>
 
 *{ /*启用滚动功能 */
+    padding: 0;
+    margin: 0;
     -ms-overflow-style: none; /* 适用于 Internet Explorer 和旧版 Edge */
     scrollbar-width: none; /* 适用于 Firefox */
     -webkit-scrollbar:none;/* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/ 

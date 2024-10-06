@@ -57,6 +57,43 @@ const routes = [
         ]
     },
 
+
+    {
+        path:'/admin',
+        name:"admin",
+        component:()=>import('@/views/backend/admin.vue'),
+        redirect:"/admin/home",
+        children:[
+            {
+                path:'home',
+                name:"home",
+                component:()=>import('@/views/backend/home/home.vue'),
+            },
+
+            {
+                path:'user_list',
+                name:"user_list",
+                component:()=>import('@/views/backend/user_mgr/user_list.vue'),
+            },
+        
+            
+            {
+                path:'article_list',
+                name:"article_list",
+                component:()=>import('@/views/backend/article_mgr/article_list.vue'),
+            },
+
+            {
+                path:'article_add_edit',
+                name:"article_add_edit",
+                component:()=>import('@/views/backend/article_mgr/article_add_edit.vue'),
+            },
+
+           
+        ]
+    },
+
+
     {
         path: '/article',
         name: "article",

@@ -1,5 +1,5 @@
 const regs={
-    email :/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+    email :/^\\s*\\w+(?:\\.{0,1}[\\w-]+)*@[a-zA-Z0-9]+(?:[-.][a-zA-Z0-9]+)*\\.[a-zA-Z]+\\s*$/,
     number:/^([0]|[1-9][0-9]*)$/,
     password:/^(?![a-zA-Z]+$)(?!\d+$)(?![^\da-zA-Z\s]+$).{9,18}$/,
 }
@@ -27,13 +27,5 @@ export default{
     password:(rule,value,callback)=>{
         return verify(rule,value,regs.password,callback)
     },
-
-
-    install: (app) => {
-        app.config.globalProperties.Verify=verify;
-    }
-
 }
-
-
 
