@@ -1,10 +1,12 @@
 <template>
 
-  <div class="feeds-page" @scroll="layoutPageOnReachBottoms" ref="layoutPageOnReachBottomH">
-    <!-- <div style="padding-top: 72px;"></div> -->
+  <div class="feeds-page" @scroll="layoutPageOnReachBottoms">
+    <!-- <div style="position: sticky;top:72px;z-index: 1000;"> -->
+    <div style="padding-top:72px;">
 
+    <ContentTag :parentPageTagData="index_tag_data"  :currentActiveTagName="current_active_tag_name" @childClickTag="getChildClickTag" v-if="flag"></ContentTag>
+  </div>
     <div class="feeds-container">
-      <ContentTag :parentPageTagData="index_tag_data"  :currentActiveTagName="current_active_tag_name" @childClickTag="getChildClickTag" v-if="flag"></ContentTag>
 
       <!-- <ContentCarouselImg></ContentCarouselImg> -->
       <Waterfall :parentPageArticleListData="index_article_list_data" :isLoading="is_loading"></Waterfall>
@@ -176,7 +178,7 @@
       margin: 0;
       width: 100%;
       transition: width 0.5s;
-      padding-top: 72px;
+      /* padding-top: 72px; */
       background-color: var(--bg);
       /* max-width: 1236px; */
       min-height: 100%;

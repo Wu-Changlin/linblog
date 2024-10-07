@@ -1,9 +1,5 @@
 <template>
-
-
-
-
-  <div class="tag-container">
+  <div :class="{'tag-container':true,'is-fixed':is_fixed?true:''}" ref="tagContainerRef">
 
     <div class="content-container">
       <div class="tag-content" ref="showTagContentRef">
@@ -25,12 +21,14 @@
   </div>
 
 
+  <div class="empty-box" v-if="is_fixed" style="width: 100%;height: 72px; position: relative;" ref="emptyBoxRef"></div>
+
   <!-- 点击显示更多 开始-->
   <div class="arrow-more-tag-container" :style="{display:data.show_more_tag_container?'block':'none'}">
 
     <div class="arrow-more-tag-content-container">
       <div class="arrow-more-tag-content">
-        <div  :class=" {'arrow-more-tag-item':true,'active':data.active_tag_name==item.tag_name?true:''}"
+        <div :class=" {'arrow-more-tag-item':true,'active':data.active_tag_name==item.tag_name?true:''}"
           v-for="(item, index) in data.show_arrow_more_tag_data" :key="index" @click="clickTag(item)"> {{
           item.tag_name }}</div>
       </div>
@@ -62,10 +60,25 @@
 
 
 <script setup>
-  import { reactive, ref, nextTick, onMounted, getCurrentInstance,onUnmounted, watch,inject,computed } from 'vue';
+  import { reactive, ref, nextTick, onMounted, getCurrentInstance, onUnmounted, watch, inject, computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import Skeleton from '@/components/skeleton.vue'
-	import { debounce, throttle} from '@/hooks/debounce_throttle.js';
+  import { debounce, throttle } from '@/hooks/debounce_throttle.js';
+
+
+
+  function getOffset(obj, direction) { 
+    let offsetL = 0; let offsetT = 0;
+     while (obj !== window.document.body && obj !== null) { 
+      offsetL += obj.offsetLeft; offsetT += obj.offsetTop; obj = obj.offsetParent; 
+    } 
+    if (direction === 'left') { 
+      return offsetL; 
+    } else {
+       return offsetT; 
+      } 
+  }
+
 
 
   const { proxy } = getCurrentInstance();//组件实例 代理
@@ -82,27 +95,27 @@
     //   default: 0,
     //   required: true
     // },
-    currentActiveTagName:{
-      type:String
+    currentActiveTagName: {
+      type: String
     }
   });
 
 
 
 
-    //注入来自layout页面的当前选中标签id
-    const layout_page_current_active_tag_id = inject('currentActiveTagId');
+  //注入来自layout页面的当前选中标签id
+  const layout_page_current_active_tag_id = inject('currentActiveTagId');
 
   // 当我们需要根据当前路由的信息来决定组件的渲染逻辑时，可以使用useRoute；而当我们需要进行路由跳转、导航等操作时，则应该使用useRouter。
 
   const hiddenTagContentRef = ref(null);//获取隐藏标签容器dom宽度，用于计算每行显示标签数量
   const hiddenTagItemRef = ref(null); // 创建一个标签dom引用
-  const showTagContentRef=ref(null);// 创建一个实际渲染标签容器dom引用
+  const showTagContentRef = ref(null);// 创建一个实际渲染标签容器dom引用
   const data = reactive({
     show_more_tag_btn: false,
     more_tag_icon: false,
     show_more_tag_container: false,
-    active_tag_id:0,//默认选中tag_id=0
+    active_tag_id: 0,//默认选中tag_id=0
     active_tag_name: '',//默认选中tag_name=''
     show_tag_count: 0,//页面实际渲染标签数量
     show_tag_data: [],//页面实际渲染标签数据
@@ -111,23 +124,23 @@
     list: [],
 
   })
-  
+
   //把父页面所传数据赋值到当前页面的data.list(赋值仅执行1次)
-  if (props.parentPageTagData) { 
+  if (props.parentPageTagData) {
     data.list = props.parentPageTagData;
   }
 
-// //把父页面所传当前选中标签id数据赋值到当前页面的data.list(赋值仅执行1次) 目前来自来自layout页面（公共）提供(provide)当前选中标签id数据(inject('currentActiveTagId'))
-//   if(props.currentActiveTagId){
-//      // 使用计算属性确保id是数字类型，原因在html元素的任何attributes都会被解析成string
-//   const numericId = computed(() => Number(props.currentActiveTagId));
-//     data.active_tag_id=numericId.value;
-//   }
-//把父页面所传当前选中标签名数据赋值到当前页面的data.list(赋值仅执行1次)
- if(props.currentActiveTagName){
-  // console.log('props.currentActiveTagName:',props.currentActiveTagName)
-  data.active_tag_name = props.currentActiveTagName;
- }
+  // //把父页面所传当前选中标签id数据赋值到当前页面的data.list(赋值仅执行1次) 目前来自来自layout页面（公共）提供(provide)当前选中标签id数据(inject('currentActiveTagId'))
+  //   if(props.currentActiveTagId){
+  //      // 使用计算属性确保id是数字类型，原因在html元素的任何attributes都会被解析成string
+  //   const numericId = computed(() => Number(props.currentActiveTagId));
+  //     data.active_tag_id=numericId.value;
+  //   }
+  //把父页面所传当前选中标签名数据赋值到当前页面的data.list(赋值仅执行1次)
+  if (props.currentActiveTagName) {
+    // console.log('props.currentActiveTagName:',props.currentActiveTagName)
+    data.active_tag_name = props.currentActiveTagName;
+  }
 
   // const i=ref(0)
   // watch(
@@ -146,7 +159,7 @@
 
   //传递事件
   const emit = defineEmits(['childClickTag'])
- 
+
 
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
@@ -157,7 +170,7 @@
     // console.log('tag_id:', tag_id);
     data.active_tag_name = item.tag_name;
     emit('childClickTag', item.tag_id, item.tag_name);//把子页面选中的标签id和标签名称传到父页面
-     //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
+    //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
     updateCurrentActiveTagIdFunction(item.tag_id);
     //  /index ===>  /index?tag_id=Java  路由携参跳转（当前页只添加路由参没有跳转）
     router.push({ name: current_route_name.value, query: { tag_id: item.tag_name }, key: new Date().getTime() });
@@ -169,81 +182,71 @@
 
 
   //使用 provide inject 代替getCurrentInstance
-  const Messages= inject('$message');
+  const Messages = inject('$message');
   //每行最多标签数量
   function maxItemsPerLines() {
     // nextTick(() => {
-      data.show_tag_data=[];
-      data.show_arrow_more_tag_data=[];
-      data.show_tag_count=0;
-      // data.more_tag_icon = false;//指向下折叠false
-      //如果计算标签数量dom对象为空，直接返回
-      // children返回的是元素节点，不包含文本节点，而childNodes则返回所有子节点，包括元素节点和文本节点。(childNodes.length children.length)
-      console.log(111,'!hiddenTagContentRef.value:',!hiddenTagContentRef.value)
-      if(!hiddenTagContentRef.value){Messages('数据加载出错', 'error');return;}
-      console.log(222)
-      if(!hiddenTagContentRef.value.children.length){Messages('空数据', 'error');return;}
-      console.log(333)
-      // console.log('Object.keys(hiddenTagItemRef.value).length:', Object.keys(hiddenTagItemRef.value).length);
-      
-      
-      // console.log(' showTagContentRef.value.offsetWidth：', showTagContentRef.value.offsetWidth);
-      //标签容器宽度
-      let tag_container_width=0;
-      // tag_container_width= hiddenTagContentRef.value.offsetWidth;
-      //实际渲染标签的容器宽度
-      tag_container_width = showTagContentRef.value.offsetWidth;
+    data.show_tag_data = [];
+    data.show_arrow_more_tag_data = [];
+    data.show_tag_count = 0;
+    // data.more_tag_icon = false;//指向下折叠false
+    //如果计算标签数量dom对象为空，直接返回
+    // if(!hiddenTagContentRef.value){Messages('数据加载出错', 'error');return;}
+    // children返回的是元素节点，不包含文本节点，而childNodes则返回所有子节点，包括元素节点和文本节点。(childNodes.length children.length)
+    //如果没有子节点，直接返回
+    // if(!hiddenTagContentRef.value.children.length){Messages('空数据', 'error');return;}
 
-      console.log('hiddenTagContentRef.value.offsetWidth：', hiddenTagContentRef.value.offsetWidth);
+    //标签容器宽度
+    let tag_container_width = 0;
+    // tag_container_width= hiddenTagContentRef.value.offsetWidth;
+    //实际渲染标签的容器宽度 父容器宽度（来自父页面）
+    let parentContainerElem = document.querySelector('.feeds-page');
+    tag_container_width = parentContainerElem.offsetWidth;
 
-      // console.log('tag_container_width:',tag_container_width);
-      const tagItem = hiddenTagItemRef.value; // 获取所有 <div> 元素的引用
-   
-      //减去指向图标的宽度 46px
-      tag_container_width = tag_container_width - 46;
-      let tag_item_width_count = 0;
-      let tag_item_count = 0;
-      let i = 0;
-      const all_tag_item_num = tagItem.length;//标签个数
-      if (all_tag_item_num > 0) {
+    // console.log('hiddenTagContentRef.value.offsetWidth：', hiddenTagContentRef.value.offsetWidth);
 
-        for (i; i < all_tag_item_num; i++) {
-          const tag_item_dom = tagItem[i];                    //标签容器dom
-          tag_item_width_count += tag_item_dom.offsetWidth;//标签宽度相加
+    // console.log('tag_container_width:',tag_container_width);
+    const tagItem = hiddenTagItemRef.value; // 获取所有 <div> 元素的引用
 
-          if (tag_item_width_count <= tag_container_width) {//判断标签dom宽度和小于等于标签容器宽度，标签数量加1
+    //减去指向图标的宽度 46px
+    tag_container_width = tag_container_width - 46;
+    let tag_item_width_count = 0;
+    let tag_item_count = 0;
+    let i = 0;
+    const all_tag_item_num = tagItem.length;//标签个数
+    if (all_tag_item_num > 0) {
 
-            // console.log('i:',i,',offsetWidth:',tag_item_dom.offsetWidth,',tag_item_width_count:',tag_item_width_count);
-            tag_item_count += 1;
-          }
+      for (i; i < all_tag_item_num; i++) {
+        const tag_item_dom = tagItem[i];                    //标签容器dom
+        tag_item_width_count += tag_item_dom.offsetWidth;//标签宽度相加
+
+        if (tag_item_width_count <= tag_container_width) {//判断标签dom宽度和小于等于标签容器宽度，标签数量加1
+
+          // console.log('i:',i,',offsetWidth:',tag_item_dom.offsetWidth,',tag_item_width_count:',tag_item_width_count);
+          tag_item_count += 1;
         }
-
-        data.show_tag_count = tag_item_count;//赋值，页面实际渲染标签数量
-        data.tag_item_dom_width_count = tag_item_width_count;//赋值，页面标签dom总宽度
-        // console.log('data.show_tag_data:',data.show_tag_data);
-        if (data.tag_item_dom_width_count <= tag_container_width) {//判断标签dom小于等于标签容器dom宽（没有溢出），隐藏指向图标容器  
-          data.show_tag_data = data.list;
-          data.show_more_tag_btn = false; //隐藏指向图标容器  
-          
-          data.show_more_tag_container = false; //关闭显示更多标签数据容器
-          data.more_tag_icon = false;//指向图标恢复默认值（指向箭头）
-        } else {//溢出标签容器dom，显示指向图标容器
-          //截取页面渲染所需标签数据
-          data.show_tag_data = data.list.slice(0, data.show_tag_count);
-            
-          data.show_arrow_more_tag_data = data.list.slice(data.show_tag_count, data.list.length);
-          
-          //显示指向图标容器
-          data.show_more_tag_btn = true;
-          
-          //截取指向更多标签数据
-
-        }
-        
       }
 
-      console.log('总数：',tagItem.length,',data.show_tag_count:',data.show_tag_count)
+      data.show_tag_count = tag_item_count;//赋值，页面实际渲染标签数量
+      data.tag_item_dom_width_count = tag_item_width_count;//赋值，页面标签dom总宽度
+      // console.log('data.show_tag_data:',data.show_tag_data);
+      if (data.tag_item_dom_width_count <= tag_container_width) {//判断标签dom小于等于标签容器dom宽（没有溢出），隐藏指向图标容器  
+        data.show_tag_data = data.list;
+        data.show_more_tag_btn = false; //隐藏指向图标容器  
 
+        data.show_more_tag_container = false; //关闭显示更多标签数据容器
+        data.more_tag_icon = false;//指向图标恢复默认值（指向箭头）
+      } else {//溢出标签容器dom，显示指向图标容器
+        //截取页面渲染所需标签数据
+        data.show_tag_data = data.list.slice(0, data.show_tag_count);
+        //截取指向更多标签数据
+        data.show_arrow_more_tag_data = data.list.slice(data.show_tag_count, data.list.length);
+        //显示指向图标容器
+        data.show_more_tag_btn = true;
+
+      }
+
+    }
   }
 
 
@@ -260,26 +263,71 @@
     }
 
   };
-
-  
   const current_route_name = ref('index');
+  // let scrollElem = document.querySelector(class_name[route.name]);
+  //标签容器dom
+  const tagContainerRef = ref(null);
+
+  const emptyBoxRef = ref(null);
+  //设置固定定位 
+  const is_fixed = ref(false);
+  function handleScroll() {
+    /**
+       * getBoundingClientRect().top 获取某元素距离浏览器顶部的高度，不包含滚动的距离
+       tagContainerRef.value.offsetTop 表示的是吸顶元素距离顶部的条件值（一般项目需求是0）,本项目是72px
+       */
+
+    //获取某元素距离浏览器顶部的高度
+    const tabOffsetTop = tagContainerRef.value.getBoundingClientRect().height;
+    let parentContainerElem = document.querySelector('.feeds-container');
+    console.log('parentContainerElem-top:',parentContainerElem.getBoundingClientRect().top)
+    // console.log('tabOffsetTop:',tabOffsetTop,',tagContainerRef:',tagContainerRef.value.offsetTop)
+    // is_fixed.value = tabOffsetTop < tagContainerRef.value.offsetTop;
+    if(parentContainerElem.getBoundingClientRect().top <=tabOffsetTop){
+      // / console.log('tabOffsetTop:',tabOffsetTop,',tagContainerRef:',tagContainerRef.value.offsetTop)
+      is_fixed.value = true;
+    }else{
+      is_fixed.value = false;
+    }
+
+    // if(){
+
+    // }
+    // console.log(emptyBoxRef.value.getBoundingClientRect().top);
+    //实际渲染标签的容器宽度 父容器宽度（来自父页面）
+
+    // emptyBoxRef
+    // console.log('emptyBoxRef.value',emptyBoxRef.value.getBoundingClientRect().top);
+      console.log('is_fixed.value,',is_fixed.value,',tabOffsetTop < tagContainerRef.value.offsetTop',tabOffsetTop,'<',tagContainerRef.value.offsetTop);
+    
+    // else{
+      // console.log('is_fixed.value,',is_fixed.value,',tabOffsetTop < tagContainerRef.value.offsetTop',tabOffsetTop,'<',tagContainerRef.value.offsetTop)
+      // if(is_fixed.value !=false){
+        // is_fixed.value =false;
+      // }
+
+    // }
+
+
+  }
 
   onMounted(() => {
+    window.addEventListener("scroll", handleScroll, true);
     //如果路由有查询参数tag_id，那么参数值赋值选中标签名变量。
     //(点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）)
     // if(route.query.tag_id){
     //   data.active_tag_name=route.query.tag_id;
     // }
     current_route_name.value = route.name;//获取当前路由的名称
-    
+
     // fetchTag();
     nextTick(() => {
-        maxItemsPerLines();
+      //初始化每行最多标签数量
+      maxItemsPerLines();
     })
     //监听窗口响应式每行最多标签数量
-    window.addEventListener('resize', throttle(() => {maxItemsPerLines()}, 300));//监听窗口缩放 加节流
-    //初始化每行最多标签数量
-    //  maxItemsPerLines();
+    window.addEventListener('resize', throttle(() => { maxItemsPerLines() }, 300));//监听窗口缩放 加节流
+
   })
 
 
@@ -291,6 +339,12 @@
 </script>
 
 <style scoped>
+
+
+.is-fixed{
+  position: fixed;
+ 
+}
   .tag-container {
     display: flex;
     justify-content: space-between;
@@ -300,42 +354,44 @@
     /* position: fixed; */
     /* position: absolute; */
     z-index: 9;
+    width: 100%;
     /* max-width: 1260px; */
     background-color: var(--bg);
+
     .content-container {
       /*backdrop-filter: blur(20px); */
-        width: 100%;
-        /* width: calc(100% - 24px); */
-        /* max-width: 1260px; */
-        display: flex;
-        position: relative;
-        user-select: none;
-        -webkit-user-select: none;
-        align-items: center;
-        font-size: 16px;
-        background-color: var(--bg);
-        color: var(--text);
-        height: 40px;
-        white-space: nowrap;
-        height: 72px;
+      width: 100%;
+      /* width: calc(100% - 24px); */
+      /* max-width: 1260px; */
+      display: flex;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+      align-items: center;
+      font-size: 16px;
+      background-color: var(--bg);
+      color: var(--text);
+      height: 40px;
+      white-space: nowrap;
+      height: 72px;
 
 
     }
 
     .tag-content {
       display: flex;
-      width:100%;
-        /* flex-wrap: wrap; */
-        /* width: calc(100% - 24px); */
-        color: var(--color-secondary-label);
-        background-color: var(--bg);
-        /* max-width: 1260px; */
-        /* overflow: hidden;*/
+      width: 100%;
+      /* flex-wrap: wrap; */
+      /* width: calc(100% - 24px); */
+      color: var(--color-secondary-label);
+      background-color: var(--bg);
+      /* max-width: 1260px; */
+      /* overflow: hidden;*/
 
       .active {
-        background-color: var(--color-active-background)!important;
+        background-color: var(--color-active-background) !important;
         border-radius: 999px;
-        color: var(--color-primary-label)!important;
+        color: var(--color-primary-label) !important;
       }
 
       .tag-item {
@@ -349,12 +405,12 @@
         user-select: none;
         background-color: var(--bg);
 
-       
+
         /*鼠标移入效果*/
         &:hover {
-          background-color: var(--color-active-background)!important;
+          background-color: var(--color-active-background) !important;
           border-radius: 999px;
-          color: var(--color-primary-label)!important;
+          color: var(--color-primary-label) !important;
         }
       }
 
@@ -437,11 +493,12 @@
     display: flex;
     position: fixed;
     background-color: var(--bg);
-    /* transform: translateY(100%); */
+    transform: translateY(100%);
     width: 100%;
     z-index: 10;
     /* max-width: 1260px; */
     height: 72px;
+
     /* 防止元素溢出 */
     .arrow-more-tag-content-container {
       overflow: hidden;
@@ -456,7 +513,7 @@
       height: 40px;
       white-space: nowrap;
       height: auto;
-    
+
 
       .arrow-more-tag-content {
         display: flex;
@@ -464,6 +521,7 @@
         /*这是关键属性，flex模式允许换行 */
         flex-wrap: wrap;
         background-color: var(--bg);
+
         .active {
           background-color: rgba(0, 0, 0, 0.03);
           border-radius: 999px;

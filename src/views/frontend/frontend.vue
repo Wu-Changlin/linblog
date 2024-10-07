@@ -294,14 +294,14 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
     background-color: var(--bg);
     height: 100vh;
     overflow: auto;
-
+    position: relative;
     .feeds-container {
       /* top: 72px; */
       position: relative;
       margin: 0;
       /* width: 100% - 24px; */
       transition: width 0.5s;
-      padding-top: 72px;
+      /* padding-top: 72px; */
       background-color: var(--bg);
       /* max-width: 1236px; */
 
