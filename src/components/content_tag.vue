@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'tag-container':true,'is-fixed':is_fixed?true:''}" ref="tagContainerRef">
+  <div class="tag-container" ref="tagContainerRef">
 
     <div class="content-container">
       <div class="tag-content" ref="showTagContentRef">
@@ -19,9 +19,32 @@
       </div>
     </div>
   </div>
+ 
+  <!-- align-items: center; -->
 
+  <div class="tag-fixed" :style="{display: is_fixed ? 'block' : 'none'}">
+    <div class="tag-container-fixed">
 
-  <div class="empty-box" v-if="is_fixed" style="width: 100%;height: 72px; position: relative;" ref="emptyBoxRef"></div>
+      <div class="content-container-fixed">
+        <div class="tag-content-fixed" ref="showTagContentRef">
+          <div :class="{'tag-item-fixed':true,'active':data.active_tag_name==item.tag_name?true:''}"
+            v-for="(item, index) in data.show_tag_data" :key="index" @click="clickTag(item)">
+            {{ item.tag_name }}
+          </div>
+  
+          <!-- 上下指向图标 开始-->
+          <div class="tag-item-fixed" v-if="data.show_more_tag_btn" @click="clickTagBtn()">
+            <div>
+              <svg-icon class="svg-icon" :icon-class="data.more_tag_icon?'arrow-up':'arrow-down'" />
+            </div>
+          </div>
+          <!-- 上下指向图标 结束-->
+  
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- 点击显示更多 开始-->
   <div class="arrow-more-tag-container" :style="{display:data.show_more_tag_container?'block':'none'}">
@@ -191,21 +214,15 @@
     data.show_tag_count = 0;
     // data.more_tag_icon = false;//指向下折叠false
     //如果计算标签数量dom对象为空，直接返回
-    // if(!hiddenTagContentRef.value){Messages('数据加载出错', 'error');return;}
+    if(!hiddenTagContentRef.value){Messages('数据加载出错', 'error');return;}
     // children返回的是元素节点，不包含文本节点，而childNodes则返回所有子节点，包括元素节点和文本节点。(childNodes.length children.length)
     //如果没有子节点，直接返回
-    // if(!hiddenTagContentRef.value.children.length){Messages('空数据', 'error');return;}
+    if(!hiddenTagContentRef.value.children.length){Messages('空数据', 'error');return;}
 
     //标签容器宽度
     let tag_container_width = 0;
     // tag_container_width= hiddenTagContentRef.value.offsetWidth;
-    //实际渲染标签的容器宽度 父容器宽度（来自父页面）
-    let parentContainerElem = document.querySelector('.feeds-page');
-    tag_container_width = parentContainerElem.offsetWidth;
-
-    // console.log('hiddenTagContentRef.value.offsetWidth：', hiddenTagContentRef.value.offsetWidth);
-
-    // console.log('tag_container_width:',tag_container_width);
+    tag_container_width = tagContainerRef.value.offsetWidth;
     const tagItem = hiddenTagItemRef.value; // 获取所有 <div> 元素的引用
 
     //减去指向图标的宽度 46px
@@ -264,55 +281,42 @@
 
   };
   const current_route_name = ref('index');
-  // let scrollElem = document.querySelector(class_name[route.name]);
+
   //标签容器dom
   const tagContainerRef = ref(null);
 
-  const emptyBoxRef = ref(null);
   //设置固定定位 
   const is_fixed = ref(false);
   function handleScroll() {
     /**
-       * getBoundingClientRect().top 获取某元素距离浏览器顶部的高度，不包含滚动的距离
-       tagContainerRef.value.offsetTop 表示的是吸顶元素距离顶部的条件值（一般项目需求是0）,本项目是72px
+       * getBoundingClientRect().bottom 获取元素底部边缘与视口边缘的距离。
+       * 吸顶元素距离顶部的条件值（项目需求是0）当元素距离浏览器顶部的高度小于或等于0时吸顶，反之取消吸顶（大于0）
+       * getBoundingClientRect().top 获取元素的上边缘到视口上边缘的距离
+       * (当吸顶或者取消吸顶时，出现元素内容吸顶上移或取消吸顶下沉；原因：吸顶内容和原有内容同时出现在视窗。
+       * 解决：当元素底部边缘与视口边缘的距离+元素高度（初始化）时吸顶小于或等于0时吸顶，反之取消吸顶（大于0）)
        */
 
-    //获取某元素距离浏览器顶部的高度
-    const tabOffsetTop = tagContainerRef.value.getBoundingClientRect().height;
-    let parentContainerElem = document.querySelector('.feeds-container');
-    console.log('parentContainerElem-top:',parentContainerElem.getBoundingClientRect().top)
-    // console.log('tabOffsetTop:',tabOffsetTop,',tagContainerRef:',tagContainerRef.value.offsetTop)
-    // is_fixed.value = tabOffsetTop < tagContainerRef.value.offsetTop;
-    if(parentContainerElem.getBoundingClientRect().top <=tabOffsetTop){
-      // / console.log('tabOffsetTop:',tabOffsetTop,',tagContainerRef:',tagContainerRef.value.offsetTop)
+       data.show_more_tag_container = false; //关闭显示更多标签数据容器
+       data.more_tag_icon = false;//指向图标恢复默认值（指向箭头）
+       const tabOffsetTop = tagContainerRef.value.getBoundingClientRect().top;
+    if((tabOffsetTop + tagContainerRef.value.clientHeight)<0){
       is_fixed.value = true;
     }else{
       is_fixed.value = false;
     }
 
-    // if(){
-
+    //获取标签栏元素底部边缘与视口边缘的距离。
+    // const tabOffsetBottom = tagContainerRef.value.getBoundingClientRect().bottom;
+    // if(tabOffsetBottom <0){
+    //   is_fixed.value = true;
+    // }else{
+    //   is_fixed.value = false;
     // }
-    // console.log(emptyBoxRef.value.getBoundingClientRect().top);
-    //实际渲染标签的容器宽度 父容器宽度（来自父页面）
-
-    // emptyBoxRef
-    // console.log('emptyBoxRef.value',emptyBoxRef.value.getBoundingClientRect().top);
-      console.log('is_fixed.value,',is_fixed.value,',tabOffsetTop < tagContainerRef.value.offsetTop',tabOffsetTop,'<',tagContainerRef.value.offsetTop);
-    
-    // else{
-      // console.log('is_fixed.value,',is_fixed.value,',tabOffsetTop < tagContainerRef.value.offsetTop',tabOffsetTop,'<',tagContainerRef.value.offsetTop)
-      // if(is_fixed.value !=false){
-        // is_fixed.value =false;
-      // }
-
-    // }
-
-
+    // slide-down
   }
 
   onMounted(() => {
-    window.addEventListener("scroll", handleScroll, true);
+   
     //如果路由有查询参数tag_id，那么参数值赋值选中标签名变量。
     //(点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）)
     // if(route.query.tag_id){
@@ -327,24 +331,113 @@
     })
     //监听窗口响应式每行最多标签数量
     window.addEventListener('resize', throttle(() => { maxItemsPerLines() }, 300));//监听窗口缩放 加节流
-
+    //吸顶效果
+    window.addEventListener("scroll", handleScroll, true);
   })
 
 
   onUnmounted(() => {
+    //离开页面时移除监听窗口响应式每行最多标签数量
     window.removeEventListener('resize', maxItemsPerLines);
+    //吸顶效果
+    window.removeEventListener('scroll', handleScroll);
     // stopHiddenTagContentRetWatch.value=null; // 如果watch返回了一个停止监听的函数，调用它
-  })//离开页面时移除监听窗口缩放
+  })
 
 </script>
 
 <style scoped>
 
-
-.is-fixed{
-  position: fixed;
+.tag-fixed{
+  width: 100%;
  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    -webkit-user-select: none;
+    flex-flow: row;
+    position: fixed;
+    z-index: 1001;
+    top: 72px;
+    animation: headerSlideDown .2s linear forwards;
+    .tag-container-fixed {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    -webkit-user-select: none;
+    /* position: fixed; */
+    /* position: absolute; */
+    z-index: 9;
+    width: 100%;
+    /* max-width: 1260px; */
+    background-color: var(--bg);
+    /* animation: headerSlideDown .2s linear forwards; */
+    .content-container-fixed {
+      /*backdrop-filter: blur(20px); */
+      width: 100%;
+      /* width: calc(100% - 24px); */
+      /* max-width: 1260px; */
+      display: flex;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+      align-items: center;
+      font-size: 16px;
+      background-color: var(--bg);
+      color: var(--text);
+      height: 40px;
+      white-space: nowrap;
+      height: 72px;
+
+
+    }
+
+    .tag-content-fixed {
+      display: flex;
+      width: 100%;
+      /* flex-wrap: wrap; */
+      /* width: calc(100% - 24px); */
+      color: var(--color-secondary-label);
+      background-color: var(--bg);
+      /* max-width: 1260px; */
+      /* overflow: hidden;*/
+
+      .active {
+        background-color: var(--color-active-background) !important;
+        border-radius: 999px;
+        color: var(--color-primary-label) !important;
+      }
+
+      .tag-item-fixed {
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 15px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        user-select: none;
+        background-color: var(--bg);
+
+
+        /*鼠标移入效果*/
+        &:hover {
+          background-color: var(--color-active-background) !important;
+          border-radius: 999px;
+          color: var(--color-primary-label) !important;
+        }
+      }
+
+    }
+
+
+  }
+   
 }
+
+
   .tag-container {
     display: flex;
     justify-content: space-between;
@@ -357,7 +450,7 @@
     width: 100%;
     /* max-width: 1260px; */
     background-color: var(--bg);
-
+    /* animation: headerSlideDown .3s linear forwards; */
     .content-container {
       /*backdrop-filter: blur(20px); */
       width: 100%;
@@ -419,7 +512,15 @@
 
   }
 
+  @keyframes headerSlideDown {
+    0% {
+        opacity: 0
+    }
 
+    to {
+        opacity: 1
+    }
+}
 
   /* 隐藏标签栏 渲染全部标签*/
   .hidden-tag-container {
@@ -493,7 +594,7 @@
     display: flex;
     position: fixed;
     background-color: var(--bg);
-    transform: translateY(100%);
+    /* transform: translateY(100%); */
     width: 100%;
     z-index: 10;
     /* max-width: 1260px; */

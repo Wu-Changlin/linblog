@@ -347,27 +347,6 @@ const is_show=ref(false)
 
 <style scoped>
 
-.website-approve {
-    display: flex;
-	position: fixed;
-    justify-content: center;
-    align-items: center;
-    bottom: 0;
-    width: 100%;
-    overflow: hidden;
-    /* display: block; */
-    /* display: none; */
-    margin-top: 12px;
-    z-index: 1;
- margin-bottom: 0;
-    height: 30px;
-    /* 隐藏 */
-    @media screen and (max-width: 959px) {
-			display: none;
-			/* visibility: hidden; */
-			
-    }
-}
 
   .waterfall-card {
     position: relative;
