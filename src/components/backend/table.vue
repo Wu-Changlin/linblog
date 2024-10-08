@@ -41,8 +41,12 @@
       </slot>
     </div>
 
+
+ 
+
     <div class="gvb_tables">
       <el-table
+      class="custom-table-bg"
         :data="data.tableData"
         style="width: 100%"
         :row-key="
@@ -328,8 +332,41 @@ const tableData = () => {
 </script>
 
 <style scoped>
+
+
+/* //表格内容颜色 */
+:deep(.el-table__body tbody tr) {
+  background-color: var(--bg);
+}
+
+:deep(.el-table__header-wrapper thead th) {
+  background-color: var(--bg);
+}
+
+
+/* 修改前后箭头未点击时的背景颜色 */
+:deep .el-pagination .btn-prev,
+:deep .el-pagination .btn-next {
+  background-color: #0e3a90 !important;
+}
+/* 修改未点击时的数字方块背景颜色 */
+:deep .el-pagination .el-pager li:not(.active):not(.disabled):hover {
+  background-color: #75fbff !important;
+}
+/* 未点击时的数字方块背景颜色 */
+:deep .el-pagination .el-pager li:not(.active):not(.disabled) {
+  background-color: #0e3a90 !important;
+  color: #75fbff;
+} 
+/* 修改默认的背景色 */
+:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
+  background-color: #75fbff !important;
+  color: #01133c;
+}
+
 .gvb_container {
-  background-color: var(--card_bg);
+  background: var(--bg);
+
   .gvb_search {
     padding: 10px;
     border-bottom: 1px solid var(--card_bg);
@@ -343,6 +380,8 @@ const tableData = () => {
   }
 
   .gvb_tables {
+  background-color: var(--bg);
+
   }
 
   .gvb_pages {
@@ -350,6 +389,7 @@ const tableData = () => {
     justify-content: center;
     padding: 10px;
     margin-bottom: 20px;
+
   }
 
   .gvb_table_avatar {

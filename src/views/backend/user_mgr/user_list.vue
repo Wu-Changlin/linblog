@@ -1,5 +1,13 @@
 <template>
 
+
+  <div class="feeds-page">
+    <div class="feeds-container">
+
+        
+
+
+
 <div>
   <!-- <el-button type="primary"  @click="addUserDialog">添加用户</el-button>
   <el-button type="primary"  @click="editUserDialog">编辑用户</el-button> -->
@@ -105,7 +113,10 @@
   </Table>
 </div>
 
+</div>
 
+
+</div>
 </template>
 
 <script setup>
@@ -262,4 +273,33 @@ const rules = reactive({
 </script>
 
 <style scoped>
+     .feeds-page {
+        flex: 1;
+     
+        width: 100%;
+        margin: 0;
+        /* padding:0px 12px; */
+        /* max-width: 1260px; */
+        /* 修改盒子大小属性 */
+        padding: 0px 12px;
+        /* background-color: var(--bg); */
+        height: 100vh;
+        overflow: auto;
+        background-color: #eee;
+        /* 底部栏内容高度 */
+        /* position: relative; */
+        .feeds-container {
+            /* top: 72px; */
+            position: relative;
+            margin: 0;
+            width: 100%;
+            transition: width 0.5s;
+            margin-top: 150px;
+            /* max-width: 1236px; */
+            min-height: 100%;
+            
+
+        }
+
+    }
 </style>
