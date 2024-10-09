@@ -16,7 +16,8 @@
 
 
 		<el-aside width="collapse">
-			<el-menu :collapse="isCollapse"  class="el-menu-vertical">
+			<!-- <el-menu :collapse="isCollapse"  class="el-menu-vertical"> -->
+				<el-menu class="el-menu-vertical">
 	
 				<!-- <div class="gvb_aside_header flex">
 					<div class="gvb_aside_logo">
@@ -34,20 +35,17 @@
 							<span>{{ menu.menu_title }}</span>
 						</template>
 						<!-- 遍历子组件 start-->
-						
-						<el-menu-item  v-for="sub_menu in menu.children" :index="sub_menu.menu_id +''">
-							<a :href="sub_menu.menu_path">
-
-							
+						<template   v-for="(sub_menu,item) in menu.children">
+						<el-menu-item @click="goto(sub_menu.menu_path)"  :index="sub_menu.menu_id +''">
 							<svg-icon  class="svg_icon"  style="width: 1em; height: 1em; margin-right: 8px;"  :icon-class="sub_menu.icon" />
 							<span>{{ sub_menu.menu_title }}</span>
-						</a>
 						</el-menu-item>
+					   </template>
 						<!-- 遍历子组件 end-->
 					</el-sub-menu>
 	
 					<!-- 无子组件，继续 -->
-					<el-menu-item  v-else   @click="goto(menu.menu_name)" :index="menu.menu_id +''">
+					<el-menu-item  v-else   @click="goto(menu.menu_path)" :index="menu.menu_id +''">
 						<svg-icon  class="svg_icon"  style="width: 1em; height: 1em; margin-right: 8px;"  :icon-class="menu.icon" />
 						<span>{{ menu.menu_title }}</span>
 					</el-menu-item>
@@ -69,6 +67,7 @@
 import { reactive, ref,onMounted ,computed} from 'vue';
 import { useRoute,useRouter } from "vue-router";
 const route=useRoute();
+const router=useRouter();
 // menu_name: string //菜单唯一标识，与路由名保持一致
 // menu_title: string //菜单显示名称
 
@@ -76,14 +75,22 @@ const route=useRoute();
 const props = defineProps({
 	parentPageMenuData: {
 			type: Array,
-    	},
+},
 });
 
 // for(){
 
 // }
 
-console.log('parentPageMenuData:',props.parentPageMenuData)
+
+//侧边栏菜单点击
+function goto(menu_path){
+//   console.log(menu_path);
+//路由跳转
+  router.push({
+    path:menu_path
+  })
+}
 
 //计算属性active_menu_name来获取路由的名称
 const active_menu_name = computed(() => route.menu_name);
