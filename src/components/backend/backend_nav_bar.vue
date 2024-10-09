@@ -9,14 +9,17 @@
 
 
 
-			<div style="margin-left: 30px;">
+			<div style="margin-left: 30px;" >
 
 
-				<svg-icon class="svg-icon" icon-class="Fold" />
+				
 
 
-
+				<svg-icon v-show="is_collapse_side_menu"   @click="isCollapse()"class="svg-icon" icon-class="Expand" />
+				<svg-icon v-show="!is_collapse_side_menu" @click="isCollapse()" class="svg-icon" icon-class="Fold" />
+			
 			</div>
+
 
 			<!-- 右边主题图标 -->
 			<div class="header-container-right-icon">
@@ -61,6 +64,27 @@
 
 
 	});
+
+
+	// 提供数据
+
+
+const is_collapse_side_menu = inject('isCollapseSideMenu');
+
+// 注入来自admin页面（公共）提供修改当前选中标签id的方法
+const updateIsCollapseSideMenuFunction = inject('updateIsCollapseSideMenuFunction');
+	
+
+	function isCollapse(){
+
+		console.log('is_collapse_side_menu:',is_collapse_side_menu.value)
+		is_collapse_side_menu.value=!is_collapse_side_menu.value;
+		updateIsCollapseSideMenuFunction(is_collapse_side_menu.value);
+		
+	}
+
+
+	  
 
 
 </script>

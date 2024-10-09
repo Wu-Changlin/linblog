@@ -2,18 +2,18 @@
 
     "article_count":9,
     "article_list":[
-        { "id": 20,
+        { "article_id": 20,
 
             "title": "v前端开发是创建Web页面或APP等前端界面呈现给用户的过程，通过HTML，CSS及JavaScript以及衍生出来的各种技术、框架、解决方案，来实现互联网产品的用户界面交互的过程",
 
            "article_content":"3.2. 【拉开序幕的 setup】 setup 概述 setup是Vue3中一个新的配置项，值是一个函数，它是 Composition API “表演的舞台”，组件中所用到的：数据、方法、计算属性、监视......等等，均配置在setup中。 特点如下： setup函数返回的对象中的内容，可直接在模板中使用。 setup中访问this是undefined。 setup函数会在beforeCreate之前调用，它是“领先”所有钩子执行的。 <template> <div class='person'> <h2>姓名：{{name}}</h2> <h2>年龄：{{age}}</h2> <button @click='changeName'>修改名字</button> <button @click='changeAge'>年龄+1</button> <button @click='showTel'>点我查看联系方式</button> </div> </template> export default { name:'Person', setup(){ // 数据，原来写在data中（注意：此时的name、age、tel数据都不是响应式数据） let name = '张三' let age = 18 let tel = '13888888888' // 方法，原来写在methods中 function changeName(){ name = 'zhang-san' //注意：此时这么修改name页面是不变化的 console.log(name) } function changeAge(){ age += 1 //注意：此时这么修改age页面是不变化的 console.log(age) } function showTel(){ alert(tel) } // 返回一个对象，对象中的内容，模板中可以直接使用 return {name,age,tel,changeName,changeAge,showTel} } } ### setup 的返回值 - 若返回一个**对象**：则对象中的：属性、方法等，在模板中均可以直接使用**（重点关注）。** - 若返回一个**函数**：则可以自定义渲染内容，代码如下： ```jsx setup(){ return ()=> '你好啊！' } setup 与 Options API 的关系 Vue2 的配置（data、methos......）中可以访问到 setup中的属性、方法。 但在setup中不能访问到Vue2的配置（data、methos......）。 如果与Vue2冲突，则setup优先。 setup 语法糖 setup函数有一个语法糖，这个语法糖，可以让我们把setup独立出去，代码如下： <template> <div class='person'> <h2>姓名：{{name}}</h2> <h2>年龄：{{age}}</h2> <button @click='changName'>修改名字</button> <button @click='changAge'>年龄+1</button> <button @click='showTel'>点我查看联系方式</button> </div> </template> <script lang='ts'> export default { name:'Person', } </script> <!-- 下面的写法是setup语法糖 --> <script setup lang='ts'> console.log(this) //undefined // 数据（注意：此时的name、age、tel都不是响应式数据） let name = '张三' let age = 18 let tel = '13888888888' // 方法 function changName(){ name = '李四'//注意：此时这么修改name页面是不变化的 } function changAge(){ console.log(age) age += 1 //注意：此时这么修改age页面是不变化的 } function showTel(){ alert(tel) } </script> 扩展：上述代码，还需要编写一个不写setup的script标签，去指定组件名字，比较麻烦，我们可以借助vite中的插件简化 第一步：npm i vite-plugin-vue-setup-extend -D 第二步：vite.config.ts import { defineConfig } from 'vite' import VueSetupExtend from 'vite-plugin-vue-setup-extend' export default defineConfig({ plugins: [ VueSetupExtend() ] }) 3. 第三步：`<script setup lang='ts' name='Person'>`" 
             },
-        { "id": 21,
+        { "article_id": 21,
 
         "title": "这三个是前端开发中最基本也是最必须的三个技能。前端的开发中，在页面的布局时， HTML将元素进行定义，CSS对展示的元素进行定位，再通过JavaScript实现相应的效果和交互。",
 "article_content": "3. Vue3核心语法 3.1. 【OptionsAPI 与 CompositionAPI】 Vue2的API设计是Options（配置）风格的。 Vue3的API设计是Composition（组合）风格的。 Options API 的弊端 Options类型的 API，数据、方法、计算属性等，是分散在：data、methods、computed中的，若想新增或者修改一个需求，就需要分别修改：data、methods、computed，不便于维护和复用。 Composition API 的优势 可以用函数的方式，更加优雅的组织代码，让相关功能的代码更加有序的组织在一起。 说明：以上四张动图原创作者：大帅老猿 "
           },
-        { "id": 30,
+        { "article_id": 30,
 
         "menu_title":"后端",
 
@@ -21,55 +21,55 @@
 
    "article_content":"2.3. 【一个简单的效果】 Vue3向下兼容Vue2语法，且Vue3中的模板中可以没有根标签 <template> <div class='person'> <h2>姓名：{{name}}</h2> <h2>年龄：{{age}}</h2> <button @click='changeName'>修改名字</button> <button @click='changeAge'>年龄+1</button> <button @click='showTel'>点我查看联系方式</button> </div> </template> <script lang='ts'> export default { name:'App', data() { return { name:'张三', age:18, tel:'13888888888' } }, methods:{ changeName(){ this.name = 'zhang-san' }, changeAge(){ this.age += 1 }, showTel(){ alert(this.tel) } }, } </script>"
         },
-        {"id": 31,
+        {"article_id": 31,
 
             "title": "后端就像是一家餐厅的厨房，负责做菜的师傅。用户在餐厅点餐（操作前台），后端就是为了满足这些订单，做好各种各样的菜式。用户点了什么菜、吃了多少，都是后端知道的。",
 
             "article_content": "2.2. 【基于 vite 创建】(推荐) vite 是新一代前端构建工具，官网地址：https://vitejs.cn，vite的优势如下： 轻量快速的热重载（HMR），能实现极速的服务启动。 对 TypeScript、JSX、CSS 等支持开箱即用。 真正的按需编译，不再等待整个应用编译完成。 webpack构建 与 vite构建对比图如下： 具体操作如下（点击查看官方文档） ## 1.创建命令 npm create vue@latest ## 2.具体配置 ## 配置项目名称 √ Project name: vue3_test ## 是否添加TypeScript支持 √ Add TypeScript? Yes ## 是否添加JSX支持 √ Add JSX Support? No ## 是否添加路由环境 √ Add Vue Router for Single Page Application development? No ## 是否添加pinia环境 √ Add Pinia for state management? No ## 是否添加单元测试 √ Add Vitest for Unit Testing? No ## 是否添加端到端测试方案 √ Add an End-to-End Testing Solution? » No ## 是否添加ESLint语法检查 √ Add ESLint for code quality? Yes ## 是否添加Prettiert代码格式化 √ Add Prettier for code formatting? No 自己动手编写一个App组件 <template> <div class='app'> <h1>你好啊！</h1> </div> </template> <script lang='ts'> export default { name:'App' //组件名 } </script> <style> .app { background-color: #ddd; box-shadow: 0 0 10px; border-radius: 10px; padding: 20px; } </style> 安装官方推荐的vscode插件： 总结： Vite 项目中，index.html 是项目的入口文件，在项目最外层。 加载index.html后，Vite 解析 <script type='module' src='xxx'> 指向的JavaScript。 Vue3中是通过 createApp 函数创建一个应用实例。 "
           },
-          {"id": 32,
+          {"article_id": 32,
 
             "title": "后端是指应用程序的服务器端，负责处理用户请求、执行业务逻辑、与数据库交互等任务。它和前端（用户界面）协同工作，完成整个应用的功能。",
 
             "article_content": "2. 创建Vue3工程 2.1. 【基于 vue-cli 创建】 点击查看官方文档 备注：目前vue-cli已处于维护模式，官方推荐基于 Vite 创建项目。 ## 查看@vue/cli版本，确保@vue/cli版本在4.5.0以上 vue --version ## 安装或者升级你的@vue/cli npm install -g @vue/cli ## 执行创建命令 vue create vue_test ## 随后选择3.x ## Choose a version of Vue.js that you want to start the project with (Use arrow keys) ## > 3.x ## 2.x ## 启动 cd vue_test npm run serve "
           }, 
-          {"id": 50,
+          {"article_id": 50,
 
             "title": "随笔，作为一种自由的散文体裁，让我能够随心所欲地记录生活中的点滴感悟。",
              "article_content":"| sfaf | yy | | ------------ | ------------ | | vg | kkk | | 44 | uuu | "
             
 
           },
-          {"id": 51,
+          {"article_id": 51,
 
             "title": "极淡，像被人随手抛的，四散开来，看着天空，嘴角不禁上扬，忍不住的，笑了。",
 
               "article_content":"3.4. 【reactive 创建：对象类型的响应式数据】 作用：定义一个响应式对象（基本类型不要用它，要用ref，否则报错） 语法：let 响应式对象= reactive(源对象)。 返回值：一个Proxy的实例对象，简称：响应式对象。 注意点：reactive定义的响应式数据是“深层次”的。 <template> <div class='person'> <h2>汽车信息：一台{{ car.brand }}汽车，价值{{ car.price }}万</h2> <h2>游戏列表：</h2> <ul> <li v-for='g in games' :key='g.id'>{{ g.name }}</li> </ul> <h2>测试：{{obj.a.b.c.d}}</h2> <button @click='changeCarPrice'>修改汽车价格</button> <button @click='changeFirstGame'>修改第一游戏</button> <button @click='test'>测试</button> </div> </template> import { reactive } from 'vue' // 数据 let car = reactive({ brand: '奔驰', price: 100 }) let games = reactive([ { id: 'ahsgdyfa01', name: '英雄联盟' }, { id: 'ahsgdyfa02', name: '王者荣耀' }, { id: 'ahsgdyfa03', name: '原神' } ]) let obj = reactive({ a:{ b:{ c:{ d:666 } } } }) function changeCarPrice() { car.price += 10 } function changeFirstGame() { games[0].name = '流星蝴蝶剑' } function test(){ obj.a.b.c.d = 999 } "
           },
-          { "id": 52,
+          { "article_id": 52,
 
             "title": "晴天！天气好的让我兴奋，蓝白色的天空中一条条浅浅的云条，",
              "article_content":"3.5. 【ref 创建：对象类型的响应式数据】 其实ref接收的数据可以是：基本类型、对象类型。 若ref接收的是对象类型，内部其实也是调用了reactive函数。 <template> <div class='person'> <h2>汽车信息：一台{{ car.brand }}汽车，价值{{ car.price }}万</h2> <h2>游戏列表：</h2> <ul> <li v-for='g in games' :key='g.id'>{{ g.name }}</li> </ul> <h2>测试：{{obj.a.b.c.d}}</h2> <button @click='changeCarPrice'>修改汽车价格</button> <button @click='changeFirstGame'>修改第一游戏</button> <button @click='test'>测试</button> </div> </template> import { ref } from 'vue' // 数据 let car = ref({ brand: '奔驰', price: 100 }) let games = ref([ { id: 'ahsgdyfa01', name: '英雄联盟' }, { id: 'ahsgdyfa02', name: '王者荣耀' }, { id: 'ahsgdyfa03', name: '原神' } ]) let obj = ref({ a:{ b:{ c:{ d:666 } } } }) console.log(car) function changeCarPrice() { car.value.price += 10 } function changeFirstGame() { games.value[0].name = '流星蝴蝶剑' } function test(){ obj.value.a.b.c.d = 999 } "
 
           },
-          { "id": 53,
+          { "article_id": 53,
 
             "title": "回忆往昔 过去的一年,仿佛是一幅画面在我脑海中不断闪回。",
 "article_content": "3.6. 【ref 对比 reactive】 宏观角度看： ref用来定义：基本类型数据、对象类型数据； reactive用来定义：对象类型数据。 区别： ref创建的变量必须使用.value（可以使用volar插件自动添加.value）。 reactive重新分配一个新对象，会失去响应式（可以使用Object.assign去整体替换）。 使用原则： 若需要一个基本类型的响应式数据，必须使用ref。 若需要一个响应式对象，层级不深，ref、reactive都可以。 若需要一个响应式对象，且层级较深，推荐使用reactive。 "
           },
-          {"id": 54,
+          {"article_id": 54,
 
             "title": "我坐在窗前,望着窗外摇曳的树叶,思绪的小舟顺着小河般的记忆逆流而上,一幕幕的记忆浮现在脑海",
 
            "article_content":"3.7. 【toRefs 与 toRef】 作用：将一个响应式对象中的每一个属性，转换为ref对象。 备注：toRefs与toRef功能一致，但toRefs可以批量转换。 语法如下： <template> <div class='person'> <h2>姓名：{{person.name}}</h2> <h2>年龄：{{person.age}}</h2> <h2>性别：{{person.gender}}</h2> <button @click='changeName'>修改名字</button> <button @click='changeAge'>修改年龄</button> <button @click='changeGender'>修改性别</button> </div> </template> import {ref,reactive,toRefs,toRef} from 'vue' // 数据 let person = reactive({name:'张三', age:18, gender:'男'}) // 通过toRefs将person对象中的n个属性批量取出，且依然保持响应式的能力 let {name,gender} = toRefs(person) // 通过toRef将person对象中的gender属性取出，且依然保持响应式的能力 let age = toRef(person,'age') // 方法 function changeName(){ name.value += '~' } function changeAge(){ age.value += 1 } function changeGender(){ gender.value = '女' } "
           },
-          {"id": 55,
+          {"article_id": 55,
 
             "title": "一种以随笔记录为主的著作体裁，多由分条的短篇汇集而成。",
              "article_content":"3.8. 【computed】 作用：根据已有数据计算出新数据（和Vue2中的computed作用一致）。 <template> <div class='person'> 姓：<input type='text' v-model='firstName'> <br> 名：<input type='text' v-model='lastName'> <br> 全名：<span>{{fullName}}</span> <br> <button @click='changeFullName'>全名改为：li-si</button> </div> </template> <script setup lang='ts' name='App'> import {ref,computed} from 'vue' let firstName = ref('zhang') let lastName = ref('san') // 计算属性——只读取，不修改 /* let fullName = computed(()=>{ return firstName.value + '-' + lastName.value }) */ // 计算属性——既读取又修改 let fullName = computed({ // 读取 get(){ return firstName.value + '-' + lastName.value }, // 修改 set(val){ console.log('有人修改了fullName',val) firstName.value = val.split('-')[0] lastName.value = val.split('-')[1] } }) function changeFullName(){ fullName.value = 'li-si' } </script>"
 
           },
-          {"id": 56,
+          {"article_id": 56,
 
             "title": "以前的我们,天真无邪,充满着稚气,用一根棒棒糖、或者冰棍就能哄的孩纸。",
 

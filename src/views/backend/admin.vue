@@ -4,19 +4,8 @@
 		<div class="main">
 			<BackendSideBar v-if="flag" :parentPageMenuData="admin_page_menu_list_data"></BackendSideBar>
 
-		
-			<div class="main-content with-side-bar">
-				<div class="tag-container">
-					<div class="content-container">
-						<div class="tag-content">
-							<div class="tag-item"> 用户列表</div>
-							<div class="tag-item"> 轮播图列表</div>
-							<div class="tag-item"> 文章列表</div>
-							<div class="tag-item"> 标签列表</div>
-							<div class="tag-item"> 图片列表</div>
-						</div>
-					</div>
-				</div>
+<div class="main-content with-side-bar" :style="{marginLeft: is_collapse_side_menu ? '82px !important' : '', paddingLeft: is_collapse_side_menu ? '10px !important' : ''}">
+		<BackendContentTag></BackendContentTag>
 
 				<router-view />
 				
@@ -36,6 +25,7 @@ import { reactive, ref,onMounted,provide,getCurrentInstance} from 'vue';
 import { useRouter } from "vue-router";
 import BackendNavBar from "@/components/backend/backend_nav_bar.vue";
 import BackendSideBar from "@/components/backend/backend_side_bar.vue";
+import BackendContentTag from "@/components/backend/backend_content_tag.vue";
 import Footer from "@/components/footer.vue";
 const { proxy } = getCurrentInstance();//组件实例 代理
 
@@ -58,10 +48,24 @@ function getAdminOrMenuListData(){
 		
 proxy.$Message('请求未找到', 'error');
 });
-
-
-
 }
+
+
+// 修改当前侧边栏菜单折叠或展开 开始
+
+const is_collapse_side_menu=ref(false);
+// 提供数据
+provide('isCollapseSideMenu',is_collapse_side_menu);
+
+ // 修改当前侧边栏菜单折叠或展开的方法
+ function updateIsCollapseSideMenuFunction(new_state) {
+	is_collapse_side_menu.value = new_state;
+ }
+
+ // 暴露方法(修改当前侧边栏菜单折叠或展开的方法)供子组件调用
+ provide('updateIsCollapseSideMenuFunction', updateIsCollapseSideMenuFunction);
+
+// 修改当前侧边栏菜单折叠或展开 结束
 
 
 onMounted(() => {
@@ -117,6 +121,8 @@ onMounted(() => {
 		padding-left: 282.66667px;
 		}
 	}
+
+
 	}
 }
 

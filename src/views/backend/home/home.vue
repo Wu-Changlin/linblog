@@ -53,7 +53,7 @@
             margin: 0;
             width: 100%;
             transition: width 0.5s;
-            margin-top: 150px;
+            margin-top: 10px
             /* background-color: var(--bg); */
             /* max-width: 1236px; */
             min-height: 100%;

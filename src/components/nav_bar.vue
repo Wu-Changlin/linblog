@@ -1,8 +1,7 @@
 <template>
 	<div class="header-container">
 		<header class="mask-paper">
-			<a v-if="show_right_search==false" aria-current="page" href="/" class="router-link-exact-active"
-				id="link-guide">
+			<a v-if="show_right_search==false" aria-current="page" href="/" class="router-link-exact-active">
 				<img crossorigin="anonymous" class="header-logo" style="pointer-events:none;" :src="parentPageLogData">
 			</a>
 
@@ -36,7 +35,7 @@
 						<!-- 下拉框列表 -->
 						<ul>
 							<li v-for="(item,index) in data.search_keyword_match_data" :key="item.index"
-								@click="goViewArticle(item.id)">
+								@click="goViewArticle(item.article_id)">
 								<div class="match-title" v-html="item.result_article_title_match_data"></div>
 								<div class="match-content" v-html="item.result_article_content_match_data"></div>
 
@@ -257,7 +256,7 @@
 				match_count++;  //成功匹配计数加一
 
 				match_data = {
-					id: article_list.value[i]['id'],
+					article_id: article_list.value[i]['article_id'],
 					result_article_title_match_data: result_article_title_match_data,
 					result_article_content_match_data: result_article_content_match_data
 				};

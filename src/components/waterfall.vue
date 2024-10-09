@@ -34,7 +34,7 @@
 
         <!-- 没有item.url元素 非资源页（item.url：外站链接）-->
         <div v-if="!item.url" class="lazy-img-card-mask"> 
-        <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px" @click="goViewArticle(item.id)"/>
+        <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px" @click="goViewArticle(item.article_id)"/>
         <div class="card-img-mask-stats">
           <div class="card-img-mask-stats-left">
             <span class="card-img-mask-stats-item">

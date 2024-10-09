@@ -1,23 +1,9 @@
 <template>
 
-    <div class="side-bar">
-
-        <!-- <ul class="channel-list">
-			<li  v-for="(menu,index) in parentPageMenuData">
-				<a class="link-wrapper">
-	  <svg-icon  class="svg_icon"  style="width: 1em; height: 1em; margin-right: 8px;"  :icon-class="menu.icon" />
-
-					<span class="channel"> {{menu.menu_title}}</span>
-				</a>
-			</li>
-        </ul> -->
-
-
-
-
+    <div class="side-bar"  :style="{ width: is_collapse_side_menu ? '72px !important' : '' }">
 		<el-aside width="collapse">
-			<!-- <el-menu :collapse="isCollapse"  class="el-menu-vertical"> -->
-				<el-menu class="el-menu-vertical">
+			<el-menu :collapse="is_collapse_side_menu"  :default-active="active_menu_name" class="el-menu-vertical">
+				<!-- <el-menu class="el-menu-vertical"> -->
 	
 				<!-- <div class="gvb_aside_header flex">
 					<div class="gvb_aside_logo">
@@ -29,14 +15,14 @@
 	
 				<template   v-for="menu in parentPageMenuData">
 					<!-- 判断有无子组件，有继续 -->
-					<el-sub-menu  v-if="menu.children.length > 0 " :index="menu.menu_id +''">
+					<el-sub-menu  v-if="menu.children.length > 0 " :index="menu.menu_name">
 						<template #title>
 							<svg-icon  class="svg_icon"  style="width: 1em; height: 1em; margin-right: 8px;"  :icon-class="menu.icon" />
 							<span>{{ menu.menu_title }}</span>
 						</template>
 						<!-- 遍历子组件 start-->
 						<template   v-for="(sub_menu,item) in menu.children">
-						<el-menu-item @click="goto(sub_menu.menu_path)"  :index="sub_menu.menu_id +''">
+						<el-menu-item @click="clickMenu(sub_menu.menu_path)"  :index="sub_menu.menu_name">
 							<svg-icon  class="svg_icon"  style="width: 1em; height: 1em; margin-right: 8px;"  :icon-class="sub_menu.icon" />
 							<span>{{ sub_menu.menu_title }}</span>
 						</el-menu-item>
@@ -45,7 +31,7 @@
 					</el-sub-menu>
 	
 					<!-- 无子组件，继续 -->
-					<el-menu-item  v-else   @click="goto(menu.menu_path)" :index="menu.menu_id +''">
+					<el-menu-item  v-else   @click="clickMenu(menu.menu_path)" :index="menu.menu_name">
 						<svg-icon  class="svg_icon"  style="width: 1em; height: 1em; margin-right: 8px;"  :icon-class="menu.icon" />
 						<span>{{ menu.menu_title }}</span>
 					</el-menu-item>
@@ -64,13 +50,16 @@
 </template>
 
 <script setup>
-import { reactive, ref,onMounted ,computed} from 'vue';
+import { reactive, ref,onMounted ,computed,inject} from 'vue';
 import { useRoute,useRouter } from "vue-router";
 const route=useRoute();
 const router=useRouter();
 // menu_name: string //菜单唯一标识，与路由名保持一致
 // menu_title: string //菜单显示名称
 
+
+
+const is_collapse_side_menu = inject('isCollapseSideMenu');
 
 const props = defineProps({
 	parentPageMenuData: {
@@ -84,17 +73,29 @@ const props = defineProps({
 
 
 //侧边栏菜单点击
-function goto(menu_path){
+function clickMenu(menu_path){
 //   console.log(menu_path);
-//路由跳转
-  router.push({
-    path:menu_path
-  })
+
+  // 使用正则表达式检查menu_path字符串是否包含add_edit
+  const str_add_edit= new RegExp("add_edit");
+
+  if (str_add_edit.exec(menu_path)) {
+
+	console.log('menu_path:',menu_path)
+  }else{
+	//路由跳转
+	router.push({
+		path:menu_path
+	})
+  }
+//           // 如果有language类名，那么移除原有后添加language-html类
+//            
 }
 
-//计算属性active_menu_name来获取路由的名称
-const active_menu_name = computed(() => route.menu_name);
 
+
+//计算属性active_menu_name来获取路由的名称高亮对应菜单项
+const active_menu_name= computed(() => route.name);
 
 </script>
 
@@ -102,7 +103,6 @@ const active_menu_name = computed(() => route.menu_name);
 
   	.side-bar {
 		height: calc(100vh - 72px);
-		overflow-y: scroll;
 		background-color: var(--bg);
 		display: flex;
 		flex-direction: column;
@@ -112,6 +112,7 @@ const active_menu_name = computed(() => route.menu_name);
 		position: fixed;
 		overflow: visible;
 		overflow-y: auto;
+	
 		/* visibility: visible; */
 		box-shadow: 0 3px 8px 6px rgba(7, 17, 27, 0.05);
 	

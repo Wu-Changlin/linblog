@@ -38,8 +38,7 @@
               <div class="item tooltip" v-for="(item, index) in data.infos" :key="index">
 
                 <div v-if="item != undefined">
-                  <li :data-level="item.level" :data-years="item.year" :data-date="item.date"
-                    :data-date-number="item.date_number" :data-selected="item.id===data.active_date_id?true:false"
+                  <li :data-level="item.level" 
                     :class="{'li-day':true,'no-hover-level':data.hoverLevel!=-1&&item.level!=data.hoverLevel ,'active':item.id===data.active_date_id,'no-active':data.is_selected==true&&item.id!=data.active_date_id}"
                     @click="handleClick(item)">
 
