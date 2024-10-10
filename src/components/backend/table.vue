@@ -128,8 +128,8 @@
 </template>
 
 <script setup>
-import { ref, reactive, getCurrentInstance } from "vue";
-const { proxy } = getCurrentInstance();
+import { ref, reactive } from "vue";
+
 
 const props = defineProps({
   tableHeader: Array, // 表头数据由父组件传递而来
@@ -198,7 +198,7 @@ function batchRemove() {
   //重置表格数据
 
   //消息通知 四种不同类型的提醒框 success、warning、info 和error
-  proxy.$message.success("成功删除");
+  $message.success("成功删除");
 }
 
 //删除用户
@@ -206,7 +206,7 @@ function deleteUser(index, scoped) {
   // console.log('deleteUser index= '+index)
   // console.log('deleteUser scoped.id= '+scoped.id)
   data.tableData.splice(index, 1); //删除原始数据数组中选中数据id索引
-  proxy.$message.success("成功删除");
+  $message.success("成功删除");
   // deleteProduct(scoped.id);
 }
 

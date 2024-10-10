@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-  import { ref, reactive, onMounted, provide, watch, onUnmounted,getCurrentInstance } from "vue";
+  import { ref, reactive, onMounted, provide, watch, onUnmounted,inject } from "vue";
   import { useRoute } from 'vue-router';
   import TagCount from '@/components/tag_count.vue';
   import Waterfall from '@/components/waterfall.vue';
@@ -53,16 +53,19 @@
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
   import NavBar from "@/components/nav_bar.vue";
   import FloatingBtnSets from "@/components/floating_btn_sets.vue";
-  const { proxy } = getCurrentInstance();//组件实例 代理
+  
 
 
 
+const $getData = inject('$getData');
+const $postDta = inject('$postDta');
+const $message = inject('$message');
 
   const search_page_article_count=ref(0);
 const search_page_article_list_data=ref();
 //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
 const getSearchKeywordMatchArticleListDataFunction= ()=>{
-	proxy.$get('/data/frontend/all_article.json', { responseType: 'json' })
+	$getData('/data/frontend/all_article.json', { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {
           search_page_article_count.value = response.article_count; // 博文数量
@@ -73,7 +76,7 @@ const getSearchKeywordMatchArticleListDataFunction= ()=>{
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 }
 
@@ -87,7 +90,7 @@ const search_page_menu_list_data=ref();
 //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 function getLayoutLogOrMenuListData(){
       // 如果你想使用axios来模拟请求，可以这样做
-      proxy.$get('/data/frontend/layout.json', { responseType: 'json' })
+      $getData('/data/frontend/layout.json', { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {
 			search_page_log.value = response.log_data; // log
@@ -102,7 +105,7 @@ function getLayoutLogOrMenuListData(){
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 
 }
@@ -123,7 +126,7 @@ function getLayoutLogOrMenuListData(){
   //获取搜索关键字匹配结果   总页数>=当前页数 ，模拟时总页数没有axios赋值，随机数赋值
   function getSearchKeywordMatchData() {
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
-    proxy.$post('/data/frontend/search_keyword.json', { search_keyword: search_page_search_keyword.value }, { responseType: 'json' })
+    $postDta('/data/frontend/search_keyword.json', { search_keyword: search_page_search_keyword.value }, { responseType: 'json' })
       .then(response => {
      
         search_keyword_count.value = response.search_keyword_count; // 博文数量
@@ -147,7 +150,7 @@ function getLayoutLogOrMenuListData(){
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
   }
 
@@ -191,7 +194,7 @@ function getLayoutLogOrMenuListData(){
   function getSearchKeywordMatchNextPageData() {
     
     current_page.value++;//当前页数加一
-    proxy.$post('/data/frontend/search_keyword.json', { search_keyword: search_page_search_keyword.value, page: search_keyword_match_data_page.value }, { responseType: 'json' })
+    $postDta('/data/frontend/search_keyword.json', { search_keyword: search_page_search_keyword.value, page: search_keyword_match_data_page.value }, { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {
 
@@ -218,7 +221,7 @@ function getLayoutLogOrMenuListData(){
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 
 

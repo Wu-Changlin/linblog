@@ -89,22 +89,7 @@
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
 
 
-
-  function getOffset(obj, direction) { 
-    let offsetL = 0; let offsetT = 0;
-     while (obj !== window.document.body && obj !== null) { 
-      offsetL += obj.offsetLeft; offsetT += obj.offsetTop; obj = obj.offsetParent; 
-    } 
-    if (direction === 'left') { 
-      return offsetL; 
-    } else {
-       return offsetT; 
-      } 
-  }
-
-
-
-  const { proxy } = getCurrentInstance();//组件实例 代理
+  
 
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
@@ -205,7 +190,8 @@
 
 
   //使用 provide inject 代替getCurrentInstance
-  const Messages = inject('$message');
+  const $messages = inject('$message');
+
   //每行最多标签数量
   function maxItemsPerLines() {
     // nextTick(() => {
@@ -214,10 +200,10 @@
     data.show_tag_count = 0;
     // data.more_tag_icon = false;//指向下折叠false
     //如果计算标签数量dom对象为空，直接返回
-    if(!hiddenTagContentRef.value){Messages('数据加载出错', 'error');return;}
+    if(!hiddenTagContentRef.value){$messages('数据加载出错', 'error');return;}
     // children返回的是元素节点，不包含文本节点，而childNodes则返回所有子节点，包括元素节点和文本节点。(childNodes.length children.length)
     //如果没有子节点，直接返回
-    if(!hiddenTagContentRef.value.children.length){Messages('空数据', 'error');return;}
+    if(!hiddenTagContentRef.value.children.length){$messages('空数据', 'error');return;}
 
     //标签容器宽度
     let tag_container_width = 0;

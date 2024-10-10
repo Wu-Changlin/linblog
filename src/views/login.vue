@@ -11,7 +11,8 @@
       
 
       <el-form-item prop="password">
-          <el-input v-model="login_form_data.password" type="password" placeholder="亲，请输入密码" show-password>
+          <el-input v-model="login_form_data.password" type="password" placeholder="亲，请输入密码" show-password
+          style="margin-top: 20px">
           </el-input>
       </el-form-item>
         
@@ -19,14 +20,15 @@
       <div v-if="opType == retrieve_password">
         
         <el-form-item prop="again_password">
-          <el-input v-model="login_form_data.again_password" type="password" placeholder="亲，请再次输入密码" show-password>
+          <el-input v-model="login_form_data.again_password" type="password" placeholder="亲，请再次输入密码" show-password
+          style="margin-top: 20px">
           </el-input>
       </el-form-item>
         
       </div>
 
     <el-form-item prop="check_code">
-          <el-input v-model="login_form_data.check_code" type="text" auto-complete="false"  placeholder="点击图片更换验证码" style="width: 250px;margin-right: 5px">
+          <el-input v-model="login_form_data.check_code" type="text" auto-complete="false"  placeholder="点击图片更换验证码" style="width: 250px;margin-top: 20px;margin-right: 5px">
           </el-input>
           <!-- <img height="10px" width="10px" src="http://blog.fengfengzhidao.com/uploads/file/235920pM89Q.jpg" /> -->
       </el-form-item>
@@ -60,9 +62,8 @@
 </template>
 
 <script setup>
-import { ref,reactive,getCurrentInstance, nextTick } from "vue";
+import { ref,reactive, nextTick,inject} from "vue";
 import { useRouter,useRoute} from "vue-router";
-const {proxy}	= getCurrentInstance();
 
 const login_form_data=reactive({
   email:"",
@@ -71,6 +72,9 @@ const login_form_data=reactive({
   again_password:"",
 })
 
+
+
+
 //提交数据进行登录
 function submitLogin(){
   //valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
@@ -78,14 +82,14 @@ function submitLogin(){
     if (valid) {
       console.log("登录:",login_form_data)
 
-      proxy.$Message('登录成功', 'success');
+      $message('登录成功', 'success');
       // 处理提交逻辑
     } else {
       // 有字段没有通过验证
      let obj=Object.keys(fields)[0];
      //使用formEl.scrollToField方法来焦点定位并滚动到特定的表单字段,这里跳到第一个字段
      formDataRef.value.scrollToField(obj);
-      proxy.$Message('输入数据有误，请检查', 'warning');
+      $message('输入数据有误，请检查', 'warning');
       return false;
     }
   });
@@ -96,14 +100,14 @@ function submitRetrievePassword(){
   formDataRef.value.validate((valid) => {
     if (valid) {
       console.log("重置密码:",login_form_data)
-      proxy.$Message('登录成功', 'success');
+      $message('登录成功', 'success');
       // 处理提交逻辑
     } else {
        // 有字段没有通过验证
      let obj=Object.keys(fields)[0];
      //使用formEl.scrollToField方法来焦点定位并滚动到特定的表单字段,这里跳到第一个字段
      formDataRef.value.scrollToField(obj);
-      proxy.$Message('输入数据有误，请检查', 'warning');
+      $message('输入数据有误，请检查', 'warning');
       return false;
     }
   });
@@ -148,22 +152,29 @@ const checkPassword=(rule,value,callback)=>{
  }
 
 
+   //使用 provide inject 代替getCurrentInstance
+   const $verify = inject('$verify');
+  // Messages('数据加载出错', 'error'); 
+
+
 //校验
 const rules = {
   email: [
     { required: true, message: "请输入邮箱" },
     { maxlength: 150, message: "邮箱长度超限" },
-    { validator: proxy.Verify.email, message: "邮箱格式有误" },
+    // { validator: proxy.$verify.email, message: "邮箱格式有误" },
+    { validator: $verify.email, message: "邮箱格式有误" },
+
   ],
   password:[
     { required: true, message: "请输入密码" },
-    { validator: proxy.Verify.password, message: "格式包含字母、数字、特殊字符，9-18位" },
+    { validator: $verify.password, message: "密码至少包含大写字母、小写字母、数字和特殊字符中的三种，并且长度至少为8位‌15。" },
 
   ],
   again_password:[
     { required: true, message: "请再次输入密码" },
     { validator: checkPassword, message: "两次输入密码不一致" },
-    { validator: proxy.Verify.password, message: "格式包含字母、数字、特殊字符，9-18位" },
+    { validator: $verify.password, message: "密码至少包含大写字母、小写字母、数字和特殊字符中的三种，并且长度至少为8位‌15。" },
 
   ],
   check_code:[

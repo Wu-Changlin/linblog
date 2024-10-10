@@ -22,22 +22,30 @@
 
 
 <script setup>
-import { reactive, ref,onMounted,provide,getCurrentInstance} from 'vue';
+import { reactive, ref,onMounted,provide ,inject} from 'vue';
 import { useRouter } from "vue-router";
 import NavBar from "@/components/nav_bar.vue";
 import SideBar from "@/components/side_bar.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import Footer from "@/components/footer.vue";
-const { proxy } = getCurrentInstance();//组件实例 代理
 
 
+
+//使用 provide inject 代替getCurrentInstance
+const $message = inject('$message');
+
+const $putData = inject('$putData');
+const $deleteData = inject('$deleteData');
+const $getData = inject('$getData');
+const $postDta = inject('$postDta');
+const $postFormData = inject('$postFormData');
 
 
 const layout_page_article_count=ref(0);
 const layout_page_article_list_data=ref();
 // //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
 const getSearchKeywordMatchArticleListDataFunction= ()=>{
-	proxy.$get('/data/frontend/all_article.json')
+	$getData('/data/frontend/all_article.json')
       .then(response => {
         // setTimeout(() => {
 			layout_page_article_count.value = response.article_count; // 博文数量
@@ -48,7 +56,7 @@ const getSearchKeywordMatchArticleListDataFunction= ()=>{
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 }
 // 使用 provide 向下传递方法
@@ -91,7 +99,7 @@ const layout_page_menu_list_data=ref();
 //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 function getLayoutLogOrMenuListData(){
 
-	proxy.$get("/data/frontend/layout.json")
+	$getData("/data/frontend/layout.json")
 	.then(response => {
         layout_page_log.value = response.log_data; // log
 		layout_page_menu_list_data.value = response.menu_data; // 菜单数据
@@ -101,7 +109,7 @@ function getLayoutLogOrMenuListData(){
     })
 	.catch(error => {
 
-    	proxy.$Message('请求未找到', 'error');
+    	$message('请求未找到', 'error');
   	});
 
 

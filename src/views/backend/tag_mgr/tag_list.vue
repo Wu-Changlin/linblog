@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { ref,reactive,getCurrentInstance } from "vue";
+import { ref,reactive } from "vue";
 import Table from "@/components/backend/table.vue";
 const {proxy}	= getCurrentInstance();
 

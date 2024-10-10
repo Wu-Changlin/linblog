@@ -22,13 +22,18 @@
 
 
 <script setup>
-  import { reactive, ref, onMounted, inject, getCurrentInstance } from 'vue';
+  import { reactive, ref, onMounted, inject } from 'vue';
   import { useRoute, useRouter } from "vue-router";
   import ContentTag from '@/components/content_tag.vue';
   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
-  const { proxy } = getCurrentInstance();//组件实例 代理
+
+  const $getData = inject('$getData');
+const $postDta = inject('$postDta');
+const $message = inject('$message');
+
+  
   const route = useRoute();
   const router = useRouter();
 
@@ -62,7 +67,7 @@
   function getFrontendPageData() {
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
     is_loading.value=true;
-    proxy.$get('/data/frontend/frontend.json')
+    $getData('/data/frontend/frontend.json')
       .then(response => {
         // setTimeout(() => {
         frontend_tag_data.value = response.tag_data;
@@ -101,7 +106,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
   }
 
@@ -111,7 +116,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
     // flag.value=false; //初始化导致子页面选中的标签id数据出现标签栏闪烁（当前标签栏处于显示状态，出现先隐藏后显示闪烁）
     is_loading.value = true;
 
-    proxy.$post('/data/frontend/frontend.json', { tag_id: active_tag_id, tag_name: active_tag_name,page:1  })
+    $postDta('/data/frontend/frontend.json', { tag_id: active_tag_id, tag_name: active_tag_name,page:1  })
       .then(response => {
         // setTimeout(() => {
         frontend_tag_data.value = response.tag_data;
@@ -153,7 +158,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 
 
@@ -203,7 +208,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
 
     console.log('进入getActiveTagNextPageData,current_page.value:', current_page.value)
     current_page.value++;//当前页数加一
-    proxy.$post('/data/frontend/active_tag_next_page_data.json', { tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
+    $postDta('/data/frontend/active_tag_next_page_data.json', { tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
       .then(response => {
         // setTimeout(() => {
         is_next_page_loading.value = false;//取消加载中动画
@@ -239,7 +244,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 
 
@@ -254,7 +259,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
     // import('./mock-data.json').then(res => {
     //   items.value = res.data;
     // }).catch(error => {
-    //   proxy.$Message('请求未找到', 'error');
+    //   $message('请求未找到', 'error');
     // });
     // 如果路由没有查询参数tag_id，那么执行getFrontendPageData。
     if (!route.query.tag_id) {

@@ -26,7 +26,7 @@
 
 
 <script setup>
-import { reactive,ref,onMounted,getCurrentInstance,inject } from 'vue';
+import { reactive,ref,onMounted,inject } from 'vue';
 import { useRoute,useRouter } from "vue-router";
 
   import ContentTag from '@/components/content_tag.vue';
@@ -34,7 +34,9 @@ import { useRoute,useRouter } from "vue-router";
   import Waterfall from '@/components/waterfall.vue';
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
 
-  const { proxy } = getCurrentInstance();//组件实例 代理
+  const $getData = inject('$getData');
+const $postDta = inject('$postDta');
+const $message = inject('$message');
   
   
   const router = useRouter();
@@ -73,7 +75,7 @@ import { useRoute,useRouter } from "vue-router";
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
     is_loading.value=true;
   // 如果你想使用axios来模拟请求，可以这样做
-  proxy.$get('/data/frontend/backend.json')
+  $getData('/data/frontend/backend.json')
         .then(response => {
         
             backend_tag_data.value = response.tag_data; 
@@ -115,7 +117,7 @@ if (!backend_article_list_data.value) {
         })
         .catch(error => {
 
-          proxy.$Message('请求未找到', 'error');
+          $message('请求未找到', 'error');
         });
   }
   is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
@@ -128,7 +130,7 @@ if (!backend_article_list_data.value) {
        is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
        is_loading.value=true;
 
-proxy.$post('/data/frontend/backend.json',{tag_id:active_tag_id,tag_name:active_tag_name,page: 1})
+$postDta('/data/frontend/backend.json',{tag_id:active_tag_id,tag_name:active_tag_name,page: 1})
  .then(response => {
 
     backend_tag_data.value = response.tag_data; 
@@ -167,7 +169,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
  })
  .catch(error => {
 
-   proxy.$Message('请求未找到', 'error');
+   $message('请求未找到', 'error');
  });
 
   }
@@ -215,7 +217,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
 
     console.log('进入getActiveTagNextPageData,current_page.value:', current_page.value)
     current_page.value++;//当前页数加一
-    proxy.$post('/data/frontend/active_tag_next_page_data.json', { tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
+    $postDta('/data/frontend/active_tag_next_page_data.json', { tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
       .then(response => {
         // setTimeout(() => {
         is_next_page_loading.value = false;//取消加载中动画
@@ -251,7 +253,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 
 

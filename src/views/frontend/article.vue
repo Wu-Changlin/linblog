@@ -136,7 +136,7 @@
 </template>
 <script setup>
   // import Footer from "@/components/footer.vue";
-  import { ref, reactive, onMounted, onUnmounted, nextTick, watch, onUpdated, provide, getCurrentInstance } from "vue";
+  import { ref, reactive, onMounted, onUnmounted, nextTick, watch, onUpdated, provide,inject} from "vue";
   import { useRoute, useRouter } from 'vue-router';
   import Skeleton from '@/components/skeleton.vue';
   import Prism from "prismjs";
@@ -144,10 +144,16 @@
   import SideBar from "@/components/side_bar.vue";
   import FloatingBtnSets from "@/components/floating_btn_sets.vue";
   import ArticleCatalog from "@/components/article_catalog.vue";
-  import '../../../public/github-markdown.css';//使用github-markdown样式渲染HTML内容
+  import '/public/github-markdown.css';//使用github-markdown样式渲染HTML内容
+ 
+ 
+  const $getData = inject('$getData');
+const $postDta = inject('$postDta');
+const $message = inject('$message');
+
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();
-  const { proxy } = getCurrentInstance();//组件实例 代理
+  
 
   const is_loading = ref(true);
   const current_route_query = ref(null);
@@ -190,7 +196,7 @@
       router.push({ path: '/404', });
     }
 
-    proxy.$get('/data/frontend/article_detail.json')
+    $getData('/data/frontend/article_detail.json')
       .then(response => {
         data.menu_title = response.menu_title;
         data.tag_ids_name = response.tag_ids_name;
@@ -224,7 +230,7 @@
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 
 
@@ -242,7 +248,7 @@
   const article_page_article_list_data = ref();
   //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
   const getSearchKeywordMatchArticleListDataFunction = () => {
-    proxy.$get('/data/frontend/all_article.json')
+    $getData('/data/frontend/all_article.json')
       .then(response => {
         // setTimeout(() => {
         article_page_article_count.value = response.article_count; // 博文数量
@@ -253,7 +259,7 @@
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
   }
 
@@ -269,7 +275,7 @@
   //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
   function getLayoutLogOrMenuListData() {
     // 如果你想使用axios来模拟请求，可以这样做
-    proxy.$get('/data/frontend/layout.json')
+    $getData('/data/frontend/layout.json')
       .then(response => {
         // setTimeout(() => {
         article_page_log.value = response.log_data; // log
@@ -284,7 +290,7 @@
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 
   }

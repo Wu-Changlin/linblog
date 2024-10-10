@@ -121,7 +121,7 @@
   </template>
   
   <script setup>
-  import { ref, reactive,onMounted, provide,inject,watch,onUnmounted,getCurrentInstance} from "vue";
+  import { ref, reactive,onMounted, provide,inject,watch,onUnmounted} from "vue";
   import WebsiteContentCount from '@/components/website_content_count.vue';  
   import WebsiteRunTime from '@/components/website_run_time.vue';
   import ContributionCalendar from '@/components/contribution_calendar.vue';
@@ -130,7 +130,11 @@
   import YearDropdown from '@/components/year_dropdown.vue';
   import Skeleton from '@/components/skeleton.vue';
   import {useRoute, useRouter } from "vue-router"; 
-  const { proxy } = getCurrentInstance();//组件实例 代理
+  
+  const $getData = inject('$getData');
+const $postDta = inject('$postDta');
+const $message = inject('$message');
+
   const router = useRouter();
   const route = useRoute();
 
@@ -180,11 +184,11 @@
     // import('./mock-data.json').then(res => {
     //   items.value = res;
     // }).catch(error => {
-    //   proxy.$Message('请求未找到', 'error');
+    //   $message('请求未找到', 'error');
     // });
     
     // 如果你想使用axios来模拟请求，可以这样做
-    proxy.$get('/data/frontend/archives.json')
+    $getData('/data/frontend/archives.json')
       .then(response => {
 
         website_content_count_data.value=response.website_content_count_data;
@@ -214,7 +218,7 @@
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 
 
@@ -234,7 +238,7 @@
     
     year_dropdown_page_update_year.value=active_year;
    
-    proxy.$post('/data/frontend/contribution_year_'+active_year+'.json')
+    $postDta('/data/frontend/contribution_year_'+active_year+'.json')
       .then(response => {
     
        current_year_contribution_data.value=response.current_year_contribution_data;
@@ -246,7 +250,7 @@
         // }, 3000); // 假设加载时间是3秒
       })
       .catch(error => {
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 
   }
@@ -269,7 +273,7 @@
       
       // console.log('contribution_day_number_data.value:',contribution_day_number_data.value);
       
-      proxy.$post('/data/frontend/click_contribution_day.json')
+      $postDta('/data/frontend/click_contribution_day.json')
       .then(response => {
        
         last_month_article_list_data.value=response.contribution_article_list_data;
@@ -283,7 +287,7 @@
         // }, 3000); // 假设加载时间是3秒
       })
       .catch(error => {
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 
     }else{

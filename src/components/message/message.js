@@ -36,7 +36,7 @@ export default {
 }
 
 // 页面使用
-// proxy.$Message('成功', 'success');
-// proxy.$Message('消息', 'message');
-// proxy.$Message('警告', 'warning');
-// proxy.$Message('错误', 'error');
+// $message('成功', 'success');
+// $message('消息', 'message');
+// $message('警告', 'warning');
+// $message('错误', 'error');

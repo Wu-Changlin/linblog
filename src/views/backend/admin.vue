@@ -21,13 +21,13 @@
 
 
 <script setup>
-import { reactive, ref,onMounted,provide,getCurrentInstance} from 'vue';
+import { reactive, ref,onMounted,provide} from 'vue';
 import { useRouter } from "vue-router";
 import BackendNavBar from "@/components/backend/backend_nav_bar.vue";
 import BackendSideBar from "@/components/backend/backend_side_bar.vue";
 import BackendContentTag from "@/components/backend/backend_content_tag.vue";
 import Footer from "@/components/footer.vue";
-const { proxy } = getCurrentInstance();//组件实例 代理
+
 
 // 修改当前选中菜单id 结束
 const flag =ref(false)
@@ -36,7 +36,7 @@ const admin_page_menu_list_data=ref();
 //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 function getAdminOrMenuListData(){
 
-	proxy.$get("/data/backend/admin.json")
+	$getData("/data/backend/admin.json")
 	.then(response => {
         admin_page_log.value = response.log_data; // log
 		admin_page_menu_list_data.value = response.menu_data; // 菜单数据
@@ -46,7 +46,7 @@ function getAdminOrMenuListData(){
     })
 	.catch(error => {
 		
-proxy.$Message('请求未找到', 'error');
+$message('请求未找到', 'error');
 });
 }
 

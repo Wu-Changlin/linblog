@@ -23,7 +23,7 @@
 
     const layoutPageOnReachBottomH = ref(null);
 
-    const { proxy } = getCurrentInstance();//组件实例 代理
+    
 
     const route = useRoute();
     const router = useRouter();

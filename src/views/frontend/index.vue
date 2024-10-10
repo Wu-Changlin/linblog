@@ -26,12 +26,18 @@
   import Footer from '@/components/footer.vue';
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
 
-  const layoutPageOnReachBottomH = ref(null);
 
-  const { proxy } = getCurrentInstance();//组件实例 代理
+  const $getData = inject('$getData');
+const $postDta = inject('$postDta');
+const $message = inject('$message');
+
+
+  
 
   const route = useRoute();
   const router = useRouter();
+
+
 
 
 
@@ -66,7 +72,7 @@
   //获取首页栏页数据（内容标签栏数据、博文列表数据（瀑布流组件））  
   function getIndexPageData() {
 
-    proxy.$get('/data/frontend/index.json')
+    $getData('/data/frontend/index.json')
       .then(response => {
         index_tag_data.value = response.tag_data; // 标签数据
         index_article_list_data.value = response.article_list_data; // // 博文列表数据
@@ -82,8 +88,8 @@
 
       })
       .catch(error => {
-        proxy.$Message('请求未找到', 'error');
-        // proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
+        // $message('请求未找到', 'error');
       });
   }
 
@@ -93,7 +99,7 @@
   function getChildClickTag(active_tag_id, active_tag_name) {
 
     is_loading.value = true;
-    proxy.$post('/data/frontend/index.json', { tag_id: active_tag_id, tag_name: active_tag_name, page: 1 })
+    $postDta('/data/frontend/index.json', { tag_id: active_tag_id, tag_name: active_tag_name, page: 1 })
       .then(response => {
         index_tag_data.value = response.tag_data; // 标签数据
         index_article_list_data.value = response.article_list_data; // // 博文列表
@@ -118,8 +124,8 @@
 
       })
       .catch(error => {
-        proxy.$Message('请求未找到', 'error');
-        // proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
+        // $message('请求未找到', 'error');
       });
 
 

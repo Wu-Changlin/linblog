@@ -137,9 +137,15 @@ import SideBar from "@/components/side_bar.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import ArticleCatalog from "@/components/article_catalog.vue";
 // import Footer from "@/components/footer.vue";
-import {ref,reactive,onMounted,onUnmounted} from "vue";
+import {ref,reactive,onMounted,onUnmounted,inject} from "vue";
 import { useRoute, useRouter } from 'vue-router';
 import Skeleton from '@/components/skeleton.vue';
+
+
+const $getData = inject('$getData');
+const $postDta = inject('$postDta');
+const $message = inject('$message');
+
 const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
 const router=useRouter();
 
@@ -173,7 +179,7 @@ onMounted(()=>{
         router.push({path:'/404', });
      }
     
-     proxy.$get('/data/frontend/article_detail.json')
+     $getData('/data/frontend/article_detail.json')
       .then(response => {
             data.menu_title=response.menu_title;
             data.tag_ids_name=response.tag_ids_name;    
@@ -199,7 +205,7 @@ onMounted(()=>{
       })
       .catch(error => {
 
-        proxy.$Message('请求未找到', 'error');
+        $message('请求未找到', 'error');
       });
 
 	mediaQuery();//初始化（防止刷新失效）
