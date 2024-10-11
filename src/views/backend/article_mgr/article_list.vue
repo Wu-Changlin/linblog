@@ -37,7 +37,7 @@
 <script setup>
 import { ref,reactive } from "vue";
 import Table from "@/components/backend/table.vue";
-const {proxy}	= getCurrentInstance();
+  const $verify = inject('$verify');
 
 
 function addArticle(){

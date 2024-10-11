@@ -13,13 +13,6 @@
           "menu_name": "user_list",
           "menu_path": "/admin/user_list",
           "icon": "user_list"
-        },
-        {
-          "menu_id": 22,
-          "menu_title": "添加/编辑用户",
-          "menu_name": "user_add_edit",
-          "menu_path": "/admin/user_add_edit",
-          "icon": "user"
         }
       ]
     },
@@ -35,13 +28,6 @@
           "menu_name": "article_list",
           "menu_path": "/admin/article_list",
           "icon": "article_list"
-        },
-        {
-          "menu_id": 23,
-          "menu_title": "添加/编辑",
-          "menu_name": "article_add_edit",
-          "menu_path": "/admin/article_add_edit",
-          "icon": "article"
         }
       ]
     },
@@ -57,13 +43,6 @@
           "menu_name": "menu_list",
           "menu_path": "/admin/menu_list",
           "icon": "menu_list"
-        },
-        {
-          "menu_id": 24,
-          "menu_title": "添加/编辑菜单",
-          "menu_name": "menu_add_edit",
-          "menu_path": "/admin/menu_add_edit",
-          "icon": "menu"
         }
       ]
     },
@@ -79,13 +58,6 @@
           "menu_name": "tag_list",
           "menu_path": "/admin/tag_list",
           "icon": "tag_list"
-        },
-        {
-          "menu_id": 25,
-          "menu_title": "添加/编辑标签",
-          "menu_name": "tag_add_edit",
-          "menu_path": "/admin/tag_add_edit",
-          "icon": "tag"
         }
       ]
     },
@@ -101,13 +73,6 @@
           "menu_name": "image_list",
           "menu_path": "/admin/image_list",
           "icon": "image_list"
-        },
-        {
-          "menu_id": 26,
-          "menu_title": "添加/编辑图片",
-          "menu_name": "image_add_edit",
-          "menu_path": "/admin/image_add_edit",
-          "icon": "image"
         }
       ]
     },
@@ -123,13 +88,6 @@
           "menu_name": "auth_list",
           "menu_path": "/admin/auth_list",
           "icon": "auth_list"
-        },
-        {
-          "menu_id": 27,
-          "menu_title": "添加/编辑权限",
-          "menu_name": "auth_add_edit",
-          "menu_path": "/admin/auth_add_edit",
-          "icon": "auth"
         }
       ]
     },
@@ -145,13 +103,6 @@
           "menu_name": "role_list",
           "menu_path": "/admin/role_list",
           "icon": "role_list"
-        },
-        {
-          "menu_id": 28,
-          "menu_title": "添加/编辑角色",
-          "menu_name": "role_add_edit",
-          "menu_path": "/admin/role_add_edit",
-          "icon": "role"
         }
       ]
     },
@@ -167,13 +118,6 @@
           "menu_name": "configuration_list",
           "menu_path": "/admin/configuration_list",
           "icon": "configuration_list"
-        },
-        {
-          "menu_id": 29,
-          "menu_title": "添加/编辑配置",
-          "menu_name": "configuration_add_edit",
-          "menu_path": "/admin/configuration_add_edit",
-          "icon": "configuration"
         }
       ]
     }

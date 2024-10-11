@@ -92,7 +92,7 @@
 	const searchInputRef = ref(null);//搜索框对象
 	const stopWatchRouteQueryKeyword = ref(null);//监听路由查询参数keyword
 
-
+	const $message = inject('$message');
 
 
 
@@ -333,14 +333,8 @@
 	}
 
 
-	//去看博文
-	function goViewArticle(article_id) {
-		//直接跳转
-		// const handleChange = () => {
-		//   router.push("/testDemo");
-		// };
-		//带参数跳转
-
+	//跳转到博文页面
+	function gotoViewArticle(article_id) {
 		if (article_id) {
 
 			// router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
@@ -350,7 +344,7 @@
 
 
 		} else {
-			console.log('非法请求')
+			$message('非法请求','error')
 		}
 
 	}

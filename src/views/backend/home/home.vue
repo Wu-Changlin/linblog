@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-    import { reactive, ref, onMounted, onUpdated, inject, getCurrentInstance, watch, nextTick } from 'vue';
+    import { reactive, ref, onMounted, onUpdated, inject, watch, nextTick } from 'vue';
     import { useRoute, useRouter } from "vue-router";
     import ContentTag from '@/components/content_tag.vue';
     //   import ContentCarouselImg from '@/components/content_carousel_img.vue';
@@ -21,9 +21,6 @@
     import Footer from '@/components/footer.vue';
     import { debounce, throttle } from '@/hooks/debounce_throttle.js';
 
-    const layoutPageOnReachBottomH = ref(null);
-
-    
 
     const route = useRoute();
     const router = useRouter();
@@ -53,7 +50,7 @@
             margin: 0;
             width: 100%;
             transition: width 0.5s;
-            margin-top: 10px
+            margin-top: 10px;
             /* background-color: var(--bg); */
             /* max-width: 1236px; */
             min-height: 100%;

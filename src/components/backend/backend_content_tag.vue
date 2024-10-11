@@ -2,14 +2,19 @@
 
   <div style="padding-top: 72px;"></div>
    <div class="tags">
- <el-tag
- v-for="(tag,index) in tags"
- :key="tag.menu_name"
- :closable="tag.menu_name!=='admin'"
- :effect="route.name===tag.menu_name?'dark':'plain'"
- >
-{{tag.menu_title }}
- </el-tag>
+   
+    <div style="margin-left: 10px;">
+      <el-tag
+      v-for="(tag,index) in tags"
+      :key="tag.menu_name"
+      :closable="tag.menu_name!=='admin'"
+      :effect="route.name===tag.menu_name?'dark':'plain'"
+      >
+     {{tag.menu_title }}
+      </el-tag>
+    </div>
+     
+ 
    </div>
 
 </template>
@@ -62,8 +67,15 @@
 
 <style scoped>
 .tags{
-    margin:20px 0 0 20px;
-    height: 72px;
+  width: 100%;
+  height: 70px;
+  z-index: 10;
+  display: flex;
+  position: fixed;
+  align-items: center;
+    margin:0px 12px;
+    background-color: var(--bg);
+    /* height: 72px; */
 }
 .el-tag{
     margin-right:10px;

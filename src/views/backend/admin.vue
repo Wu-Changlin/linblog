@@ -1,4 +1,6 @@
 <template>
+
+
 	<div class="container">
 		<BackendNavBar  :parentPageLogData="admin_page_log" ></BackendNavBar>
 		<div class="main">
@@ -21,7 +23,7 @@
 
 
 <script setup>
-import { reactive, ref,onMounted,provide} from 'vue';
+import { reactive, ref,onMounted,provide,inject} from 'vue';
 import { useRouter } from "vue-router";
 import BackendNavBar from "@/components/backend/backend_nav_bar.vue";
 import BackendSideBar from "@/components/backend/backend_side_bar.vue";
@@ -29,6 +31,9 @@ import BackendContentTag from "@/components/backend/backend_content_tag.vue";
 import Footer from "@/components/footer.vue";
 
 
+const $getData = inject('$getData');
+const $postDta = inject('$postDta');
+const $message = inject('$message');
 // 修改当前选中菜单id 结束
 const flag =ref(false)
 const admin_page_log=ref();
@@ -107,6 +112,7 @@ onMounted(() => {
 	.main-content {
 		@media screen and (min-width: 960px) and (max-width: 1191px) {
 		padding-left: calc(-6px + 25vw);
+        
 		}
 
 		@media screen and (min-width: 1192px) and (max-width: 1423px) {

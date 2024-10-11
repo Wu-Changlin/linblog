@@ -8,95 +8,21 @@
 
 
 
-<div>
+
   <!-- <el-button type="primary"  @click="addUserDialog">添加用户</el-button>
   <el-button type="primary"  @click="editUserDialog">编辑用户</el-button> -->
 
 
 
-  <el-dialog
-      v-model="data.showAddUserDialog"
-      :rules="rules"
-      :showCancel="false"
-      @close="closeAddUserDialog()"
-      :title="data.dialog_title"
-      width="30%" 
-    >  
-  
-        <el-form
-          ref="ruleFormRef"
-          :model="ruleForm"
-          :rules="rules"
-          label-width="120px"
-          class="demo-ruleForm"
-          label-position="left"
-  
-        >
-          <el-form-item label="用户名称" prop="name">
-            <el-input v-model="ruleForm.name"  placeholder="亲，请输入用户名称"></el-input>
-          </el-form-item>
-  
-  
-          <el-form-item label="邮箱" prop="email">
-            <el-input v-model="ruleForm.email" placeholder="亲，请输入邮箱"></el-input>
-          </el-form-item>
-  
-          <el-form-item v-model="ruleForm.cover" label="头像" prop="cover">
-            
-            <el-button class="cover_card" @click="dialogConfig.is_show=true">
-  
-              <img     v-if="selected.cover_path" :src="selected.cover_path" alt="" class="cover_img" >
-						<svg-icon v-else style="width: 20;height: 20;" class="reds-icon" icon-class="search" />
-
-  
-            </el-button>
-                                  
-            <ArticleCoverList :key="dialogConfig.is_show" :is_show="dialogConfig.is_show"  @close="dialogConfig.is_show = false" @success="SelectCover"></ArticleCoverList>
-  
-          </el-form-item>
-  
-  
-          <el-form-item label="密码" prop="password">
-            <el-input v-model="ruleForm.password" type="password" placeholder="亲，请输入密码" show-password>
-            </el-input>
-          </el-form-item>
-              
-  
-          <el-form-item label="再次密码" prop="again_password">
-            <el-input v-model="ruleForm.again_password" type="password" placeholder="亲，请再次输入密码" show-password>
-            </el-input>
-          </el-form-item>
-              
-          
-          <el-form-item label="角色" prop="resource">
-            <el-radio-group v-model="ruleForm.resource">
-              <el-radio label="1">管理员</el-radio>
-              <el-radio label="2">普通用户</el-radio>
-            </el-radio-group>
-          </el-form-item>
-  
-        </el-form>
-  
-  
-        <template #footer>
-          <div>
-            <el-button @click="closeAddUserDialog()">取消</el-button>、
-            <el-button type="primary" @click="submitForm()">确认</el-button>
-          </div>
-        </template>
-  
-  
-  
-  </el-dialog>
   
 
-  <Table :tableHeader="tableHeader"> 
+  <Table  v-if="flag" :parentPageTableData="user_list_data" :parentPagePaginationData="pagination_data" :tableHeader="tableHeader"  @batchRemoveCurrentActiveIds="batchRemoveChildCurrentActiveIds"   @deleteCurrentActiveId="deleteChildCurrentActiveId"> 
 
     <template #add>
-      <el-button type="primary"  @click="addUserDialog()">添加用户</el-button>
+      <el-button type="primary"  @click="clickGotoAddOrEditPage(0)">添加用户</el-button>
     </template>
-    <template #edit>
-      <el-button type="primary"  @click="editUserDialog()">编辑</el-button>
+    <template #edit="active_data">
+      <el-button size="small" type="primary"  @click="clickGotoAddOrEditPage(active_data)">编辑</el-button>
     </template>
    
 
@@ -111,7 +37,7 @@
 
     
   </Table>
-</div>
+
 
 </div>
 
@@ -120,12 +46,54 @@
 </template>
 
 <script setup>
-import { ref,reactive } from "vue";
+import { ref,reactive,inject,onMounted } from "vue";
+import {useRoute,useRouter}  from "vue-router";
 import ArticleCoverList from '@/components/backend/article_cover_list.vue'
 import Table from "@/components/backend/table.vue";
-const {proxy}	= getCurrentInstance();
+
+const route=useRoute();
+const router=useRouter();
+
+  //使用 provide inject 代替getCurrentInstance
+  const $verify = inject('$verify');
+  const $getData = inject('$getData');
+const $postDta = inject('$postDta');
+const $message = inject('$message');
+
+/*操作表格数据 开始*/ 
+
+function batchRemoveChildCurrentActiveIds(active_ids){
+  console.log('batchRemoveChildCurrentActiveIds(active_ids):',active_ids)
+
+}
+
+function deleteChildCurrentActiveId(active_id){
+  console.log('deleteChildCurrentActiveId(active_id):',active_id)
+
+}
 
 
+//点击跳转到添加/编辑页面(同一页面)
+function clickGotoAddOrEditPage(current_active_data){
+
+  
+//获取页面名称前缀：使用slice方法，是从开始到"_"的位置之。
+let prefix_name  = route.name.slice(0, route.name.indexOf('_'));
+
+let router_name=prefix_name+'_add_edit';
+//如果存在当前选中id，那么携参跳转到添加/编辑页面。
+if(current_active_data){
+let  article_id =current_active_data.active_data;
+  let routeUrl = router.resolve({ name: router_name, query: { id: article_id }, key: new Date().getTime() });
+  //  console.log('routeUrl',routeUrl);
+  window.open(routeUrl.href, '_blank');//打开新窗口
+}else{//跳转到添加页面。
+router.push({ name: router_name,key: new Date().getTime() });
+
+}
+
+}
+/*操作表格数据 结束*/ 
 
 //表头  //scopedSlot 自定义插槽的名字
 const tableHeader= [
@@ -141,6 +109,10 @@ const tableHeader= [
         {prop: "delete_time",label: "删除时间",key:"delete_time"},
         
 ];
+
+
+
+
 
 //封面 start
 
@@ -209,7 +181,7 @@ function closeAddUserDialog(){
 
 //表单确认操作
 function submitForm(){
-  
+
   data.showAddUserDialog = false; //关闭弹窗
 
 }
@@ -247,17 +219,17 @@ const rules = reactive({
   email: [
     { required: true, message: "请输入邮箱" },
     { maxlength: 150, message: "邮箱长度超限" },
-    { validator: proxy.Verify.email, message: "邮箱格式有误" },
+    { validator: $verify.email, message: "邮箱格式有误" },
   ],
   password:[
     { required: true, message: "请输入密码" },
-    { validator: proxy.Verify.password, message: "格式包含字母、数字、特殊字符，9-18位" },
+    { validator: $verify.password, message: "格式包含字母、数字、特殊字符，9-18位" },
 
   ],
   again_password:[
     { required: true, message: "请再次输入密码" },
     { validator: checkPassword, message: "两次输入密码不一致" },
-    { validator: proxy.Verify.password, message: "格式包含字母、数字、特殊字符，9-18位" },
+    { validator: $verify.password, message: "格式包含字母、数字、特殊字符，9-18位" },
   ],
   resource:[
   { required: true, message: "请选择角色" },
@@ -265,8 +237,57 @@ const rules = reactive({
   
 })
   
-//添加/编辑用弹窗 end
+
+
+
+
+  const user_list_data = ref();
+  const total_pages = ref(0); //总页数
+  const current_page = ref(1);//当前页数
+  const flag = ref(false);
+
+const pagination_data = reactive({
+  current_page: 1, //当前页数
+  current_page_limit: 10, // 每页显示个数选择器的选项设置
+  total_count: 0, //总个数
+})
+
+
+  // "total_pages":2,
+//   "total_count":12,
+//   "current_page":1,
+//   "current_page_limit":10,
+  //获取数据（内容标签栏数据、博文列表数据（瀑布流组件））  
+  function getUserListPageData() {
+
+$getData('/data/backend/user_list.json')
+  .then(response => {
+    user_list_data.value=response.user_list_data;
+    pagination_data.current_page=response.current_page;
+    pagination_data.current_page_limit=response.current_page_limit;
+    pagination_data.total_count=response.total_count;
   
+    console.log('user_list_data',user_list_data.value)
+
+    
+
+    flag.value = true;
+    // is_loading.value = false;
+
+  })
+  .catch(error => {
+    $message('请求未找到', 'error');
+    // $message('请求未找到', 'error');
+  });
+}
+
+
+
+onMounted(() => {
+
+  getUserListPageData();
+
+});
 
 
 

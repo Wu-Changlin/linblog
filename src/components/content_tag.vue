@@ -190,7 +190,7 @@
 
 
   //使用 provide inject 代替getCurrentInstance
-  const $messages = inject('$message');
+  const $message = inject('$message');
 
   //每行最多标签数量
   function maxItemsPerLines() {
@@ -200,10 +200,10 @@
     data.show_tag_count = 0;
     // data.more_tag_icon = false;//指向下折叠false
     //如果计算标签数量dom对象为空，直接返回
-    if(!hiddenTagContentRef.value){$messages('数据加载出错', 'error');return;}
+    if(!hiddenTagContentRef.value){$message('数据加载出错', 'error');return;}
     // children返回的是元素节点，不包含文本节点，而childNodes则返回所有子节点，包括元素节点和文本节点。(childNodes.length children.length)
     //如果没有子节点，直接返回
-    if(!hiddenTagContentRef.value.children.length){$messages('空数据', 'error');return;}
+    if(!hiddenTagContentRef.value.children.length){$message('空数据', 'error');return;}
 
     //标签容器宽度
     let tag_container_width = 0;

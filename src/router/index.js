@@ -75,42 +75,24 @@ const routes = [
                 name:"user_list",
                 component:()=>import('@/views/backend/user_mgr/user_list.vue'),
             },
-            {
-                path:'user_add_edit',
-                name:"user_add_edit",
-                component:()=>import('@/views/backend/user_mgr/user_add_edit.vue'),
-            },
+           
             {
                 path:'article_list',
                 name:"article_list",
                 component:()=>import('@/views/backend/article_mgr/article_list.vue'),
-            },
-            {
-                path:'article_add_edit',
-                name:"article_add_edit",
-                component:()=>import('@/views/backend/article_mgr/article_add_edit.vue'),
-            },
+            }, 
             {
                 path:'tag_list',
                 name:"tag_list",
                 component:()=>import('@/views/backend/tag_mgr/tag_list.vue'),
             },
-            {
-                path:'tag_add_edit',
-                name:"tag_add_edit",
-                component:()=>import('@/views/backend/tag_mgr/tag_add_edit.vue'),
-            },
+            
             {
                 path:'image_list',
                 name:"image_list",
                 component:()=>import('@/views/backend/image_mgr/image_list.vue'),
             },
-
-            {
-                path:'image_add_edit',
-                name:"image_add_edit",
-                component:()=>import('@/views/backend/image_mgr/image_add_edit.vue'),
-            },
+           
             {
                 path:'menu_list',
                 name:"menu_list",
@@ -118,7 +100,7 @@ const routes = [
             },
 
             {
-                path:'menu_add_edit',
+                path:'/menu_add_edit',
                 name:"menu_add_edit",
                 component:()=>import('@/views/backend/menu_mgr/menu_add_edit.vue'),
             },
@@ -127,21 +109,14 @@ const routes = [
                 name:"auth_list",
                 component:()=>import('@/views/backend/auth_mgr/auth_list.vue'),
             },
-            {
-                path:'auth_add_edit',
-                name:"auth_add_edit",
-                component:()=>import('@/views/backend/auth_mgr/auth_add_edit.vue'),
-            },
+            
             {
                 path:'role_list',
                 name:"role_list",
                 component:()=>import('@/views/backend/role_mgr/role_list.vue'),
             },
-            {
-                path:'role_add_edit',
-                name:"role_add_edit",
-                component:()=>import('@/views/backend/role_mgr/role_add_edit.vue'),
-            },
+
+           
 
             {
                 path:'configuration_list',
@@ -149,11 +124,7 @@ const routes = [
                 component:()=>import('@/views/backend/configuration_mgr/configuration_list.vue'),
             },
 
-            {
-                path:'configuration_add_edit',
-                name:"configuration_add_edit",
-                component:()=>import('@/views/backend/configuration_mgr/configuration_add_edit.vue'),
-            },
+          
         
             
            
@@ -161,6 +132,45 @@ const routes = [
            
         ]
     },
+
+
+    {
+        path:'/admin/user_add_edit',
+        name:"user_add_edit",
+        component:()=>import('@/views/backend/user_mgr/user_add_edit.vue'),
+    },
+    {
+        path:'/admin/article_add_edit',
+        name:"article_add_edit",
+        component:()=>import('@/views/backend/article_mgr/article_add_edit.vue'),
+    },
+    {
+        path:'/admin/tag_add_edit',
+        name:"tag_add_edit",
+        component:()=>import('@/views/backend/tag_mgr/tag_add_edit.vue'),
+    },
+
+    {
+        path:'/admin/image_add_edit',
+        name:"image_add_edit",
+        component:()=>import('@/views/backend/image_mgr/image_add_edit.vue'),
+    },
+    {
+        path:'/admin/auth_add_edit',
+        name:"auth_add_edit",
+        component:()=>import('@/views/backend/auth_mgr/auth_add_edit.vue'),
+    },
+    {
+        path:'/admin/role_add_edit',
+        name:"role_add_edit",
+        component:()=>import('@/views/backend/role_mgr/role_add_edit.vue'),
+    },
+    {
+        path:'/admin/configuration_add_edit',
+        name:"configuration_add_edit",
+        component:()=>import('@/views/backend/configuration_mgr/configuration_add_edit.vue'),
+    },
+
 
 
     {

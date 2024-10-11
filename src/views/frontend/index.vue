@@ -69,7 +69,7 @@ const $message = inject('$message');
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
 
-  //获取首页栏页数据（内容标签栏数据、博文列表数据（瀑布流组件））  
+  //获取首页数据（内容标签栏数据、博文列表数据（瀑布流组件））  
   function getIndexPageData() {
 
     $getData('/data/frontend/index.json')

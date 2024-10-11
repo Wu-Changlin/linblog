@@ -155,7 +155,7 @@
   import EmptyState from '@/components/empty_state.vue';
 
 
-
+  const $message = inject('$message');
   const router = useRouter();
   const route = useRoute();
   // const is_loading=ref(true)
@@ -248,7 +248,7 @@ const is_show=ref(false)
      window.open(routeUrl.href, '_blank');//打开新窗口
 
     } else {
-      console.log('非法请求')
+      $message('非法请求','error')
     }
 
 
