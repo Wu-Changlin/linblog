@@ -7,7 +7,7 @@ const div=document.createElement('div')
 div.setAttribute('class','my-message-container')
 document.body.appendChild(div)
 
-const $Message = (text,type) => {
+export default function Messages (text,type){
     let timer=null
  //createVNode 用于创建一个虚拟节点
  // 参数1 支持组件
@@ -27,13 +27,6 @@ render(vnode,div);
    },3000)
 }
 
-
-export default {
-    install: (app) => {
-        app.config.globalProperties['$Message'] = $Message;
-       
-    }
-}
 
 // 页面使用
 // $message('成功', 'success');

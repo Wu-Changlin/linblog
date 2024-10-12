@@ -58,7 +58,7 @@
 
 
 const $getData = inject('$getData');
-const $postDta = inject('$postDta');
+const $postData = inject('$postData');
 const $message = inject('$message');
 
   const search_page_article_count=ref(0);
@@ -126,7 +126,7 @@ function getLayoutLogOrMenuListData(){
   //获取搜索关键字匹配结果   总页数>=当前页数 ，模拟时总页数没有axios赋值，随机数赋值
   function getSearchKeywordMatchData() {
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
-    $postDta('/data/frontend/search_keyword.json', { search_keyword: search_page_search_keyword.value }, { responseType: 'json' })
+    $postData('/data/frontend/search_keyword.json', { search_keyword: search_page_search_keyword.value }, { responseType: 'json' })
       .then(response => {
      
         search_keyword_count.value = response.search_keyword_count; // 博文数量
@@ -194,7 +194,7 @@ function getLayoutLogOrMenuListData(){
   function getSearchKeywordMatchNextPageData() {
     
     current_page.value++;//当前页数加一
-    $postDta('/data/frontend/search_keyword.json', { search_keyword: search_page_search_keyword.value, page: search_keyword_match_data_page.value }, { responseType: 'json' })
+    $postData('/data/frontend/search_keyword.json', { search_keyword: search_page_search_keyword.value, page: search_keyword_match_data_page.value }, { responseType: 'json' })
       .then(response => {
         // setTimeout(() => {
 

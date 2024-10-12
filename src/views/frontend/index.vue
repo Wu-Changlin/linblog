@@ -28,7 +28,7 @@
 
 
   const $getData = inject('$getData');
-const $postDta = inject('$postDta');
+const $postData = inject('$postData');
 const $message = inject('$message');
 
 
@@ -99,7 +99,7 @@ const $message = inject('$message');
   function getChildClickTag(active_tag_id, active_tag_name) {
 
     is_loading.value = true;
-    $postDta('/data/frontend/index.json', { tag_id: active_tag_id, tag_name: active_tag_name, page: 1 })
+    $postData('/data/frontend/index.json', { tag_id: active_tag_id, tag_name: active_tag_name, page: 1 })
       .then(response => {
         index_tag_data.value = response.tag_data; // 标签数据
         index_article_list_data.value = response.article_list_data; // // 博文列表

@@ -148,7 +148,7 @@
  
  
   const $getData = inject('$getData');
-const $postDta = inject('$postDta');
+const $postData = inject('$postData');
 const $message = inject('$message');
 
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息

@@ -97,7 +97,7 @@ export const getData = (url, params) => {
     })
 }
 /** * post方法，对应post请求 * @param {String} url [请求的url地址] * @param {Object} params [请求时携带的参数] */
-export const postDta = (url, params) => {
+export const postData = (url, params) => {
     return axios.post(url, params,{headers:{'Content-Type': 'application/json'}}) 
     //是将对象 序列化成URL的形式，以&进行拼接   
     .then(response => {

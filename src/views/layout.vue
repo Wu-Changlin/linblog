@@ -37,7 +37,7 @@ const $message = inject('$message');
 const $putData = inject('$putData');
 const $deleteData = inject('$deleteData');
 const $getData = inject('$getData');
-const $postDta = inject('$postDta');
+const $postData = inject('$postData');
 const $postFormData = inject('$postFormData');
 
 

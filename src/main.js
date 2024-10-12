@@ -5,9 +5,6 @@ import ElementPlus from 'element-plus'; //引入ElementPlus依赖
 import 'element-plus/dist/index.css'; // 引入样式文件index.css
 
 
-
-// import {$put $get $post $postForm} from '@/utils/request.js';
-
 //  安装tooltip
 import tooltip from '@/components/tooltip/directive.js';
 
@@ -23,9 +20,9 @@ import SvgIcon from '@/components/SvgIcon.vue';
 
 
 //  引入Axios 实例
-import  {putData,deleteData,getData,postDta,postFormData,} from '@/utils/request.js';
+import  {putData,deleteData,getData,postData,postFormData,} from '@/utils/request.js';
 //  顶部消息提示
-import messages from  "@/components/message/messages.js";
+import message from  "@/components/message/message.js";
 //  校验方法
 import verify from "@/utils/verify.js"
 
@@ -38,10 +35,10 @@ const app = createApp(App);
 app.provide('$putData',putData)
 app.provide('$deleteData',deleteData)
 app.provide('$getData',getData)
-app.provide('$postDta',postDta)
+app.provide('$postData',postData)
 app.provide('$postFormData',postFormData)
 
-app.provide('$message',messages)
+app.provide('$message',message)
 app.provide('$verify',verify)
 
 
@@ -49,7 +46,7 @@ app.provide('$verify',verify)
 // const $putData = inject('$putData');
 // const $deleteData = inject('$deleteData');
 // const $getData = inject('$getData');
-// const $postDta = inject('$postDta');
+// const $postData = inject('$postData');
 // const $postFormData = inject('$postFormData');
 // const $message = inject('$message');
 //   const $verify = inject('$verify');

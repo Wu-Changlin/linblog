@@ -32,7 +32,7 @@ import Footer from "@/components/footer.vue";
 
 
 const $getData = inject('$getData');
-const $postDta = inject('$postDta');
+const $postData = inject('$postData');
 const $message = inject('$message');
 // 修改当前选中菜单id 结束
 const flag =ref(false)

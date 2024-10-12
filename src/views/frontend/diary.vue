@@ -36,7 +36,7 @@
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
 
   const $getData = inject('$getData');
-  const $postDta = inject('$postDta');
+  const $postData = inject('$postData');
   const $message = inject('$message');
 
   const route = useRoute();
@@ -130,7 +130,7 @@
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
     is_loading.value = true;
 
-    $postDta('/data/frontend/diary.json', { tag_id: active_tag_id, tag_name: active_tag_name })
+    $postData('/data/frontend/diary.json', { tag_id: active_tag_id, tag_name: active_tag_name })
       .then(response => {
         // setTimeout(() => {
         diary_tag_data.value = response.tag_data;
@@ -222,7 +222,7 @@
 
     console.log('进入getActiveTagNextPageData,current_page.value:', current_page.value)
     current_page.value++;//当前页数加一
-    $postDta('/data/frontend/active_tag_next_page_data.json', { tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
+    $postData('/data/frontend/active_tag_next_page_data.json', { tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
       .then(response => {
         // setTimeout(() => {
         is_next_page_loading.value = false;//取消加载中动画

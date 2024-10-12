@@ -30,7 +30,7 @@
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
 
   const $getData = inject('$getData');
-const $postDta = inject('$postDta');
+const $postData = inject('$postData');
 const $message = inject('$message');
 
   
@@ -116,7 +116,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
     // flag.value=false; //初始化导致子页面选中的标签id数据出现标签栏闪烁（当前标签栏处于显示状态，出现先隐藏后显示闪烁）
     is_loading.value = true;
 
-    $postDta('/data/frontend/frontend.json', { tag_id: active_tag_id, tag_name: active_tag_name,page:1  })
+    $postData('/data/frontend/frontend.json', { tag_id: active_tag_id, tag_name: active_tag_name,page:1  })
       .then(response => {
         // setTimeout(() => {
         frontend_tag_data.value = response.tag_data;
@@ -208,7 +208,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
 
     console.log('进入getActiveTagNextPageData,current_page.value:', current_page.value)
     current_page.value++;//当前页数加一
-    $postDta('/data/frontend/active_tag_next_page_data.json', { tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
+    $postData('/data/frontend/active_tag_next_page_data.json', { tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
       .then(response => {
         // setTimeout(() => {
         is_next_page_loading.value = false;//取消加载中动画

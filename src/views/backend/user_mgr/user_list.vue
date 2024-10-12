@@ -16,7 +16,34 @@
 
   
 
-  <Table  v-if="flag" :parentPageTableData="user_list_data" :parentPagePaginationData="pagination_data" :tableHeader="tableHeader"  @batchRemoveCurrentActiveIds="batchRemoveChildCurrentActiveIds"   @deleteCurrentActiveId="deleteChildCurrentActiveId"> 
+  <Table  v-if="flag" :parentPageTableData="user_list_data" :parentPagePaginationData="pagination_data" 
+  :tableHeader="tableHeader"  @getPaginationChangeData="getChildPaginationChangeData" 
+  @batchRemoveCurrentActiveIds="batchRemoveChildCurrentActiveIds"  @deleteCurrentActiveId="deleteChildCurrentActiveId"> 
+
+
+    <template #query>
+      <el-form  :model="query_form_data" @keyup.enter="queryInputData()">
+        <div style="display: flex;flex-direction: column;">
+        <el-form-item>
+        <el-input v-model="query_form_data.nike_name" placeholder="搜索用户昵称" style="width: 200px">
+        </el-input>
+      </el-form-item>
+        <el-form-item>
+        <el-select  style="width: 200px" v-model="query_form_data.role" placeholder="请选择">
+          <el-option v-for="item in options" :key="item.role" :label="item.label" :value="item.role" />
+        </el-select>
+      </el-form-item>
+
+        <el-form-item>
+        <div style="width: 100%;">
+          <el-button type="primary" @click="queryInputData()">查询</el-button>
+          <el-button type="primary" @click="resetPageData()">重置</el-button>
+        </div>
+        
+        </el-form-item>
+      </div>
+      </el-form>
+    </template>
 
     <template #add>
       <el-button type="primary"  @click="clickGotoAddOrEditPage(0)">添加用户</el-button>
@@ -30,7 +57,7 @@
     <!-- 图片列特殊处理 start-->
 <template #avatar="scope">
 
-<el-image class="gvb_table_avatar" :src="scope.row.avatar" />
+<el-image class="table_img" :src="scope.row.avatar" />
             
 </template>
 <!-- 图片列特殊处理 end-->
@@ -57,7 +84,7 @@ const router=useRouter();
   //使用 provide inject 代替getCurrentInstance
   const $verify = inject('$verify');
   const $getData = inject('$getData');
-const $postDta = inject('$postDta');
+const $postData = inject('$postData');
 const $message = inject('$message');
 
 /*操作表格数据 开始*/ 
@@ -81,23 +108,25 @@ function clickGotoAddOrEditPage(current_active_data){
 let prefix_name  = route.name.slice(0, route.name.indexOf('_'));
 
 let router_name=prefix_name+'_add_edit';
+let routeUrl ='';
 //如果存在当前选中id，那么携参跳转到添加/编辑页面。
 if(current_active_data){
 let  article_id =current_active_data.active_data;
-  let routeUrl = router.resolve({ name: router_name, query: { id: article_id }, key: new Date().getTime() });
-  //  console.log('routeUrl',routeUrl);
-  window.open(routeUrl.href, '_blank');//打开新窗口
+  routeUrl = router.resolve({ name: router_name, query: { id: article_id }, key: new Date().getTime() });
+
 }else{//跳转到添加页面。
-router.push({ name: router_name,key: new Date().getTime() });
+  routeUrl = router.resolve({ name: router_name,key: new Date().getTime() });
 
 }
+ //  console.log('routeUrl',routeUrl);
+window.open(routeUrl.href, '_blank');//打开新窗口
 
 }
 /*操作表格数据 结束*/ 
 
 //表头  //scopedSlot 自定义插槽的名字
 const tableHeader= [
-        {prop: "id",label: "id",key:"id"},
+        {prop: "user_id",label: "user_id",key:"user_id"},
         {prop: "nike_name",label: "昵称",key:"nike_name"},
         {prop: "avatar",label: "头像",key:"avatar",scopedSlot:"avatar"},
         {prop: "email",label: "邮箱",key:"email"},
@@ -112,132 +141,75 @@ const tableHeader= [
 
 
 
+const options = [
+    {
+      role: 1,
+      label: "管理员",
+    },
+    {
+      role: 2,
+      label: "普通用户",
+    },
+  ];
 
 
-//封面 start
-
-// dialogConfig 控制显示/隐藏封面图片列表
-const dialogConfig = reactive({
-  is_show: false,
-})
-
-  
-//接收子组件emit('success',id,path)，确认选中的封面图片id
-function SelectCover(cover_id,cover_path) {
-  // console.log('SelectCover id='+cover_id); 
-  // console.log('SelectCover path='+cover_path); 
-
-  selected.cover_id=cover_id;
-  selected.cover_path=cover_path;
 
 
+
+//保存初始化数据
+const init_query_form_data ={
+  nike_name: '',
+  role: '',
 }
+//查询当前活动的输入数据，使用reactive变成响应式数据
+const query_form_data = reactive({...init_query_form_data});
 
-//封面数据初始化
-const selected=reactive({
-  cover_id:'',
-  cover_path:'',
-})
-  
-//封面 end
-
-
-
-
-//表格数据
-const data=reactive({
-    showAddUserDialog:false,
-    dialog_title:'',
-})
-  
-
-
-//添加用户
-function addUserDialog(){
-  data.showAddUserDialog=true;
-  data.dialog_title="添加用户";
+//重置函数
+const resetQueryFormData = () => {
+  Object.assign(query_form_data,init_query_form_data)
 }
 
 
-//编辑用户
-function editUserDialog(){
-  data.showAddUserDialog=true;
-  data.dialog_title="编辑用户";
 
-}
-
-
-//添加/编辑用弹窗 start
-
-//表单ref
-const ruleFormRef = ref();
+//执行查询当前活动的输入数据
+    function queryInputData(){
+      // console.log("查询当前活动的输入数据:",query_form_data);
+      // 合并
+      let query_data={...query_form_data};
+    //去除 JavaScript 对象中的空值和空对象
+    query_data = removeEmptyValues(query_data);
+    //如果有查询数据，那么添加到路由参数。
+    if(Object.keys(query_data).length > 0){//Object.keys会转化一个数组，判断非空对象
+      query_data.current_page=1; //当前页数  将当前页设置为1，确保每次执行查询都是从第一页开始
+      query_data.current_page_limit=10; // 每页显示个数选择器的选项设置   将每页显示个数设置为10，确保每次执行查询都是显示个数为10
+      // 执行跳转
+      router.push({ name:route.name, query: query_data, key: new Date().getTime() });
+      // 获取查询数据
+      $postData('/data/backend/query_data.json',query_data)
+  .then(response => {
+    user_list_data.value=response.user_list_data;
+    pagination_data.current_page=response.current_page;
+    pagination_data.current_page_limit=response.current_page_limit;
+    pagination_data.total_count=response.total_count;
   
+    console.log('user_list_data',user_list_data.value)
 
-//表单取消操作
-function closeAddUserDialog(){
-    ruleFormRef.value.resetFields();//重置表单 防止数据混淆
-    data.showAddUserDialog = false; //关闭弹窗
-}
+    
 
-//表单确认操作
-function submitForm(){
+    flag.value = true;
+    // is_loading.value = false;
 
-  data.showAddUserDialog = false; //关闭弹窗
+  })
+  .catch(error => {
+    $message('请求未找到', 'error');
+    // $message('请求未找到', 'error');
+  });
 
-}
-  
+    }else{
+      $message('请先输入查询内容', 'warning');
+    }
 
-//初始化添加数据
-const ruleForm=reactive({
-  name:"",
-  email:"",
-  cover:"",
-  password:"",
-  again_password:"",
-  resource:"",
-
-})
-
-
-//两次密码一致性校验      第二次输入需和第一次输入一致
-const checkPassword=(rule,value,callback)=>{
-  // console.log(ruleForm.password);
-  if(value !== ruleForm.password){
-    callback(new Error(rule.message));
-  }else{
-    callback();
-  }
-  }
-
-
-//校验
-const rules = reactive({
-  name: [
-    { required: true, message: '请输入名称'},
-    { min: 3, max: 20, message: '长度范围 3 至 20' },
-  ],
-  email: [
-    { required: true, message: "请输入邮箱" },
-    { maxlength: 150, message: "邮箱长度超限" },
-    { validator: $verify.email, message: "邮箱格式有误" },
-  ],
-  password:[
-    { required: true, message: "请输入密码" },
-    { validator: $verify.password, message: "格式包含字母、数字、特殊字符，9-18位" },
-
-  ],
-  again_password:[
-    { required: true, message: "请再次输入密码" },
-    { validator: checkPassword, message: "两次输入密码不一致" },
-    { validator: $verify.password, message: "格式包含字母、数字、特殊字符，9-18位" },
-  ],
-  resource:[
-  { required: true, message: "请选择角色" },
-  ]
-  
-})
-  
-
+    }
 
 
 
@@ -283,11 +255,95 @@ $getData('/data/backend/user_list.json')
 
 
 
+function getChildPaginationChangeData(article_pagination){
+  console.log('getChildPaginationChangeData(article_pagination):',JSON.stringify(article_pagination));
+  flag.value = false;
+  // 有效载荷数据
+    let payload_data={}; 
+    let query_data={...query_form_data};
+      //去除 JavaScript 对象中的空值和空对象
+      query_data = removeEmptyValues(query_data);
+    //如果有查询数据，那么添加到路由参数。
+    if(Object.keys(query_data).length > 0){//Object.keys会转化一个数组，判断非空对象
+      payload_data=Object.assign(query_form_data,payload_data);
+    }
+
+    payload_data=Object.assign(article_pagination,payload_data);
+        // 获取查询数据
+        $postData('/data/backend/user_list.json',payload_data)
+  .then(response => {
+    user_list_data.value=response.user_list_data;
+    pagination_data.current_page=response.current_page;
+    pagination_data.current_page_limit=response.current_page_limit;
+    pagination_data.total_count=response.total_count;
+
+   // TODO    需要根据每页显示个数重新计算
+     // 模式模式 分页用当前选中值
+    let slice_start = Math.floor(Math.random()*10); // 要删除的元素下标
+    pagination_data.current_page=article_pagination.current_page;
+    pagination_data.current_page_limit=article_pagination.current_page_limit; 
+
+
+
+    user_list_data.value = getRandom( user_list_data.value,pagination_data.current_page_limit);
+    console.log('getChildPaginationChangeData-user_list_data.value:',user_list_data.value);
+
+    flag.value = true;
+    // is_loading.value = false;
+  })
+  .catch(error => {
+// console.log('error:',error)
+    $message('请求未找到', 'error');
+    // $message('请求未找到', 'error');
+  });
+
+}
+
+
+// 重置页面数据 （点击表单重置按钮）
+function resetPageData(){
+  router.push({ name:route.name, key: new Date().getTime() });
+  //重置函数
+  resetQueryFormData();
+  //获取页面数据
+  getUserListPageData();
+}
+
 onMounted(() => {
 
-  getUserListPageData();
+  
+  if(Object.keys(route.query).length > 0){
+    console.log(111);
+    getChildPaginationChangeData(pagination_data);
+  }else{
+    getUserListPageData();
+  }
 
 });
+
+// 去除 JavaScript 对象中的空值和空对象
+function removeEmptyValues(obj) {
+    let parsedObj = Object.keys(obj)
+    .filter((key) => obj[key] !== null && obj[key] !== undefined && obj[key] !== '')
+    .reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {});
+  return parsedObj;
+}
+
+function getRandom(array,range) {
+    var old_array = array,
+      
+    //防止超过数组的长度
+    range = range > old_array.length?old_array.length:range;
+    var newArray = [].concat(old_array), //拷贝原数组进行操作就不会破坏原数组
+        valArray = [];
+    for (var n = 0; n<range;n++){
+             var r = Math.floor(Math.random() * (newArray.length));
+        valArray.push(newArray[r]);
+        //在原数组删掉，然后在下轮循环中就可以避免重复获取
+        newArray.splice(r, 1);
+    }
+    return valArray;
+}
 
 
 

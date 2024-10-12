@@ -132,7 +132,7 @@
   import {useRoute, useRouter } from "vue-router"; 
   
   const $getData = inject('$getData');
-const $postDta = inject('$postDta');
+const $postData = inject('$postData');
 const $message = inject('$message');
 
   const router = useRouter();
@@ -238,7 +238,7 @@ const $message = inject('$message');
     
     year_dropdown_page_update_year.value=active_year;
    
-    $postDta('/data/frontend/contribution_year_'+active_year+'.json')
+    $postData('/data/frontend/contribution_year_'+active_year+'.json')
       .then(response => {
     
        current_year_contribution_data.value=response.current_year_contribution_data;
@@ -273,7 +273,7 @@ const $message = inject('$message');
       
       // console.log('contribution_day_number_data.value:',contribution_day_number_data.value);
       
-      $postDta('/data/frontend/click_contribution_day.json')
+      $postData('/data/frontend/click_contribution_day.json')
       .then(response => {
        
         last_month_article_list_data.value=response.contribution_article_list_data;
