@@ -116,7 +116,6 @@
 
   const init_pagination= computed(() => props.parentPagePaginationData);
 
-  console.log('init_pagination:',init_pagination.value)
 
   const pagination = reactive({
     current_page: 1, //当前页数
@@ -168,7 +167,7 @@
         var t = tableData[i][id_name.value];
         if (t == Ele[id_name.value]) {
           removeBatchId.push(Ele[id_name.value]);
-          console.log("Ele[id_name.value]:", Ele[id_name.value]);
+          // console.log("Ele[id_name.value]:", Ele[id_name.value]);
           //如果原始数据中的id等于选中数据id，那么执行删除
           tableData.splice(i, 1); //删除原始数据数组中选中数据id索引
         }
@@ -206,7 +205,7 @@
   //当选择项发生变化时会触发该事件（用户选中或取消选中表格某行数据）
   const handleSelectionChange = (val) => {
     data.selectedData = val;
-    console.log("handleSelectionChange=", data.selectedData)
+    // console.log("handleSelectionChange=", data.selectedData);
   };
 
   //size-change	page-size 每页显示个数选择器的选项设置改变时触发

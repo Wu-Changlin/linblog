@@ -73,7 +73,7 @@
 </template>
 
 <script setup>
-import { ref,reactive,inject,onMounted } from "vue";
+import { ref,reactive,inject,onMounted,computed} from "vue";
 import {useRoute,useRouter}  from "vue-router";
 import ArticleCoverList from '@/components/backend/article_cover_list.vue'
 import Table from "@/components/backend/table.vue";
@@ -192,9 +192,20 @@ const resetQueryFormData = () => {
     pagination_data.current_page_limit=response.current_page_limit;
     pagination_data.total_count=response.total_count;
   
-    console.log('user_list_data',user_list_data.value)
+    // console.log('user_list_data',user_list_data.value)
+// TODO   如果有查询数据，那么过滤表格数据
+
 
     
+
+
+    let math_role_data= computed(() => {
+      return user_list_data.value.filter(user => user.role === query_data.role);
+    })
+    console.log('math_role_data:',math_role_data.value);
+
+
+user_list_data.value=math_role_data.value;
 
     flag.value = true;
     // is_loading.value = false;
@@ -239,9 +250,7 @@ $getData('/data/backend/user_list.json')
     pagination_data.current_page_limit=response.current_page_limit;
     pagination_data.total_count=response.total_count;
   
-    console.log('user_list_data',user_list_data.value)
-
-    
+    // console.log('user_list_data',user_list_data.value)
 
     flag.value = true;
     // is_loading.value = false;
@@ -277,16 +286,36 @@ function getChildPaginationChangeData(article_pagination){
     pagination_data.current_page_limit=response.current_page_limit;
     pagination_data.total_count=response.total_count;
 
-   // TODO    需要根据每页显示个数重新计算
+  
      // 模式模式 分页用当前选中值
     let slice_start = Math.floor(Math.random()*10); // 要删除的元素下标
     pagination_data.current_page=article_pagination.current_page;
     pagination_data.current_page_limit=article_pagination.current_page_limit; 
 
+    // TODO   如果有查询数据，那么过滤表格数据
+
+   if(article_pagination.role){
+    console.log('role-user_list_data.value :',user_list_data.value,  ",article_pagination.role:",article_pagination.role)
+     // 计算属性，返回 role 等于 1 的用户列表
+    
 
 
-    user_list_data.value = getRandom( user_list_data.value,pagination_data.current_page_limit);
-    console.log('getChildPaginationChangeData-user_list_data.value:',user_list_data.value);
+    let math_role_data= computed(() => {
+      return user_list_data.value.filter(user => user.role === article_pagination.role);
+    })
+
+    console.log('math_role_data:',math_role_data.value);
+
+
+    user_list_data.value=math_role_data.value;
+    //  let math_role = user_list_data.value.filter(user => user.role === 1);
+    // console.log('user_list_data.value.filter(user => user.role === 1):',user_list_data.value.filter(user => user.role === 1));
+    // console.log('math_role :',math_role)
+
+   }
+
+    user_list_data.value = getRandom(user_list_data.value,pagination_data.current_page_limit);
+    // console.log('getChildPaginationChangeData-user_list_data.value:',user_list_data.value);
 
     flag.value = true;
     // is_loading.value = false;
@@ -313,13 +342,20 @@ onMounted(() => {
 
   
   if(Object.keys(route.query).length > 0){
-    console.log(111);
-    getChildPaginationChangeData(pagination_data);
+
+    let route_query_str =  JSON.stringify(route.query);
+
+
+route_query_str= convertStringToNumber(route_query_str);
+
+let route_query_obj =JSON.parse(route_query_str); 
+    getChildPaginationChangeData(route_query_obj);
   }else{
     getUserListPageData();
   }
 
 });
+
 
 // 去除 JavaScript 对象中的空值和空对象
 function removeEmptyValues(obj) {
@@ -343,6 +379,20 @@ function getRandom(array,range) {
         newArray.splice(r, 1);
     }
     return valArray;
+}
+
+
+/*
+使用了正则表达式和replace函数，将引号包围的数字替换为无引号的数字。
+*/
+function convertStringToNumber(current_string) {
+ 
+  let old_string=current_string
+ let new_string = old_string.replace(/"(\d+)"/g, function(match, p1) {
+    return  p1;
+  });
+
+  return new_string;
 }
 
 
