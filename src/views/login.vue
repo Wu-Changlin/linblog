@@ -65,6 +65,12 @@
 import { ref,reactive, nextTick,inject} from "vue";
 import { useRouter,useRoute} from "vue-router";
 
+
+   //使用 provide inject 代替getCurrentInstance
+  const $verify = inject('$verify');
+
+ const $message = inject('$message');
+
 const login_form_data=reactive({
   email:"",
   password:"",
@@ -152,9 +158,6 @@ const checkPassword=(rule,value,callback)=>{
  }
 
 
-   //使用 provide inject 代替getCurrentInstance
-   const $verify = inject('$verify');
-  // Messages('数据加载出错', 'error'); 
 
 
 //校验

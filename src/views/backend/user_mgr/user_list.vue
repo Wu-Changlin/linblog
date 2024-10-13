@@ -17,7 +17,7 @@
   
 
   <Table  v-if="flag" :parentPageTableData="user_list_data" :parentPagePaginationData="pagination_data" 
-  :tableHeader="tableHeader"  @getPaginationChangeData="getChildPaginationChangeData" 
+  :tableHeader="table_header"  @getPaginationChangeData="getChildPaginationChangeData" 
   @batchRemoveCurrentActiveIds="batchRemoveChildCurrentActiveIds"  @deleteCurrentActiveId="deleteChildCurrentActiveId"> 
 
 
@@ -46,13 +46,11 @@
     </template>
 
     <template #add>
-      <el-button type="primary"  @click="clickGotoAddOrEditPage(0)">添加用户</el-button>
+      <el-button type="primary"  @click="clickGotoAddOrEditPage(0,'add')">添加用户</el-button>
     </template>
     <template #edit="active_data">
-      <el-button size="small" type="primary"  @click="clickGotoAddOrEditPage(active_data)">编辑</el-button>
+      <el-button size="small" type="primary"  @click="clickGotoAddOrEditPage(active_data,'edit')">编辑</el-button>
     </template>
-   
-
 
     <!-- 图片列特殊处理 start-->
 <template #avatar="scope">
@@ -73,10 +71,12 @@
 </template>
 
 <script setup>
-import { ref,reactive,inject,onMounted,computed} from "vue";
+import { ref,reactive,inject,onMounted,onUnmounted,computed} from "vue";
 import {useRoute,useRouter}  from "vue-router";
-import ArticleCoverList from '@/components/backend/article_cover_list.vue'
+import ArticleCoverList from '@/components/backend/article_cover_list.vue';
 import Table from "@/components/backend/table.vue";
+
+import {listenMsg} from '@/components/crossTagMsg.js';
 
 const route=useRoute();
 const router=useRouter();
@@ -101,7 +101,7 @@ function deleteChildCurrentActiveId(active_id){
 
 
 //点击跳转到添加/编辑页面(同一页面)
-function clickGotoAddOrEditPage(current_active_data){
+function clickGotoAddOrEditPage(current_active_data,actions){
 
   
 //获取页面名称前缀：使用slice方法，是从开始到"_"的位置之。
@@ -109,15 +109,14 @@ let prefix_name  = route.name.slice(0, route.name.indexOf('_'));
 
 let router_name=prefix_name+'_add_edit';
 let routeUrl ='';
-//如果存在当前选中id，那么携参跳转到添加/编辑页面。
+let query_data={};
+
+//如果存在当前选中id，那么当前选中id赋值到query_data中。
 if(current_active_data){
-let  article_id =current_active_data.active_data;
-  routeUrl = router.resolve({ name: router_name, query: { id: article_id }, key: new Date().getTime() });
-
-}else{//跳转到添加页面。
-  routeUrl = router.resolve({ name: router_name,key: new Date().getTime() });
-
+  query_data.id =current_active_data.active_data;
 }
+query_data.action=actions;
+routeUrl = router.resolve({ name: router_name, query:query_data, key: new Date().getTime() });
  //  console.log('routeUrl',routeUrl);
 window.open(routeUrl.href, '_blank');//打开新窗口
 
@@ -125,35 +124,26 @@ window.open(routeUrl.href, '_blank');//打开新窗口
 /*操作表格数据 结束*/ 
 
 //表头  //scopedSlot 自定义插槽的名字
-const tableHeader= [
-        {prop: "user_id",label: "user_id",key:"user_id"},
-        {prop: "nike_name",label: "昵称",key:"nike_name"},
-        {prop: "avatar",label: "头像",key:"avatar",scopedSlot:"avatar"},
-        {prop: "email",label: "邮箱",key:"email"},
-        {prop: "role",label: "角色",key:"role"},
-        {prop: "account_status",label: "账号状态",key:"account_status"},
-        {prop: "ip",label: "登陆ip",key:"ip"},
-        {prop: "created_time",label: "创建时间",key:"created_time"},
-        {prop: "update_time",label: "更新时间",key:"update_time"},
-        {prop: "delete_time",label: "删除时间",key:"delete_time"},
-        
-];
+const table_header= ref([]);
+//选择器数据
+const options = ref([]);
+
+// 获取页面框架数据
+function getPageLayoutData(){
 
 
+  $getData('/data/backend/user_page_layout_data.json')
+  .then(response => {
+    table_header.value=response.table_header;
+    options.value=response.options;
+  })
+  .catch(error => {
+    // console.log(' getPageLayoutData()=>error:',error)
+    $message('请求未找到', 'error');
+    // $message('请求未找到', 'error');
+  });
 
-const options = [
-    {
-      role: 1,
-      label: "管理员",
-    },
-    {
-      role: 2,
-      label: "普通用户",
-    },
-  ];
-
-
-
+}
 
 
 //保存初始化数据
@@ -184,6 +174,7 @@ const resetQueryFormData = () => {
       query_data.current_page_limit=10; // 每页显示个数选择器的选项设置   将每页显示个数设置为10，确保每次执行查询都是显示个数为10
       // 执行跳转
       router.push({ name:route.name, query: query_data, key: new Date().getTime() });
+
       // 获取查询数据
       $postData('/data/backend/query_data.json',query_data)
   .then(response => {
@@ -192,18 +183,12 @@ const resetQueryFormData = () => {
     pagination_data.current_page_limit=response.current_page_limit;
     pagination_data.total_count=response.total_count;
   
-    // console.log('user_list_data',user_list_data.value)
+    // 
 // TODO   如果有查询数据，那么过滤表格数据
-
-
-    
-
-
     let math_role_data= computed(() => {
       return user_list_data.value.filter(user => user.role === query_data.role);
     })
-    console.log('math_role_data:',math_role_data.value);
-
+    // console.log('math_role_data:',math_role_data.value);
 
 user_list_data.value=math_role_data.value;
 
@@ -265,19 +250,22 @@ $getData('/data/backend/user_list.json')
 
 
 function getChildPaginationChangeData(article_pagination){
-  console.log('getChildPaginationChangeData(article_pagination):',JSON.stringify(article_pagination));
+
   flag.value = false;
   // 有效载荷数据
     let payload_data={}; 
     let query_data={...query_form_data};
       //去除 JavaScript 对象中的空值和空对象
       query_data = removeEmptyValues(query_data);
-    //如果有查询数据，那么添加到路由参数。
+    //如果有查询数据，那么合并查询数据。Object.assign如果有同名属性的话，后面的属性值会覆盖前面的属性值。
     if(Object.keys(query_data).length > 0){//Object.keys会转化一个数组，判断非空对象
-      payload_data=Object.assign(query_form_data,payload_data);
+      payload_data=Object.assign(query_data,payload_data);
     }
-
+    //合并分页数据
     payload_data=Object.assign(article_pagination,payload_data);
+
+      // 执行跳转
+router.push({ name:route.name, query: payload_data, key: new Date().getTime() });
         // 获取查询数据
         $postData('/data/backend/user_list.json',payload_data)
   .then(response => {
@@ -295,16 +283,13 @@ function getChildPaginationChangeData(article_pagination){
     // TODO   如果有查询数据，那么过滤表格数据
 
    if(article_pagination.role){
-    console.log('role-user_list_data.value :',user_list_data.value,  ",article_pagination.role:",article_pagination.role)
-     // 计算属性，返回 role 等于 1 的用户列表
-    
-
-
+    // console.log('role-user_list_data.value :',user_list_data.value,  ",article_pagination.role:",article_pagination.role)
+     // 计算属性，筛选出查询数据和表格数据相等元素的数据
     let math_role_data= computed(() => {
       return user_list_data.value.filter(user => user.role === article_pagination.role);
     })
 
-    console.log('math_role_data:',math_role_data.value);
+    // console.log('math_role_data:',math_role_data.value);
 
 
     user_list_data.value=math_role_data.value;
@@ -353,6 +338,7 @@ let route_query_obj =JSON.parse(route_query_str);
   }else{
     getUserListPageData();
   }
+  getPageLayoutData();
 
 });
 
@@ -395,6 +381,26 @@ function convertStringToNumber(current_string) {
   return new_string;
 }
 
+//监听跨标签消息
+const cancelListen= listenMsg((msgInfo)=>{
+  if(msgInfo.type==='add-user'){
+
+  }else if(msgInfo.type==='edit-user'){
+    const i=user_list_data.value.findIndex((e)=>e.user_id===msgInfo.content.user_id);
+    if(i>=0){
+      user_list_data.value[i]=msgInfo.content;
+
+    }
+  }
+
+  console.log(`监听到其他标签页的消息：msgInfo.type:${msgInfo.type},msgInfo.content:${msgInfo.content}`)
+
+})
+
+
+onUnmounted(() => {
+  cancelListen;//移除监听跨标签消息
+})
 
 
 </script>

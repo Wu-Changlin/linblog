@@ -235,7 +235,6 @@
    
     //发出分页器数据到父页面进行请求新表格数据
     emit('getPaginationChangeData', pagination);
-    router.push({ name: route.name, query: { current_page: pagination.current_page, current_page_limit: pagination.current_page_limit }, key: new Date().getTime() });
   }
 
   //目前表格显示数据
