@@ -3,8 +3,8 @@
   
   "user_id": 1,
   "nike_name": "守一",
-  "avatar": "/public/logo.png",
-  "email": "111@qq.com",
+  "avatar": "/logo.png",
+  "email": "111@qq.com",  
   "role": 1,
   "user_status": 1,
   "password":"$A1xxx***",

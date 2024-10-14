@@ -1,0 +1,17 @@
+{
+  "table_header": [
+    {"prop": "article_id","label": "id","key":"article_id"},
+    {"prop": "title","label": "标题","key":"title"},
+    {"prop": "menu_name","label": "分栏","key":"menu_name"},
+    {"prop": "article_introduction","label": "简介","key":"article_introduction"},
+    {"prop": "cover","label": "封面","key":"cover","scopedSlot":"cover"},
+    {"prop": "tag_ids","label": "标签","key":"tag_ids"},
+    {"prop": "visits","label": "浏览量","key":"visits"},
+    {"prop": "word_count","label": "字数","key":"word_count"},
+    {"prop": "read_time","label": "阅读时长","key":"read_time"},
+    {"prop": "author_name","label": "作者","key":"author_name"},
+    {"prop": "created_time","label": "创建时间","key":"created_time"},
+    {"prop": "update_time","label": "更新时间","key":"update_time"},
+    {"prop": "delete_time","label": "删除时间","key":"delete_time"}
+  ]
+}

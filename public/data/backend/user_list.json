@@ -7,7 +7,7 @@
     {
       "user_id": 1,
       "nike_name": "守一",
-      "avatar": "/public/logo.png",
+      "avatar": "/logo.png",
       "email": "111@qq.com",
       "role": 1,
       "user_status": 1,
@@ -21,7 +21,7 @@
     {
       "user_id": 2,
       "nike_name": "二胡",
-      "avatar": "/public/logo.png",
+      "avatar": "/logo.png",
       "email": "111@qq.com",
       "role": 2,
       "user_status": 0,
@@ -34,7 +34,7 @@
     {
       "user_id": 3,
       "nike_name": "三餐",
-      "avatar": "/public/logo.png",
+      "avatar": "/logo.png",
       "email": "111@qq.com",
       "role": 1,
       "user_status": 1,
@@ -47,7 +47,7 @@
     {
       "user_id": 4,
       "nike_name": "四喜",
-      "avatar": "/public/logo.png",
+      "avatar": "/logo.png",
       "email": "111@qq.com",
       "role": 1,
       "user_status": 1,
@@ -60,7 +60,7 @@
     {
       "user_id": 5,
       "nike_name": "五味",
-      "avatar": "/public/logo.png",
+      "avatar": "/logo.png",
       "email": "111@qq.com",
       "role": 2,
       "user_status": 0,
@@ -73,7 +73,7 @@
     {
       "user_id": 6,
       "nike_name": "七情",
-      "avatar": "/public/logo.png",
+      "avatar": "/logo.png",
       "email": "111@qq.com",
       "role": 2,
       "user_status": 0,
@@ -86,7 +86,7 @@
     {
       "user_id": 7,
       "nike_name": "二泉",
-      "avatar": "/public/logo.png",
+      "avatar": "/logo.png",
       "email": "111@qq.com",
       "role": 1,
       "user_status": 1,
@@ -99,7 +99,7 @@
     {
       "user_id": 8,
       "nike_name": "三好",
-      "avatar": "/public/logo.png",
+      "avatar": "/logo.png",
       "email": "111@qq.com",
       "role": 2,
       "user_status": 0,
@@ -112,7 +112,7 @@
     {
       "user_id": 9,
       "nike_name": "六欲",
-      "avatar": "/public/logo.png",
+      "avatar": "/logo.png",
       "email": "111@qq.com",
       "role": 1,
       "user_status": 1,
@@ -125,7 +125,7 @@
     {
       "user_id": 10,
       "nike_name": "四季",
-      "avatar": "/public/logo.png",
+      "avatar": "/logo.png",
       "email": "111@qq.com",
       "role": 2,
       "user_status": 0,
@@ -138,7 +138,7 @@
     {
       "user_id": 11,
       "nike_name": "五谷",
-      "avatar": "/public/logo.png",
+      "avatar": "/logo.png",
       "email": "111@qq.com",
       "role": 2,
       "user_status": 0,
@@ -151,7 +151,7 @@
     {
       "user_id": 12,
       "nike_name": "六畜",
-      "avatar": "/public/logo.png",
+      "avatar": "/logo.png",
       "email": "111@qq.com",
       "role": 2,
       "user_status": 0,

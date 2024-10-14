@@ -176,7 +176,7 @@ const resetQueryFormData = () => {
       router.push({ name:route.name, query: query_data, key: new Date().getTime() });
 
       // 获取查询数据
-      $postData('/data/backend/query_data.json',query_data)
+      $postData('/data/backend/user_query_data.json',query_data)
   .then(response => {
     user_list_data.value=response.user_list_data;
     pagination_data.current_page=response.current_page;
@@ -384,7 +384,8 @@ function convertStringToNumber(current_string) {
 //监听跨标签消息
 const cancelListen= listenMsg((msgInfo)=>{
   if(msgInfo.type==='add-user'){
-
+    // unshift()方法将一个或多个元素添加到数组的开头，并返回新数组的长度。
+    user_list_data.value.unshift(msgInfo.content);
   }else if(msgInfo.type==='edit-user'){
     const i=user_list_data.value.findIndex((e)=>e.user_id===msgInfo.content.user_id);
     if(i>=0){
@@ -393,7 +394,7 @@ const cancelListen= listenMsg((msgInfo)=>{
     }
   }
 
-  console.log(`监听到其他标签页的消息：msgInfo.type:${msgInfo.type},msgInfo.content:${msgInfo.content}`)
+  // console.log(`监听到其他标签页的消息：msgInfo.type:${msgInfo.type},msgInfo.content:${msgInfo.content}`)
 
 })
 

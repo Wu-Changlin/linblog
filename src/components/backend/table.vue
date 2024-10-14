@@ -269,18 +269,18 @@
 
 
   /* 修改前后箭头未点击时的背景颜色 */
-  :deep .el-pagination .btn-prev,
-  :deep .el-pagination .btn-next {
+  :deep(.el-pagination .btn-prev),
+  :deep(.el-pagination .btn-next){
     background-color: #0e3a90 !important;
   }
 
   /* 修改未点击时的数字方块背景颜色 */
-  :deep .el-pagination .el-pager li:not(.active):not(.disabled):hover {
+  :deep(.el-pagination .el-pager li:not(.active):not(.disabled):hover) {
     background-color: #75fbff !important;
   }
 
   /* 未点击时的数字方块背景颜色 */
-  :deep .el-pagination .el-pager li:not(.active):not(.disabled) {
+  :deep(.el-pagination .el-pager li:not(.active):not(.disabled)) {
     background-color: #0e3a90 !important;
     color: #75fbff;
   }

@@ -172,8 +172,46 @@ function clickSubmit(){
       $postData('/data/backend/edit_user_data.json',ruleForm)
   .then(response => {
     //把修改或添加消息广播出去
-    sendMsg('add-user','2222');
-    $message('修改或添加成功', 'success');
+    // const msg_content=response.action_success_data;
+    if(route.query.action=="edit"){
+      //模拟
+      let msg_content={
+      user_id: 1,
+      nike_name: "edit-user",
+      avatar: "/logo.png",
+      email: "xxx@qq.com",  
+      role: 1,
+      user_status: 1,
+      account_status: "edit-user",
+      created_time: "1687938191",
+      update_time: "1728874350",
+    }
+    
+
+    sendMsg('edit-user',msg_content);
+    $message('修改成功', 'success');
+
+    }else if(route.query.action=="add"){
+       //模拟
+      let msg_content={
+      user_id: 999,
+      nike_name: "add-user",
+      avatar: "/logo.png",
+      email: "xxx@qq.com",  
+      role: 1,
+      user_status: 1,
+      account_status: "add-user",
+      created_time: "1687938191",
+      update_time: "1687938191",
+    }
+    
+
+    sendMsg('add-user',msg_content);
+    $message('添加成功', 'success');
+
+    }
+    
+    
   })
   .catch(error => {
     // console.log(' getPageLayoutData()=>error:',error)
@@ -248,9 +286,15 @@ onMounted(() => {
   //如果是action=="edit"，那么获取当前编辑id数据
   if(route.query.action=="edit"){
     getEditCurrentIdData(route.query);
+  }else if(route.query.action=="add"){
+    getAddOrEditPageLayoutData();
+  }else{
+    $message('非法操作', 'error');
+    router.push({path:'/404'});//重定向到404页面
+    return;
   }
 
-  getAddOrEditPageLayoutData();
+  
 }else{
   $message('非法请求', 'error');
 }
