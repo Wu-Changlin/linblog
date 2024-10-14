@@ -18,7 +18,17 @@
   </el-form-item>
 
   <el-form-item v-model="ruleForm.avatar" label="头像" prop="avatar">
-    
+    <div v-if="ruleForm.avatar">
+  <el-image 
+  style="width: 200px; height: 40px"
+  :src="ruleForm.avatar"
+  :preview-src-list="[ruleForm.avatar]"
+  fit="cover"
+  />
+
+</div>
+
+
     <el-button class="avatar_card" @click="dialogConfig.is_show=true">
 
       <img     v-if="selected.cover_path" :src="selected.cover_path" alt="" class="cover_img" >
@@ -28,7 +38,7 @@
     </el-button>
                           
     <ArticleCoverList :key="dialogConfig.is_show" :is_show="dialogConfig.is_show"  @close="dialogConfig.is_show = false" @success="SelectCover"></ArticleCoverList>
-
+  
   </el-form-item>
 
 
@@ -92,6 +102,7 @@ const router=useRouter();
 const ruleFormRef = ref();
 //初始化添加数据
 const ruleForm=reactive({
+  user_id:0,
   nike_name:"",
   email:"",
   cover:"",
@@ -238,6 +249,8 @@ function clickSubmit(){
 function getEditCurrentIdData(edit_current_id_data){
   $postData('/data/backend/edit_user_data.json',edit_current_id_data)
   .then(response => {
+    
+    ruleForm.user_id=response.user_id;
 
     ruleForm.nike_name=response.nike_name;
     ruleForm.email=response.email;
@@ -286,6 +299,7 @@ onMounted(() => {
   //如果是action=="edit"，那么获取当前编辑id数据
   if(route.query.action=="edit"){
     getEditCurrentIdData(route.query);
+    getAddOrEditPageLayoutData();
   }else if(route.query.action=="add"){
     getAddOrEditPageLayoutData();
   }else{

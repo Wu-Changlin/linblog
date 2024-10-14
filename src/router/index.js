@@ -46,11 +46,6 @@ const routes = [
 
 
 
-            {
-                path: '/test',
-                name: "test",
-                component: () => import('@/views/frontend/test.vue'),//引入该路由使用的组件
-            }
 
 
 
@@ -215,6 +210,11 @@ const routes = [
 
 
 
+    {
+        path: '/test',
+        name: "test",
+        component: () => import('@/views/frontend/test.vue'),//引入该路由使用的组件
+    },
 
     {
         //在路由列表的底部添加一个通配符路由，它会捕获所有未匹配到具体路由的URL，并将用户重定向到/404页面。

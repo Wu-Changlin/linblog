@@ -23,7 +23,7 @@
 
 
     <div class="table-container">
-      <el-table class="custom-table-bg" :data="data.tableData" :row-key="
+      <el-table class="custom-table-bg" :data="data.tableData" style="width: 100%" :row-key="
           (row) => {
             return row[id_name];
           }
@@ -41,6 +41,23 @@
               </template>
               <!-- 图片列特殊处理 start-->
             </el-table-column>
+          </template>
+          <!-- 标题列特殊处理 start-->
+          <template v-else-if="item.key==='title'">
+              <el-table-column width="240" :prop="item.prop" :label="item.label" :key="item.key">
+                <template #default="scope">
+                <el-popover
+                placement="top-start"
+                :title="item.label"
+                width="240"
+                trigger="hover"
+                :content="scope.row.title">
+          <template #reference>
+            <div>{{ scope.row.title }}</div>
+          </template>
+        </el-popover>
+      </template>
+              </el-table-column>
           </template>
           <template v-else>
             <el-table-column :prop="item.prop" :label="item.label" :key="item.key" />

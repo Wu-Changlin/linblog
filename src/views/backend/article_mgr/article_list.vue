@@ -235,7 +235,7 @@ $getData('/data/backend/article_list.json')
     pagination_data.current_page_limit=response.current_page_limit;
     pagination_data.total_count=response.total_count;
   
-    // console.log('article_list_data',article_list_data.value)
+     console.log('article_list_data：',article_list_data.value)
 
     flag.value = true;
     // is_loading.value = false;
