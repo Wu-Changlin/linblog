@@ -23,7 +23,7 @@
 
               <el-form-item label="栏目" prop="menu_id">
                 <el-radio-group v-model="ruleForm.menu_id" @change="checkColumnRadioInfo">
-                  <el-radio v-for="item in menu_data" :key="item.menu_id" :value="item.menu_id" border> {{
+                  <el-radio  v-for="item in menu_data" :key="item.menu_id" :value="item.menu_id" border> {{
                     item.menu_title }}</el-radio>
                 </el-radio-group>
               </el-form-item>
@@ -57,12 +57,12 @@
 
               </el-form-item>
 
-              <el-form-item v-model="ruleForm.tag_ids" label="标签" prop="tag_ids">
+              <el-form-item  label="标签" v-model="ruleForm.tag_ids" prop="tag_ids">
 
-                <el-checkbox-group style="display: flex;overflow: hidden;flex-wrap: wrap;" v-model="ruleForm.tag_ids"
+                <el-checkbox-group style="display: flex;overflow: hidden;flex-wrap: wrap;"  v-model="ruleForm.tag_ids"
                   @change="checkTagsBoxInfo">
-                  <el-checkbox style="margin-top: 10px;" v-for="item in tags_data" :key="item.tag_id"
-                    :value="item.tag_id" size="large" border>
+                  <el-checkbox  style="margin-top: 10px;" v-for="item in tags_data" :key="item.tag_id"
+                    :value="item.tag_id" :label="item.tag_name" size="large" border>
                     {{ item.tag_name }}
                   </el-checkbox>
                 </el-checkbox-group>
@@ -103,6 +103,8 @@
   import { MdEditor } from 'md-editor-v3';
   import 'md-editor-v3/lib/style.css';
 
+
+
   const route = useRoute();
   const router = useRouter();
   //使用 provide inject 代替getCurrentInstance
@@ -112,6 +114,8 @@
   const $message = inject('$message');
 
   const is_show_panel = ref(false);
+
+
 
 
   const onUploadImg = (files) => {
@@ -130,29 +134,16 @@
 
 
 
-  //点击标签多选框选中值
-  function checkTagsBoxInfo(val) {
-    //            //console.log('ruleForm.tag start='+ruleForm.tag)
-    //            console.log('checkTagsBoxInfo（val） =',val)
-    //            console.log('ruleForm.tag_ids:',ruleForm.tag_ids);
+    //点击标签多选框选中值
+    function checkTagsBoxInfo(val) {
 
-    // //用indexof来检测 被选中的数组里面是否已有现在点击的这条的menu_id
-    // let checkedIndex = ruleForm.tag_ids.indexOf(val)
+      // 使用函数
+      ruleForm.tag_ids_names = findTagNamesById(ruleForm.tag_ids, tags_data.value);
+      console.log('ruleForm.tag_ids_names:', ruleForm.tag_ids_names)
+      console.log('checkTagsBoxInfo（val） =',val)
+    }
 
-    // console.log('checkedIndex ='+checkedIndex)
 
-    // //返回-1表示 无 则把该条的id push进数组并令flag为true
-    // if (checkedIndex == -1) {
-    //   ruleForm.article_tag.push(val.id)
-    // } else {
-    //   //如果有的话checkindex返回所在的index 当本来选中又取消时就需要把此条数据删除
-    //   //此时正好用splice 要把本来在里面的所在的index的id从数组里删除
-    //   ruleForm.article_tag.splice(checkedIndex, 1)
-    // }
-
-    //console.log('ruleForm.tag end='+ruleForm.tag)
-
-  }
 
   // dialogConfig 控制显示/隐藏封面图片列表
   const dialogConfig = reactive({
@@ -179,7 +170,6 @@
 
 
   const ruleFormRef = ref();
-
   //初始化添加数据
   const ruleForm = reactive({
     article_id: 0,
@@ -187,6 +177,7 @@
     article_abstract: "",
     cover: "",
     tag_ids: [],
+    tag_ids_names:'',
     author_name: "",
     menu_id: "",
     article_content: ""
@@ -195,6 +186,8 @@
 
 
 
+
+  
 
 
 
@@ -230,6 +223,8 @@
                 cover: "/logo.png",
                 // JavaScript数组转换为逗号分隔的字符串，可以使用join()方法。
                 tag_ids: ruleForm.tag_ids ? ruleForm.tag_ids.join(',') : '',
+               // 使用JavaScript的String.prototype.split方法来将字符串按照指定的分隔符转换为数组
+                tag_ids_names:  ruleForm.tag_ids_names ?  ruleForm.tag_ids_names.split(',') : '',
                 visits: 1,
                 word_count: 1000,
                 read_time: "3:03",
@@ -250,6 +245,8 @@
                 cover: "/logo.png",
                 // JavaScript数组转换为逗号分隔的字符串，可以使用join()方法。
                 tag_ids: ruleForm.tag_ids ? ruleForm.tag_ids.join(',') : '',
+                // 使用JavaScript的String.prototype.split方法来将字符串按照指定的分隔符转换为数组
+                tag_ids_names:  ruleForm.tag_ids_names ?  ruleForm.tag_ids_names.split(',') : '',
                 visits: 1,
                 word_count: 1000,
                 read_time: "3:03",
@@ -376,6 +373,35 @@
       $message('非法请求', 'error');
     }
   });
+
+
+
+  
+
+  /*
+  js数据处理:根据字符串tag_id数组,递归找到另一个对象数组里对应tag_id项所对应的tag_name
+  使用JavaScript中的String.prototype.replace()方法来去除字符串中的第一个逗号。
+  */
+  function findTagNamesById(ids, data){
+  // return ids.map(id => {
+  //   const item = data.find(item => item.tag_id === id);
+  //   return item ? item.tag_name : null; // 如果找不到对应的项，返回null或者其他默认值
+  // });
+
+  let tag_name_string='';
+
+   ids.map(id => {
+    const item = data.find(item => item.tag_id === id);
+     item ?tag_name_string +=","+item.tag_name : null; // 如果找不到对应的项，返回null或者其他默认值
+  });
+
+  tag_name_string = tag_name_string.replace(/^,/, '');
+
+  return tag_name_string;
+
+
+};
+
 
 
 </script>

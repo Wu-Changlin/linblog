@@ -71,7 +71,7 @@
       <!-- 在JavaScript中，可以使用String.prototype.split((',')方法将逗号分隔的字符串转换为数组。 -->
 
         <el-tag
-        v-for="(tag, index) in scope.row.tag_ids_names.split(',')"
+        v-for="(tag, index) in scope.row.tag_ids_names"
         :key="index"
         :prop="tag" 
         :label="tag" 
@@ -273,7 +273,7 @@ $getData('/data/backend/article_list.json')
     pagination_data.current_page_limit=response.current_page_limit;
     pagination_data.total_count=response.total_count;
   
-     console.log('article_list_data：',article_list_data.value)
+    //  console.log('article_list_data：',article_list_data.value);
 
     flag.value = true;
     // is_loading.value = false;

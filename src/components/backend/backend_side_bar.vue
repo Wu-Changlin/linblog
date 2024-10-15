@@ -73,7 +73,7 @@
 
 	//侧边栏菜单点击
 	function clickMenu(menu_path) {
-		console.log('menu_path:', menu_path);
+		// console.log('menu_path:', menu_path);
 
 		//路由跳转
 		router.push({path: menu_path})
