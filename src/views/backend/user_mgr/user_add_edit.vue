@@ -187,7 +187,7 @@ function clickSubmit(){
     if(route.query.action=="edit"){
       //模拟
       let msg_content={
-      user_id: 1,
+      user_id:route.query.id ?Number(route.query.id): 1,
       nike_name: "edit-user",
       avatar: "/logo.png",
       email: "xxx@qq.com",  

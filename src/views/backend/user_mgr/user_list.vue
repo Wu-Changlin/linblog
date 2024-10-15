@@ -52,13 +52,13 @@
       <el-button size="small" type="primary"  @click="clickGotoAddOrEditPage(active_data,'edit')">编辑</el-button>
     </template>
 
-    <!-- 图片列特殊处理 start-->
+    <!-- 图片列特殊处理 开始-->
 <template #avatar="scope">
 
 <el-image class="table_img" :src="scope.row.avatar" />
             
 </template>
-<!-- 图片列特殊处理 end-->
+<!-- 图片列特殊处理 结束-->
 
     
   </Table>
@@ -388,6 +388,8 @@ const cancelListen= listenMsg((msgInfo)=>{
     user_list_data.value.unshift(msgInfo.content);
   }else if(msgInfo.type==='edit-user'){
     const i=user_list_data.value.findIndex((e)=>e.user_id===msgInfo.content.user_id);
+    console.log('msgInfo.content.article_id:',msgInfo.content.article_id,',user_list_data.value[i]:',JSON.stringify(user_list_data.value))
+    
     if(i>=0){
       user_list_data.value[i]=msgInfo.content;
 

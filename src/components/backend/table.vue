@@ -37,28 +37,35 @@
             <el-table-column width="200" align="center" :prop="item.prop" :label="item.label" :key="item.key">
               <!-- 图片列特殊处理 start-->
               <template #default="scope">
+                <!-- <slot :name="item.prop" :row="scope.row" :index="scope.$index"></slot> -->
                 <slot :name="item.prop" :row="scope.row" :index="scope.$index"></slot>
               </template>
+
+              
               <!-- 图片列特殊处理 start-->
             </el-table-column>
           </template>
-          <!-- 标题列特殊处理 start-->
-          <template v-else-if="item.key==='title'">
+          
+            <!-- 标签列特殊处理 start-->
+            <!-- <template v-else-if="item.key==='tag_ids_names'">
               <el-table-column width="240" :prop="item.prop" :label="item.label" :key="item.key">
                 <template #default="scope">
-                <el-popover
-                placement="top-start"
-                :title="item.label"
-                width="240"
-                trigger="hover"
-                :content="scope.row.title">
-          <template #reference>
-            <div>{{ scope.row.title }}</div>
+                  <el-tag
+                  v-for="(tag, index) in scope.row.tag_ids_names"
+                  :key="index"
+                
+                  :prop="item.tag" 
+                  :label="item.tag" 
+                  size="small">
+                  {{ tag }}
+                </el-tag>
+
           </template>
-        </el-popover>
-      </template>
-              </el-table-column>
-          </template>
+        </el-table-column>
+      </template> -->
+              
+          
+
           <template v-else>
             <el-table-column :prop="item.prop" :label="item.label" :key="item.key" />
           </template>

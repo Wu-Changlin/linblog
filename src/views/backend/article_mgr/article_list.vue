@@ -4,18 +4,6 @@
   <div class="feeds-page">
     <div class="feeds-container">
 
-        
-
-
-
-
-  <!-- <el-button type="primary"  @click="addUserDialog">添加用户</el-button>
-  <el-button type="primary"  @click="editUserDialog">编辑用户</el-button> -->
-
-
-
-  
-
   <Table  v-if="flag" :parentPageTableData="article_list_data" :parentPagePaginationData="pagination_data" 
   :tableHeader="table_header"  @getPaginationChangeData="getChildPaginationChangeData" 
   @batchRemoveCurrentActiveIds="batchRemoveChildCurrentActiveIds"  @deleteCurrentActiveId="deleteChildCurrentActiveId"> 
@@ -52,13 +40,52 @@
       <el-button size="small" type="primary"  @click="clickGotoAddOrEditPage(active_data,'edit')">编辑</el-button>
     </template>
 
-    <!-- 图片列特殊处理 start-->
+    <!-- 图片列特殊处理 开始-->
 <template #cover="scope">
 
 <el-image class="table_img" :src="scope.row.cover" />
             
 </template>
-<!-- 图片列特殊处理 end-->
+<!-- 图片列特殊处理 结束-->
+
+<!-- 文章标题列特殊处理 开始-->
+
+<template #title="scope">
+  <el-popover
+  placement="top-start"
+  :title="scope.row.label"
+  width="240"
+  trigger="hover"
+  :content="scope.row.title">
+<template #reference>
+<div>{{ scope.row.title }}</div>
+</template>
+</el-popover>
+</template>
+
+<!-- 文章标题列特殊处理 结束-->
+
+    <!-- 标签列特殊处理 开始-->
+    <template #tag_ids_names="scope">
+
+      <!-- 在JavaScript中，可以使用String.prototype.split((',')方法将逗号分隔的字符串转换为数组。 -->
+
+        <el-tag
+        v-for="(tag, index) in scope.row.tag_ids_names.split(',')"
+        :key="index"
+        :prop="tag" 
+        :label="tag" 
+        style="margin-left: 10px;"
+        size="small">
+        {{ tag }}
+      </el-tag>
+
+
+
+      <!-- <el-tag>{{ scope.row.tag_ids_names }}</el-tag> -->
+                  
+      </template>
+      <!--  标签列特殊处理 结束-->
 
     
   </Table>
@@ -77,6 +104,17 @@ import ArticleCoverList from '@/components/backend/article_cover_list.vue';
 import Table from "@/components/backend/table.vue";
 
 import {listenMsg} from '@/components/crossTagMsg.js';
+
+const tag_array=ref(["笔记",'资源']);
+
+
+const items = ref([
+  { type: 'primary', label: 'Tag 1' },
+  { type: 'success', label: 'Tag 2' },
+  { type: 'info', label: 'Tag 3' },
+  { type: 'warning', label: 'Tag 4' },
+  { type: 'danger', label: 'Tag 5' },
+])
 
 const route=useRoute();
 const router=useRouter();
@@ -381,14 +419,14 @@ const cancelListen= listenMsg((msgInfo)=>{
     // unshift()方法将一个或多个元素添加到数组的开头，并返回新数组的长度。
     article_list_data.value.unshift(msgInfo.content);
   }else if(msgInfo.type==='edit-article'){
-    const i=article_list_data.value.findIndex((e)=>e.article_id===msgInfo.content.article_id);
+    const i=article_list_data.value.findIndex((e)=>e.article_id === msgInfo.content.article_id);
+    
     if(i>=0){
       article_list_data.value[i]=msgInfo.content;
-
     }
   }
 
-  console.log(`监听到其他标签页的消息：msgInfo.type:${msgInfo.type},msgInfo.content:${msgInfo.content}`)
+  console.log(`监听到其他标签页的消息：msgInfo.type:${msgInfo.type},msgInfo.content:${JSON.stringify(msgInfo.content)}`)
 
 })
 

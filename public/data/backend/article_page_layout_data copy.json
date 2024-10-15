@@ -1,11 +1,10 @@
 {
   "table_header": [
     {"prop": "article_id","label": "article_id","key":"article_id"},
-    {"prop": "title","label": "标题","key":"title","scopedSlot":"title"},
+    {"prop": "title","label": "标题","key":"title"},
     {"prop": "menu_title","label": "分栏","key":"menu_title"},
-    {"prop": "tag_ids_names","label": "标签","key":"tag_ids_names","scopedSlot":"tag_ids_names"},
     {"prop": "cover","label": "封面","key":"cover","scopedSlot":"cover"},
-    {"prop": "tag_ids","label": "标签","key":"tag_ids"},
+    {"prop": "tag_ids_names","label": "标签","key":"tag_ids_names","tag_ids_names":"tag_ids_names"},
     {"prop": "visits","label": "浏览量","key":"visits"},
     {"prop": "word_count","label": "字数","key":"word_count"},
     {"prop": "read_time","label": "阅读时长","key":"read_time"},
