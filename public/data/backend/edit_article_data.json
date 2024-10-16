@@ -2,9 +2,10 @@
 
   "article_id": 30,
   "menu_id": 3,
+  "is_pulled": 0,
   "menu_title":"后端",
-  "tag_ids": "30,31,32",
-  "tag_ids_name": "C++,Java,Python", 
+  "tag_ids": "30,31,32",   
+  "tag_ids_names":["C++","Java","Python"],
   "visits": 3000,
   "word_count": 30000,
   "read_time": "19:47",

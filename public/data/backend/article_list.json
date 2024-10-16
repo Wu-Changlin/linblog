@@ -9,6 +9,7 @@
       "author_name": "b站",
       "menu_id": 4,
       "menu_title": "资源",
+      "is_pulled": 1,
       "created_time": "1687938191",
       "update_time": "1687938191",
       "title": "众所周知，B站是一个学习网站",
@@ -21,7 +22,7 @@
     {
       "article_id": 20,
       "menu_id": 2,
-      "menu_name": "frontend",
+      "menu_name": "frontend","is_pulled": 0,
       "menu_title": "前端",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -37,7 +38,7 @@
     {
       "article_id": 21,
       "menu_id": 2,
-      "menu_name": "frontend",
+      "menu_name": "frontend","is_pulled": 0,
       "menu_title": "前端",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -53,7 +54,7 @@
     {
       "article_id": 22,
       "menu_id": 2,
-      "menu_name": "frontend",
+      "menu_name": "frontend","is_pulled": 1,
       "menu_title": "前端",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -69,7 +70,7 @@
     {
       "article_id": 23,
       "menu_id": 2,
-      "menu_name": "frontend",
+      "menu_name": "frontend","is_pulled": 0,
       "menu_title": "前端",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -85,7 +86,7 @@
     {
       "article_id": 30,
       "menu_id": 3,
-      "menu_name": "backend",
+      "menu_name": "backend","is_pulled": 0,
       "menu_title": "后端",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -100,7 +101,7 @@
     {
       "article_id": 31,
       "menu_id": 3,
-      "menu_name": "backend",
+      "menu_name": "backend","is_pulled": 0,
       "menu_title": "后端",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -115,7 +116,7 @@
     {
       "article_id": 32,
       "menu_id": 3,
-      "menu_name": "backend",
+      "menu_name": "backend","is_pulled": 0,
       "menu_title": "后端",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -130,7 +131,7 @@
     {
       "article_id": 33,
       "menu_id": 3,
-      "menu_name": "backend",
+      "menu_name": "backend","is_pulled": 0,
       "menu_title": "后端",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -146,7 +147,7 @@
     {
       "article_id": 50,
       "menu_id": 6,
-      "menu_name": "diary",
+      "menu_name": "diary","is_pulled": 0,
       "menu_title": "随笔",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -161,7 +162,7 @@
     {
       "article_id": 51,
       "menu_id": 6,
-      "menu_name": "diary",
+      "menu_name": "diary","is_pulled": 0,
       "menu_title": "随笔",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -176,7 +177,7 @@
     {
       "article_id": 52,
       "menu_id": 6,
-      "menu_name": "diary",
+      "menu_name": "diary","is_pulled": 0,
       "menu_title": "随笔",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -191,7 +192,7 @@
     {
       "article_id": 53,
       "menu_id": 6,
-      "menu_name": "diary",
+      "menu_name": "diary","is_pulled": 0,
       "menu_title": "随笔",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -206,7 +207,7 @@
     {
       "article_id": 50,
       "menu_id": 6,
-      "menu_name": "diary",
+      "menu_name": "diary","is_pulled": 0,
       "menu_title": "随笔",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -221,7 +222,7 @@
     {
       "article_id": 51,
       "menu_id": 6,
-      "menu_name": "diary",
+      "menu_name": "diary","is_pulled": 0,
       "menu_title": "随笔",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -236,7 +237,7 @@
     {
       "article_id": 52,
       "menu_id": 6,
-      "menu_name": "diary",
+      "menu_name": "diary","is_pulled": 0,
       "menu_title": "随笔",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -251,7 +252,7 @@
     {
       "article_id": 53,
       "menu_id": 6,
-      "menu_name": "diary",
+      "menu_name": "diary","is_pulled": 0,
       "menu_title": "随笔",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -266,7 +267,7 @@
     {
       "article_id": 54,
       "menu_id": 6,
-      "menu_name": "diary",
+      "menu_name": "diary","is_pulled": 0,
       "menu_title": "随笔",
       "created_time": "1687938191",
       "update_time": "1687938191",
@@ -281,7 +282,7 @@
     {
       "article_id": 99,
       "menu_id": 2,
-      "menu_name": "frontend",
+      "menu_name": "frontend","is_pulled": 0,
       "menu_title": "前端",
       "created_time": "1687938191",
       "update_time": "1687938191",

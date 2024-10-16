@@ -80,7 +80,7 @@
       <div class="contribution-tip-container">
         <div class="contribution-tip-content">
           <div class="contributions_count">0</div>
-          <svg-icon class="svg_icon" icon-class="jindutiao" />
+          <svg-icon class="svg_icon" icon-class="symbol_progress_bar" />
           <div class="contributions_count">4+</div>
         </div>
 

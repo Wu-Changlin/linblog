@@ -94,11 +94,7 @@ const routes = [
                 component:()=>import('@/views/backend/menu_mgr/menu_list.vue'),
             },
 
-            {
-                path:'/menu_add_edit',
-                name:"menu_add_edit",
-                component:()=>import('@/views/backend/menu_mgr/menu_add_edit.vue'),
-            },
+           
             {
                 path:'auth_list',
                 name:"auth_list",
@@ -139,6 +135,13 @@ const routes = [
         name:"article_add_edit",
         component:()=>import('@/views/backend/article_mgr/article_add_edit.vue'),
     },
+
+    {
+        path:'/menu_add_edit',
+        name:"menu_add_edit",
+        component:()=>import('@/views/backend/menu_mgr/menu_add_edit.vue'),
+    },
+    
     {
         path:'/admin/tag_add_edit',
         name:"tag_add_edit",

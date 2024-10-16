@@ -53,9 +53,9 @@
     </el-input>
   </el-form-item>
       
-  <el-form-item label="启用" prop="user_status">
+  <el-form-item label="启用" prop="is_enable">
   <el-switch
-  v-model="ruleForm.user_status"
+  v-model="ruleForm.is_enable"
   inline-prompt
   active-text="是"
   inactive-text="否"
@@ -109,7 +109,7 @@ const ruleForm=reactive({
   password:"",
   again_password:"",
   role:"",
-  user_status:false,
+  is_enable:false,
 
 })
 /*封面 开始*/
@@ -192,7 +192,7 @@ function clickSubmit(){
       avatar: "/logo.png",
       email: "xxx@qq.com",  
       role: 1,
-      user_status: 1,
+      is_enable:ruleForm.is_pulled===true?1:0,
       account_status: "edit-user",
       created_time: "1687938191",
       update_time: "1728874350",
@@ -210,7 +210,7 @@ function clickSubmit(){
       avatar: "/logo.png",
       email: "xxx@qq.com",  
       role: 1,
-      user_status: 1,
+      is_enable:ruleForm.is_pulled===true?1:0,
       account_status: "add-user",
       created_time: "1687938191",
       update_time: "1687938191",
@@ -232,7 +232,6 @@ function clickSubmit(){
 
 
 
-     
     
     } else {
       // 有字段没有通过验证
@@ -251,14 +250,17 @@ function getEditCurrentIdData(edit_current_id_data){
   .then(response => {
     
     ruleForm.user_id=response.user_id;
-
     ruleForm.nike_name=response.nike_name;
     ruleForm.email=response.email;
     ruleForm.avatar=response.avatar;
     ruleForm.password=response.password;
     ruleForm.again_password=response.again_password;
     ruleForm.role=response.role;
-    ruleForm.user_status=response.user_status==1?true:false;
+    ruleForm.is_enable=response.is_enable==1?true:false;
+
+
+    //模拟数据 id=route.query.id
+    ruleForm.menu_id = route.query.id;
     
   })
   .catch(error => {

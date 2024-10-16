@@ -10,9 +10,20 @@
     {"prop": "word_count","label": "字数","key":"word_count"},
     {"prop": "read_time","label": "阅读时长","key":"read_time"},
     {"prop": "author_name","label": "作者","key":"author_name"},
+    {"prop": "is_pulled","label": "下架","key":"is_pulled"},
     {"prop": "created_time","label": "创建时间","key":"created_time"},
     {"prop": "update_time","label": "更新时间","key":"update_time"},
     {"prop": "delete_time","label": "删除时间","key":"delete_time"}
+  ],
+  "is_pulled_data": [
+    {
+      "value": 0,
+      "label": "否"
+    },
+    {
+      "value": 1,
+      "label": "是"
+    }
   ],
   "menu_data":[
     {

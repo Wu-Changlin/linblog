@@ -225,7 +225,7 @@ const pagination_data = reactive({
 //   "total_count":12,
 //   "current_page":1,
 //   "current_page_limit":10,
-  //获取数据（内容标签栏数据、博文列表数据（瀑布流组件））  
+  //获取数据
   function getUserListPageData() {
 
 $getData('/data/backend/user_list.json')

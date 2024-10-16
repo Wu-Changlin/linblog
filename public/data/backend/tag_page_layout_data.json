@@ -1,0 +1,47 @@
+{
+  "table_header": [
+    { "prop": "tag_id", "label": "tag_id", "key": "tag_id" },
+    { "prop": "menu_title", "label": "所属栏目", "key": "menu_title" },
+    { "prop": "tag_name", "label": "标签名", "key": "tag_name","scopedSlot":"tag_name"},
+    { "prop": "tag_keywords", "label": "关键词", "key": "tag_keywords" },
+    { "prop": "tag_description", "label": "描述", "key": "tag_description" },
+    { "prop": "is_pulled", "label": "下架", "key": "is_pulled" },
+    { "prop": "created_time", "label": "创建时间", "key": "created_time" },
+    { "prop": "update_time", "label": "更新时间", "key": "update_time" },
+    { "prop": "delete_time", "label": "删除时间", "key": "delete_time" }
+  ],
+  "is_pulled_data": [
+    {
+      "value": 0,
+      "label": "否"
+    },
+    {
+      "value": 1,
+      "label": "是"
+    }
+  ],
+  "menu_data":[
+    {
+      "menu_id":3,
+      "menu_name": "backend",
+      "menu_title":"后端",
+      "menu_path": "/backend"
+    },
+  
+    {
+      "menu_id":4,
+      "menu_name": "resource",
+      "menu_title":"资源",
+      "menu_path": "/resource"
+    },
+    {
+      "menu_id":6,
+      "menu_name": "diary",
+      "menu_title":"随笔",
+      "menu_path": "/diary"
+    }
+    
+  ]
+  
+  
+}

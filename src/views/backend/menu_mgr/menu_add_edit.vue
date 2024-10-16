@@ -1,313 +1,281 @@
 <template>
-  
-    <el-collapse>
-      <el-collapse-item title="完善信息" name="1">
-        
-            <el-form
-              ref="ruleFormRef"
-              :model="ruleForm" 
-              label-position="left"
-
-            >
-
-              <div class="form_info">
-
-            
-                <div class="left">
-                  <el-form-item label="标题" prop="article_title">
-                    <el-input v-model="ruleForm.article_title"  placeholder="亲，请输入标题"></el-input>
-                  </el-form-item>
+  <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
+    label-position="left">
+    <el-form-item label="展示名称" prop="menu_title">
+      <el-input v-model="ruleForm.menu_title" placeholder="亲，请输入展示名称"></el-input>
+    </el-form-item>
 
 
-                  <el-form-item label="简介" prop="article_introduction">
-                    <el-input v-model="ruleForm.article_introduction" type="textarea" placeholder="亲，请输入简介"></el-input>
-                  </el-form-item>
+    <el-form-item label="路由Name" prop="menu_name">
+      <el-input v-model="ruleForm.menu_name" placeholder="亲，请输入路由Name"></el-input>
+    </el-form-item>
 
 
-                  <el-form-item label="栏目" prop="article_column">
-                    <el-radio-group v-model="ruleForm.article_column">
-                      <el-radio  v-for="item in columnList"  :key="item.id" :value="item.id" border> {{ item.name }}</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                  
 
-                  <el-form-item label="作者" prop="article_author">
-                    <el-radio-group v-model="ruleForm.article_author">
-                      <el-radio  v-for="item in authorList"  :key="item.id" :value="item.id" border> {{ item.name }}</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-
-                </div>
-
-                <div class="right">
-
-                  <el-form-item v-model="ruleForm.article_cover" label="封面" prop="article_cover">
-
-                    <el-button class="cover_card" @click="dialogConfig.is_show=true">
-
-                      <img     v-if="selected.cover_path" :src="selected.cover_path" alt="" class="cover_img" >
-                      <!-- <el-icon v-else class="cover_card_icon"><Plus /></el-icon> -->
-						<svg-icon v-else style="width: 20;height: 20;" class="reds-icon" icon-class="search" />
+    <el-form-item label="路由Path" prop="menu_path">
+      <el-input v-model="ruleForm.menu_path" placeholder="亲，请输入路由Path">
+      </el-input>
+    </el-form-item>
 
 
-                    </el-button>
-                                          
-                    <ArticleCoverList :key="dialogConfig.is_show" :is_show="dialogConfig.is_show"  @close="dialogConfig.is_show = false" @success="SelectCover"></ArticleCoverList>
-                    
+
+    <el-form-item label="业务层面" prop="business_level">
+      <el-select v-model="ruleForm.business_level" placeholder="请选择">
+        <el-option v-for="(item, index) in options_business_level_data" :key="item.business_level" :label="item.label"
+          :value="item.business_level" />
+      </el-select>
+
+    </el-form-item>
 
 
-                  </el-form-item>
+    <el-form-item label="图标" prop="icon">
+      <!-- 选择器 开始-->
+      <el-select v-model="ruleForm.icon" placeholder="请选择">
+        <!-- 选中回显数据 开始-->
+        <template #prefix>
+          <!-- 将前置插槽数据设置为label的值  显示图标-->
+          <svg-icon v-if="ruleForm.icon" :icon-class="ruleForm.icon" />
+        </template>
+        <!-- 选中回显数据 结束-->
+        <!--选择区 开始-->
+        <el-option v-for="(item, index) in options_icon_data" :key="item" :label="item" :value="item">
+          <div slot="default" style="display: flex; align-items: center;">
+            <svg-icon :icon-class="item" />
+            <div style="margin-left: 10px;"> {{ item }}</div>
+          </div>
+        </el-option>
 
-                  <el-form-item   v-model="ruleForm.article_tag"  label="标签" prpo="article_tag">
-                  
-                    <el-checkbox-group   v-model="ruleForm.article_tag"   @change="checkboxInfo">
-                      <el-checkbox v-for="item in tagList"  :key="item.id" :value="item.id"  size="large" border>
-                        {{ item.name }}
-                      </el-checkbox>
-                    </el-checkbox-group>
-                  
-                  </el-form-item>
+        <!--选择区 结束-->
 
-                </div>
-            
+      </el-select>
+      <!-- 选择器 结束-->
 
-              </div>
+    </el-form-item>
 
-          
-          
-           
-              <el-form-item>
-                <div class="bottom-button">
-                  <el-button>保存草稿</el-button>
-                  <el-button type="primary">发布</el-button>
-                </div>
-                
-              </el-form-item>
-      
-        
-            </el-form>
-          
-      </el-collapse-item>
-    </el-collapse>
- 
-  
-  <MdEditor  height="100vh"  v-model="text" @on-upload-img="onUploadImg" />
-  <!-- <v-md-editor  height="100vh" :disabled-menus="[]" @upload-image="handleUploadImage"/> -->
+
+    <el-form-item label="父节点" prop="parent_id">
+      <el-select v-model="ruleForm.parent_id" placeholder="请选择">
+        <el-option v-for="(item, index) in options_parent_id_data" :key="item.menu_id" :label="item.menu_title"
+          :value="item.menu_id" />
+      </el-select>
+
+    </el-form-item>
+
+    <el-form-item>
+      <div style="width: 100%;">
+        <el-button type="primary" @click="clickSubmit()">提交</el-button>
+      </div>
+
+    </el-form-item>
+
+  </el-form>
 </template>
 
 <script setup>
-import { ref, reactive, nextTick ,watch} from "vue"
-import ArticleCoverList from '@/components/backend/article_cover_list.vue'
-import {MdEditor} from 'md-editor-v3'
-import 'md-editor-v3/lib/style.css'
+  import { ref, reactive, onMounted, computed, nextTick, inject } from "vue";
+  import { useRouter, useRoute } from "vue-router";
+  import ArticleCoverList from '@/components/backend/article_cover_list.vue';
+  import { sendMsg } from '@/components/crossTagMsg.js';
 
-const text = ref('Hello Editor!')
-const onUploadImg = (files) => {
-  console.log(files)
-}
-//栏目数据
-const columnList = [
-  {
-    id: "001",
-    name:'前端'
-  },
-  {
-    id: "002",
-    name:'服务端'
-  },
-  {
-    id: "003",
-    name:'随笔'
-  },
-]
+
+  const route = useRoute();
+  const router = useRouter();
+  //使用 provide inject 代替getCurrentInstance
+  const $verify = inject('$verify');
+  const $getData = inject('$getData');
+  const $postData = inject('$postData');
+  const $message = inject('$message');
 
 
 
-//作者数据
-const authorList = [
-  {
-    id: "001",
-    name:'原创'
-  },
-  {
-    id: "002",
-    name:'转载'
-  },
-]
 
-//标签数据
-const tagList = [
-  {
-    id: "001",
-    name:'php'
-  },
-  {
-    id: "002",
-    name:'vue'
-  },
-  {
-    id: "003",
-    name:'linux'
-  },
-  {
-    id: "004",
-    name:'js'
-  },
 
- 
-]
+  //表单ref
+  const ruleFormRef = ref();
+  //初始化添加数据
+  const ruleForm = reactive({
+    menu_id: 0,
+    menu_name: "",
+    menu_title: "",
+    menu_path: "",
+    icon: "",
+    business_level: "",
+    parent_id: 0,
+  })
 
-//多选框选中值
-function  checkboxInfo(val){
-           
-  //console.log('ruleForm.tag start='+ruleForm.tag)
+  //校验
+  const rules = {
+    email: [
+      { required: true, message: "请输入邮箱" },
+      { maxlength: 150, message: "邮箱长度超限" },
+      // { validator: proxy.$verify.email, message: "邮箱格式有误" },
 
-  //用indexof来检测 被选中的数组里面是否已有现在点击的这条的id
-  let checkedIndex = ruleForm.article_tag.indexOf(val.id)
+    ],
+    password: [
+      { required: true, message: "请输入密码" },
 
-  //console.log('checkedIndex ='+checkedIndex)
+    ],
 
-  //返回-1表示 无 则把该条的id push进数组并令flag为true
-  if (checkedIndex == -1) {
-    ruleForm.article_tag.push(val.id)
-  } else {
-    //如果有的话checkindex返回所在的index 当本来选中又取消时就需要把此条数据删除
-    //此时正好用splice 要把本来在里面的所在的index的id从数组里删除
-    ruleForm.article_tag.splice(checkedIndex, 1)
+  };
+
+  //提交修改数据
+  function clickSubmit() {
+    //valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
+    ruleFormRef.value.validate((valid, fields) => {
+      if (valid) {
+        console.log("表单数据:", ruleForm)
+        // 处理提交逻辑
+        $postData('/data/backend/edit_menu_data.json', ruleForm)
+          .then(response => {
+            //把修改或添加消息广播出去
+            // const msg_content=response.action_success_data;
+            if (route.query.action == "edit") {
+              //模拟
+              let msg_content = {
+                menu_id: route.query.id ? Number(route.query.id) : 1,
+                menu_name: ruleForm.menu_name,
+                menu_title: ruleForm.menu_title,
+                menu_path: ruleForm.menu_path,
+                icon: ruleForm.icon,
+                business_level: ruleForm.business_level,
+                parent_id: ruleForm.parent_id,
+                created_time: "1687938191",
+                update_time: "1687938191",
+                delete_time: "1687938191"
+              }
+
+              sendMsg('edit-menu', msg_content);
+              $message('修改成功', 'success');
+
+            } else if (route.query.action == "add") {
+              //模拟
+              let msg_content = {
+                menu_id: 999,
+                menu_name: ruleForm.menu_name,
+                menu_title: ruleForm.menu_title,
+                menu_path: ruleForm.menu_path,
+                icon: ruleForm.icon,
+                business_level: ruleForm.business_level,
+                parent_id: ruleForm.parent_id,
+                created_time: "1687938191",
+                update_time: "1687938191",
+                delete_time: "1687938191"
+              }
+
+
+              sendMsg('add-menu', msg_content);
+              $message('添加成功', 'success');
+
+            }
+
+
+          })
+          .catch(error => {
+            // console.log(' getPageLayoutData()=>error:',error)
+            $message('请求未找到', 'error');
+            // $message('请求未找到', 'error');
+          });
+
+
+
+
+
+      } else {
+        // 有字段没有通过验证
+        let obj = Object.keys(fields)[0];
+        //使用formEl.scrollToField方法来焦点定位并滚动到特定的表单字段,这里跳到第一个字段
+        ruleFormRef.value.scrollToField(obj);
+        $message('输入数据有误，请检查', 'warning');
+        return false;
+      }
+    });
   }
 
-  //console.log('ruleForm.tag end='+ruleForm.tag)
 
-}
+  function getEditCurrentIdData(edit_current_id_data) {
+    $postData('/data/backend/edit_menu_data.json', edit_current_id_data)
+      .then(response => {
 
+        ruleForm.menu_id = response.menu_id;
+        ruleForm.menu_title = response.menu_title;
+        ruleForm.menu_name = response.menu_name;
+        ruleForm.menu_path = response.menu_path;
+        ruleForm.icon = response.icon;
+        ruleForm.business_level = response.business_level;
+        ruleForm.parent_id = response.parent_id;
 
-//接收子组件emit('success',id,path)，确认选中的封面图片id
-function SelectCover(cover_id,cover_path) {
-  // console.log('SelectCover id='+cover_id); 
-  // console.log('SelectCover path='+cover_path); 
+        //模拟数据 id=route.query.id
+        ruleForm.menu_id = route.query.id;
 
-  selected.cover_id=cover_id;
-  selected.cover_path=cover_path;
-
-
-}
-
-
-const selected=reactive({
-  cover_id:'',
-  cover_path:'',
-})
-
-
-
-const ruleFormRef = ref();
-
-//初始化添加数据
-const ruleForm=reactive({
-  article_title:"",
-  article_introduction:"",
-  article_cover:"",
-  article_tag:[],
-  article_author:"",
-  article_column:"",
-
-})
-
-
-
-
-
-// dialogConfig 控制显示/隐藏封面图片列表
-const dialogConfig = reactive({
-  is_show: false,
-})
-
-//markdown 上传本地图片
-const handleUploadImage = (event, insertImage, files) => {
-      // TODO: 在这里将二进制文件上传到服务器
-      Notification.success('图片上传成功')
-      // 通过回调中的 insertImage 向文本输入图片地址
-      insertImage({
-        url: '', // 服务器上传成功后的图片url
       })
-    }
+      .catch(error => {
+        // console.log(' getPageLayoutData()=>error:',error)
+        $message('请求未找到', 'error');
+        // $message('请求未找到', 'error');
+      });
 
-</script>
-
-
-<style scoped>
-
-/* :deep(.el-checkbox-button__inner){
-    border: 1px dashed var(--el-border-color);
-    border-radius: 6px;
-    margin-right:10px ;
-    font-size: 12px;
-  
-
-} */
-
-.form_info{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--card_bg);
- 
-
-  .left{
-    width: 40%;
-    
   }
-  .right{
-      width: 55%;
-      display: flex;
-      flex-direction: column;
 
-      :deep(.el-checkbox) {
-        background-color: var(--cart_bg);
-        line-height: 100%;
-        border-radius: 4px;
-        margin-right: 10px;  
-        height: 26px;
-        
+
+
+  //选择器数据
+  const options_business_level_data = ref([])
+  const options_parent_id_data = ref([]);
+  const options_icon_data = ref([]);
+
+
+
+  // 获取页面框架数据
+  function getAddOrEditPageLayoutData() {
+
+
+    $getData('/data/backend/menu_page_layout_data.json')
+      .then(response => {
+        options_business_level_data.value = response.options_business_level_data;
+        options_parent_id_data.value = response.options_parent_id_data;
+        options_icon_data.value = response.options_icon_data;
+
+        // unshift()方法将一个或多个元素添加到数组的开头，并返回新数组的长度。
+
+        const root_directory = {
+          menu_id: 0,
+          menu_title: "根目录"
+        }
+
+
+        options_parent_id_data.value.unshift(root_directory)
+
+
+      })
+      .catch(error => {
+        // console.log(' getPageLayoutData()=>error:',error)
+        $message('请求未找到', 'error');
+        // $message('请求未找到', 'error');
+      });
+
+  }
+
+
+  onMounted(() => {
+
+
+    if (Object.keys(route.query).length > 0) {
+      //如果是action=="edit"，那么获取当前编辑id数据
+      if (route.query.action == "edit") {
+        getEditCurrentIdData(route.query);
+        getAddOrEditPageLayoutData();
+      } else if (route.query.action == "add") {
+        getAddOrEditPageLayoutData();
+      } else {
+        $message('非法操作', 'error');
+        router.push({ path: '/404' });//重定向到404页面
+        return;
       }
 
-  }
 
+    } else {
+      $message('非法请求', 'error');
+    }
+  });
 
-}
-
-.cover_card{
-  margin: 0px 0px 0px 0px;
-  padding: 0px 0px 0px 0px;
-  width:  200px;
-  height: 115px;
-  border: 1px dashed var(--el-border-color);
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: var(--el-transition-duration-fast);
-  .cover_img{
-    width: 100%;
-    height: 100%;
-    display: block;
-
-  }
-  
-  .el-icon.cover_card_icon {
-      font-size: 28px;
-      color: #8c939d;
-      text-align: center;
-  }
-    
-}
-
-.bottom-button{
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-
-</style>
+</script>

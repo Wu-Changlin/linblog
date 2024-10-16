@@ -42,7 +42,7 @@
               <span class="card-img-mask-stats-text"> {{ item.visits}}</span>
             </span>
             <span class="card-img-mask-stats-item">
-              <div class="card-img-mask-stats-icon"><svg-icon icon-class="zishu" /></div>
+              <div class="card-img-mask-stats-icon"><svg-icon icon-class="word_count" /></div>
               <span class="card-img-mask-stats-text"> {{ item.word_count}}</span>
             </span>
 

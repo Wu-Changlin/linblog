@@ -70,6 +70,15 @@
               </el-form-item>
 
 
+              <el-form-item label="启用" prop="is_pulled">
+                <el-switch
+                v-model="ruleForm.is_pulled"
+                inline-prompt
+                active-text="是"
+                inactive-text="否"
+              />
+              </el-form-item>
+
             </div>
 
             <div class="bottom-button">
@@ -180,7 +189,8 @@
     tag_ids_names:'',
     author_name: "",
     menu_id: "",
-    article_content: ""
+    article_content: "",
+    is_pulled:false
 
   })
 
@@ -221,6 +231,7 @@
                 title: "edit-article",
                 menu_title: "后端",
                 cover: "/logo.png",
+                is_pulled:ruleForm.is_pulled===true?1:0,
                 // JavaScript数组转换为逗号分隔的字符串，可以使用join()方法。
                 tag_ids: ruleForm.tag_ids ? ruleForm.tag_ids.join(',') : '',
                // 使用JavaScript的String.prototype.split方法来将字符串按照指定的分隔符转换为数组
@@ -243,6 +254,7 @@
                 title: "add-article",
                 menu_title: "前端",
                 cover: "/logo.png",
+                is_pulled:ruleForm.is_pulled===true?1:0,
                 // JavaScript数组转换为逗号分隔的字符串，可以使用join()方法。
                 tag_ids: ruleForm.tag_ids ? ruleForm.tag_ids.join(',') : '',
                 // 使用JavaScript的String.prototype.split方法来将字符串按照指定的分隔符转换为数组
@@ -297,6 +309,10 @@
         ruleForm.author_name = response.author_name;
         ruleForm.menu_id = response.menu_id;
         ruleForm.article_content = response.article_content;
+        ruleForm.is_pulled = response.is_pulled;
+
+         //模拟数据 id=route.query.id
+    ruleForm.article_id = route.query.id;
 
       })
       .catch(error => {
