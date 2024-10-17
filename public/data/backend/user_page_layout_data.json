@@ -17,7 +17,7 @@
     { "prop": "update_time", "label": "更新时间", "key": "update_time" },
     { "prop": "delete_time", "label": "删除时间", "key": "delete_time" }
   ],
-  "options": [
+  "options_role_data": [
     {
       "role": 1,
       "label": "管理员"
@@ -27,7 +27,7 @@
       "label": "普通用户"
     }
   ],
-  "is_pulled_data": [
+  "is_enable_data": [
     {
       "value": 0,
       "label": "否"

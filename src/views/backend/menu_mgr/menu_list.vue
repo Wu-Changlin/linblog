@@ -11,27 +11,28 @@
 
 
                 <template #query>
-                    <el-form :model="query_form_data" @keyup.enter="queryInputData()">
-                        <div style="display: flex;flex-direction: column;">
-                            <el-form-item>
-                                <el-input v-model="query_form_data.nike_name" placeholder="搜索用户昵称" style="width: 200px">
+                    <el-form :inline="false" class="flex-form" :model="query_form_data" @keyup.enter="queryInputData()">
+                    
+                            <el-form-item label="菜单名称">
+                                <el-input v-model="query_form_data.menu_title" placeholder="搜索菜单名称">
                                 </el-input>
                             </el-form-item>
-                            <el-form-item>
-                                <el-select style="width: 200px" v-model="query_form_data.role" placeholder="请选择">
-                                    <el-option v-for="item in options" :key="item.role" :label="item.label"
-                                        :value="item.role" />
+                            
+                            <el-form-item label="业务层面">
+                                <el-select v-model="query_form_data.business_level" placeholder="请选择">
+                                    <el-option v-for="item in options_business_level_data" :key="item.business_level" :label="item.label"
+                                        :value="item.business_level" />
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item>
-                                <div style="width: 100%;">
+                            <el-form-item class="el-form-item-button">
+                                
                                     <el-button type="primary" @click="queryInputData()">查询</el-button>
                                     <el-button type="primary" @click="resetPageData()">重置</el-button>
-                                </div>
+                            
 
                             </el-form-item>
-                        </div>
+                        
                     </el-form>
                 </template>
 
@@ -46,7 +47,7 @@
                 <!-- 图标列特殊处理 开始-->
                 <template #icon="scope">
 
-                    <div style="display: flex; align-items: center;justify-content: center;">
+                    <div v-if="scope.row.icon" style="display: flex; align-items: center;justify-content: center;">
                         <svg-icon :icon-class="scope.row.icon" />
                         <div style="margin-left: 10px;"> {{ scope.row.icon }}</div>
                     </div>
@@ -120,7 +121,7 @@
     //表头  //scopedSlot 自定义插槽的名字
     const table_header = ref([]);
     //选择器数据
-    const options = ref([]);
+    const options_business_level_data = ref([]);
 
     // 获取页面框架数据
     function getPageLayoutData() {
@@ -129,10 +130,10 @@
         $getData('/data/backend/menu_page_layout_data.json')
             .then(response => {
                 table_header.value = response.table_header;
-                options.value = response.options;
+                options_business_level_data.value = response.options_business_level_data;
             })
             .catch(error => {
-                console.log(' getPageLayoutData()=>error:',error)
+                console.log('error:',error)
                 $message('请求未找到', 'error');
                 // $message('请求未找到', 'error');
             });
@@ -142,8 +143,9 @@
 
     //保存初始化数据
     const init_query_form_data = {
-        nike_name: '',
-        role: '',
+        menu_title: '',
+        business_level: '',
+
     }
     //查询当前活动的输入数据，使用reactive变成响应式数据
     const query_form_data = reactive({ ...init_query_form_data });
@@ -170,7 +172,7 @@
             router.push({ name: route.name, query: query_data, key: new Date().getTime() });
 
             // 获取查询数据
-            $postData('/data/backend/menu_query_data.json', query_data)
+            $postData('/data/backend/menu_list.json', query_data)
                 .then(response => {
                     menu_list_data.value = response.menu_list_data;
                     pagination_data.current_page = response.current_page;
@@ -180,7 +182,7 @@
                     // 
                     // TODO   如果有查询数据，那么过滤表格数据
                     let math_role_data = computed(() => {
-                        return menu_list_data.value.filter(menu => menu.role === query_data.role);
+                        return menu_list_data.value.filter(menu => menu.business_level === query_data.business_level);
                     })
                     // console.log('math_role_data:',math_role_data.value);
 
@@ -215,10 +217,6 @@
     })
 
 
-    // "total_pages":2,
-    //   "total_count":12,
-    //   "current_page":1,
-    //   "current_page_limit":10,
     //获取数据  
     function getMenuListPageData() {
 
@@ -243,6 +241,7 @@
 
 
 
+    //分页器数据变化    
     function getChildPaginationChangeData(article_pagination) {
 
         flag.value = false;
@@ -276,19 +275,19 @@
 
                 // TODO   如果有查询数据，那么过滤表格数据
 
-                if (article_pagination.role) {
-                    // console.log('role-menu_list_data.value :',menu_list_data.value,  ",article_pagination.role:",article_pagination.role)
+                if (article_pagination.business_level) {
+                    // console.log('business_level-menu_list_data.value :',menu_list_data.value,  ",article_pagination.business_level:",article_pagination.business_level)
                     // 计算属性，筛选出查询数据和表格数据相等元素的数据
                     let math_role_data = computed(() => {
-                        return menu_list_data.value.filter(menu => menu.role === article_pagination.role);
+                        return menu_list_data.value.filter(menu => menu.business_level === article_pagination.business_level);
                     })
 
                     // console.log('math_role_data:',math_role_data.value);
 
 
                     menu_list_data.value = math_role_data.value;
-                    //  let math_role = menu_list_data.value.filter(menu => menu.role === 1);
-                    // console.log('menu_list_data.value.filter(menu => menu.role === 1):',menu_list_data.value.filter(menu => menu.role === 1));
+                    //  let math_role = menu_list_data.value.filter(menu => menu.business_level === 1);
+                    // console.log('menu_list_data.value.filter(menu => menu.business_level === 1):',menu_list_data.value.filter(menu => menu.business_level === 1));
                     // console.log('math_role :',math_role)
 
                 }
@@ -300,7 +299,7 @@
                 // is_loading.value = false;
             })
             .catch(error => {
-                // console.log('error:',error)
+                console.log('error:',error)
                 $message('请求未找到', 'error');
                 // $message('请求未找到', 'error');
             });
@@ -432,4 +431,20 @@
         }
 
     }
+
+
+    .flex-form {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-form > .el-form-item {
+  flex: 0 0 auto; /* 不允许缩放，基于内容宽度 */
+  margin: 15px; /* 表单项间隔 */
+  width: 220px;
+}
+
+
+.el-form-item-button{
+  width: 100% !important;
+}
 </style>

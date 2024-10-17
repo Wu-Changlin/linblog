@@ -8,8 +8,8 @@
   label-position="left"
 
 >
-  <el-form-item label="用户名称" prop="nike_name">
-    <el-input v-model="ruleForm.nike_name"  placeholder="亲，请输入用户名称"></el-input>
+  <el-form-item label="用户昵称" prop="nike_name">
+    <el-input v-model="ruleForm.nike_name"  placeholder="亲，请输入用户昵称"></el-input>
   </el-form-item>
 
 
@@ -64,7 +64,7 @@
   
   <el-form-item label="角色" prop="role">
     <el-select   v-model="ruleForm.role" placeholder="请选择">
-      <el-option v-for="item in options" :key="item.role" :label="item.label" :value="item.role" />
+      <el-option v-for="item in options_role_data" :key="item.role" :label="item.label" :value="item.role" />
     </el-select>
 
   </el-form-item>
@@ -272,9 +272,8 @@ function getEditCurrentIdData(edit_current_id_data){
 }
 
 
-
 //选择器数据
-const options = ref([]);
+const options_role_data = ref([]);
 
 // 获取页面框架数据
 function getAddOrEditPageLayoutData(){
@@ -283,7 +282,7 @@ function getAddOrEditPageLayoutData(){
   $getData('/data/backend/user_page_layout_data.json')
   .then(response => {
 
-    options.value=response.options;
+    options_role_data.value=response.options_role_data;
   })
   .catch(error => {
     // console.log(' getPageLayoutData()=>error:',error)

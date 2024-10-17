@@ -4,47 +4,41 @@
   <div class="feeds-page">
     <div class="feeds-container">
 
-        
-
-
-
-
-  <!-- <el-button type="primary"  @click="addUserDialog">添加用户</el-button>
-  <el-button type="primary"  @click="editUserDialog">编辑用户</el-button> -->
-
-
-
-  
-
   <Table  v-if="flag" :parentPageTableData="user_list_data" :parentPagePaginationData="pagination_data" 
   :tableHeader="table_header"  @getPaginationChangeData="getChildPaginationChangeData" 
   @batchRemoveCurrentActiveIds="batchRemoveChildCurrentActiveIds"  @deleteCurrentActiveId="deleteChildCurrentActiveId"> 
-
-
+    
+  <!-- 搜索区域 开始-->
     <template #query>
-      <el-form  :model="query_form_data" @keyup.enter="queryInputData()">
-        <div style="display: flex;flex-direction: column;">
-        <el-form-item>
-        <el-input v-model="query_form_data.nike_name" placeholder="搜索用户昵称" style="width: 200px">
-        </el-input>
-      </el-form-item>
-        <el-form-item>
-        <el-select  style="width: 200px" v-model="query_form_data.role" placeholder="请选择">
-          <el-option v-for="item in options" :key="item.role" :label="item.label" :value="item.role" />
-        </el-select>
-      </el-form-item>
+      <el-form :inline="false" class="flex-form" :model="query_form_data" @keyup.enter="queryInputData()">
+        <!-- <div style="display: flex;flex-direction: column;"> -->
+        <el-form-item label="用户昵称">
+          <el-input v-model="query_form_data.nike_name" placeholder="搜索用户昵称">
+          </el-input>
+        </el-form-item>
 
-        <el-form-item>
-        <div style="width: 100%;">
+        <el-form-item label="邮箱">
+          <el-input v-model="query_form_data.email" placeholder="搜索邮箱">
+          </el-input>
+        </el-form-item>
+
+        <el-form-item label="角色">
+          <el-select  v-model="query_form_data.role" placeholder="请选择">
+            <el-option v-for="item in options_role_data" :key="item.role" :label="item.label" :value="item.role" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item class="el-form-item-button">
+    
           <el-button type="primary" @click="queryInputData()">查询</el-button>
           <el-button type="primary" @click="resetPageData()">重置</el-button>
-        </div>
+ 
         
         </el-form-item>
-      </div>
+      <!-- </div> -->
       </el-form>
     </template>
-
+<!-- 搜索区域 结束-->
     <template #add>
       <el-button type="primary"  @click="clickGotoAddOrEditPage(0,'add')">添加用户</el-button>
     </template>
@@ -126,16 +120,15 @@ window.open(routeUrl.href, '_blank');//打开新窗口
 //表头  //scopedSlot 自定义插槽的名字
 const table_header= ref([]);
 //选择器数据
-const options = ref([]);
+const options_role_data = ref([]);
 
 // 获取页面框架数据
 function getPageLayoutData(){
 
-
   $getData('/data/backend/user_page_layout_data.json')
   .then(response => {
     table_header.value=response.table_header;
-    options.value=response.options;
+    options_role_data.value=response.options_role_data;
   })
   .catch(error => {
     // console.log(' getPageLayoutData()=>error:',error)
@@ -149,6 +142,7 @@ function getPageLayoutData(){
 //保存初始化数据
 const init_query_form_data ={
   nike_name: '',
+  email:'',
   role: '',
 }
 //查询当前活动的输入数据，使用reactive变成响应式数据
@@ -438,4 +432,20 @@ onUnmounted(() => {
         }
 
     }
+
+
+    .flex-form {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-form > .el-form-item {
+  flex: 0 0 auto; /* 不允许缩放，基于内容宽度 */
+  margin: 15px; /* 表单项间隔 */
+  width: 220px;
+}
+
+
+.el-form-item-button{
+  width: 100% !important;
+}
 </style>

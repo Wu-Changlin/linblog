@@ -12,15 +12,15 @@
   ],
   "is_pulled_data": [
     {
-      "value": 0,
+      "is_pulled": 0,
       "label": "否"
     },
     {
-      "value": 1,
+      "is_pulled": 1,
       "label": "是"
     }
   ],
-  "menu_data":[
+  "options_menu_data":[
     {
       "menu_id":3,
       "menu_name": "backend",

@@ -10,26 +10,31 @@
 
 
     <template #query>
-      <el-form  :model="query_form_data" @keyup.enter="queryInputData()">
-        <div style="display: flex;flex-direction: column;">
-        <el-form-item>
-        <el-input v-model="query_form_data.nike_name" placeholder="搜索用户昵称" style="width: 200px">
+      <el-form  :inline="false" class="flex-form" :model="query_form_data" @keyup.enter="queryInputData()">
+        
+        <el-form-item label="文章标题">
+        <el-input v-model="query_form_data.title" placeholder="搜索文章标题">
         </el-input>
       </el-form-item>
-        <el-form-item>
-        <el-select  style="width: 200px" v-model="query_form_data.role" placeholder="请选择">
-          <el-option v-for="item in options" :key="item.role" :label="item.label" :value="item.role" />
+      <el-form-item label="栏目">
+        <el-select   v-model="query_form_data.menu_id" placeholder="请选择">
+          <el-option v-for="item in options_menu_data" :key="item.menu_id" :label="item.menu_title" :value="item.menu_id" />
+        </el-select>
+      </el-form-item>
+        <el-form-item label="标签">
+        <el-select   v-model="query_form_data.tag_id" placeholder="请选择">
+          <el-option v-for="item in options_tags_data" :key="item.tag_id" :label="item.tag_name" :value="item.tag_id" />
         </el-select>
       </el-form-item>
 
-        <el-form-item>
-        <div style="width: 100%;">
+        <el-form-item class="el-form-item-button">
+      
           <el-button type="primary" @click="queryInputData()">查询</el-button>
           <el-button type="primary" @click="resetPageData()">重置</el-button>
-        </div>
+
         
         </el-form-item>
-      </div>
+      
       </el-form>
     </template>
 
@@ -43,7 +48,7 @@
     <!-- 图片列特殊处理 开始-->
 <template #cover="scope">
 
-<el-image class="table_img" :src="scope.row.cover" />
+<el-image v-if="scope.row.cover" class="table_img" :src="scope.row.cover" />
             
 </template>
 <!-- 图片列特殊处理 结束-->
@@ -52,8 +57,8 @@
 
 <template #title="scope">
   <el-popover
+  v-if="scope.row.title"
   placement="top-start"
-  :title="scope.row.label"
   width="240"
   trigger="hover"
   :content="scope.row.title">
@@ -67,10 +72,8 @@
 
     <!-- 标签列特殊处理 开始-->
     <template #tag_ids_names="scope">
-
-      <!-- 在JavaScript中，可以使用String.prototype.split((',')方法将逗号分隔的字符串转换为数组。 -->
-
         <el-tag
+      v-if="scope.row.tag_ids_names"
         v-for="(tag, index) in scope.row.tag_ids_names"
         :key="index"
         :prop="tag" 
@@ -79,15 +82,9 @@
         size="small">
         {{ tag }}
       </el-tag>
-
-
-
-      <!-- <el-tag>{{ scope.row.tag_ids_names }}</el-tag> -->
-                  
+      <!-- <el-tag>{{ scope.row.tag_ids_names }}</el-tag> -->         
       </template>
       <!--  标签列特殊处理 结束-->
-
-    
   </Table>
 
 
@@ -106,15 +103,6 @@ import Table from "@/components/backend/table.vue";
 import {listenMsg} from '@/components/crossTagMsg.js';
 
 const tag_array=ref(["笔记",'资源']);
-
-
-const items = ref([
-  { type: 'primary', label: 'Tag 1' },
-  { type: 'success', label: 'Tag 2' },
-  { type: 'info', label: 'Tag 3' },
-  { type: 'warning', label: 'Tag 4' },
-  { type: 'danger', label: 'Tag 5' },
-])
 
 const route=useRoute();
 const router=useRouter();
@@ -163,8 +151,11 @@ window.open(routeUrl.href, '_blank');//打开新窗口
 
 //表头  //scopedSlot 自定义插槽的名字
 const table_header= ref([]);
-//选择器数据
-const options = ref([]);
+//所属栏目 选择器数据
+const options_menu_data = ref([]);
+//所属标签 选择器数据
+const options_tags_data = ref([]);
+
 
 // 获取页面框架数据
 function getPageLayoutData(){
@@ -173,7 +164,9 @@ function getPageLayoutData(){
   $getData('/data/backend/article_page_layout_data.json')
   .then(response => {
     table_header.value=response.table_header;
-    options.value=response.options;
+    options_menu_data.value=response.options_menu_data;
+    options_tags_data.value=response.options_tags_data;
+
   })
   .catch(error => {
     // console.log(' getPageLayoutData()=>error:',error)
@@ -186,8 +179,9 @@ function getPageLayoutData(){
 
 //保存初始化数据
 const init_query_form_data ={
-  nike_name: '',
-  role: '',
+  title: '',
+  menu_id: '',
+  tag_id:''
 }
 //查询当前活动的输入数据，使用reactive变成响应式数据
 const query_form_data = reactive({...init_query_form_data});
@@ -224,7 +218,7 @@ const resetQueryFormData = () => {
     // 
 // TODO   如果有查询数据，那么过滤表格数据
     let math_role_data= computed(() => {
-      return article_list_data.value.filter(article => article.role === query_data.role);
+      return article_list_data.value.filter(article => article.menu_id === query_data.menu_id);
     })
     // console.log('math_role_data:',math_role_data.value);
 
@@ -468,4 +462,20 @@ onUnmounted(() => {
         }
 
     }
+
+
+    .flex-form {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-form > .el-form-item {
+  flex: 0 0 auto; /* 不允许缩放，基于内容宽度 */
+  margin: 15px; /* 表单项间隔 */
+  width: 220px;
+}
+
+
+.el-form-item-button{
+  width: 100% !important;
+}
 </style>

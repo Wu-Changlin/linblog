@@ -15,15 +15,15 @@
 
             <div style="padding: 10px;">
 
-              <el-form-item label="摘要" prop="article_abstract"  style="height: 140px;">
-                <el-input v-model="ruleForm.article_abstract" type="textarea" maxlength="100" placeholder="亲，请输入简介"
+              <el-form-item label="摘要" prop="article_abstract" style="min-height: 100px">
+                <el-input style="height: 100%;" v-model="ruleForm.article_abstract" type="textarea" maxlength="100" placeholder="亲，请输入简介"
                   show-word-limit></el-input>
               </el-form-item>
 
 
               <el-form-item label="栏目" prop="menu_id">
                 <el-radio-group v-model="ruleForm.menu_id" @change="checkColumnRadioInfo">
-                  <el-radio  v-for="item in menu_data" :key="item.menu_id" :value="item.menu_id" border> {{
+                  <el-radio  v-for="item in options_menu_data" :key="item.menu_id" :value="item.menu_id"> {{
                     item.menu_title }}</el-radio>
                 </el-radio-group>
               </el-form-item>
@@ -59,11 +59,11 @@
 
               <el-form-item  label="标签" v-model="ruleForm.tag_ids" prop="tag_ids">
 
-                <el-checkbox-group style="display: flex;overflow: hidden;flex-wrap: wrap;"  v-model="ruleForm.tag_ids"
+                <el-checkbox-group style="display: flex;overflow: hidden;flex-wrap: wrap;"   :max="3"  v-model="ruleForm.tag_ids"
                   @change="checkTagsBoxInfo">
-                  <el-checkbox  style="margin-top: 10px;" v-for="item in tags_data" :key="item.tag_id"
-                    :value="item.tag_id" :label="item.tag_name" size="large" border>
-                    {{ item.tag_name }}
+                  <el-checkbox  style="margin-top: 10px;" v-for="item in options_tags_data" :key="item.tag_id"
+                    :value="item.tag_id" :label="item.tag_name" size="large">
+                    <el-tag>{{ item.tag_name }}</el-tag>
                   </el-checkbox>
                 </el-checkbox-group>
 
@@ -138,7 +138,8 @@
   //点击栏目单选框选中值
   function checkColumnRadioInfo(val) {
     // console.log('checkColumnRadioInfo =',val);
-    tags_data.value = response_tags_data.value.filter(tag => tag.menu_id === val);
+    //显示栏目下标签
+    options_tags_data.value = response_tags_data.value.filter(tag => tag.menu_id === val);
   }
 
 
@@ -147,7 +148,7 @@
     function checkTagsBoxInfo(val) {
 
       // 使用函数
-      ruleForm.tag_ids_names = findTagNamesById(ruleForm.tag_ids, tags_data.value);
+      ruleForm.tag_ids_names = findTagNamesById(ruleForm.tag_ids, options_tags_data.value);
       console.log('ruleForm.tag_ids_names:', ruleForm.tag_ids_names)
       console.log('checkTagsBoxInfo（val） =',val)
     }
@@ -326,12 +327,9 @@
 
 
   //栏目数据
-  const menu_data = ref();
-
-
-
+  const options_menu_data = ref();
   //标签数据
-  const tags_data = ref();
+  const options_tags_data = ref();
   //页面框架数据的标签数据
   const response_tags_data = ref();
 
@@ -344,16 +342,16 @@
     $getData('/data/backend/article_page_layout_data.json')
       .then(response => {
 
-        menu_data.value = response.menu_data;
-        response_tags_data.value = response.tags_data;
+        options_menu_data.value = response.options_menu_data;
+        response_tags_data.value = response.options_tags_data;
         if (ruleForm.menu_id) {
 
-          tags_data.value = response_tags_data.value.filter(tag => tag.menu_id === ruleForm.menu_id);
+          options_tags_data.value = response_tags_data.value.filter(tag => tag.menu_id === ruleForm.menu_id);
         } else {
           //使用数组的解构赋值方式获取栏目第一个元素 
-          const [firstElement] = menu_data.value;
+          const [firstElement] = options_menu_data.value;
           ruleForm.menu_id = firstElement.menu_id;
-          tags_data.value = response_tags_data.value.filter(tag => tag.menu_id === firstElement.menu_id);
+          options_tags_data.value = response_tags_data.value.filter(tag => tag.menu_id === firstElement.menu_id);
         }
 
 
@@ -424,6 +422,11 @@
 
 
 <style scoped>
+
+:deep(.el-textarea__inner ){
+min-height: 100% !important;
+}
+
   .panel {
     position: absolute;
     margin: 1.8rem -3rem 0 0;

@@ -2,7 +2,7 @@
   <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
     label-position="left">
     <el-form-item label="标签名" prop="tag_name">
-      <el-input v-model="ruleForm.tag_name" placeholder="亲，请输入用户名称"></el-input>
+      <el-input v-model="ruleForm.tag_name" placeholder="亲，请输入用户昵称"></el-input>
     </el-form-item>
 
     <el-form-item label="关键词" prop="tag_keywords">
@@ -18,9 +18,9 @@
       <el-switch v-model="ruleForm.is_pulled" inline-prompt active-text="是" inactive-text="否" />
     </el-form-item>
 
-    <el-form-item label="所属栏目" prop="role">
+    <el-form-item label="所属栏目" prop="menu_id">
       <el-select @change="selectColumnInfo" v-model="ruleForm.menu_id" placeholder="请选择">
-        <el-option v-for="item in menu_data" :key="item.menu_id" :label="item.menu_title" :value="item.menu_id" />
+        <el-option v-for="item in options_menu_data" :key="item.menu_id" :label="item.menu_title" :value="item.menu_id" />
       </el-select>
     </el-form-item>
 
@@ -54,7 +54,7 @@
   //初始化添加数据
   const ruleForm = reactive({
     tag_id: 0,
-    menu_id: 0,
+    menu_id: '',
     menu_name: "",
     menu_title: "",
     tag_name: "",
@@ -69,7 +69,7 @@
     function selectColumnInfo(val) {
 
       // 查找相等id返回menu_title。find() 方法返回数组中满足提供的测试函数的第一个元素的值。否则返回 undefined。
-      const current_active_menu_id_data = menu_data.value.find(menu => menu.menu_id === ruleForm.menu_id);
+      const current_active_menu_id_data = options_menu_data.value.find(menu => menu.menu_id === ruleForm.menu_id);
       ruleForm.menu_title=current_active_menu_id_data.menu_title;
       // console.log('ruleForm. ruleForm.menu_title:',ruleForm.menu_title)
       // console.log('selectColumnInfo（val） =',val)
@@ -190,7 +190,7 @@
 
 
   //选择器数据
-  const menu_data = ref([]);
+  const options_menu_data = ref([]);
 
   // 获取页面框架数据
   function getAddOrEditPageLayoutData() {
@@ -199,7 +199,7 @@
     $getData('/data/backend/tag_page_layout_data.json')
       .then(response => {
 
-        menu_data.value = response.menu_data;
+        options_menu_data.value = response.options_menu_data;
 
       })
       .catch(error => {

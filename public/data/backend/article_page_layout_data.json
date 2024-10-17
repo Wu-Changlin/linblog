@@ -17,15 +17,15 @@
   ],
   "is_pulled_data": [
     {
-      "value": 0,
+      "is_pulled": 0,
       "label": "否"
     },
     {
-      "value": 1,
+      "is_pulled": 1,
       "label": "是"
     }
   ],
-  "menu_data":[
+  "options_menu_data":[
     {
       "menu_id":2,
       "menu_name": "frontend",
@@ -53,7 +53,7 @@
     }
     
   ],
-  "tags_data": [
+  "options_tags_data": [
     {
       "tag_id": 20,
       "menu_id": 2,
