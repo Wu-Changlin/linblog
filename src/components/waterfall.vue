@@ -1,96 +1,89 @@
-
 <template>
   <transition name="scale-down" mode="out-in">
-<!-- 骨架屏 开始-->
+    <!-- 骨架屏 开始-->
     <!-- <div v-if="is_loading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef"> -->
-      <div v-if="isLoading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef">
-      
-      <div
-      class="item"
-      v-for="(item, index)  in 10" 
-      :key="item"
-      :data-item='item'
-      :data-index='index'
-      :style="{background: 'rgba(0, 0, 0, 0.04)', width:skeleton_width + 'px'}" >
-     
-      <!-- 图片占位 -->
-      <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height*0.7 + 'px'" animated  style="border-radius: 8px;"/>
-      <!-- 标题占位 -->
-      <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" height="24px" animated style="margin-top: 12px;" />
-      <!-- 作者 -->
-      <Skeleton bg="#e4e4e4" :width="skeleton_width*0.25 + 'px'" height="24px" animated style="margin: 12px 0px;" />
+    <div v-if="isLoading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef">
+
+      <div class="item" v-for="(item, index)  in 10" :key="item" :data-item='item' :data-index='index'
+        :style="{background: 'rgba(0, 0, 0, 0.04)', width:skeleton_width + 'px'}">
+
+        <!-- 图片占位 -->
+        <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height*0.7 + 'px'" animated
+          style="border-radius: 8px;" />
+        <!-- 标题占位 -->
+        <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" height="24px" animated style="margin-top: 12px;" />
+        <!-- 作者 -->
+        <Skeleton bg="#e4e4e4" :width="skeleton_width*0.25 + 'px'" height="24px" animated style="margin: 12px 0px;" />
 
       </div>
-      
+
     </div>
 
-<!-- 骨架屏 结束-->
-<!-- 渲染内容 开始-->
-<template  v-else>
- 
-  <Waterfall  v-if="data.list.length>0" :list="data.list" :breakpoints="breakpoints" :delay="300"  key="waterfall-container" class="waterfall-container">
-    <template #item="{ item,index }">
-      <div class="waterfall-card">
+    <!-- 骨架屏 结束-->
+    <!-- 渲染内容 开始-->
+    <template v-else>
 
-        <!-- 没有item.url元素 非资源页（item.url：外站链接）-->
-        <div v-if="!item.url" class="lazy-img-card-mask"> 
-        <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px" @click="goViewArticle(item.article_id)"/>
-        <div class="card-img-mask-stats">
-          <div class="card-img-mask-stats-left">
-            <span class="card-img-mask-stats-item">
-              <div class="card-img-mask-stats-icon"><svg-icon icon-class="visits" /></div>
-              <span class="card-img-mask-stats-text"> {{ item.visits}}</span>
-            </span>
-            <span class="card-img-mask-stats-item">
-              <div class="card-img-mask-stats-icon"><svg-icon icon-class="word_count" /></div>
-              <span class="card-img-mask-stats-text"> {{ item.word_count}}</span>
-            </span>
+      <Waterfall v-if="data.list.length>0" :list="data.list" :breakpoints="breakpoints" :delay="300"
+        key="waterfall-container" class="waterfall-container">
+        <template #item="{ item,index }">
+          <div class="waterfall-card">
 
-          </div>
+            <!-- 没有item.url元素 非资源页（item.url：外站链接）-->
+            <div v-if="!item.url" class="lazy-img-card-mask">
+              <LazyImg class="lazy-img" :url="item.cover" style="border-radius: 8px"
+                @click="goViewArticle(item.article_id)" />
+              <div class="card-img-mask-stats">
+                <div class="card-img-mask-stats-left">
+                  <span class="card-img-mask-stats-item">
+                    <div class="card-img-mask-stats-icon"><svg-icon icon-class="visits" /></div>
+                    <span class="card-img-mask-stats-text"> {{ item.visits}}</span>
+                  </span>
+                  <span class="card-img-mask-stats-item">
+                    <div class="card-img-mask-stats-icon"><svg-icon icon-class="word_count" /></div>
+                    <span class="card-img-mask-stats-text"> {{ item.word_count}}</span>
+                  </span>
 
-          <span class="card-img-mask-stats-reading-time">{{ item.read_time}}</span>
+                </div>
 
-        </div>
-        </div>
-        <!-- 有item.url元素 资源页（item.url：外站链接）-->
-        <div v-else class="lazy-img-card-mask">
+                <span class="card-img-mask-stats-reading-time">{{ item.read_time}}</span>
 
-            <a :href="item.url" target="_blank">
-          
-              <LazyImg   class="lazy-img"  :url="item.cover" style="border-radius: 8px"/>
-        
-            </a>
-          </div>
+              </div>
+            </div>
+            <!-- 有item.url元素 资源页（item.url：外站链接）-->
+            <div v-else class="lazy-img-card-mask">
 
-          <!--  底部信息块（标题和作者） 开始-->
-        <div class="footer">
-          <a class="title"><span>{{ item.title}}</span></a>
-          <div class="author-wrapper">
-            <a class="author">
-              <svg-icon class="author-avatar" icon-class="author" />
-              <span class="name"> {{ item.author_name}}</span>
-            </a>
-            <!-- <span class="like-wrapper like-active">
-                 <span  class="like-lottie" style="width: 16px; height: 16px;" ></span>
+              <a :href="item.url" target="_blank">
+
+                <LazyImg class="lazy-img" :url="item.cover" style="border-radius: 8px" />
+
+              </a>
+            </div>
+
+            <!--  底部信息块（标题和作者） 开始-->
+            <div class="footer">
+              <a class="title"><span>{{ item.title}}</span></a>
+              <div class="author-wrapper">
+                <a class="author">
+                  <svg-icon class="author-avatar" icon-class="author" />
+                  <span class="name"> {{ item.author_name}}</span>
+                </a>
+                <!-- <span class="like-wrapper like-active">
+                <span  class="like-lottie" style="width: 16px; height: 16px;" ></span>
                   <svg-icon class="reds-icon" style="width: 16px; height: 16px;" icon-class="visits"/>
                   <span class="count">12</span>
                 </span> -->
+              </div>
+            </div>
+            <!--  底部信息块（标题和作者） 结束 -->
+
           </div>
-        </div>
-        <!--  底部信息块（标题和作者） 结束 -->
+        </template>
+      </Waterfall>
 
-      </div>
+
     </template>
-  </Waterfall>
+    <!-- 渲染内容 结束-->
 
-
- 
-
-
-
-</template>
-<!-- 渲染内容 结束-->
-    
 
   </transition>
 
@@ -98,28 +91,24 @@
   <!-- 下一页骨架屏 开始-->
   <transition name="scale-down" mode="out-in">
     <!-- 骨架屏 开始-->
-        <!-- <div v-if="is_loading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef"> -->
-          <div class="waterfall-skeleton"  v-if="isNextPageLoading" key="isNextPageLoading">
-          
-          <div
-          class="item"
-          v-for="(item, index)  in 10" 
-          :key="item"
-          :data-item='item'
-          :data-index='index'
-          :style="{background: 'rgba(0, 0, 0, 0.04)', width:skeleton_width + 'px'}" >
-         
-          <!-- 图片占位 -->
-          <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height*0.7 + 'px'" animated  style="border-radius: 8px;"/>
-          <!-- 标题占位 -->
-          <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" height="24px" animated style="margin-top: 12px;" />
-          <!-- 作者 -->
-          <Skeleton bg="#e4e4e4" :width="skeleton_width*0.25 + 'px'" height="24px" animated style="margin: 12px 0px;" />
-    
-          </div>
-          
-        </div>
-    
+    <!-- <div v-if="is_loading" key="loading" class="waterfall-skeleton" ref="waterfallSkeletonContainerRef"> -->
+    <div class="waterfall-skeleton" v-if="isNextPageLoading" key="isNextPageLoading">
+
+      <div class="item" v-for="(item, index)  in 10" :key="item" :data-item='item' :data-index='index'
+        :style="{background: 'rgba(0, 0, 0, 0.04)', width:skeleton_width + 'px'}">
+
+        <!-- 图片占位 -->
+        <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" :height="skeleton_height*0.7 + 'px'" animated
+          style="border-radius: 8px;" />
+        <!-- 标题占位 -->
+        <Skeleton bg="#e4e4e4" :width="skeleton_width + 'px'" height="24px" animated style="margin-top: 12px;" />
+        <!-- 作者 -->
+        <Skeleton bg="#e4e4e4" :width="skeleton_width*0.25 + 'px'" height="24px" animated style="margin: 12px 0px;" />
+
+      </div>
+
+    </div>
+
     <!-- 骨架屏 结束-->
 
 
@@ -137,7 +126,7 @@
   <!-- 没有更多数据占位 结束-->
 
 
-<!-- 没有数据占位 开始-->
+  <!-- 没有数据占位 开始-->
   <EmptyState v-if="isEmptyArticleListData" :height="`566px`" :imgUrl="'/empty-state.png'">
     <template #content>
       <span style="padding-bottom: 16px;">没有数据</span>
@@ -147,8 +136,8 @@
 
 </template>
 <script setup>
-  import { reactive, ref, onMounted, onUnmounted ,watch,computed,inject,nextTick} from 'vue';
-  import {useRoute, useRouter } from "vue-router"; 
+  import { reactive, ref, onMounted, onUnmounted, watch, computed, inject, nextTick } from 'vue';
+  import { useRoute, useRouter } from "vue-router";
   import { LazyImg, Waterfall } from "vue-waterfall-plugin-next";
   import "vue-waterfall-plugin-next/dist/style.css";
   import Skeleton from '@/components/skeleton.vue';
@@ -171,60 +160,60 @@
     parentPageArticleListData: {//父页面传标签数据
       type: Array
     },
-    isLoading:{
-      type:Boolean,
-      default:true
+    isLoading: {
+      type: Boolean,
+      default: true
     },
-    isNextPageLoading:{
-      type:Boolean,
-      default:false
+    isNextPageLoading: {
+      type: Boolean,
+      default: false
     },
-    isNoMoreData:{
-      type:Boolean,
-      default:false
+    isNoMoreData: {
+      type: Boolean,
+      default: false
     },
-    isEmptyArticleListData:{
-      type:Boolean,
-      default:false
+    isEmptyArticleListData: {
+      type: Boolean,
+      default: false
     },
 
-    
+
   });
 
 
 
 
-// 使用ref来存储watch返回的函数
-const  stopParentPageArticleListData = ref(null);
+  // 使用ref来存储watch返回的函数
+  const stopParentPageArticleListData = ref(null);
 
-//监听父页面所传数据。当有新值时，把父页面所传数据赋值到当前页面的data.list   
- stopParentPageArticleListData.value = watch(
-       () =>props.parentPageArticleListData,
-       (newValue, oldValue) => {
-      
-      
-        if(newValue){//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
-          // console.log('newValue-props.parentPageArticleListData:',props.parentPageArticleListData)
-          data.list = props.parentPageArticleListData;
-          
-
-         
-        }
-        
-       },{ immediate: true }
-     )
+  //监听父页面所传数据。当有新值时，把父页面所传数据赋值到当前页面的data.list   
+  stopParentPageArticleListData.value = watch(
+    () => props.parentPageArticleListData,
+    (newValue, oldValue) => {
 
 
-   
-const is_show=ref(false)
+      if (newValue) {//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
+        // console.log('newValue-props.parentPageArticleListData:',props.parentPageArticleListData)
+        data.list = props.parentPageArticleListData;
+
+
+
+      }
+
+    }, { immediate: true }
+  )
+
+
+
+  const is_show = ref(false)
 
   onMounted(() => {
     //控制骨架屏尺寸
     skeletonHandleResize(); // 初始化尺寸
     window.addEventListener('resize', skeletonHandleResize);
 
-    
-    
+
+
   });
 
 
@@ -238,17 +227,17 @@ const is_show=ref(false)
     //带参数跳转
     if (article_id) {
       // router.push({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
-     let routeUrl =''; 
-     routeUrl= router.resolve({ name: 'article', query: { id: article_id },key: new Date().getTime() });
-     if (route.query.keyword) {//搜索结果页携参跳转到博文页
-       routeUrl = router.resolve({ name: 'article', query: { id: article_id ,keyword:route.query.keyword},key: new Date().getTime() });
-		}  
+      let routeUrl = '';
+      routeUrl = router.resolve({ name: 'article', query: { id: article_id }, key: new Date().getTime() });
+      if (route.query.keyword) {//搜索结果页携参跳转到博文页
+        routeUrl = router.resolve({ name: 'article', query: { id: article_id, keyword: route.query.keyword }, key: new Date().getTime() });
+      }
 
-    //  console.log('routeUrl',routeUrl);
-     window.open(routeUrl.href, '_blank');//打开新窗口
+      //  console.log('routeUrl',routeUrl);
+      window.open(routeUrl.href, '_blank');//打开新窗口
 
     } else {
-      $message('非法请求','error')
+      $message('非法请求', 'error')
     }
 
 
@@ -286,7 +275,7 @@ const is_show=ref(false)
   const skeleton_width = ref(236);
   const skeleton_height = ref(236); // 默认高度
   // const skeleton_item= ref(5);
- //控制骨架屏尺寸
+  //控制骨架屏尺寸
   function skeletonHandleResize() {
 
     if (waterfallSkeletonContainerRef.value) {
@@ -336,102 +325,100 @@ const is_show=ref(false)
 
   onUnmounted(() => {
     window.removeEventListener('resize', skeletonHandleResize);//移除骨架屏监听
-     stopParentPageArticleListData.value=null; // 如果watch返回了一个停止监听的函数，调用它
+    stopParentPageArticleListData.value = null; // 如果watch返回了一个停止监听的函数，调用它
   });
 
- 
+
 
 
 </script>
 
 
 <style scoped>
-
-
   .waterfall-card {
     position: relative;
 
-    .lazy-img-card-mask{
+    .lazy-img-card-mask {
       position: relative;
 
       .lazy-img {
-      cursor: pointer;
+        cursor: pointer;
+      }
+
+      .card-img-mask-stats {
+        position: absolute;
+        padding: 3px 3px;
+        bottom: 0px;
+        left: 0;
+        z-index: 2;
+        box-sizing: border-box;
+        /* padding: 0px 8px 0px; */
+        width: 100%;
+        height: 25px;
+        border-bottom-right-radius: 6px;
+        border-bottom-left-radius: 6px;
+        background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .8) 100%);
+        color: var(--card_bg);
+        font-size: 13px;
+        line-height: 18px;
+        opacity: 1;
+        display: -webkit-flex;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+
+        .card-img-mask-stats-left {
+          min-width: 0;
+          flex: 1;
+          display: -webkit-flex;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start
+        }
+
+
+        .card-img-mask-stats-item {
+          margin-right: 12px;
+          display: -webkit-flex;
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+
+        }
+
+        .card-img-mask-stats-text {
+          word-break: keep-all;
+        }
+
+
+        .card-img-mask-stats-icon {
+          /* margin-right: 2px; */
+          display: flex;
+          width: 18px;
+          height: 18px;
+          /* color: var(--bg); */
+          justify-items: center;
+          align-items: center;
+
+        }
+
+
+        .card-img-mask-stats-reading-time {
+          display: flex;
+          justify-items: center;
+          align-items: center;
+        }
+
+        .svg-icon {
+          width: 18px;
+          height: 18px;
+        }
+
+      }
+
     }
 
-    .card-img-mask-stats{
-    position: absolute;
-      padding: 3px 3px;
-      bottom: 0px;
-      left: 0;
-      z-index: 2;
-      box-sizing: border-box;
-      /* padding: 0px 8px 0px; */
-      width: 100%;
-      height: 25px;
-      border-bottom-right-radius: 6px;
-      border-bottom-left-radius: 6px;
-      background-image: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .8) 100%);
-      color: var(--card_bg);
-      font-size: 13px;
-      line-height: 18px;
-      opacity: 1;
-      display: -webkit-flex;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      
-  
-    .card-img-mask-stats-left {
-      min-width: 0;
-      flex: 1;
-      display: -webkit-flex;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start
-    }
-
-
-    .card-img-mask-stats-item {
-      margin-right: 12px;
-      display: -webkit-flex;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-
-    }
-
-    .card-img-mask-stats-text {
-      word-break: keep-all;
-    }
-
-
-    .card-img-mask-stats-icon {
-      /* margin-right: 2px; */
-      display: flex;
-      width: 18px;
-      height: 18px;
-      /* color: var(--bg); */
-      justify-items: center;
-      align-items: center;
-
-    }
-
-
-    .card-img-mask-stats-reading-time{
-      display: flex;
-      justify-items: center;
-      align-items: center;
-    }
-
-    .svg-icon{
-      width: 18px;
-      height: 18px;
-    }
-
-	}
-
-    }
- 
 
     .footer {
       padding: 12px;
@@ -439,10 +426,10 @@ const is_show=ref(false)
 
       /* Chrome, Safari, 新版 Edge */
       .title::-webkit-line-clamp {
-          -webkit-line-clamp: 2;
+        -webkit-line-clamp: 2;
       }
-      
-     /* 旧版 IE */
+
+      /* 旧版 IE */
       .title {
         margin-bottom: 8px;
         word-break: break-all;
@@ -539,11 +526,11 @@ const is_show=ref(false)
 
   /* 缩放动画 */
   .waterfall-container {
-  transition: all 0.3s ease;
-  background-color: var(--bg);
-  /* padding-top: 10px; */
-  /* animation: grow-in 0.1s forwards; */
-}
+    transition: all 0.3s ease;
+    background-color: var(--bg);
+    /* padding-top: 10px; */
+    /* animation: grow-in 0.1s forwards; */
+  }
 
 
 
@@ -557,12 +544,13 @@ const is_show=ref(false)
     flex-wrap: wrap;
     transition: all 0.3s ease;
     padding-top: 10px;
-   
+
     .item {
       width: 236px;
       margin-left: 6px;
       margin-right: 6px;
       margin-bottom: 10px;
+
       .skeleton~.skeleton {
         display: flex;
         position: relative;
@@ -573,18 +561,20 @@ const is_show=ref(false)
 
 
 
- 
+
 
 
   /* 骨架屏缩放动画 */
-  .scale-down-enter-active, .scale-down-leave-active {
-  transition: all 0.8s ease;
-}
- 
-.scale-down-enter-from, .scale-down-leave-to {
-  opacity: 0;
-  transform: scale(0.8);
-} 
+  .scale-down-enter-active,
+  .scale-down-leave-active {
+    transition: all 0.8s ease;
+  }
+
+  .scale-down-enter-from,
+  .scale-down-leave-to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
 
   /* .fade-enter-from,
   .fade-leave-to {
