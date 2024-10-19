@@ -28,17 +28,17 @@ let lunarYearArr = [
     lunarMonth = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'],
     lunarDay = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '初', '廿'],
     tianGan = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'],
-    diZhi = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];  
+    diZhi = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
 
 // 公历转农历函数
-export function sloarToLunar(sy, sm, sd,sh) {
+export function sloarToLunar(sy, sm, sd, sh) {
     // 输入的月份减1处理
     sm -= 1;
 
     // 计算与公历基准的相差天数
     // Date.UTC()返回的是距离公历1970年1月1日的毫秒数,传入的月份需要减1
     let daySpan = (Date.UTC(sy, sm, sd) - Date.UTC(1949, 0, 29)) / (24 * 60 * 60 * 1000) + 1;
-    let ly, lm, ld , lh;
+    let ly, lm, ld, lh;
     // 确定输出的农历年份
     for (let j = 0; j < lunarYearArr.length; j++) {
         daySpan -= lunarYearDays(lunarYearArr[j]);
@@ -82,7 +82,7 @@ export function sloarToLunar(sy, sm, sd,sh) {
     // } else {
     //     lm = lunarMonth[lm - 1];
     // }
-    
+
     // 将计算出来的农历年份转换为天干地支年
     // ly = getTianGan(ly) + getDiZhi(ly);
 
@@ -102,7 +102,7 @@ export function sloarToLunar(sy, sm, sd,sh) {
 
 
     // console.log(ly, lm, ld);
- //  返回农历：年 月 日
+    //  返回农历：年 月 日
     // return {
     //     lunarYear: ly,
     //     lunarMonth: lm,
@@ -113,52 +113,19 @@ export function sloarToLunar(sy, sm, sd,sh) {
     let diZhiKey = (ly - 3) % 12;
     if (diZhiKey === 0) diZhiKey = 12;
 
-    ly=diZhiKey;
-    
-
-    let expression=(sh / 2);
+    ly = diZhiKey;
 
 
+      // 检查当前时间是否在某个2小时时间段内
+    lh = isInTwoHourPeriod(sh);
 
-    // switch (expression) {
-    //     case (expression <=1 ):
-    //         lh=1;
-
-    //     case (expression > 1 && expression  <= 2):
-    //         skeleton_width.value = (expression - 60) / 5;
-    //         skeleton_height.value = skeleton_width.value;
-    //         return 5;
-
-    //     case (expression > 2 && expression <= 3):
-    //         skeleton_width.value = (expression - 60) / 4;
-    //         skeleton_height.value = skeleton_width.value;
-    //         return 4;
-
-    //     case (expression > 3 && expression <= 4):
-    //         skeleton_width.value = (expression - 60) / 3;
-    //         skeleton_height.value = skeleton_width.value;
-    //         return 3;
-
-    //     case (expression > 4 && expression <= 5):
-    //         skeleton_width.value = (expression - 60) / 2;
-    //         skeleton_height.value = skeleton_width.value;
-    //         return 2;
-
-    //     default:
-    //         skeleton_width.value = expression - 10;
-    //         skeleton_height.value = skeleton_width.value;
-    //         return 1;
-    // }
-
-
-
-
+console.log('检查当前时间是否在某个1小时时间段内:',lh);
 
     return {
         lunarYear: ly,
         lunarMonth: lm,
         lunarDay: ld,
-        lunarHours:lh
+        lunarHours: lh
     }
 
     /*  返回农历年地支数 月份数 日数 时辰数   结束*/
@@ -237,4 +204,37 @@ function getDiZhi(ly) {
     if (diZhiKey === 0) diZhiKey = 12;
     // console.log('diZhiKey:',diZhiKey);
     return diZhi[diZhiKey - 1]
+}
+
+
+
+
+//检查当前时间是否在某个2小时时间段内,十二时辰划分；返回子1丑2……亥12
+function isInTwoHourPeriod(is_timestamp) {
+    // 当天的日期
+    const date = new Date(is_timestamp * 1000);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    // 时间戳数组
+    let hourTimestamps = [];
+    // 生成当天单数小时的时间戳数组
+    for (let hour = 0; hour <= 23; hour++) {
+        if (hour % 2 !== 0) {
+            const start = new Date(year, month, day, hour);
+            const end = new Date(year, month, day, hour + 2);//2小时时间段内
+            let start_time = Math.floor(start.getTime() / 1000);
+            let end_time = end.getTime() / 1000;
+            end_time = end_time - 1;//减少1秒  如01：00：00 -1 = 00：00：59；
+            hourTimestamps.push({ start: start_time, end: end_time });
+        }
+
+    }
+    // 使用扩展运算符将数组最后一个元素移动到前端
+    hourTimestamps = [hourTimestamps.slice(-1)[0], ...hourTimestamps.slice(0, -1)];
+
+    // 检查时间戳是否在任何2小时时间段内
+    let key_number = hourTimestamps.findIndex(range => is_timestamp >= range.start && is_timestamp < range.end);
+    key_number = key_number + 1;
+    return key_number;
 }

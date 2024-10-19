@@ -266,7 +266,7 @@ function getLayoutLogOrMenuListData(){
 
 <style scoped>
 *{  
- 
+
     -ms-overflow-style: none; /* 适用于 Internet Explorer 和旧版 Edge */
     scrollbar-width: none; /* 适用于 Firefox */
     -webkit-scrollbar:none;/* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/ 

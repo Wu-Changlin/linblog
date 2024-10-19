@@ -1,5 +1,14 @@
 <template>
-  <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
+
+<div class="page_title_container">
+  <div class="line"></div>
+  <div class="title">
+    {{ page_title}}
+  </div>
+  <div class="line"></div>
+</div>
+
+  <el-form  style="margin-top: 100px;" ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
     label-position="left">
     <el-form-item label="标签名" prop="tag_name">
       <el-input v-model="ruleForm.tag_name" placeholder="亲，请输入用户昵称"></el-input>
@@ -210,7 +219,7 @@
 
   }
 
-
+const page_title=ref('');
   onMounted(() => {
 
 
@@ -219,8 +228,12 @@
       if (route.query.action == "edit") {
         getEditCurrentIdData(route.query);
         getAddOrEditPageLayoutData();
+ 
+        page_title.value='编辑标签';
       } else if (route.query.action == "add") {
         getAddOrEditPageLayoutData();
+        page_title.value='添加标签';
+
       } else {
         $message('非法操作', 'error');
         router.push({ path: '/404' });//重定向到404页面
@@ -234,3 +247,26 @@
   });
 
 </script>
+
+
+<style  scoped>
+
+.page_title_container {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: space-between;  /* 水平间隔 */
+  height: 100px; /* 容器高度 */
+  .title {
+  text-align: center;
+  flex: 1; /* 占据剩余空间 */
+}
+
+.line {
+  flex: 1; /* 占据剩余空间 */
+  border-top: 2px solid #999999; /* 横线样式 */
+  margin: 0 10px; /* 横线外边距 */
+}
+}
+
+
+</style>

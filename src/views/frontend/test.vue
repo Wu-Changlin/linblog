@@ -1,94 +1,98 @@
 <template>
   <div>
 
+    <input type="text" v-model="inputRef">
+    <button @click="jia()">加密</button>
+    <button @click="jie()">解密</button>
+
   </div>
 </template>
 
-
 <script setup>
-  import { sloarToLunar } from "@/hooks/sloarToLunar.js";
+  import { ref, reactive, onMounted, provide, watch, onUnmounted,inject } from "vue";
+const inputRef=ref(null)
+  function jia() {
+    var str =inputRef.value?'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ':'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ';
+    var ta = "";
 
-
-  // 创建一个新的Date对象，默认为当前日期和时间
-  const now = new Date();
-
-  // 获取年份
-  const year = now.getFullYear();
-
-  // 获取月份（0-11，0表示1月，所以需要加1）
-  const month = now.getMonth() + 1;
-
-  // 获取日（1-31）
-  const day = now.getDate();
-
-  // 获取小时（0-23）
-  const hours = now.getHours();
-
-  // 输出结果
-  console.log(`年: ${year}`);
-  console.log(`月: ${month}`);
-  console.log(`日: ${day}`);
-  console.log(`时: ${hours}`);
-
-  // 直接调用
-  console.log('2024, 12, 31  15:', sloarToLunar(2024, 12, 31,15));
-  console.log('2024, 10 18 23 :', sloarToLunar(2024, 10, 18,23));
-
-  console.log('2024, 1 18 20 :', sloarToLunar(2024, 1, 18,20));
-
-
-  console.log('2018, 9, 17  3:', sloarToLunar(2018, 9, 17,3));
-  console.log('2017, 7, 24 0:', sloarToLunar(2017, 7, 24,0));
-
-
-
-  function getChineseHour(hour) {
-    const hours = hour ? hour: new Date().getHours();
-    const zodiacHours = [
-        { name: '子时', start: 23, end: 1 },
-        { name: '丑时', start: 1, end: 3 },
-        { name: '寅时', start: 3, end: 5 },
-        { name: '卯时', start: 5, end: 7 },
-        { name: '辰时', start: 7, end: 9 },
-        { name: '巳时', start: 9, end: 11 },
-        { name: '午时', start: 11, end: 13 },
-        { name: '未时', start: 13, end: 15 },
-        { name: '申时', start: 15, end: 17 },
-        { name: '酉时', start: 17, end: 19 },
-        { name: '戌时', start: 19, end: 21 },
-        { name: '亥时', start: 21, end: 23 }
-    ];
- 
-    let currentHourName = '';
-    zodiacHours.forEach(hour => {
-        if (hours >= hour.start && hours < hour.end) {
-            currentHourName = hour.name;
+    // str = base64_encode();
+    console.log(typeof str)
+    for (var i = 0; i < str.length; i++) {
+      for (var key in Table) {
+        if (Table[key] == str[i]) {
+          ta += key
         }
-    });
- 
-    const hourOfZodiac = hours % 12 || 12; // 计算当前时刻属于十二时辰中的哪个时刻
-    return `${currentHourName} (${hourOfZodiac}时)`;
-}
- 
-console.log(getChineseHour()); // 输出形如：" teen (9时)"
+      }
+    }
 
-console.log(getChineseHour(0)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(1)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(2)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(2.9)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(4)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(5)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(6)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(7)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(8)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(9)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(10)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(11)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(12)); // 输出形如：" teen (9时)"
-console.log(getChineseHour(13)); // 输出形如：" teen (9时)"
+    console.log('ta:',ta)
+  }
 
-console.log(getChineseHour(23)); // 输出形如：" teen (9时)"
+  var Table = {
+    '乾': 'A',
+    '坤': 'B',
+    '屯': 'C',
+    '蒙': 'D',
+    '需': 'E',
+    '讼': 'F',
+    '师': 'G',
+    '比': 'H',
+    '小畜': 'I',
+    '履': 'J',
+    '泰': 'K',
+    '否': 'L',
+    '同人': 'M',
+    '大有': 'N',
+    '谦': 'O',
+    '豫': 'P',
+    '随': 'Q',
+    '蛊': 'R',
+    '临': 'S',
+    '观': 'T',
+    '噬嗑': 'U',
+    '贲': 'V',
+    '剥': 'W',
+    '复': 'X',
+    '无妄': 'Y',
+    '大畜': 'Z',
+    '颐': 'a',
+    '大过': 'b',
+    '坎': 'c',
+    '离': 'd',
+    '咸': 'e',
+    '恒': 'f',
+    '遁': 'g',
+    '大壮': 'h',
+    '晋': 'i',
+    '明夷': 'j',
+    '家人': 'k',
+    '睽': 'l',
+    '蹇': 'm',
+    '解': 'n',
+    '损': 'o',
+    '益': 'p',
+    '夬': 'q',
+    '姤': 'r',
+    '萃': 's',
+    '升': 't',
+    '困': 'u',
+    '井': 'v',
+    '革': 'w',
+    '鼎': 'x',
+    '震': 'y',
+    '艮': 'z',
+    '渐': '1',
+    '归妹': '2',
+    '丰': '3',
+    '旅': '4',
+    '巽': '5',
+    '兑': '6',
+    '涣': '7',
+    '节': '8',
+    '中孚': '9',
+    '小过': '0',
+    '既济': '+',
+    '未济': '/'
 
-
-
+  };
 </script>

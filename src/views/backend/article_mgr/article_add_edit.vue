@@ -1,4 +1,14 @@
 <template>
+
+
+  <div class="page_title_container">
+    <div class="line"></div>
+    <div class="title">
+      {{ page_title}}
+    </div>
+    <div class="line"></div>
+  </div>
+
   <div style="width: 100%;height: 100vh; overflow: hidden;">
 
     <div style="display: flex;flex-wrap: wrap;height: 62px;margin-top: 10px;">
@@ -365,7 +375,7 @@
   }
 
 
-
+  const page_title=ref('');
   onMounted(() => {
 
 
@@ -374,8 +384,10 @@
       if (route.query.action == "edit") {
         getEditCurrentIdData(route.query);
         getAddOrEditPageLayoutData();
+        page_title.value='编辑文章';
       } else if (route.query.action == "add") {
         getAddOrEditPageLayoutData();
+        page_title.value='添加文章';
       } else {
         $message('非法操作', 'error');
         router.push({ path: '/404' });//重定向到404页面
@@ -573,4 +585,24 @@ min-height: 100% !important;
 
     padding: 0 20px
   }
+
+
+  .page_title_container {
+  display: flex;
+  align-items: center; /* 垂直居中 */
+  justify-content: space-between;  /* 水平间隔 */
+  height: 100px; /* 容器高度 */
+  .title {
+  text-align: center;
+  flex: 1; /* 占据剩余空间 */
+}
+
+.line {
+  flex: 1; /* 占据剩余空间 */
+  border-top: 2px solid #999999; /* 横线样式 */
+  margin: 0 10px; /* 横线外边距 */
+}
+}
+
+  
 </style>
