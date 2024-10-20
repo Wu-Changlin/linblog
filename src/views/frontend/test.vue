@@ -6,10 +6,20 @@
     <button @click="jie()">解密</button>
 
   </div>
+
+
+  <div>asciiString： {{ asciiString }}</div>
+
+  <div>
+    <p>中文字符: {{ chineseChar }}</p>
+    <p>ASCII 值: {{ asciiValue }}</p>
+  </div>
 </template>
 
 <script setup>
-  import { ref, reactive, onMounted, provide, watch, onUnmounted,inject } from "vue";
+  import { ref, reactive, onMounted, provide, watch, onUnmounted,inject ,computed} from "vue";
+  import  Base64 from "@/hooks/to_base64.js";
+ console.log('encode:',Base64.encode('中'))
 const inputRef=ref(null)
   function jia() {
     var str =inputRef.value?'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ':'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ';
@@ -27,6 +37,57 @@ const inputRef=ref(null)
 
     console.log('ta:',ta)
   }
+
+
+
+
+
+
+  const str_two = ref('一');
+const asciiString = ref('');
+
+
+let asciiCode = str_two.value.charCodeAt(0);
+
+
+console.log('asciiCode:',asciiCode); // 输出: 65
+
+// 转换函数
+function convertToAscii(inputStr) {
+  let result = '';
+  for (let i = 0; i < inputStr.length; i++) {
+    const charCode = inputStr.charCodeAt(i);
+    result +=charCode.toString(16).padStart(4, '0');
+  }
+  return result;
+}
+
+console.log(str_two.value.charCodeAt())
+
+
+console.log('str_two.value.charCodeAt(0):',str_two.value.charCodeAt(0));
+
+// 将字符串转换为 ASCII 码
+function stringToAscii(str) {
+  let ascii = '';
+  for (let i = 0; i < str.length; i++) {
+    ascii += (str[i].charCodeAt(0) & 0xFF).toString(16);
+  }
+  return ascii;
+}
+
+// 示例
+console.log(stringToAscii('Javascript')); // 4a617661736372697074
+
+
+// 示例
+console.log('stringToAscii(Javascript):',stringToAscii('中')); 
+
+
+const chineseChar = ref('中');
+const asciiValue = computed(() => chineseChar.value.charCodeAt(0));
+// 应用转换
+asciiString.value = convertToAscii(str_two.value);
 
   var Table = {
     '乾': 'A',
@@ -95,4 +156,13 @@ const inputRef=ref(null)
     '未济': '/'
 
   };
+
+  
+//   var Base64: {
+//     _keyStr: string;
+//     encode: (e: any) => string;
+//     decode: (e: any) => string;
+//     _utf8_encode: (e: any) => string;
+//     _utf8_decode: (e: any) => string;
+// }
 </script>

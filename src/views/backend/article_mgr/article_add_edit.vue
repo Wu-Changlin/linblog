@@ -80,7 +80,7 @@
               </el-form-item>
 
 
-              <el-form-item label="启用" prop="is_pulled">
+              <el-form-item label="下架" prop="is_pulled">
                 <el-switch
                 v-model="ruleForm.is_pulled"
                 inline-prompt

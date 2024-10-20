@@ -10,7 +10,6 @@
 let timer = null
 export function debounce (fn, delay = 1000){
     if(timer != null){
-      
         clearTimeout(timer)
         timer = null
     }

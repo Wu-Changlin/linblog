@@ -8,7 +8,7 @@
   <div class="line"></div>
 </div>
 
-  <el-form  style="margin-top: 100px;" ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
+  <el-form  ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
     label-position="left">
     <el-form-item label="标签名" prop="tag_name">
       <el-input v-model="ruleForm.tag_name" placeholder="亲，请输入用户昵称"></el-input>

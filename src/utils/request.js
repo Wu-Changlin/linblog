@@ -43,7 +43,7 @@ axios.interceptors.request.use(
         // config.headers.token = sessionStorage.getItem('token')
         // config.data=config.data
         //  在发送请求之前添加公共参数
-       
+    
     // 比如添加一个公共的token
     // config.headers['Authorization'] = 'Bearer your-token';
     // 添加公共的query参数
