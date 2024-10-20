@@ -187,8 +187,8 @@
     //console.log('batchRemove = '+ JSON.stringify(data.selectedData))
     data.selectedData.forEach((Ele, index) => {
       //console.log(Ele.date);
-      for (var i = 0; i < tableData.length; i++) {
-        var t = tableData[i][id_name.value];
+      for (let i = 0; i < tableData.length; i++) {
+        let t = tableData[i][id_name.value];
         if (t == Ele[id_name.value]) {
           removeBatchId.push(Ele[id_name.value]);
           // console.log("Ele[id_name.value]:", Ele[id_name.value]);

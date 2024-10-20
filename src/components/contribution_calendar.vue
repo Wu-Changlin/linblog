@@ -209,7 +209,7 @@
 
 
     // 计算天数差值加1(今天) 向下取整
-    var daysDifference = Math.floor((todays - firstMondayDate) / (1000 * 60 * 60 * 24)) + 1;
+    let daysDifference = Math.floor((todays - firstMondayDate) / (1000 * 60 * 60 * 24)) + 1;
 
     // console.log('todays:',todays.toISOString().split('T')[0],',daysDifference:',daysDifference,',firstMondayDate:',firstMondayDate.toISOString().split('T')[0]); // 输出从初始日期到今天的天数
 

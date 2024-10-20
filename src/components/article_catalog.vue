@@ -156,7 +156,7 @@
    //获取元素的height margin-top padding margin-bottom
     function getElementHeightWithMargin(element) {
         if (element) {
-            var style = window.getComputedStyle(element);
+            let style = window.getComputedStyle(element);
             return (
                 parseFloat(style.height) +
                 parseFloat(style.marginTop) +

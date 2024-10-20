@@ -18,17 +18,19 @@
 
 <script setup>
   import { ref, reactive, onMounted, provide, watch, onUnmounted,inject ,computed} from "vue";
-  import  Base64 from "@/hooks/to_base64.js";
+  import  Base64 from "@/hooks/useBase64.js";
  console.log('encode:',Base64.encode('中'))
+ console.log('decode:',Base64.decode('5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ'))
+
 const inputRef=ref(null)
   function jia() {
-    var str =inputRef.value?'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ':'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ';
-    var ta = "";
+    let str =inputRef.value?'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ':'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ';
+    let ta = "";
 
     // str = base64_encode();
     console.log(typeof str)
-    for (var i = 0; i < str.length; i++) {
-      for (var key in Table) {
+    for (let i = 0; i < str.length; i++) {
+      for (let key in Table) {
         if (Table[key] == str[i]) {
           ta += key
         }
@@ -89,7 +91,7 @@ const asciiValue = computed(() => chineseChar.value.charCodeAt(0));
 // 应用转换
 asciiString.value = convertToAscii(str_two.value);
 
-  var Table = {
+  let Table = {
     '乾': 'A',
     '坤': 'B',
     '屯': 'C',
@@ -158,7 +160,7 @@ asciiString.value = convertToAscii(str_two.value);
   };
 
   
-//   var Base64: {
+//   let Base64: {
 //     _keyStr: string;
 //     encode: (e: any) => string;
 //     decode: (e: any) => string;
