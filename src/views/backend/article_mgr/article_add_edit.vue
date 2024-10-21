@@ -245,8 +245,7 @@
                 is_pulled:ruleForm.is_pulled===true?1:0,
                 // JavaScript数组转换为逗号分隔的字符串，可以使用join()方法。
                 tag_ids: ruleForm.tag_ids ? ruleForm.tag_ids.join(',') : '',
-               // 使用JavaScript的String.prototype.split方法来将字符串按照指定的分隔符转换为数组
-                tag_ids_names:  ruleForm.tag_ids_names ?  ruleForm.tag_ids_names.split(',') : '',
+                tag_ids_names:  ruleForm.tag_ids_names ?  ruleForm.tag_ids_names.join(',') : '',
                 visits: 1,
                 word_count: 1000,
                 read_time: "3:03",
@@ -269,7 +268,7 @@
                 // JavaScript数组转换为逗号分隔的字符串，可以使用join()方法。
                 tag_ids: ruleForm.tag_ids ? ruleForm.tag_ids.join(',') : '',
                 // 使用JavaScript的String.prototype.split方法来将字符串按照指定的分隔符转换为数组
-                tag_ids_names:  ruleForm.tag_ids_names ?  ruleForm.tag_ids_names.split(',') : '',
+                tag_ids_names:  ruleForm.tag_ids_names ?  ruleForm.tag_ids_names.join(',') : '',
                 visits: 1,
                 word_count: 1000,
                 read_time: "3:03",

@@ -333,16 +333,16 @@
             .reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {});
         return parsedObj;
     }
-
-    function getRandom(array, range) {
-        var old_array = array,
+//获取随机
+    function getRandom(data_array, range) {
+        let old_array = data_array;
 
             //防止超过数组的长度
             range = range > old_array.length ? old_array.length : range;
-        var newArray = [].concat(old_array), //拷贝原数组进行操作就不会破坏原数组
+        let newArray = [].concat(old_array), //拷贝原数组进行操作就不会破坏原数组
             valArray = [];
-        for (var n = 0; n < range; n++) {
-            var r = Math.floor(Math.random() * (newArray.length));
+        for (let n = 0; n < range; n++) {
+            let r = Math.floor(Math.random() * (newArray.length));
             valArray.push(newArray[r]);
             //在原数组删掉，然后在下轮循环中就可以避免重复获取
             newArray.splice(r, 1);

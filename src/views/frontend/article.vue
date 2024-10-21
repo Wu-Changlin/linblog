@@ -198,6 +198,7 @@ const $message = inject('$message');
 
     $getData('/data/frontend/article_detail.json')
       .then(response => {
+
         data.menu_title = response.menu_title;
         data.tag_ids_name = response.tag_ids_name;
         data.visits = response.visits;

@@ -70,11 +70,15 @@
 
 <!-- 文章标题列特殊处理 结束-->
 
+
+
+
+
     <!-- 标签列特殊处理 开始-->
     <template #tag_ids_names="scope">
         <el-tag
       v-if="scope.row.tag_ids_names"
-        v-for="(tag, index) in scope.row.tag_ids_names"
+        v-for="(tag, index) in scope.row.tag_ids_names.split(',')"
         :key="index"
         :prop="tag" 
         :label="tag" 
@@ -99,10 +103,7 @@ import { ref,reactive,inject,onMounted,onUnmounted,computed} from "vue";
 import {useRoute,useRouter}  from "vue-router";
 import ArticleCoverList from '@/components/backend/article_cover_list.vue';
 import Table from "@/components/backend/table.vue";
-
 import {listenMsg} from '@/components/crossTagMsg.js';
-
-const tag_array=ref(["笔记",'资源']);
 
 const route=useRoute();
 const router=useRouter();
@@ -377,8 +378,8 @@ function removeEmptyValues(obj) {
   return parsedObj;
 }
 
-function getRandom(array,range) {
-    let old_array = array,
+function getRandom(data_array,range) {
+    let old_array = data_array;
       
     //防止超过数组的长度
     range = range > old_array.length?old_array.length:range;

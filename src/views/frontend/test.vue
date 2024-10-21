@@ -2,8 +2,8 @@
   <div>
 
     <input type="text" v-model="inputRef">
-    <button @click="jia()">加密</button>
-    <button @click="jie()">解密</button>
+    <!-- <button @click="jia()">加密</button>
+    <button @click="jie()">解密</button> -->
 
   </div>
 
@@ -19,29 +19,96 @@
 <script setup>
   import { ref, reactive, onMounted, provide, watch, onUnmounted,inject ,computed} from "vue";
   import  Base64 from "@/hooks/useBase64.js";
- console.log('encode:',Base64.encode('中'))
- console.log('decode:',Base64.decode('5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ'))
-
-const inputRef=ref(null)
-  function jia() {
-    let str =inputRef.value?'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ':'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ';
-    let ta = "";
-
-    // str = base64_encode();
-    console.log(typeof str)
-    for (let i = 0; i < str.length; i++) {
-      for (let key in Table) {
-        if (Table[key] == str[i]) {
-          ta += key
-        }
-      }
-    }
-
-    console.log('ta:',ta)
-  }
 
 
+  const params = {
+            act_name: '答题抢红包活动', //活动名称  是否必填：是            
+            mch_billno:111, //商户订单号  是否必填：是
+            mch_id: 'mchid', //商户号  是否必填：是
+            nonce_str: '2132r00<>/[]==9-98*&&^%$%$!~', //随机字符串  是否必填：是
+            re_openid: 're_openid', //用户openid  是否必填：是
+            remark: '答题满分可抢红包！', //备注  是否必填：是
+            client_ip: [1,5,7], //Ip地址  是否必填：是            
+            sign: 'mysign', //签名  是否必填：是  generateSign(/* 传入相关参数进行签名 */) // 你需要实现generateSign函数
+            
+        };
 
+  //把params中的各项转换为url查询字符串，先对params中的key除了sign按ASCII码升序排序在转换为url查询字符串。
+function buildQueryString(params) {
+ 
+  let query_string= Object.keys(params).sort().map(key => {
+      return `${encodeURIComponent(key)}=${(params[key])}`
+    }).join('&')
+    return query_string;
+
+}
+
+
+
+
+const data={
+  page_head_title: "首页",
+  page_head_keyword: "关键字",
+  page_head_description: "描述首页",
+  total_pages:1,
+  current_page:1,
+  current_active_tag_id:20,
+  current_active_tag_name:"html",
+  website_approve_title:"桂icp0000号",
+  website_approve_url:"https://beian.miit.gov.cn/#/Integrated/index",
+  tag_data: [1,2,3]
+}
+
+
+console.log('data:',JSON.stringify(data));
+  console.log('buildQueryString:',buildQueryString(data))
+
+
+
+let data_to_base64=Base64.encode(data);
+console.log('data_to_base64:',data_to_base64);
+
+const inputRef=ref(null);
+  // function jia() {
+  //   let str =inputRef.value?'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ':'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ';
+  //   let ta = "";
+
+  //   // str = base64_encode();
+  //   console.log(typeof str)
+  //   for (let i = 0; i < str.length; i++) {
+  //     for (let key in Table) {
+  //       if (Table[key] == str[i]) {
+  //         ta += key
+  //       }
+  //     }
+  //   }
+
+  //   console.log('ta:',ta)
+  // }
+
+  console.log('data:',JSON.stringify(data)); // 输出: 65
+
+
+
+
+
+  function replaceMultiple(str, replacements) {
+  const regex = new RegExp(Object.keys(replacements).join('|'), 'g');
+  return str.replace(regex, match => replacements[match]+'***');
+}
+
+const str_ing = 'The quick brown fox jumps over the lazy dog. If the dog reacted, was it really lazy?dog,dog reacted,lazy,quick brown';
+const replacements = {
+  'dog': 'monkey',
+  'dog reacted': 'monkey moved',
+  'lazy': 'quick',
+  'quick brown': 'black white'
+};
+
+const result = replaceMultiple(str_ing, replacements);
+console.log('str_ing:',str_ing);
+
+console.log('result:',result);
 
 
 

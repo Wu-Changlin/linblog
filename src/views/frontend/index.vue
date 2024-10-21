@@ -32,7 +32,6 @@ const $postData = inject('$postData');
 const $message = inject('$message');
 
 
-  
 
   const route = useRoute();
   const router = useRouter();

@@ -276,7 +276,7 @@ router.push({ name:route.name, query: payload_data, key: new Date().getTime() })
 
     // TODO   如果有查询数据，那么过滤表格数据
 
-   if(article_pagination.role){
+  if(article_pagination.role){
     // console.log('role-user_list_data.value :',user_list_data.value,  ",article_pagination.role:",article_pagination.role)
      // 计算属性，筛选出查询数据和表格数据相等元素的数据
     let math_role_data= computed(() => {
@@ -291,7 +291,7 @@ router.push({ name:route.name, query: payload_data, key: new Date().getTime() })
     // console.log('user_list_data.value.filter(user => user.role === 1):',user_list_data.value.filter(user => user.role === 1));
     // console.log('math_role :',math_role)
 
-   }
+  }
 
     user_list_data.value = getRandom(user_list_data.value,pagination_data.current_page_limit);
     // console.log('getChildPaginationChangeData-user_list_data.value:',user_list_data.value);
@@ -345,8 +345,8 @@ function removeEmptyValues(obj) {
   return parsedObj;
 }
 
-function getRandom(array,range) {
-    let old_array = array,
+function getRandom(data_array,range) {
+    let old_array = data_array;
       
     //防止超过数组的长度
     range = range > old_array.length?old_array.length:range;
