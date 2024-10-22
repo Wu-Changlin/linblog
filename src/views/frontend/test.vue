@@ -1,116 +1,38 @@
 <template>
-  <div>
 
-    <input type="text" v-model="inputRef">
-    <!-- <button @click="jia()">加密</button>
-    <button @click="jie()">解密</button> -->
-
-  </div>
-
-
-  <div>asciiString： {{ asciiString }}</div>
-
-  <div>
-    <p>中文字符: {{ chineseChar }}</p>
-    <p>ASCII 值: {{ asciiValue }}</p>
-  </div>
 </template>
 
 <script setup>
   import { ref, reactive, onMounted, provide, watch, onUnmounted,inject ,computed} from "vue";
   import  Base64 from "@/hooks/useBase64.js";
+  import  {getAchieveUseSignData} from "@/hooks/useSign.js";
 
 
-  const params = {
-            act_name: '答题抢红包活动', //活动名称  是否必填：是            
-            mch_billno:111, //商户订单号  是否必填：是
-            mch_id: 'mchid', //商户号  是否必填：是
-            nonce_str: '2132r00<>/[]==9-98*&&^%$%$!~', //随机字符串  是否必填：是
-            re_openid: 're_openid', //用户openid  是否必填：是
-            remark: '答题满分可抢红包！', //备注  是否必填：是
-            client_ip: [1,5,7], //Ip地址  是否必填：是            
-            sign: 'mysign', //签名  是否必填：是  generateSign(/* 传入相关参数进行签名 */) // 你需要实现generateSign函数
-            
-        };
+  const data = {
+        page_head_title: "首页",
+        page_head_keyword: "关键字",
+        page_head_description: "描述首页",
+        total_pages: 1,
+        current_page: 1,
+        current_active_tag_id: 20,
+        current_active_tag_name: "html",
+        website_approve_title: "桂icp0000号",
+        website_approve_url: "https://beian.miit.gov.cn/#/Integrated/index",
+        tag_data: '1,2,3',
+        tag_ids_name: "C++,Java,Python",
+        visits: 3000,
+        word_count: 30000,
+        read_time: "19:47",
+        title: "后端（Back-end）： 执行应用的核心逻辑，处理用户的请求，与数据库交互，返回相应的数据。",
+        author_name: "原创",
+        created_time: "2024-09-13 23:29:17",
+        article_content: '## 3.2. 【拉开序幕的 setup】 ### setup 概述 `setup`是`Vue3`中一个新的配置项，值是一个函数，它是 `Composition API` **“表演的舞台**_**”**_，组件中所用到的：数据、方法、计算属性、监视......等等，均配置在`setup`中。 ```go package main import "fmt" func main() { fmt.Println("Google" + "Runoob") } ``` ```htmlHTMLCSSJavaScriptFlutterVueReactSvelte``` * `Vue2`的生命周期 > 创建阶段：`beforeCreate`、`created` > > 挂载阶段：`beforeMount`、`mounted` > > 更新阶段：`beforeUpdate`、`updated` > > 销毁阶段：`beforeDestroy`、`destroyed` | 日期 | 月 | | ------------ | ------------ | |09 | 09 | | 09 |08 | 特点如下： - `setup`函数返回的对象中的内容，可直接在模板中使用。 - `setup`中访问`this`是`undefined`。 - `setup`函数会在`beforeCreate`之前调用，它是“领先”所有钩子执行的。 ```html ``` ### setup 的返回值 - 若返回一个**对象**：则对象中的：属性、方法等，在模板中均可以直接使用**（重点关注）。** - 若返回一个**函数**：则可以自定义渲染内容，代码如下： ```jsx setup(){ return ()=> "你好啊！" } ``` ### setup 与 Options API 的关系 - `Vue2` 的配置（`data`、`methos`......）中**可以访问到** `setup`中的属性、方法。 - 但在`setup`中**不能访问到**`Vue2`的配置（`data`、`methos`......）。 - 如果与`Vue2`冲突，则`setup`优先。 ### setup 语法糖 `setup`函数有一个语法糖，这个语法糖，可以让我们把`setup`独立出去，代码如下： ```html ``` 扩展：上述代码，还需要编写一个不写`setup`的`script`标签，去指定组件名字，比较麻烦，我们可以借助`vite`中的插件简化 1. 第一步：`npm i vite-plugin-vue-setup-extend -D` 2. 第二步：`vite.config.ts` ```jsx import { defineConfig } from "vite" import VueSetupExtend from "vite-plugin-vue-setup-extend" export default defineConfig({ plugins: [ VueSetupExtend() ] }) ``` 3. 第三步：`")'
+    }
 
-  //把params中的各项转换为url查询字符串，先对params中的key除了sign按ASCII码升序排序在转换为url查询字符串。
-function buildQueryString(params) {
- 
-  let query_string= Object.keys(params).sort().map(key => {
-      return `${encodeURIComponent(key)}=${(params[key])}`
-    }).join('&')
-    return query_string;
+  // 获取实现签名后数据
+  getAchieveUseSignData(data);
 
-}
-
-
-
-
-const data={
-  page_head_title: "首页",
-  page_head_keyword: "关键字",
-  page_head_description: "描述首页",
-  total_pages:1,
-  current_page:1,
-  current_active_tag_id:20,
-  current_active_tag_name:"html",
-  website_approve_title:"桂icp0000号",
-  website_approve_url:"https://beian.miit.gov.cn/#/Integrated/index",
-  tag_data: [1,2,3]
-}
-
-
-console.log('data:',JSON.stringify(data));
-  console.log('buildQueryString:',buildQueryString(data))
-
-
-
-let data_to_base64=Base64.encode(data);
-console.log('data_to_base64:',data_to_base64);
-
-const inputRef=ref(null);
-  // function jia() {
-  //   let str =inputRef.value?'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ':'5ZCN56ew5Ye65aSE77yaTEFEWS0wNzcg5rC06YeO576O6aaZ';
-  //   let ta = "";
-
-  //   // str = base64_encode();
-  //   console.log(typeof str)
-  //   for (let i = 0; i < str.length; i++) {
-  //     for (let key in Table) {
-  //       if (Table[key] == str[i]) {
-  //         ta += key
-  //       }
-  //     }
-  //   }
-
-  //   console.log('ta:',ta)
-  // }
-
-  console.log('data:',JSON.stringify(data)); // 输出: 65
-
-
-
-
-
-  function replaceMultiple(str, replacements) {
-  const regex = new RegExp(Object.keys(replacements).join('|'), 'g');
-  return str.replace(regex, match => replacements[match]+'***');
-}
-
-const str_ing = 'The quick brown fox jumps over the lazy dog. If the dog reacted, was it really lazy?dog,dog reacted,lazy,quick brown';
-const replacements = {
-  'dog': 'monkey',
-  'dog reacted': 'monkey moved',
-  'lazy': 'quick',
-  'quick brown': 'black white'
-};
-
-const result = replaceMultiple(str_ing, replacements);
-console.log('str_ing:',str_ing);
-
-console.log('result:',result);
-
-
+  
 
   const str_two = ref('一');
 const asciiString = ref('');
@@ -119,7 +41,7 @@ const asciiString = ref('');
 let asciiCode = str_two.value.charCodeAt(0);
 
 
-console.log('asciiCode:',asciiCode); // 输出: 65
+// console.log('asciiCode:',asciiCode); // 输出: 65
 
 // 转换函数
 function convertToAscii(inputStr) {
@@ -131,10 +53,10 @@ function convertToAscii(inputStr) {
   return result;
 }
 
-console.log(str_two.value.charCodeAt())
+// console.log(str_two.value.charCodeAt())
 
 
-console.log('str_two.value.charCodeAt(0):',str_two.value.charCodeAt(0));
+// console.log('str_two.value.charCodeAt(0):',str_two.value.charCodeAt(0));
 
 // 将字符串转换为 ASCII 码
 function stringToAscii(str) {
@@ -146,92 +68,15 @@ function stringToAscii(str) {
 }
 
 // 示例
-console.log(stringToAscii('Javascript')); // 4a617661736372697074
+// console.log(stringToAscii('Javascript')); // 4a617661736372697074
 
 
 // 示例
-console.log('stringToAscii(Javascript):',stringToAscii('中')); 
+// console.log('stringToAscii(Javascript):',stringToAscii('中')); 
 
 
 const chineseChar = ref('中');
 const asciiValue = computed(() => chineseChar.value.charCodeAt(0));
 // 应用转换
 asciiString.value = convertToAscii(str_two.value);
-
-  let Table = {
-    '乾': 'A',
-    '坤': 'B',
-    '屯': 'C',
-    '蒙': 'D',
-    '需': 'E',
-    '讼': 'F',
-    '师': 'G',
-    '比': 'H',
-    '小畜': 'I',
-    '履': 'J',
-    '泰': 'K',
-    '否': 'L',
-    '同人': 'M',
-    '大有': 'N',
-    '谦': 'O',
-    '豫': 'P',
-    '随': 'Q',
-    '蛊': 'R',
-    '临': 'S',
-    '观': 'T',
-    '噬嗑': 'U',
-    '贲': 'V',
-    '剥': 'W',
-    '复': 'X',
-    '无妄': 'Y',
-    '大畜': 'Z',
-    '颐': 'a',
-    '大过': 'b',
-    '坎': 'c',
-    '离': 'd',
-    '咸': 'e',
-    '恒': 'f',
-    '遁': 'g',
-    '大壮': 'h',
-    '晋': 'i',
-    '明夷': 'j',
-    '家人': 'k',
-    '睽': 'l',
-    '蹇': 'm',
-    '解': 'n',
-    '损': 'o',
-    '益': 'p',
-    '夬': 'q',
-    '姤': 'r',
-    '萃': 's',
-    '升': 't',
-    '困': 'u',
-    '井': 'v',
-    '革': 'w',
-    '鼎': 'x',
-    '震': 'y',
-    '艮': 'z',
-    '渐': '1',
-    '归妹': '2',
-    '丰': '3',
-    '旅': '4',
-    '巽': '5',
-    '兑': '6',
-    '涣': '7',
-    '节': '8',
-    '中孚': '9',
-    '小过': '0',
-    '既济': '+',
-    '未济': '/'
-
-  };
-
-  
-//   let Base64: {
-//     _keyStr: string;
-//     encode: (e: any) => string;
-//     decode: (e: any) => string;
-//     _utf8_encode: (e: any) => string;
-//     _utf8_decode: (e: any) => string;
-// }
 </script>

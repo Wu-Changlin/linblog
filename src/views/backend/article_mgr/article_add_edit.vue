@@ -237,15 +237,14 @@
             if (route.query.action == "edit") {
               //模拟
               let msg_content = {
-
                 article_id:route.query.id ?Number(route.query.id): 30,
                 title: "edit-article",
                 menu_title: "后端",
                 cover: "/logo.png",
                 is_pulled:ruleForm.is_pulled===true?1:0,
                 // JavaScript数组转换为逗号分隔的字符串，可以使用join()方法。
-                tag_ids: ruleForm.tag_ids ? ruleForm.tag_ids.join(',') : '',
-                tag_ids_names:  ruleForm.tag_ids_names ?  ruleForm.tag_ids_names.join(',') : '',
+                tag_ids:ruleForm.tag_ids.join(','),
+                tag_ids_names:  ruleForm.tag_ids_names ?  ruleForm.tag_ids_names: '',
                 visits: 1,
                 word_count: 1000,
                 read_time: "3:03",
@@ -266,9 +265,8 @@
                 cover: "/logo.png",
                 is_pulled:ruleForm.is_pulled===true?1:0,
                 // JavaScript数组转换为逗号分隔的字符串，可以使用join()方法。
-                tag_ids: ruleForm.tag_ids ? ruleForm.tag_ids.join(',') : '',
-                // 使用JavaScript的String.prototype.split方法来将字符串按照指定的分隔符转换为数组
-                tag_ids_names:  ruleForm.tag_ids_names ?  ruleForm.tag_ids_names.join(',') : '',
+                tag_ids: ruleForm.tag_ids.join(','),
+                tag_ids_names:  ruleForm.tag_ids_names ?  ruleForm.tag_ids_names: '',
                 visits: 1,
                 word_count: 1000,
                 read_time: "3:03",
@@ -412,6 +410,18 @@
   //   const item = data.find(item => item.tag_id === id);
   //   return item ? item.tag_name : null; // 如果找不到对应的项，返回null或者其他默认值
   // });
+
+
+//   let tag_name_array=[];
+
+// ids.map(id => {
+//  const item = data.find(item => item.tag_id === id);
+//   item ?tag_name_array.push(item.tag_name) : null; // 如果找不到对应的项，返回null或者其他默认值
+// });
+
+
+// return tag_name_array;
+
 
   let tag_name_string='';
 

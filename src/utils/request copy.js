@@ -1,6 +1,7 @@
 /**axios封装* 请求拦截、相应拦截、错误统一处理*/
 import axios from 'axios';
-import router from '@/router/index.js'
+import router from '@/router/index.js';
+
 
 // let protocol = window.location.protocol; //协议
 // let host = window.location.host; //主机
@@ -43,7 +44,7 @@ axios.interceptors.request.use(
         // config.headers.token = sessionStorage.getItem('token')
         // config.data=config.data
         //  在发送请求之前添加公共参数
-       
+
     // 比如添加一个公共的token
     // config.headers['Authorization'] = 'Bearer your-token';
     // 添加公共的query参数

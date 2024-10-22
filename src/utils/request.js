@@ -1,7 +1,7 @@
 /**axios封装* 请求拦截、相应拦截、错误统一处理*/
 import axios from 'axios';
 import router from '@/router/index.js'
-
+import  {getAchieveUseSignData} from "@/hooks/useSign.js";
 // let protocol = window.location.protocol; //协议
 // let host = window.location.host; //主机
 // let port = window.location.port; //主机端口
@@ -49,8 +49,8 @@ axios.interceptors.request.use(
     // 添加公共的query参数
     // config.params = { ...config.params, params: 'params' };
     // 添加公共的body参数
-    const timestamp = Date.now(); // 或者使用其他方式生成当前时间的时间戳
-    config.data = { ...config.data, time:timestamp };
+    const data=getAchieveUseSignData(config.data);
+    config.data = data;
         return config;
     },
     error => {
