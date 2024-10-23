@@ -162,7 +162,7 @@ const options_tags_data = ref([]);
 function getPageLayoutData(){
 
 
-  $getData('/data/backend/article_page_layout_data.json')
+  $getData('/data/backend/article_page_layout_data.json',{})
   .then(response => {
     table_header.value=response.table_header;
     options_menu_data.value=response.options_menu_data;
@@ -170,8 +170,8 @@ function getPageLayoutData(){
 
   })
   .catch(error => {
-    // console.log(' getPageLayoutData()=>error:',error)
-    $message('请求未找到', 'error');
+    console.log(' getPageLayoutData()=>error:',error)
+    // $message('请求未找到', 'error');
     // $message('请求未找到', 'error');
   });
 
@@ -261,21 +261,22 @@ const pagination_data = reactive({
   //获取数据
   function getArticleListPageData() {
 
-$getData('/data/backend/article_list.json')
+$getData('/data/backend/article_list.json',pagination_data)
   .then(response => {
     article_list_data.value=response.article_list_data;
     pagination_data.current_page=response.current_page;
     pagination_data.current_page_limit=response.current_page_limit;
     pagination_data.total_count=response.total_count;
   
-    //  console.log('article_list_data：',article_list_data.value);
+    console.log('article_list_data',article_list_data.value);
 
     flag.value = true;
     // is_loading.value = false;
 
   })
   .catch(error => {
-    $message('请求未找到', 'error');
+    console.log('getArticleListPageData-error:',error)
+    // $message('请求未找到', 'error');
     // $message('请求未找到', 'error');
   });
 }

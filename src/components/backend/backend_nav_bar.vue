@@ -7,13 +7,7 @@
 
 			</a>
 
-
-
 			<div style="margin-left: 30px;" >
-
-
-				
-
 
 				<svg-icon v-show="is_collapse_side_menu"   @click="isCollapse()"class="svg-icon" icon-class="Expand" />
 				<svg-icon v-show="!is_collapse_side_menu" @click="isCollapse()" class="svg-icon" icon-class="Fold" />
@@ -82,9 +76,6 @@ const updateIsCollapseSideMenuFunction = inject('updateIsCollapseSideMenuFunctio
 		updateIsCollapseSideMenuFunction(is_collapse_side_menu.value);
 		
 	}
-
-
-	  
 
 
 </script>

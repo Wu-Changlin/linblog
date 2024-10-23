@@ -29,10 +29,8 @@ import BackendNavBar from "@/components/backend/backend_nav_bar.vue";
 import BackendSideBar from "@/components/backend/backend_side_bar.vue";
 import BackendContentTag from "@/components/backend/backend_content_tag.vue";
 import Footer from "@/components/footer.vue";
+import adminPageApi from "@/api/backend/admin.js";//api接口
 
-
-const $getData = inject('$getData');
-const $postData = inject('$postData');
 const $message = inject('$message');
 // 修改当前选中菜单id 结束
 const flag =ref(false)
@@ -40,19 +38,12 @@ const admin_page_log=ref();
 const admin_page_menu_list_data=ref();
 //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 function getAdminOrMenuListData(){
-
-	$getData("/data/backend/admin.json")
+	adminPageApi.getAdminOrMenuListData({})
 	.then(response => {
         admin_page_log.value = response.log_data; // log
 		admin_page_menu_list_data.value = response.menu_data; // 菜单数据
-		
-		
 		flag.value=true;
     })
-	.catch(error => {
-		
-$message('请求未找到', 'error');
-});
 }
 
 
@@ -68,7 +59,7 @@ provide('isCollapseSideMenu',is_collapse_side_menu);
  }
 
  // 暴露方法(修改当前侧边栏菜单折叠或展开的方法)供子组件调用
- provide('updateIsCollapseSideMenuFunction', updateIsCollapseSideMenuFunction);
+provide('updateIsCollapseSideMenuFunction', updateIsCollapseSideMenuFunction);
 
 // 修改当前侧边栏菜单折叠或展开 结束
 
@@ -77,8 +68,8 @@ onMounted(() => {
 
 	//获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 	getAdminOrMenuListData();
-   
-  });
+
+ });
 
 
 

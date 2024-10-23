@@ -2,40 +2,22 @@
 import axios from 'axios';
 import router from '@/router/index.js'
 import  {getAchieveUseSignData} from "@/hooks/useSign.js";
-// let protocol = window.location.protocol; //协议
-// let host = window.location.host; //主机
-// let port = window.location.port; //主机端口
-// let reg = /^localhost+/;
-// if(reg.test(host)) {
-//   //若本地项目调试使用
-//    axios.defaults.baseURL = 'http://localhost:8888';
-// } else {
-//    //动态请求地址             协议               主机
-//    axios.defaults.baseURL = protocol + "//" + host  + ":" + port;
-// }
 
 
+// 使用create 创建axios示例 （当然这里存在很多配置选项，具体需要具体配置）
+const axiosService = axios.create()
 
 
-// development 本地开发环境
-// test    测试环境
-// production   生产环境
-// if (process.env.NODE_ENV === "development") {
-//     axios.defaults.baseURL = "/api";
-//   }
-  
 // console.log(import.meta.env.VITE_BASE_API)
 
-
-export const apiName = "/api";
-// axios.defaults.baseURL = '/api';
+// axiosService.defaults.baseURL = '/api';
 //来自相应环境.env文件VITE_BASE_API
-axios.defaults.baseURL = import.meta.env.VITE_BASE_API;
+axiosService.defaults.baseURL = import.meta.env.VITE_BASE_API;
 
 //请求拦截
-axios.interceptors.request.use(
+axiosService.interceptors.request.use(
     
-    async config => {
+    config => {
         // console.log(config)
         // 每次发送请求之前判断vuex中是否存在token        
         // 如果存在，则统一在http请求的header都加上token，这样后台根据token判断你的登录情况
@@ -49,8 +31,14 @@ axios.interceptors.request.use(
     // 添加公共的query参数
     // config.params = { ...config.params, params: 'params' };
     // 添加公共的body参数
-    const data=getAchieveUseSignData(config.data);
-    config.data = data;
+    if(config.method==='post'){
+        const data=getAchieveUseSignData(config.data);
+        config.data =  data ;
+    
+    }else if(config.method==='get'){
+        const data=getAchieveUseSignData(config.params);
+        config.params =  data ;
+    }
         return config;
     },
     error => {
@@ -58,7 +46,7 @@ axios.interceptors.request.use(
     }
 )
 // 响应拦截器
-axios.interceptors.response.use(
+axiosService.interceptors.response.use(
     response => {
         if (response.status === 200) {return Promise.resolve(response); 
             //进行中
@@ -87,50 +75,54 @@ axios.interceptors.response.use(
             }
         }
 );
-/** * get方法，对应get请求 * @param {String} url [请求的url地址] * @param {Object} params [请求时携带的参数] */
-export const getData = (url, params) => {
-    return axios.get(url, {params: params})
-    .then(response => {
-        return response.data;
-    }).catch(error => {
-        return error.data;
-    })
-}
-/** * post方法，对应post请求 * @param {String} url [请求的url地址] * @param {Object} params [请求时携带的参数] */
-export const postData = (url, params) => {
-    return axios.post(url, params,{headers:{'Content-Type': 'application/json'}}) 
-    //是将对象 序列化成URL的形式，以&进行拼接   
-    .then(response => {
-        return response.data;
-    })
-    .catch(error => {
-        return error.data
-    })
-}
-//表单提交
-export const postFormData = (url, params) => {
-    return axios.post(url, params,{headers:{'Content-Type': 'multipart/form-data'}}) 
-    //是将对象 序列化成URL的形式，以&进行拼接   
-    .then(response => {
-        return response.data;
-    })
-    .catch(error => {
-        return error.data
-    })
-}
-export const deleteData = (url, params) => {
-    return axios.delete(url, {params: params})
-    .then(response => {
-        return response.data;
-    }).catch(error => {
-        return error.data;
-    })
-}
-export const putData = (url, params) => {
-    return axios.put(url, params)
-    .then(response => {
-        return response.data;
-    }).catch(error => {
-        return error.data;
-    })
-}
+
+export default axiosService
+
+
+// /** * get方法，对应get请求 * @param {String} url [请求的url地址] * @param {Object} params [请求时携带的参数] */
+// export const getData = (url, params) => {
+//     return axiosService.get(url, {params: params})
+//     .then(response => {
+//         return response.data;
+//     }).catch(error => {
+//         return error.data;
+//     })
+// }
+// /** * post方法，对应post请求 * @param {String} url [请求的url地址] * @param {Object} params [请求时携带的参数] */
+// export const postData = (url, params) => {
+//     return axiosService.post(url, params,{headers:{'Content-Type': 'application/json'}}) 
+//     //是将对象 序列化成URL的形式，以&进行拼接   
+//     .then(response => {
+//         return response.data;
+//     })
+//     .catch(error => {
+//         return error.data
+//     })
+// }
+// //表单提交
+// export const postFormData = (url, params) => {
+//     return axiosService.post(url, params,{headers:{'Content-Type': 'multipart/form-data'}}) 
+//     //是将对象 序列化成URL的形式，以&进行拼接   
+//     .then(response => {
+//         return response.data;
+//     })
+//     .catch(error => {
+//         return error.data
+//     })
+// }
+// export const deleteData = (url, params) => {
+//     return axiosService.delete(url, {params: params})
+//     .then(response => {
+//         return response.data;
+//     }).catch(error => {
+//         return error.data;
+//     })
+// }
+// export const putData = (url, params) => {
+//     return axiosService.put(url, params)
+//     .then(response => {
+//         return response.data;
+//     }).catch(error => {
+//         return error.data;
+//     })
+// }

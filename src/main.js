@@ -20,7 +20,9 @@ import SvgIcon from '@/components/SvgIcon.vue';
 
 
 //  引入Axios 实例
-import  {putData,deleteData,getData,postData,postFormData,} from '@/utils/request.js';
+// import  {putData,deleteData,getData,postData,postFormData,} from '@/utils/request.js';
+
+
 //  顶部消息提示
 import message from  "@/components/message/message.js";
 //  校验方法
@@ -32,11 +34,11 @@ const app = createApp(App);
 
 
 //全局提供方法
-app.provide('$putData',putData)
-app.provide('$deleteData',deleteData)
-app.provide('$getData',getData)
-app.provide('$postData',postData)
-app.provide('$postFormData',postFormData)
+// app.provide('$putData',putData)
+// app.provide('$deleteData',deleteData)
+// app.provide('$getData',getData)
+// app.provide('$postData',postData)
+// app.provide('$postFormData',postFormData)
 
 app.provide('$message',message)
 app.provide('$verify',verify)
