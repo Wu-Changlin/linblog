@@ -88,8 +88,9 @@ axios.interceptors.response.use(
             }
         }
 );
+
 /** * get方法，对应get请求 * @param {String} url [请求的url地址] * @param {Object} params [请求时携带的参数] */
-const $get = (url, params) => {
+export const getData = (url, params) => {
     return axios.get(url, {params: params})
     .then(response => {
         return response.data;
@@ -98,7 +99,7 @@ const $get = (url, params) => {
     })
 }
 /** * post方法，对应post请求 * @param {String} url [请求的url地址] * @param {Object} params [请求时携带的参数] */
-const $post = (url, params) => {
+export const postData = (url, params) => {
     return axios.post(url, params,{headers:{'Content-Type': 'application/json'}}) 
     //是将对象 序列化成URL的形式，以&进行拼接   
     .then(response => {
@@ -109,7 +110,7 @@ const $post = (url, params) => {
     })
 }
 //表单提交
-const $postForm = (url, params) => {
+export const postFormData = (url, params) => {
     return axios.post(url, params,{headers:{'Content-Type': 'multipart/form-data'}}) 
     //是将对象 序列化成URL的形式，以&进行拼接   
     .then(response => {
@@ -119,7 +120,7 @@ const $postForm = (url, params) => {
         return error.data
     })
 }
-const $delete = (url, params) => {
+export const deleteData = (url, params) => {
     return axios.delete(url, {params: params})
     .then(response => {
         return response.data;
@@ -127,23 +128,11 @@ const $delete = (url, params) => {
         return error.data;
     })
 }
-const $put = (url, params) => {
+export const putData = (url, params) => {
     return axios.put(url, params)
     .then(response => {
         return response.data;
     }).catch(error => {
         return error.data;
     })
-}
-// 下面是将get和post方法挂载到vue原型上供全局使用、
-// vue2.x中是通 Vue.prototype 来绑定的，像这样Vue.prototype.$toast = Toast。在vue3中取消了Vue.prototype，推荐使用globalProperties来绑定，
-export default {
-    install: (app) => {
-        app.config.globalProperties['$put'] = $put;
-        app.config.globalProperties['$delete'] = $delete;
-        app.config.globalProperties['$get'] = $get;
-        app.config.globalProperties['$post'] = $post;
-        app.config.globalProperties['$postForm'] = $postForm;
-        app.config.globalProperties['$axios'] = axios;
-    }
 }

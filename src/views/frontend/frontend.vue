@@ -28,9 +28,9 @@
   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
+import frontendModuleApi from "@/api/frontend/frontend.js";//api接口
 
-  const $getData = inject('$getData');
-const $postData = inject('$postData');
+
 const $message = inject('$message');
 
   
@@ -59,7 +59,7 @@ const $message = inject('$message');
   const parent_page_current_active_tag_id = inject('currentActiveTagId');
 
    // 注入来自layout页面（公共）提供修改当前选中标签id的方法
-   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
+  const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
 
 
@@ -67,7 +67,7 @@ const $message = inject('$message');
   function getFrontendPageData() {
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
     is_loading.value=true;
-    $getData('/data/frontend/frontend.json')
+    frontendModuleApi.getFrontendPageData({})
       .then(response => {
         // setTimeout(() => {
         frontend_tag_data.value = response.tag_data;
@@ -75,7 +75,6 @@ const $message = inject('$message');
         current_page.value = response.current_page; //当前页数
         frontend_carousel_img_data.value = response.carousel_img_data;
         frontend_article_list_data.value = response.article_list_data;
-
 
         current_active_tag_id.value = response.current_active_tag_id;
         current_active_tag_name.value = response.current_active_tag_name;
@@ -104,10 +103,6 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
         is_loading.value = false;
 
       })
-      .catch(error => {
-
-        $message('请求未找到', 'error');
-      });
   }
 
   //获取把子页面选中的标签id和标签名称传到父页面或者点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）
@@ -116,7 +111,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
     // flag.value=false; //初始化导致子页面选中的标签id数据出现标签栏闪烁（当前标签栏处于显示状态，出现先隐藏后显示闪烁）
     is_loading.value = true;
 
-    $postData('/data/frontend/frontend.json', { tag_id: active_tag_id, tag_name: active_tag_name,page:1  })
+    frontendModuleApi.getChildClickTag({ tag_id: active_tag_id, tag_name: active_tag_name,page:1  })
       .then(response => {
         // setTimeout(() => {
         frontend_tag_data.value = response.tag_data;
@@ -156,10 +151,6 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
         is_loading.value = false;
 
       })
-      .catch(error => {
-
-        $message('请求未找到', 'error');
-      });
 
 
   }
@@ -171,8 +162,8 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
     if (is_no_more_data.value) return;//如果显示没有更多数据占位图（页面已渲染最后一页），那么直接返回
     if (is_next_page_loading.value) return;//如果加载下一页数据占位，那么直接返回
     if(is_empty_article_list_data.value)return;//如果显示没有数据占位图（后台返回空数据），那么直接返回
-     
-    console.log(`点击${current_active_tag_name.value}，总页数:${total_pages.value},第${current_page.value}页：`)
+    
+    // console.log(`点击${current_active_tag_name.value}，总页数:${total_pages.value},第${current_page.value}页：`)
 
     //总页数>=当前页数 ，模拟时当前页数没有axios赋值，随总页数（总页数是随机数）赋值
     if (total_pages.value > current_page.value) {
@@ -186,7 +177,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
 
           is_next_page_loading.value = true;
 
-          console.log('满足距离value=true,is_next_page_loading.value:', is_next_page_loading.value)
+          // console.log('满足距离value=true,is_next_page_loading.value:', is_next_page_loading.value)
           setTimeout(() => {
             getActiveTagNextPageData();//获取选中标签下一页数据
           }, 3000)
@@ -206,9 +197,9 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
   //根据触底获取选中标签下一页数据  
   function getActiveTagNextPageData() {
 
-    console.log('进入getActiveTagNextPageData,current_page.value:', current_page.value)
+    // console.log('进入getActiveTagNextPageData,current_page.value:', current_page.value)
     current_page.value++;//当前页数加一
-    $postData('/data/frontend/active_tag_next_page_data.json', { tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
+    frontendModuleApi.getActiveTagNextPageData({ tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
       .then(response => {
         // setTimeout(() => {
         is_next_page_loading.value = false;//取消加载中动画
@@ -238,14 +229,10 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
           if (!frontend_article_list_data.value) {
             is_empty_article_list_data.value = true;
           }
-          console.log('数据合并：is_next_page_loading.value:', is_next_page_loading.value)
+          // console.log('数据合并：is_next_page_loading.value:', is_next_page_loading.value)
           // is_next_page_loading.value = false;//取消加载中动画
         }
       })
-      .catch(error => {
-
-        $message('请求未找到', 'error');
-      });
 
 
   }

@@ -1,13 +1,18 @@
-{
 
-  "menu_id": 1,
-  "menu_name": "index",
-  "menu_title": "首页",
-  "menu_path": "/index",
-  "icon": "index",
-  "business_level": "frontend",
-  "parent_id": 0,
-  "created_time": "1687938191",
-  "update_time": "1687938191",
-  "delete_time": "1687938191"
-}
+{
+  "code":200,
+  "data":{
+    "menu_id": 1,
+    "menu_name": "index",
+    "menu_title": "首页",
+    "menu_path": "/index",
+    "icon": "index",
+    "business_level": "frontend",
+    "parent_id": 0,
+    "created_time": "1687938191",
+    "update_time": "1687938191",
+    "delete_time": "1687938191"
+  },
+  "msg":"成功"
+  }
+

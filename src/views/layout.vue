@@ -28,36 +28,23 @@ import NavBar from "@/components/nav_bar.vue";
 import SideBar from "@/components/side_bar.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import Footer from "@/components/footer.vue";
-
-
+import layoutModuleApi from "@/api/frontend/layout.js";//api接口
 
 //使用 provide inject 代替getCurrentInstance
 const $message = inject('$message');
 
-const $putData = inject('$putData');
-const $deleteData = inject('$deleteData');
-const $getData = inject('$getData');
-const $postData = inject('$postData');
-const $postFormData = inject('$postFormData');
-
-
 const layout_page_article_count=ref(0);
 const layout_page_article_list_data=ref();
-// //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
+// 获取搜索关键字匹配所用数据源  提供一个获取数据的方法
 const getSearchKeywordMatchArticleListDataFunction= ()=>{
-	$getData('/data/frontend/all_article.json')
-      .then(response => {
+	layoutModuleApi.getSearchKeywordMatchArticleListDataFunction({})
+    .then(response => {
         // setTimeout(() => {
 			layout_page_article_count.value = response.article_count; // 博文数量
 			layout_page_article_list_data.value = response.article_list; // 博文列表
         // }, 3000); // 假设加载时间是3秒
 		
-
-      })
-      .catch(error => {
-
-        $message('请求未找到', 'error');
-      });
+    })
 }
 // 使用 provide 向下传递方法
 provide('getSearchKeywordMatchArticleListDataFunction', getSearchKeywordMatchArticleListDataFunction);
@@ -99,21 +86,15 @@ const layout_page_menu_list_data=ref();
 //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 function getLayoutLogOrMenuListData(){
 
-	$getData("/data/frontend/layout.json")
+	layoutModuleApi.getLayoutLogOrMenuListData({})
 	.then(response => {
+		
         layout_page_log.value = response.log_data; // log
 		layout_page_menu_list_data.value = response.menu_data; // 菜单数据
 		getSearchKeywordMatchArticleListDataFunction();//匹配关键字数据源
-		// console.log('response.log_data:',response.log_data);
 		
+		// console.log('layout_page_menu_list_data:', response);
     })
-	.catch(error => {
-
-    	$message('请求未找到', 'error');
-  	});
-
-
-
 }
 
 
@@ -121,8 +102,8 @@ onMounted(() => {
 
 	//获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 	getLayoutLogOrMenuListData();
-   
-  });
+
+});
 
 
 

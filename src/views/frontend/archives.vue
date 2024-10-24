@@ -113,7 +113,7 @@
               :isLoading="is_loading_contribution_article_list_data"></Waterfall>
           </div>
           <!-- 动态栏 结束 -->
-    
+
 
         </div>
 
@@ -133,9 +133,9 @@
   import YearDropdown from '@/components/year_dropdown.vue';
   import Skeleton from '@/components/skeleton.vue';
   import { useRoute, useRouter } from "vue-router";
+  import archivesModuleApi from "@/api/frontend/archives.js";//api接口
 
-  const $getData = inject('$getData');
-  const $postData = inject('$postData');
+
   const $message = inject('$message');
 
   const router = useRouter();
@@ -182,16 +182,9 @@
 
   const is_loading_contribution_article_list_data = ref(true);
 
-  onMounted(() => {
-    // 假设JSON文件与组件在同一目录下
-    // import('./mock-data.json').then(res => {
-    //   items.value = res;
-    // }).catch(error => {
-    //   $message('请求未找到', 'error');
-    // });
-
-    // 如果你想使用axios来模拟请求，可以这样做
-    $getData('/data/frontend/archives.json')
+  //获取归档页网站统计栏、标签统计栏、贡献统计栏数据
+  function getArchivesPageData() {
+    archivesModuleApi.getArchivesPageData({})
       .then(response => {
 
         website_content_count_data.value = response.website_content_count_data;
@@ -217,16 +210,12 @@
         // console.log('response:',response);
         // }, 3000); // 假设加载时间是3秒
 
-
       })
-      .catch(error => {
 
-        $message('请求未找到', 'error');
-        return;
-      });
+  }
 
-
-    //   fetchTag();
+  onMounted(() => {
+    getArchivesPageData()
   });
 
 
@@ -242,7 +231,8 @@
 
     year_dropdown_page_update_year.value = active_year;
 
-    $postData('/data/frontend/contribution_year_' + active_year + '.json')
+   const request_url='/data/frontend/contribution_year_' + active_year + '.json';
+    archivesModuleApi.getClickYearContributionData(request_url,{})
       .then(response => {
 
         current_year_contribution_data.value = response.current_year_contribution_data;
@@ -263,12 +253,7 @@
 
   //获取选中日期贡献信息（由contribution_calendar子组件发到父组件的点击贡献图某日数据）
   function clickContributionDay(contribution_day_year, contribution_day_month, contribution_day_date, contribution_day_number, active_today_contribution_id, is_selected) {
-
     is_loading_contribution_article_list_data.value = true;
-
-
-    // console.log('is_loading_contribution_article_list_data.value:',is_loading_contribution_article_list_data.value);
-
     is_selected_data.value = is_selected;
     // console.log('contribution_day_year：',contribution_day_year,',contribution_day_month:',contribution_day_month,',contribution_day_date:',contribution_day_date,',contribution_day_date:',contribution_day_number)
     if (is_selected == true) {
@@ -276,10 +261,8 @@
       contribution_day_month_data.value = contribution_day_month;
       contribution_day_date_data.value = contribution_day_date;
       contribution_day_number_data.value = contribution_day_number;
-
       // console.log('contribution_day_number_data.value:',contribution_day_number_data.value);
-
-      $postData('/data/frontend/click_contribution_day.json')
+      archivesModuleApi.clickContributionDay({})
         .then(response => {
 
           last_month_article_list_data.value = response.contribution_article_list_data;

@@ -1,40 +1,45 @@
+
 {
-  "table_header": [
-    { "prop": "user_id", "label": "user_id", "key": "user_id" },
-    { "prop": "nike_name", "label": "昵称", "key": "nike_name" },
-    {
-      "prop": "avatar",
-      "label": "头像",
-      "key": "avatar",
-      "scopedSlot": "avatar"
-    },
-    { "prop": "email", "label": "邮箱", "key": "email" },
-    { "prop": "is_enable", "label": "启用", "key": "is_enable" },
-    { "prop": "role", "label": "角色", "key": "role" },
-    { "prop": "account_status", "label": "账号状态", "key": "account_status" },
-    { "prop": "ip", "label": "登陆ip", "key": "ip" },
-    { "prop": "created_time", "label": "创建时间", "key": "created_time" },
-    { "prop": "update_time", "label": "更新时间", "key": "update_time" },
-    { "prop": "delete_time", "label": "删除时间", "key": "delete_time" }
-  ],
-  "options_role_data": [
-    {
-      "role": 1,
-      "label": "管理员"
-    },
-    {
-      "role": 2,
-      "label": "普通用户"
-    }
-  ],
-  "is_enable_data": [
-    {
-      "value": 0,
-      "label": "否"
-    },
-    {
-      "value": 1,
-      "label": "是"
-    }
-  ]
+  "code":200,
+  "data":  {
+    "table_header": [
+      { "prop": "user_id", "label": "user_id", "key": "user_id" },
+      { "prop": "nike_name", "label": "昵称", "key": "nike_name" },
+      {
+        "prop": "avatar",
+        "label": "头像",
+        "key": "avatar",
+        "scopedSlot": "avatar"
+      },
+      { "prop": "email", "label": "邮箱", "key": "email" },
+      { "prop": "is_enable", "label": "启用", "key": "is_enable" },
+      { "prop": "role", "label": "角色", "key": "role" },
+      { "prop": "account_status", "label": "账号状态", "key": "account_status" },
+      { "prop": "ip", "label": "登陆ip", "key": "ip" },
+      { "prop": "created_time", "label": "创建时间", "key": "created_time" },
+      { "prop": "update_time", "label": "更新时间", "key": "update_time" },
+      { "prop": "delete_time", "label": "删除时间", "key": "delete_time" }
+    ],
+    "options_role_data": [
+      {
+        "role": 1,
+        "label": "管理员"
+      },
+      {
+        "role": 2,
+        "label": "普通用户"
+      }
+    ],
+    "is_enable_data": [
+      {
+        "value": 0,
+        "label": "否"
+      },
+      {
+        "value": 1,
+        "label": "是"
+      }
+    ]
+  },
+  "msg":"成功"
 }

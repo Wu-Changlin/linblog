@@ -1,4 +1,6 @@
 {
+"code":200,
+"data":{
   "log_data": "/logo.png",
   "menu_data": [
     {
@@ -122,5 +124,8 @@
       ]
     }
   ]
+},
+"msg":"成功"
+
 }
 

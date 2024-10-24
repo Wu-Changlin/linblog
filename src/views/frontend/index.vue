@@ -25,18 +25,13 @@
   import Waterfall from '@/components/waterfall.vue';
   import Footer from '@/components/footer.vue';
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
-
-
-  const $getData = inject('$getData');
-const $postData = inject('$postData');
-const $message = inject('$message');
-
+import indexModuleApi from "@/api/frontend/index.js";//api接口
 
 
   const route = useRoute();
   const router = useRouter();
 
-
+const $message = inject('$message');
 
 
 
@@ -71,7 +66,7 @@ const $message = inject('$message');
   //获取首页数据（内容标签栏数据、博文列表数据（瀑布流组件））  
   function getIndexPageData() {
 
-    $getData('/data/frontend/index.json')
+    indexModuleApi.getIndexPageData({})
       .then(response => {
         index_tag_data.value = response.tag_data; // 标签数据
         index_article_list_data.value = response.article_list_data; // // 博文列表数据
@@ -84,21 +79,15 @@ const $message = inject('$message');
 
         flag.value = true;
         is_loading.value = false;
-
       })
-      .catch(error => {
-        $message('请求未找到', 'error');
-        // $message('请求未找到', 'error');
-      });
   }
 
 
   //获取子页面选中的标签id数据 
   // NOTE:　首页的标签数据仅展示一页（没有上拉加载更多），目的：显示页面底部备案信息。 
   function getChildClickTag(active_tag_id, active_tag_name) {
-
     is_loading.value = true;
-    $postData('/data/frontend/index.json', { tag_id: active_tag_id, tag_name: active_tag_name, page: 1 })
+    indexModuleApi.getChildClickTag({ tag_id: active_tag_id, tag_name: active_tag_name, page: 1 })
       .then(response => {
         index_tag_data.value = response.tag_data; // 标签数据
         index_article_list_data.value = response.article_list_data; // // 博文列表
@@ -122,13 +111,6 @@ const $message = inject('$message');
 
         
       })
-      .catch(error => {
-        $message('请求未找到', 'error');
-        // $message('请求未找到', 'error');
-      });
-
-
-
   }
 
 

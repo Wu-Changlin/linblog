@@ -1,5 +1,6 @@
 {
-  
+  "code":200,
+  "data":{
     "search_keyword_count": 10,
     "total_pages":3,
     "current_page":1,
@@ -520,8 +521,9 @@
     "menu_id": 4,
     "menu_name": "resource"
   }
-
-
 ]
-  }
+},
+  "msg":"成功"
+}
+
   

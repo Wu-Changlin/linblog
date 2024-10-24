@@ -11,10 +11,11 @@
 
         <!-- <div style="background-color: rgba(0, 0, 0, 0.04);width: 100%;height:100%;display:flex; padding-top: 72px;"> -->
 
-          <!-- 目录占位 -->
-          <Skeleton bg="#e4e4e4" width="238px" height="100%"  animated class="article_catalog_skeleton" style="display: flex;flex-direction: column;flex-shrink: 0;margin-left: 12px;" />
-          <!-- 内容占位 -->
-          <Skeleton bg="#e4e4e4" height="100%" animated style="flex: 1;margin: 0px 12px;" />
+        <!-- 目录占位 -->
+        <Skeleton bg="#e4e4e4" width="238px" height="100%" animated class="article_catalog_skeleton"
+          style="display: flex;flex-direction: column;flex-shrink: 0;margin-left: 12px;" />
+        <!-- 内容占位 -->
+        <Skeleton bg="#e4e4e4" height="100%" animated style="flex: 1;margin: 0px 12px;" />
 
 
         <!-- </div> -->
@@ -68,20 +69,19 @@
           <!-- 博文内容 结束-->
 
 
-          
+
           <div style="margin: 20px auto;width: fit-content;">----- <span
               style="color: white;background-color: black;padding: 0 5px;font-size: .7rem;">END</span> -----</div>
 
-<!-- 本文相关信息 开始-->
+          <!-- 本文相关信息 开始-->
           <p class="notice" style="text-indent:0em">
-            博客站点：<a :href="data.website_url" rel="author"><span
-                class="brand">{{data.website_name }}</span></a><br>
+            博客站点：<a :href="data.website_url" rel="author"><span class="brand">{{data.website_name }}</span></a><br>
             本文链接：<a :href="data.article_url">{{ data.article_url }}</a><br>
-            版权声明：本文章采用<a rel="license" :href="data.license_url"
-              target="_blank"><i>&nbsp;<strong>{{ data.license_description }} &nbsp;</strong></i></a>。
+            版权声明：本文章采用<a rel="license" :href="data.license_url" target="_blank"><i>&nbsp;<strong>{{
+                  data.license_description }} &nbsp;</strong></i></a>。
           </p>
-<!-- 本文相关信息 开始-->
- <!-- 上下篇链接 开始-->
+          <!-- 本文相关信息 开始-->
+          <!-- 上下篇链接 开始-->
           <div class="post-pager">
             <div class="prev">
               <a :href="data.prev_article_url">
@@ -136,7 +136,7 @@
 </template>
 <script setup>
   // import Footer from "@/components/footer.vue";
-  import { ref, reactive, onMounted, onUnmounted, nextTick, watch, onUpdated, provide,inject} from "vue";
+  import { ref, reactive, onMounted, onUnmounted, nextTick, watch, onUpdated, provide, inject } from "vue";
   import { useRoute, useRouter } from 'vue-router';
   import Skeleton from '@/components/skeleton.vue';
   import Prism from "prismjs";
@@ -145,15 +145,14 @@
   import FloatingBtnSets from "@/components/floating_btn_sets.vue";
   import ArticleCatalog from "@/components/article_catalog.vue";
   import '/public/github-markdown.css';//使用github-markdown样式渲染HTML内容
- 
- 
-  const $getData = inject('$getData');
-const $postData = inject('$postData');
-const $message = inject('$message');
+  import articleModuleApi from "@/api/frontend/article.js";//api接口
+  import layoutModuleApi from "@/api/frontend/layout.js";//api接口
+
+  const $message = inject('$message');
 
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();
-  
+
 
   const is_loading = ref(true);
   const current_route_query = ref(null);
@@ -170,33 +169,24 @@ const $message = inject('$message');
     author_name: "原创",
     created_time: "发布时间",
     article_content: "内容",
-   article_url:"本文链接",
-       website_url:"网站链接",
-       website_name:"网站名称",
-       prev_article_id:"上一篇博文id",
-       prev_article_title:"上一篇博文标题",
-       prev_article_abstract:"上一篇博文摘要",
-       prev_article_url:"上一篇博文链接",
-       next_article_id:"下一篇博文id",
-       next_article_title:"下一篇博文标题",
-       next_article_abstract:"下一篇博文摘要",
-       next_article_url:"下一篇博文链接",
-       license_url:"版权url",
-       license_description:"版权描述",
+    article_url: "本文链接",
+    website_url: "网站链接",
+    website_name: "网站名称",
+    prev_article_id: "上一篇博文id",
+    prev_article_title: "上一篇博文标题",
+    prev_article_abstract: "上一篇博文摘要",
+    prev_article_url: "上一篇博文链接",
+    next_article_id: "下一篇博文id",
+    next_article_title: "下一篇博文标题",
+    next_article_abstract: "下一篇博文摘要",
+    next_article_url: "下一篇博文链接",
+    license_url: "版权url",
+    license_description: "版权描述",
 
   })
-
-
-  onMounted(() => {
-    // getArticleDetail
-    //两重校验路由查询参数，路由表加页面;否: 导航到404页面。 
-    if (current_route_query) {
-      current_route_query.value = route.query;
-    } else {
-      router.push({ path: '/404', });
-    }
-
-    $getData('/data/frontend/article_detail.json')
+  //获取博文详情数据
+  function getArticlePageData() {
+    articleModuleApi.getArticlePageData({})
       .then(response => {
 
         data.menu_title = response.menu_title;
@@ -229,14 +219,20 @@ const $message = inject('$message');
         is_loading.value = false;//取消骨架屏
 
       })
-      .catch(error => {
-
-        $message('请求未找到', 'error');
-      });
+  
+  }
 
 
+  onMounted(() => {
+    // getArticleDetail
+    //两重校验路由查询参数，路由表加页面;否: 导航到404页面。 
+    if (current_route_query) {
+      current_route_query.value = route.query;
+    } else {
+      router.push({ path: '/404', });
+    }
 
-
+    getArticlePageData();
     mediaQuery();//初始化（防止刷新失效）
     //     console.log('挂载完毕');
     window.addEventListener('resize', mediaQuery);  //监听窗口大小变化	
@@ -249,7 +245,7 @@ const $message = inject('$message');
   const article_page_article_list_data = ref();
   //获取搜索关键字匹配所用数据源  提供一个获取数据的方法
   const getSearchKeywordMatchArticleListDataFunction = () => {
-    $getData('/data/frontend/all_article.json')
+    layoutModuleApi.getSearchKeywordMatchArticleListDataFunction({})
       .then(response => {
         // setTimeout(() => {
         article_page_article_count.value = response.article_count; // 博文数量
@@ -258,10 +254,6 @@ const $message = inject('$message');
 
 
       })
-      .catch(error => {
-
-        $message('请求未找到', 'error');
-      });
   }
 
 
@@ -276,7 +268,7 @@ const $message = inject('$message');
   //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
   function getLayoutLogOrMenuListData() {
     // 如果你想使用axios来模拟请求，可以这样做
-    $getData('/data/frontend/layout.json')
+    layoutModuleApi.getLayoutLogOrMenuListData({})
       .then(response => {
         // setTimeout(() => {
         article_page_log.value = response.log_data; // log
@@ -289,10 +281,6 @@ const $message = inject('$message');
         // }, 3000); // 延迟3秒
 
       })
-      .catch(error => {
-
-        $message('请求未找到', 'error');
-      });
 
   }
 
@@ -315,22 +303,22 @@ const $message = inject('$message');
 
         //如果没有支持某语法高亮，那么替换成language-html
         if (!Prism.languages[language]) {
-           // 使用正则表达式检查class类字符串是否包含language类名
+          // 使用正则表达式检查class类字符串是否包含language类名
           const languageRegex = new RegExp("language");
           // 如果有language类名，那么移除原有后添加language-html类
-           if (languageRegex.exec(block.className)) {
+          if (languageRegex.exec(block.className)) {
             block.classList.remove(block.className);
             block.classList.add('language-html')
-          }else{//元素中添加一个类名是language-html
+          } else {//元素中添加一个类名是language-html
             block.classList.add('language-html')
           }
-          
-        } 
+
+        }
         //添加行号类
         block.classList.add('line-numbers');
 
-      
- // 高亮代码块
+
+        // 高亮代码块
         Prism.highlightElement(block);
       })
 
@@ -396,11 +384,11 @@ const $message = inject('$message');
 
 <style scoped>
   * {
-        /* 适用于 Internet Explorer 和旧版 Edge */
+    /* 适用于 Internet Explorer 和旧版 Edge */
     -ms-overflow-style: none;
-   /* 适用于 Firefox */
+    /* 适用于 Firefox */
     scrollbar-width: none;
- /* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/
+    /* WebKit 内核浏览器（如 Chrome 和 Safari）中的滚动条*/
     -webkit-scrollbar: none;
   }
 
@@ -469,7 +457,7 @@ const $message = inject('$message');
   }
 
   .article-container {
-       /* 禁止容器x轴方向滚动 */
+    /* 禁止容器x轴方向滚动 */
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
@@ -493,7 +481,8 @@ const $message = inject('$message');
 
 
 
-  .article-content,.markdown-body {
+  .article-content,
+  .markdown-body {
     /* font-size: 14px;
     font-family: Source Sans Pro, Helvetica Neue, Arial, sans-serif !important;
     -webkit-font-smoothing: antialiased;
@@ -684,17 +673,18 @@ const $message = inject('$message');
   }
 
 
-  .article_catalog_skeleton{
+  .article_catalog_skeleton {
     @media screen and (max-width: 695px) {
-        display: none !important;
-        /* visibility: hidden; */
-        
-      }
-      @media screen and (min-width: 696px) and (max-width: 959px) {
-        display: none !important;
-        /* visibility: hidden; */
-        
-      }
+      display: none !important;
+      /* visibility: hidden; */
+
+    }
+
+    @media screen and (min-width: 696px) and (max-width: 959px) {
+      display: none !important;
+      /* visibility: hidden; */
+
+    }
   }
 
   /* 骨架屏缩放动画 */
@@ -708,5 +698,4 @@ const $message = inject('$message');
     opacity: 0;
     transform: scale(0.8);
   }
-
 </style>

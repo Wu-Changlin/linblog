@@ -35,7 +35,7 @@
 						<!-- 下拉框列表 -->
 						<ul>
 							<li v-for="(item,index) in data.search_keyword_match_data" :key="item.index"
-								@click="goViewArticle(item.article_id)">
+								@click="gotoViewArticle(item.article_id)">
 								<div class="match-title" v-html="item.result_article_title_match_data"></div>
 								<div class="match-content" v-html="item.result_article_content_match_data"></div>
 

@@ -64,6 +64,7 @@
 <script setup>
 import { ref,reactive, nextTick,inject} from "vue";
 import { useRouter,useRoute} from "vue-router";
+import loginModuleApi from "@/api/backend/login.js";//api接口
 
 
    //使用 provide inject 代替getCurrentInstance

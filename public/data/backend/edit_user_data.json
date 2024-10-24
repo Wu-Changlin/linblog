@@ -1,17 +1,20 @@
 {
+  "code":200,
+  "data":{
+    "user_id": 1,
+    "nike_name": "守一",
+    "avatar": "/logo.png",
+    "email": "111@qq.com",  
+    "role": 1,
+    "is_enable": 1,
+    "password":"$A1xxx***",
+    "again_password":"$A1xxx***",
+    "account_status": "正常",
+    "ip": "10.198.1.1",
+    "created_time": "1687938191",
+    "update_time": "1687938191",
+    "delete_time": "1687938191"
+  },
+  "msg":"成功"
+  }
 
-  
-  "user_id": 1,
-  "nike_name": "守一",
-  "avatar": "/logo.png",
-  "email": "111@qq.com",  
-  "role": 1,
-  "is_enable": 1,
-  "password":"$A1xxx***",
-  "again_password":"$A1xxx***",
-  "account_status": "正常",
-  "ip": "10.198.1.1",
-  "created_time": "1687938191",
-  "update_time": "1687938191",
-  "delete_time": "1687938191"
-}

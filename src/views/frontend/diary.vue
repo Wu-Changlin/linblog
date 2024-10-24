@@ -34,9 +34,8 @@
   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
   import { debounce, throttle } from '@/hooks/debounce_throttle.js';
+  import diaryModuleApi from "@/api/frontend/diary.js";//api接口
 
-  const $getData = inject('$getData');
-  const $postData = inject('$postData');
   const $message = inject('$message');
 
   const route = useRoute();
@@ -75,7 +74,7 @@
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
     is_loading.value = true;
     // 如果你想使用axios来模拟请求，可以这样做
-    $getData('/data/frontend/diary.json')
+    diaryModuleApi.getDiaryPageData({})
       .then(response => {
         // setTimeout(() => {
         diary_tag_data.value = response.tag_data;
@@ -130,7 +129,7 @@
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
     is_loading.value = true;
 
-    $postData('/data/frontend/diary.json', { tag_id: active_tag_id, tag_name: active_tag_name })
+    diaryModuleApi.getChildClickTag({ tag_id: active_tag_id, tag_name: active_tag_name })
       .then(response => {
         // setTimeout(() => {
         diary_tag_data.value = response.tag_data;
@@ -222,7 +221,8 @@
 
     console.log('进入getActiveTagNextPageData,current_page.value:', current_page.value)
     current_page.value++;//当前页数加一
-    $postData('/data/frontend/active_tag_next_page_data.json', { tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
+
+    diaryModuleApi.getActiveTagNextPageData({ tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
       .then(response => {
         // setTimeout(() => {
         is_next_page_loading.value = false;//取消加载中动画

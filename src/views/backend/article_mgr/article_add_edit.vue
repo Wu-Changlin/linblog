@@ -118,7 +118,7 @@
   import { ref, reactive, onMounted, computed, nextTick, inject } from "vue";
   import { useRouter, useRoute } from "vue-router";
   import ArticleCoverList from '@/components/backend/article_cover_list.vue';
-  import { sendMsg } from '@/components/crossTagMsg.js';
+  import {sendMsg} from '@/components/cross_tag_msg/crossTagMsg.js';
   import { MdEditor } from 'md-editor-v3';
   import 'md-editor-v3/lib/style.css';
 

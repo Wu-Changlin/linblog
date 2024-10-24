@@ -1,270 +1,275 @@
 {
-  "total_pages": 2,
-  "total_count": 12,
-  "current_page": 1,
-  "current_page_limit": 10,
-  "menu_list_data": [
-    {
-      "menu_id": 1,
-      "menu_name": "index",
-      "menu_title": "首页",
-      "menu_path": "/index",
-      "icon": "index",
-      "business_level": 1,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 2,
-      "menu_name": "frontend",
-      "menu_title": "前端",
-      "menu_path": "/frontend",
-      "icon": "frontend",
-      "business_level": 1,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 3,
-      "menu_name": "backend",
-      "menu_title": "后端",
-      "menu_path": "/backend",
-      "icon": "backend",
-      "business_level": 1,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
+  "code":200,
+  "data":{
+    "total_pages": 2,
+    "total_count": 12,
+    "current_page": 1,
+    "current_page_limit": 10,
+    "menu_list_data": [
+      {
+        "menu_id": 1,
+        "menu_name": "index",
+        "menu_title": "首页",
+        "menu_path": "/index",
+        "icon": "index",
+        "business_level": 1,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 2,
+        "menu_name": "frontend",
+        "menu_title": "前端",
+        "menu_path": "/frontend",
+        "icon": "frontend",
+        "business_level": 1,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 3,
+        "menu_name": "backend",
+        "menu_title": "后端",
+        "menu_path": "/backend",
+        "icon": "backend",
+        "business_level": 1,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+  
+      {
+        "menu_id": 4,
+        "menu_name": "resource",
+        "menu_title": "资源",
+        "menu_path": "/resource",
+        "icon": "resource",
+        "business_level": 1,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+  
+      {
+        "menu_id": 5,
+        "menu_name": "archives",
+        "menu_title": "归档",
+        "menu_path": "/archives",
+        "icon": "archives",
+        "business_level": 1,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+  
+      {
+        "menu_id": 6,
+        "menu_name": "diary",
+        "menu_title": "随笔",
+        "menu_path": "/diary",
+        "icon": "diary",
+        "business_level": 1,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+  
+      {
+        "menu_id": 7,
+        "menu_title": "用户管理",
+        "menu_name": "user",
+        "icon": "user",
+        "business_level": 2,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+  
+      {
+        "menu_id": 8,
+        "menu_title": "用户列表",
+        "menu_name": "user_list",
+        "menu_path": "/admin/user_list",
+        "icon": "user_list",
+        "business_level": 2,
+        "parent_id": 7,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+  
+      {
+        "menu_id": 9,
+        "menu_title": "文章管理",
+        "menu_name": "article",
+        "icon": "article",
+        "business_level": 2,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 10,
+        "menu_title": "文章列表",
+        "menu_name": "article_list",
+        "menu_path": "/admin/article_list",
+        "icon": "article_list",
+        "business_level": 2,
+        "parent_id": 9,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 12,
+        "menu_title": "菜单管理",
+        "menu_name": "menu",
+        "icon": "menus",
+        "business_level": 2,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 13,
+        "menu_title": "菜单列表",
+        "menu_name": "menu_list",
+        "menu_path": "/admin/menu_list",
+        "icon": "menu_list",
+        "business_level": 2,
+        "parent_id": 12,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 14,
+        "menu_title": "标签管理",
+        "menu_name": "tag",
+        "icon": "tags",
+        "business_level": 2,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 15,
+        "menu_title": "标签列表",
+        "menu_name": "tag_list",
+        "menu_path": "/admin/tag_list",
+        "icon": "tag_list",
+        "business_level": 2,
+        "parent_id": 14,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 16,
+        "menu_title": "图片管理",
+        "menu_name": "image",
+        "icon": "image",
+        "business_level": 2,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 17,
+        "menu_title": "图片列表",
+        "menu_name": "image_list",
+        "menu_path": "/admin/image_list",
+        "icon": "image_list",
+        "business_level": 2,
+        "parent_id": 16,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 18,
+        "menu_title": "权限管理",
+        "menu_name": "auth",
+        "icon": "auth",
+        "business_level": 2,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 19,
+        "menu_title": "权限列表",
+        "menu_name": "auth_list",
+        "menu_path": "/admin/auth_list",
+        "icon": "auth_list",
+        "business_level": 2,
+        "parent_id": 18,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 20,
+        "menu_title": "角色管理",
+        "menu_name": "role",
+        "icon": "role",
+        "business_level": 2,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 21,
+        "menu_title": "角色列表",
+        "menu_name": "role_list",
+        "menu_path": "/admin/role_list",
+        "icon": "role_list",
+        "business_level": 2,
+        "parent_id": 20,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 22,
+        "menu_title": "配置管理",
+        "menu_name": "configuration",
+        "icon": "configuration",
+        "business_level": 2,
+        "parent_id": 0,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "menu_id": 23,
+        "menu_title": "配置列表",
+        "menu_name": "configuration_list",
+        "menu_path": "/admin/configuration_list",
+        "icon": "configuration_list",
+        "business_level": 2,
+        "parent_id": 22,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      }
+    ]
+  },
+  "msg":"成功"
+  }
 
-    {
-      "menu_id": 4,
-      "menu_name": "resource",
-      "menu_title": "资源",
-      "menu_path": "/resource",
-      "icon": "resource",
-      "business_level": 1,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-
-    {
-      "menu_id": 5,
-      "menu_name": "archives",
-      "menu_title": "归档",
-      "menu_path": "/archives",
-      "icon": "archives",
-      "business_level": 1,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-
-    {
-      "menu_id": 6,
-      "menu_name": "diary",
-      "menu_title": "随笔",
-      "menu_path": "/diary",
-      "icon": "diary",
-      "business_level": 1,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-
-    {
-      "menu_id": 7,
-      "menu_title": "用户管理",
-      "menu_name": "user",
-      "icon": "user",
-      "business_level": 2,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-
-    {
-      "menu_id": 8,
-      "menu_title": "用户列表",
-      "menu_name": "user_list",
-      "menu_path": "/admin/user_list",
-      "icon": "user_list",
-      "business_level": 2,
-      "parent_id": 7,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-
-    {
-      "menu_id": 9,
-      "menu_title": "文章管理",
-      "menu_name": "article",
-      "icon": "article",
-      "business_level": 2,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 10,
-      "menu_title": "文章列表",
-      "menu_name": "article_list",
-      "menu_path": "/admin/article_list",
-      "icon": "article_list",
-      "business_level": 2,
-      "parent_id": 9,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 12,
-      "menu_title": "菜单管理",
-      "menu_name": "menu",
-      "icon": "menus",
-      "business_level": 2,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 13,
-      "menu_title": "菜单列表",
-      "menu_name": "menu_list",
-      "menu_path": "/admin/menu_list",
-      "icon": "menu_list",
-      "business_level": 2,
-      "parent_id": 12,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 14,
-      "menu_title": "标签管理",
-      "menu_name": "tag",
-      "icon": "tags",
-      "business_level": 2,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 15,
-      "menu_title": "标签列表",
-      "menu_name": "tag_list",
-      "menu_path": "/admin/tag_list",
-      "icon": "tag_list",
-      "business_level": 2,
-      "parent_id": 14,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 16,
-      "menu_title": "图片管理",
-      "menu_name": "image",
-      "icon": "image",
-      "business_level": 2,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 17,
-      "menu_title": "图片列表",
-      "menu_name": "image_list",
-      "menu_path": "/admin/image_list",
-      "icon": "image_list",
-      "business_level": 2,
-      "parent_id": 16,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 18,
-      "menu_title": "权限管理",
-      "menu_name": "auth",
-      "icon": "auth",
-      "business_level": 2,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 19,
-      "menu_title": "权限列表",
-      "menu_name": "auth_list",
-      "menu_path": "/admin/auth_list",
-      "icon": "auth_list",
-      "business_level": 2,
-      "parent_id": 18,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 20,
-      "menu_title": "角色管理",
-      "menu_name": "role",
-      "icon": "role",
-      "business_level": 2,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 21,
-      "menu_title": "角色列表",
-      "menu_name": "role_list",
-      "menu_path": "/admin/role_list",
-      "icon": "role_list",
-      "business_level": 2,
-      "parent_id": 20,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 22,
-      "menu_title": "配置管理",
-      "menu_name": "configuration",
-      "icon": "configuration",
-      "business_level": 2,
-      "parent_id": 0,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    },
-    {
-      "menu_id": 23,
-      "menu_title": "配置列表",
-      "menu_name": "configuration_list",
-      "menu_path": "/admin/configuration_list",
-      "icon": "configuration_list",
-      "business_level": 2,
-      "parent_id": 22,
-      "created_time": "1687938191",
-      "update_time": "1687938191",
-      "delete_time": "1687938191"
-    }
-  ]
-}

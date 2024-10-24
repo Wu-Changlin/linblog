@@ -70,7 +70,7 @@ import {useRoute,useRouter}  from "vue-router";
 import ArticleCoverList from '@/components/backend/article_cover_list.vue';
 import Table from "@/components/backend/table.vue";
 
-import {listenMsg} from '@/components/crossTagMsg.js';
+import {listenMsg} from '@/components/cross_tag_msg/crossTagMsg.js';
 
 const route=useRoute();
 const router=useRouter();

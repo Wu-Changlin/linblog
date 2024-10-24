@@ -1,46 +1,50 @@
 {
-
- "log_data":"/logo.png",
- "menu_data":[
-    {
-        "menu_id":1,
-        "menu_name": "index",
-        "menu_title":"首页",
-        "menu_path": "/index"
+  "code":200,
+  "data":{
+    "log_data":"/logo.png",
+    "menu_data":[
+        {
+            "menu_id":1,
+            "menu_name": "index",
+            "menu_title":"首页",
+            "menu_path": "/index"
+        },
+        {
+          "menu_id":2,
+          "menu_name": "frontend",
+          "menu_title":"前端",
+          "menu_path": "/frontend"
+        },
+        {
+          "menu_id":3,
+          "menu_name": "backend",
+          "menu_title":"后端",
+          "menu_path": "/backend"
+        },
+      
+        {
+          "menu_id":4,
+          "menu_name": "resource",
+          "menu_title":"资源",
+          "menu_path": "/resource"
+        },
+      
+        {
+          "menu_id":5,
+          "menu_name": "archives",
+          "menu_title":"归档",
+          "menu_path": "/archives"
+        },
+      
+        {
+          "menu_id":6,
+          "menu_name": "diary",
+          "menu_title":"随笔",
+          "menu_path": "/diary"
+        }
+        
+      ]
     },
-    {
-      "menu_id":2,
-      "menu_name": "frontend",
-      "menu_title":"前端",
-      "menu_path": "/frontend"
-    },
-    {
-      "menu_id":3,
-      "menu_name": "backend",
-      "menu_title":"后端",
-      "menu_path": "/backend"
-    },
-  
-    {
-      "menu_id":4,
-      "menu_name": "resource",
-      "menu_title":"资源",
-      "menu_path": "/resource"
-    },
-  
-    {
-      "menu_id":5,
-      "menu_name": "archives",
-      "menu_title":"归档",
-      "menu_path": "/archives"
-    },
-  
-    {
-      "menu_id":6,
-      "menu_name": "diary",
-      "menu_title":"随笔",
-      "menu_path": "/diary"
-    }
-    
-  ]
+  "msg":"成功"
 }
+  
