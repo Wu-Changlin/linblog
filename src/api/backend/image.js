@@ -1,14 +1,14 @@
 import axiosService from "@/utils/request.js";  // 导入axiosService中创建的axios实例
 
 
-//article 模块
+//image 模块
 
 
 /** * post方法，对应post请求 * @param {String} url [请求的url地址] * @param {Object} params [请求时携带的参数] */
-const article = {
+const image = {
     // 获取list页面框架数据
     getPageLayoutData(params) {
-        return axiosService.post("/data/backend/article_page_layout_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("/data/backend/image_page_layout_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -21,7 +21,7 @@ const article = {
     },
     //获取表格数据
     getArticleListPageData(params) {
-        return axiosService.post("/data/backend/article_list.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("/data/backend/image_list.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -35,7 +35,7 @@ const article = {
 
     // 获取查询数据
     queryInputData(params) {
-        return axiosService.post("/data/backend/article_query_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("/data/backend/image_query_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -48,7 +48,7 @@ const article = {
     },
     // 分页数据
     getChildPaginationChangeData(params) {
-        return axiosService.post("/data/backend/article_list.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("/data/backend/image_list.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -63,7 +63,7 @@ const article = {
 
 // 提交添加或编辑数据
 clickSubmitAddOrEditData(params) {
-        return axiosService.post("/data/backend/edit_article_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("/data/backend/edit_image_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -78,7 +78,7 @@ clickSubmitAddOrEditData(params) {
 
       //获取编辑id的数据
       getEditCurrentIdData(params) {
-        return axiosService.post("/data/backend/edit_article_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("/data/backend/edit_image_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -99,4 +99,4 @@ clickSubmitAddOrEditData(params) {
 }
 
 
-export default article;
+export default image;

@@ -1,0 +1,36 @@
+{
+  "code":200,
+  "data":{
+    "table_header": [
+      {"prop": "id","label": "id","key":"id"},
+      {"prop": "img_name","label": "名称","key":"img_name"},
+      {"prop": "img_path","label": "图片","key":"img_path","scopedSlot":"img_path"},
+      {"prop": "img_type","label": "类型","key":"img_type"},
+      {"prop": "is_pulled","label": "下架","key":"is_pulled"},
+      {"prop": "created_time","label": "创建时间","key":"created_time"},
+      {"prop": "update_time","label": "更新时间","key":"update_time"},
+      {"prop": "delete_time","label": "删除时间","key":"delete_time"}  
+    ],
+    "is_pulled_data": [
+      {
+        "is_pulled": 0,
+        "label": "否"
+      },
+      {
+        "is_pulled": 1,
+        "label": "是"
+      }
+    ],
+    "options_img_type_data":[
+      {
+        "img_type":1,
+        "img_type_name": "轮播图"
+      },
+      {
+        "img_type":2,
+        "img_type_name": "log"
+      }
+    ]
+  },
+  "msg":"成功"
+  }

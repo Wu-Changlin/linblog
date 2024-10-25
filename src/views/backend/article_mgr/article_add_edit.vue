@@ -13,7 +13,7 @@
 
     <div style="display: flex;flex-wrap: wrap;height: 62px;margin-top: 10px;">
       <div style="flex: 1;align-items: center; margin: 0 10px;" class="article-title-input">
-        <el-input v-model="article_title_input" style="width: 100%; height: 100%;" placeholder="输入文章标题..." clearable />
+        <el-input v-model="ruleForm.title" style="width: 100%; height: 100%;" placeholder="输入文章标题..." clearable />
       </div>
       <div style="display: flex;align-items: center;margin: 0 10px;">
         <el-button type="primary">草稿箱</el-button>
@@ -93,7 +93,7 @@
 
             <div class="bottom-button">
               <el-button>保存草稿</el-button>
-              <el-button type="primary" @click="clickSubmit()">确定并发布</el-button>
+              <el-button type="primary" @click="clickSubmitAddOrEditData()">确定并发布</el-button>
 
             </div>
 
@@ -121,8 +121,7 @@
   import {sendMsg} from '@/components/cross_tag_msg/crossTagMsg.js';
   import { MdEditor } from 'md-editor-v3';
   import 'md-editor-v3/lib/style.css';
-
-
+  import articleModuleApi from "@/api/backend/article.js";//api接口
 
   const route = useRoute();
   const router = useRouter();
@@ -134,16 +133,9 @@
 
   const is_show_panel = ref(false);
 
-
-
-
   const onUploadImg = (files) => {
     console.log(files)
   }
-
-  const article_title_input = ref('');
-
-
 
   //点击栏目单选框选中值
   function checkColumnRadioInfo(val) {
@@ -152,11 +144,8 @@
     options_tags_data.value = response_tags_data.value.filter(tag => tag.menu_id === val);
   }
 
-
-
     //点击标签多选框选中值
     function checkTagsBoxInfo(val) {
-
       // 使用函数
       ruleForm.tag_ids_names = findTagNamesById(ruleForm.tag_ids, options_tags_data.value);
       console.log('ruleForm.tag_ids_names:', ruleForm.tag_ids_names)
@@ -223,14 +212,14 @@
   }
 
 
-  //提交修改数据
-  function clickSubmit() {
+  //提交添加或修改数据
+  function clickSubmitAddOrEditData() {
     //  valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
     ruleFormRef.value.validate((valid, fields) => {
       if (valid) {
         console.log("表单数据:", ruleForm)
         // 处理提交逻辑
-        $postData('/data/backend/edit_article_data.json', ruleForm)
+        articleModuleApi.clickSubmitAddOrEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
             // const msg_content=response.action_success_data;
@@ -304,7 +293,7 @@
 
   //获取编辑id的数据
   function getEditCurrentIdData(edit_current_id_data) {
-    $postData('/data/backend/edit_article_data.json', edit_current_id_data)
+    articleModuleApi.getEditCurrentIdData(edit_current_id_data)
       .then(response => {
 
         ruleForm.article_id = response.article_id;
@@ -344,9 +333,7 @@
 
   // 获取页面框架数据
   function getAddOrEditPageLayoutData() {
-
-
-    $getData('/data/backend/article_page_layout_data.json')
+    articleModuleApi.getPageLayoutData({})
       .then(response => {
 
         options_menu_data.value = response.options_menu_data;
