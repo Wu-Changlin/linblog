@@ -14,7 +14,7 @@
       <el-input v-model="ruleForm.img_name" placeholder="亲，请输入用户昵称"></el-input>
     </el-form-item>
 
-    <el-form-item label="上传图片" prop="img_path" style="width: 100%;height: 600px;">
+    <el-form-item label="上传图片" prop="img_path" style="width: 100%;height: 800px;">
       <input type="file" @change="handleImageUpload" />
 
       <div class="carousel-container" ref="carouselContainerRef">
@@ -22,12 +22,14 @@
         <div class="carousel-content">
           <div class="carousel-inner">
             <div class="item">
-              <canvas ref="canvas" @click="getColorAtClickPosition($event)"></canvas>
+              <canvas  ref="canvas" @click="getColorAtClickPosition($event)"></canvas>
             </div>
           </div>
         </div>
 
-        <div class="vui-carousel" :style="{backgroundColor:vui_carousel_color}">
+        <div class="vui-carousel" 
+        :style="{'--b-color':vui_carousel_color}">
+        <!-- :style="{backgroundColor:vui_carousel_color}">  -->
 
           <div class="l-box">
             <div class="title">测试标题内容</div>
@@ -85,8 +87,6 @@
   const $verify = inject('$verify');
   const $message = inject('$message');
 
-
-
   //监听图片上传
   const canvas = ref(null);
   const carouselContainerRef = ref(null);
@@ -97,12 +97,12 @@
     const img = new Image();
     img.onload = () => {
       // 设置轮播图元素的宽度和高度
-      carouselContainerRef.value.style.width = img.width + 'px';
-      carouselContainerRef.value.style.height = img.height + 'px';
+      // carouselContainerRef.value.style.width = img.width + 'px';
+      // carouselContainerRef.value.style.height = img.height + 'px';
       // 设置画布元素的宽度、高度及相关属性
       const ctx = canvas.value.getContext('2d');
-      canvas.value.width = img.width;
-      canvas.value.height = img.height;
+      // canvas.value.width = img.width;
+      // canvas.value.height = img.height;
       ctx.drawImage(img, 0, 0);
       // getColorsFromCanvas();
     };
@@ -114,7 +114,7 @@
 
   };
 
-
+  //点击图片获取颜色，用于轮播图图片底部的渐变部分的背景色 
   function getColorAtClickPosition(event) {
     // Multiple readback operations using getImageData are faster with the willReadFrequently attribute set
     // HTML Canvas2D：设置willReadFrequently属性为true可加快多个getImageData读取操作的速度
@@ -130,7 +130,7 @@
     const g = data[1];
     const b = data[2];
     const a = data[3];
-    vui_carousel_color.value = `rgba(${r}, ${g}, ${b}, ${a}) !important`;
+    vui_carousel_color.value = `rgba(${r}, ${g}, ${b}, ${a})`;
     console.log(`Clicked RGBA: (${r}, ${g}, ${b}, ${a})`);
     console.log(`vui_carousel_color.value: (${vui_carousel_color.value})`);
   };
@@ -305,12 +305,12 @@
     if (Object.keys(route.query).length > 0) {
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
-        getEditCurrentIdData(route.query);
-        getAddOrEditPageLayoutData();
+        // getEditCurrentIdData(route.query);
+        // getAddOrEditPageLayoutData();
 
         page_title.value = '编辑图片';
       } else if (route.query.action == "add") {
-        getAddOrEditPageLayoutData();
+        // getAddOrEditPageLayoutData();
         page_title.value = '添加图片';
 
       } else {
@@ -359,6 +359,7 @@
     padding: 0;
     width: 100%;
     margin: 0;
+    max-width: 1200px;
   }
 
   /* 轮播图 开始*/
@@ -366,7 +367,7 @@
     width: 100%;
     height: 0;
     /* 宽高比 16/9 */
-    padding-top: 56.25%;
+    /* padding-top: 56.25%; */
     position: relative;
     overflow: hidden;
 
@@ -383,9 +384,11 @@
 
 
   .item {
-    flex: 0 0 100%;
-
+    /* flex: 0 0 100%; */
   }
+
+
+
 
   .carousel-inner img {
     width: 100%;
