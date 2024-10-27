@@ -95,24 +95,128 @@
   function handleImageUpload(event) {
     const image = event.target.files[0];
     const img = new Image();
+    const maxWidth = 1200
+    const maxHeight = 675
+    const aspectRatio = 16 / 9;
     img.onload = () => {
-      // 设置轮播图元素的宽度和高度
-      // carouselContainerRef.value.style.width = img.width + 'px';
-      // carouselContainerRef.value.style.height = img.height + 'px';
-      // 设置画布元素的宽度、高度及相关属性
-      const ctx = canvas.value.getContext('2d');
-      // canvas.value.width = img.width;
-      // canvas.value.height = img.height;
-      ctx.drawImage(img, 0, 0);
-      // getColorsFromCanvas();
+      
+      console.log('000');
+      const img_ratio = img.width / img.height;
+      if (img_ratio != aspectRatio || img.width > maxWidth || img.height > maxHeight) {
+        console.log('图片格式或尺寸超限');
+        return;
+      } else {
+        // 设置轮播图元素的宽度和高度
+        carouselContainerRef.value.style.width = img.width + 'px';
+        carouselContainerRef.value.style.height = img.height + 'px';
+        // 设置画布元素的宽度、高度及相关属性
+        const ctx = canvas.value.getContext('2d');
+        canvas.value.width = img.width;
+        canvas.value.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        console.log('canvas.value.image:', image)
+        compressionFile(image);
+      }
     };
-    img.src = URL.createObjectURL(image);
-
-    console.log('canvas.value.image:', image)
-
-
-
+    img.src = URL.createObjectURL(image); 
   };
+
+
+
+   // 图像文件转base64编码
+   const fileToDataURL = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onloadend = (e) => resolve((e.target).result)
+      reader.readAsDataURL(file)
+    })
+  }
+
+   // base64编码转图像文件
+  const dataURLToImage = (dataURL) => {
+    return new Promise((resolve) => {
+      const img = new Image()
+      img.onload = () => resolve(img)
+      img.src = dataURL
+    })
+  }
+
+
+  //画布转比特流  将Canvas转换为Blob对象
+  const canvastoFile = (canvas, type, quality) => {
+    return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), type, quality))
+  }
+
+
+
+  // 处理图片
+  /**
+   * 图片压缩方法
+   * @param {Object}  file 图片文件
+   * @param {String} type 想压缩成的文件类型  如果输入和输出图片都是png类型，那么输出图片比原图大33%
+   * @param {Nubmber} quality 压缩质量参数
+   * @returns 压缩后的新图片
+   * 
+   * toDataURL是用base64对图像进行编码的，且编码后的源文件比编码前大33%，base64只是对图片对应的二进制码，
+   * 按照六位对应一个字符规则做转换，转码后是反而比原图片文件大的。
+   * 但是对于小图片而言，经转换后多出来的字节传输远比多建立一个http连接开销小，所以会利用base64对小图转码来提高页面加载速度。
+   */
+  const compressionFile = async (files, type = 'image/jpeg', quality = 0.5) => {
+    const file = files;
+    console.log('file.name:', file);
+    const fileName = file.name;
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    const base64 = await fileToDataURL(file);
+    const img = await dataURLToImage(base64);
+
+    // const reader = new FileReader() // 创建 FileReader
+    //     reader.onload = ({
+    //       target: {
+    //         result: src
+    //       }
+    //     }) => {
+    //       const image = new Image() // 创建 img 元素
+    //       image.onload = async () => {
+
+    //       }
+    //     }
+
+    // var targetWidth = image.width;
+    // var targetHeight = image.height;
+    // var originWidth = image.width;
+    // var originHeight = image.height;
+
+    // var maxWidth = 1260;
+    //               var maxHeight = 760;
+
+    canvas.width = img.width
+    canvas.height = img.height
+    context.clearRect(0, 0, img.width, img.height)
+    // 在canvas绘制前填充白色背景
+    context.fillStyle = '#fff'
+    context.fillRect(0, 0, img.width, img.height)
+    context.drawImage(img, 0, 0, img.width, img.height)
+    const blob = (await canvastoFile(canvas, type, quality)); // quality:0.5可根据实际情况计算
+    const f = await new File([blob], fileName, {
+      type: type
+    })
+    const re = [{
+      originalFileObj: f,
+      path: file.path,
+      size: f.size,
+      type: file.type
+    }]
+    console.log('f:', f);
+
+    imgs.src = URL.createObjectURL(f);
+    console.log(' img.src = URL.createObjectURL(f):', f.size / 1024)
+    console.log('re:', re);
+    return re;
+  }
+
+
+
 
   //点击图片获取颜色，用于轮播图图片底部的渐变部分的背景色 
   function getColorAtClickPosition(event) {
