@@ -55,36 +55,60 @@
     const img = new Image();
   
     img.onload = () => {
-    // 设置轮播图元素的宽度和高度
-      // carouselContainerRef.value.style.width = img.width+'px';
-      // carouselContainerRef.value.style.height = img.height+'px';
-      // 设置画布元素的宽度、高度及相关属性
 
-        
-    
+      
+      var maxWidth = 1200
+              var maxHeight = 675
+                
+
+                const aspectRatio = 16 / 9;
+                console.log('000');
+              const img_ratio=img.width/img.height;
+                if(img_ratio!=aspectRatio|| img.width>maxWidth||  img.height>maxHeight){
+                    console.log('图片格式或尺寸超限');
+                    return;
+                }else{
+                  console.log('111');
+                  carouselContainerRef.value.style.width = img.width+'px';
+      carouselContainerRef.value.style.height = img.height+'px';
+      // 设置画布元素的宽度、高度及相关属性
 
       const ctx = canvas.value.getContext('2d');
       canvas.value.width = img.width;
       canvas.value.height = img.height;
       ctx.drawImage(img, 0, 0);
-      // getColorsFromCanvas();
-    };
-    img.src = URL.createObjectURL(image);
+
+                 
 
     console.log('canvas.value.image:', image)
 
-    if (image) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const dataURL = e.target.result; // 使用 e.target.result 获取文件的 DataURL
-      // 处理 dataURL ...
+  
+    compressionFile(image);
+                }
+                  
+              
+
+    // 设置轮播图元素的宽度和高度
+      // carouselContainerRef.value.style.width = img.width+'px';
+      // carouselContainerRef.value.style.height = img.height+'px';
+      // // 设置画布元素的宽度、高度及相关属性
+
+      // const ctx = canvas.value.getContext('2d');
+      // canvas.value.width = img.width;
+      // canvas.value.height = img.height;
+      // ctx.drawImage(img, 0, 0);
+      // getColorsFromCanvas();
     };
+    // img.src = URL.createObjectURL(image);
+
+    // console.log('canvas.value.image:', image)
+
+    img.src = URL.createObjectURL(image);
     // compressionFile(image);
-    compressImg(image);
+    // compressImg(image);
   }
 
-  
-  };
+
 
   function imageScale(width, originWidth, originHeight) {
         const scaleRatio = width / originWidth;
@@ -137,33 +161,33 @@ const canvastoFile = (canvas, type, quality)=> {
   const base64 = await fileToDataURL(file);
   const img = await dataURLToImage(base64);
 
-  const reader = new FileReader() // 创建 FileReader
-      reader.onload = ({
-        target: {
-          result: src
-        }
-      }) => {
-        const image = new Image() // 创建 img 元素
-        image.onload = async () => {
+  // const reader = new FileReader() // 创建 FileReader
+  //     reader.onload = ({
+  //       target: {
+  //         result: src
+  //       }
+  //     }) => {
+  //       const image = new Image() // 创建 img 元素
+  //       image.onload = async () => {
 
-        }
-      }
+  //       }
+  //     }
 
-  var targetWidth = image.width;
-  var targetHeight = image.height;
-  var originWidth = image.width;
-  var originHeight = image.height;
+  // var targetWidth = image.width;
+  // var targetHeight = image.height;
+  // var originWidth = image.width;
+  // var originHeight = image.height;
 
-  var maxWidth = 1260;
-                var maxHeight = 760;
+  // var maxWidth = 1260;
+  //               var maxHeight = 760;
 
-  canvas.width = targetWidth
-  canvas.height = targetHeight
-  context.clearRect(0, 0, targetWidth, targetHeight);
+  canvas.width = img.width
+  canvas.height = img.height
+  context.clearRect(0, 0, img.width, img.height)
   // 在canvas绘制前填充白色背景
-  context.fillStyle = '#fff';
-  context.fillRect(0, 0, targetWidth, targetHeight);
-  context.drawImage(image, 0, 0, targetWidth, targetHeight);
+  context.fillStyle = '#fff'
+  context.fillRect(0, 0, img.width, img.height)
+  context.drawImage(img, 0, 0, img.width, img.height)
   const blob = (await canvastoFile(canvas, type, quality)); // quality:0.5可根据实际情况计算
   const f = await new File([blob], fileName, {
     type: type
