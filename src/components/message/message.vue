@@ -116,7 +116,8 @@
   .my-message {
     padding: 0;
     margin: 0;
-    width: 300px;
+    /* width: 300px; */
+    max-width: 900px;
     height: 50px;
     position: fixed;
     z-index: 9999;

@@ -10,57 +10,93 @@
 
   <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
     label-position="left">
-    <el-form-item label="标签名" prop="img_name">
-      <el-input v-model="ruleForm.img_name" placeholder="亲，请输入用户昵称"></el-input>
+    <el-form-item label="图片名称" prop="img_name">
+      <el-input v-model="ruleForm.img_name" placeholder="亲，请输入图片名称（没有输入，默认文件名）"></el-input>
     </el-form-item>
 
-    <el-form-item label="上传图片" prop="img_path" style="width: 100%;height: 800px;">
+    <el-form-item label="类型" prop="image_type">
+      <el-radio-group v-model="ruleForm.image_type">
+        <el-radio v-for="item in options_image_type_data" :key="item.image_type" :value="item.image_type"> {{
+          item.image_type_name }}</el-radio>
+      </el-radio-group>
+    </el-form-item>
+
+    <el-form-item label="上传图片" prop="img_path">
       <input type="file" @change="handleImageUpload" />
+    </el-form-item>
 
-      <div class="carousel-container" ref="carouselContainerRef">
+    <div v-if="ruleForm.image_type===1">
 
-        <div class="carousel-content">
-          <div class="carousel-inner">
-            <div class="item">
-              <canvas  ref="canvas" @click="getColorAtClickPosition($event)"></canvas>
+    
+    <el-form-item label="底部标题" prop="vui_carousel_title">
+      <el-input v-model="ruleForm.vui_carousel_title" placeholder="亲，请输入底部标题"></el-input>
+    </el-form-item>
+
+    <el-form-item label="底部背景" prop="vui_carousel_color" style="height: 500px;">
+
+      <div style="display: flex;width: 100%;height: 100%;">
+        <div style="display: flex;width: 200px;height: 450px;margin-right: 10px;">
+          <div style="display: flex;flex-direction: column; /* 设置为垂直布局 */width: 100%;height: 100%;">
+            <div>点击选取颜色</div>
+            <div :style="{'background-color':ruleForm.vui_carousel_color,'width':'100%','height': '100%'}"></div>
+          </div>
+
+        </div>
+        <div style="display: flex;flex:1;height: 450px;">
+          <div class="carousel-container" ref="carouselContainerRef">
+            <div class="carousel-content">
+              <div class="carousel-inner">
+                <div class="item">
+                  <canvas ref="canvas" @click="getColorAtClickPosition($event)"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="vui-carousel" :style="{'--b-color':ruleForm.vui_carousel_color}">
+              <!-- :style="{backgroundColor:ruleForm.vui_carousel_color}">  -->
+
+              <div class="l-box">
+                <div v-if="ruleForm.vui_carousel_title">{{ruleForm.vui_carousel_title}}</div>
+                <div v-else class="title"> 测试标题内容</div>
+              </div>
+
+              <div class="r-box">
+
+                <ul class="dots">
+                  <li :class="[index==1?'pacman':'dot',index==1?'l':'']" v-for="(item,index) in 2">
+                    <!-- 吃豆人 -->
+                    <div v-if="index==1"></div>
+                    <div v-if="index==1"></div>
+                  </li>
+                </ul>
+
+              </div>
+
             </div>
           </div>
         </div>
 
-        <div class="vui-carousel" 
-        :style="{'--b-color':vui_carousel_color}">
-        <!-- :style="{backgroundColor:vui_carousel_color}">  -->
-
-          <div class="l-box">
-            <div class="title">测试标题内容</div>
-          </div>
-
-          <div class="r-box">
-
-            <ul class="dots">
-              <li :class="[index==1?'pacman':'dot',index==1?'l':'']" v-for="(item,index) in 2">
-                <!-- 吃豆人 -->
-                <div v-if="index==1"></div>
-                <div v-if="index==1"></div>
-              </li>
-            </ul>
-
-          </div>
-
-        </div>
       </div>
+
     </el-form-item>
+  </div>
 
     <el-form-item label="下架" prop="is_pulled">
       <el-switch v-model="ruleForm.is_pulled" inline-prompt active-text="是" inactive-text="否" />
     </el-form-item>
 
 
-    <el-form-item label="类型" prop="img_type">
-      <el-radio-group v-model="ruleForm.img_type">
-        <el-radio v-for="item in options_img_type_data" :key="item.img_type" :value="item.img_type"> {{
-          item.img_type_name }}</el-radio>
-      </el-radio-group>
+    <el-form-item label="图片" prop="is_pulled">
+
+      <div class="avatar-uploader" >
+      <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+      <div  v-else class="svg-icon-uploader">
+      
+      <input style="opacity: 0;" type="file" name="file" accept="image/*" id="upload" >
+      <svg-icon class="svg-icon" icon-class="plus"></svg-icon>
+      </div>
+    </div>
+
     </el-form-item>
 
 
@@ -79,6 +115,12 @@
   import { useRouter, useRoute } from "vue-router";
   import ArticleCoverList from '@/components/backend/article_cover_list.vue';
   import { sendMsg } from '@/components/cross_tag_msg/crossTagMsg.js';
+  import imageModuleApi from "@/api/backend/image.js";//api接口
+
+const imageUrl = ref('')
+
+
+
 
 
   const route = useRoute();
@@ -86,45 +128,56 @@
   //使用 provide inject 代替getCurrentInstance
   const $verify = inject('$verify');
   const $message = inject('$message');
+  
+
 
   //监听图片上传
   const canvas = ref(null);
   const carouselContainerRef = ref(null);
-  const vui_carousel_color = ref('');
 
   function handleImageUpload(event) {
     const image = event.target.files[0];
+    if (!image) {
+      return;
+    }
     const img = new Image();
-    const maxWidth = 1200
-    const maxHeight = 675
+    const maxWidth = 1920;
+    const maxHeight = 1080;
+    const minWidth = 800;
+    const minHeight = 450;
     const aspectRatio = 16 / 9;
     img.onload = () => {
-      
+
       console.log('000');
       const img_ratio = img.width / img.height;
       if (img_ratio != aspectRatio || img.width > maxWidth || img.height > maxHeight) {
-        console.log('图片格式或尺寸超限');
+        // console.log('图片格式或尺寸超限');
+        $message('图片比例或尺寸非法。比例16/9，尺寸范围：最大宽1920，最大高1080。', 'error');
         return;
       } else {
-        // 设置轮播图元素的宽度和高度
-        carouselContainerRef.value.style.width = img.width + 'px';
-        carouselContainerRef.value.style.height = img.height + 'px';
-        // 设置画布元素的宽度、高度及相关属性
+        // 设置轮播图元素的宽度和高度 （注意页面显示最小数据，非原图尺寸）
+        carouselContainerRef.value.style.width = minWidth + 'px';
+        carouselContainerRef.value.style.height = minHeight + 'px';
+        // carouselContainerRef.value.style.width = img.width + 'px';
+        // carouselContainerRef.value.style.height = img.height + 'px';
+        // 设置画布元素的宽度、高度及相关属性（注意页面显示最小数据，非原图尺寸）
         const ctx = canvas.value.getContext('2d');
-        canvas.value.width = img.width;
-        canvas.value.height = img.height;
-        ctx.drawImage(img, 0, 0);
-        console.log('canvas.value.image:', image)
-        compressionFile(image);
+        canvas.value.width = minWidth;
+        canvas.value.height = minHeight;
+        // canvas.value.width = img.width;
+        // canvas.value.height = img.height;
+        ctx.drawImage(img, 0, 0, minWidth, minHeight);
+        //接收图片bs64数据；
+        ruleForm.image_path = compressionFile(image);
       }
-    };
-    img.src = URL.createObjectURL(image); 
+    }
+    img.src = URL.createObjectURL(image);
   };
 
 
 
-   // 图像文件转base64编码
-   const fileToDataURL = (file) => {
+  // 图像文件转base64编码
+  const fileToDataURL = (file) => {
     return new Promise((resolve) => {
       const reader = new FileReader()
       reader.onloadend = (e) => resolve((e.target).result)
@@ -132,7 +185,7 @@
     })
   }
 
-   // base64编码转图像文件
+  // base64编码转图像文件
   const dataURLToImage = (dataURL) => {
     return new Promise((resolve) => {
       const img = new Image()
@@ -162,6 +215,9 @@
    * 但是对于小图片而言，经转换后多出来的字节传输远比多建立一个http连接开销小，所以会利用base64对小图转码来提高页面加载速度。
    */
   const compressionFile = async (files, type = 'image/jpeg', quality = 0.5) => {
+    if (!files) {
+      return;
+    }
     const file = files;
     console.log('file.name:', file);
     const fileName = file.name;
@@ -169,61 +225,46 @@
     const context = canvas.getContext('2d');
     const base64 = await fileToDataURL(file);
     const img = await dataURLToImage(base64);
-
-    // const reader = new FileReader() // 创建 FileReader
-    //     reader.onload = ({
-    //       target: {
-    //         result: src
-    //       }
-    //     }) => {
-    //       const image = new Image() // 创建 img 元素
-    //       image.onload = async () => {
-
-    //       }
-    //     }
-
-    // var targetWidth = image.width;
-    // var targetHeight = image.height;
-    // var originWidth = image.width;
-    // var originHeight = image.height;
-
-    // var maxWidth = 1260;
-    //               var maxHeight = 760;
-
-    canvas.width = img.width
-    canvas.height = img.height
-    context.clearRect(0, 0, img.width, img.height)
+    canvas.width = img.width;
+    canvas.height = img.height;
+    context.clearRect(0, 0, img.width, img.height);
     // 在canvas绘制前填充白色背景
-    context.fillStyle = '#fff'
-    context.fillRect(0, 0, img.width, img.height)
-    context.drawImage(img, 0, 0, img.width, img.height)
+    context.fillStyle = '#fff';
+    context.fillRect(0, 0, img.width, img.height);
+    context.drawImage(img, 0, 0, img.width, img.height);
     const blob = (await canvastoFile(canvas, type, quality)); // quality:0.5可根据实际情况计算
     const f = await new File([blob], fileName, {
       type: type
     })
-    const re = [{
-      originalFileObj: f,
-      path: file.path,
-      size: f.size,
-      type: file.type
-    }]
+    // const re = [{
+    //   originalFileObj: f,
+    //   path: file.path,
+    //   size: f.size,
+    //   type: file.type
+    // }]
     console.log('f:', f);
+    // 图片文件转bs64
+    const img_base64_str = await fileToDataURL(f);
+    // 返回数据；
+    return img_base64_str;
+    // imgs.src = URL.createObjectURL(f);
+    // 输出图片多少kb
+    // console.log(' img.src = URL.createObjectURL(f):', f.size/1024)
 
-    imgs.src = URL.createObjectURL(f);
-    console.log(' img.src = URL.createObjectURL(f):', f.size / 1024)
-    console.log('re:', re);
-    return re;
+    // return re;
   }
-
 
 
 
   //点击图片获取颜色，用于轮播图图片底部的渐变部分的背景色 
   function getColorAtClickPosition(event) {
+    // 如果没有图片，那么直接返回
+    if (!ruleForm.image_path) {
+      return;
+    }
     // Multiple readback operations using getImageData are faster with the willReadFrequently attribute set
     // HTML Canvas2D：设置willReadFrequently属性为true可加快多个getImageData读取操作的速度
     // HTML Canvas2D中的willReadFrequently属性是一个布尔值，用于控制是否将图像数据缓存在GPU内存中，当设置为true时，浏览器会尽量将图像数据缓存在GPU内存中，从而提高多个getImageData读取操作的速度。
-
     const context = canvas.value.getContext('2d', { willReadFrequently: true });
     const rect = canvas.value.getBoundingClientRect();
     const x = event.clientX - rect.left;
@@ -234,27 +275,24 @@
     const g = data[1];
     const b = data[2];
     const a = data[3];
-    vui_carousel_color.value = `rgba(${r}, ${g}, ${b}, ${a})`;
+    ruleForm.vui_carousel_color = `rgba(${r}, ${g}, ${b}, ${a})`;
     console.log(`Clicked RGBA: (${r}, ${g}, ${b}, ${a})`);
-    console.log(`vui_carousel_color.value: (${vui_carousel_color.value})`);
+    console.log(`ruleForm.vui_carousel_color: (${ruleForm.vui_carousel_color})`);
   };
-
 
 
   //表单ref
   const ruleFormRef = ref();
   //初始化添加数据
   const ruleForm = reactive({
-    tag_id: 0,
-    menu_id: '',
-    menu_name: "",
-    menu_title: "",
-    tag_name: "",
-    tag_keywords: "",
-    tag_description: "",
+    image_id: 0,
+    image_name: "",
+    image_path: "",
+    image_type: "",
     is_pulled: false,
+    vui_carousel_color: "",
+    vui_carousel_title:""
   })
-
 
 
   //栏目选择器的选中值
@@ -382,23 +420,17 @@
 
 
   //选择器数据
-  const options_img_type_data = ref([]);
+  const options_image_type_data = ref([]);
 
   // 获取页面框架数据
   function getAddOrEditPageLayoutData() {
 
 
-    $getData('/data/backend/tag_page_layout_data.json')
+    imageModuleApi.getPageLayoutData({})
       .then(response => {
-
-        options_img_type_data.value = response.options_img_type_data;
+        options_image_type_data.value = response.options_image_type_data;
 
       })
-      .catch(error => {
-        // console.log(' getPageLayoutData()=>error:',error)
-        $message('请求未找到', 'error');
-        // $message('请求未找到', 'error');
-      });
 
   }
 
@@ -410,11 +442,11 @@
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
         // getEditCurrentIdData(route.query);
-        // getAddOrEditPageLayoutData();
+        getAddOrEditPageLayoutData();
 
         page_title.value = '编辑图片';
       } else if (route.query.action == "add") {
-        // getAddOrEditPageLayoutData();
+        getAddOrEditPageLayoutData();
         page_title.value = '添加图片';
 
       } else {
@@ -463,13 +495,13 @@
     padding: 0;
     width: 100%;
     margin: 0;
-    max-width: 1200px;
+    max-width: 1920px;
   }
 
   /* 轮播图 开始*/
   .carousel-content {
     width: 100%;
-    height: 0;
+    height: 100%;
     /* 宽高比 16/9 */
     /* padding-top: 56.25%; */
     position: relative;
@@ -479,16 +511,16 @@
 
   .carousel-inner {
     width: 100%;
+    height: 100%;
     position: absolute;
     inset: 0;
     display: flex;
     transition: transform 1s ease-in-out;
-
   }
 
 
   .item {
-    /* flex: 0 0 100%; */
+    flex: 0 0 100%;
   }
 
 
@@ -649,4 +681,33 @@
   /* 轮播图底部交互 结束*/
 
   /* 轮播图 结束*/
+
+  .avatar-uploader .avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+ :deep(.avatar-uploader .el-upload) {
+  border: 1px dashed #dcdfe6;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+:deep(.avatar-uploader .el-upload:hover) {
+  border-color: #409eff;
+}
+
+.svg-icon-uploader{
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
+  display: flex;
+    justify-content: center;
+    align-items: center;
+}
 </style>

@@ -14,9 +14,9 @@
                     <el-form :inline="false" class="flex-form" :model="query_form_data" @keyup.enter="queryInputData()">
 
                         <el-form-item label="图片类型">
-                            <el-select v-model="query_form_data.img_type" placeholder="请选择">
-                                <el-option v-for="item in options_img_type_data" :key="item.img_type"
-                                    :label="item.img_type_name" :value="item.img_type" />
+                            <el-select v-model="query_form_data.image_type" placeholder="请选择">
+                                <el-option v-for="item in options_image_type_data" :key="item.image_type"
+                                    :label="item.image_type_name" :value="item.image_type" />
                             </el-select>
                         </el-form-item>
                 
@@ -41,9 +41,9 @@
                 </template>
 
                 <!-- 图片列特殊处理 开始-->
-                <template #img_path="scope">
+                <template #image_path="scope">
 
-                    <el-image v-if="scope.row.img_path" class="table_img" :src="scope.row.img_path" />
+                    <el-image v-if="scope.row.image_path" class="table_img" :src="scope.row.image_path" />
 
                 </template>
                 <!-- 图片列特殊处理 结束-->
@@ -122,7 +122,7 @@
     //表头  //scopedSlot 自定义插槽的名字
     const table_header = ref([]);
     //图片类型 选择器数据
-    const options_img_type_data = ref([]);
+    const options_image_type_data = ref([]);
 
 
     // 获取页面框架数据
@@ -130,7 +130,7 @@
         imageModuleApi.getPageLayoutData({})
             .then(response => {
                 table_header.value = response.table_header;
-                options_img_type_data.value = response.options_img_type_data;
+                options_image_type_data.value = response.options_image_type_data;
           
 
             })

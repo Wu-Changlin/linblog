@@ -19,7 +19,7 @@ const vnode= createVNode(myMessage,{text, type})
 // 参数二：表示渲染的目标位置 （DOM元素）
 render(vnode,div);
 
- // 希望1s后消失
+ // 希望3s后消失
  clearTimeout(timer)
    timer=setTimeout(()=>{
     // 清空div里面的内容
