@@ -15,88 +15,88 @@
     </el-form-item>
 
     <el-form-item label="类型" prop="image_type">
-      <el-radio-group v-model="ruleForm.image_type">
+      <el-radio-group v-model="ruleForm.image_type" @change="checkImageTypeRadioInfo">
         <el-radio v-for="item in options_image_type_data" :key="item.image_type" :value="item.image_type"> {{
           item.image_type_name }}</el-radio>
       </el-radio-group>
     </el-form-item>
 
-    <el-form-item label="上传图片" prop="img_path">
-      <input type="file" @change="handleImageUpload" />
+    <el-form-item label="图片" prop="is_pulled">
+
+      <div class="image-uploader">
+
+        <img v-if="image_url" :src="image_url" class="avatar" @click="handleLogImageSelect">
+
+        <div class="svg-icon-uploader" @click="handleLogImageSelect">
+
+
+          <svg-icon class="svg-icon" icon-class="plus"></svg-icon>
+
+          <input ref="uploadLongImageFileInputRef" type="file" @change="handleLogImage" accept="image/*"
+            style="display: none;width: 178px;height: 178px;">
+        </div>
+      </div>
+
     </el-form-item>
 
     <div v-if="ruleForm.image_type===1">
 
-    
-    <el-form-item label="底部标题" prop="vui_carousel_title">
-      <el-input v-model="ruleForm.vui_carousel_title" placeholder="亲，请输入底部标题"></el-input>
-    </el-form-item>
 
-    <el-form-item label="底部背景" prop="vui_carousel_color" style="height: 500px;">
+      <el-form-item label="底部标题" prop="vui_carousel_title">
+        <el-input v-model="ruleForm.vui_carousel_title" placeholder="亲，请输入底部标题"></el-input>
+      </el-form-item>
 
-      <div style="display: flex;width: 100%;height: 100%;">
-        <div style="display: flex;width: 200px;height: 450px;margin-right: 10px;">
-          <div style="display: flex;flex-direction: column; /* 设置为垂直布局 */width: 100%;height: 100%;">
-            <div>点击选取颜色</div>
-            <div :style="{'background-color':ruleForm.vui_carousel_color,'width':'100%','height': '100%'}"></div>
+      <el-form-item label="底部背景" prop="vui_carousel_color" style="height: 500px;">
+
+        <div style="display: flex;width: 100%;height: 100%;">
+          <div style="display: flex;width: 200px;height: 450px;margin-right: 10px;">
+            <div style="display: flex;flex-direction: column; /* 设置为垂直布局 */width: 100%;height: 100%;">
+              <div>点击选取颜色</div>
+              <div :style="{'background-color':ruleForm.vui_carousel_color,'width':'100%','height': '100%'}"></div>
+            </div>
+
           </div>
-
-        </div>
-        <div style="display: flex;flex:1;height: 450px;">
-          <div class="carousel-container" ref="carouselContainerRef">
-            <div class="carousel-content">
-              <div class="carousel-inner">
-                <div class="item">
-                  <canvas ref="canvas" @click="getColorAtClickPosition($event)"></canvas>
+          <div style="display: flex;flex:1;height: 450px;">
+            <div class="carousel-container" ref="carouselContainerRef">
+              <div class="carousel-content">
+                <div class="carousel-inner">
+                  <div class="item">
+                    <canvas ref="canvas" @click="getColorAtClickPosition($event)"></canvas>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="vui-carousel" :style="{'--b-color':ruleForm.vui_carousel_color}">
-              <!-- :style="{backgroundColor:ruleForm.vui_carousel_color}">  -->
+              <div class="vui-carousel" :style="{'--b-color':ruleForm.vui_carousel_color}">
+                <!-- :style="{backgroundColor:ruleForm.vui_carousel_color}">  -->
 
-              <div class="l-box">
-                <div v-if="ruleForm.vui_carousel_title">{{ruleForm.vui_carousel_title}}</div>
-                <div v-else class="title"> 测试标题内容</div>
+                <div class="l-box">
+                  <div v-if="ruleForm.vui_carousel_title">{{ruleForm.vui_carousel_title}}</div>
+                  <div v-else class="title"> 测试标题内容</div>
+                </div>
+
+                <div class="r-box">
+
+                  <ul class="dots">
+                    <li :class="[index==1?'pacman':'dot',index==1?'l':'']" v-for="(item,index) in 2">
+                      <!-- 吃豆人 -->
+                      <div v-if="index==1"></div>
+                      <div v-if="index==1"></div>
+                    </li>
+                  </ul>
+
+                </div>
+
               </div>
-
-              <div class="r-box">
-
-                <ul class="dots">
-                  <li :class="[index==1?'pacman':'dot',index==1?'l':'']" v-for="(item,index) in 2">
-                    <!-- 吃豆人 -->
-                    <div v-if="index==1"></div>
-                    <div v-if="index==1"></div>
-                  </li>
-                </ul>
-
-              </div>
-
             </div>
           </div>
+
         </div>
 
-      </div>
-
-    </el-form-item>
-  </div>
+      </el-form-item>
+    </div>
 
     <el-form-item label="下架" prop="is_pulled">
       <el-switch v-model="ruleForm.is_pulled" inline-prompt active-text="是" inactive-text="否" />
-    </el-form-item>
-
-
-    <el-form-item label="图片" prop="is_pulled">
-
-      <div class="avatar-uploader" >
-      <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-      <div  v-else class="svg-icon-uploader">
-      
-      <input style="opacity: 0;" type="file" name="file" accept="image/*" id="upload" >
-      <svg-icon class="svg-icon" icon-class="plus"></svg-icon>
-      </div>
-    </div>
-
     </el-form-item>
 
 
@@ -117,28 +117,201 @@
   import { sendMsg } from '@/components/cross_tag_msg/crossTagMsg.js';
   import imageModuleApi from "@/api/backend/image.js";//api接口
 
-const imageUrl = ref('')
+  //上传log图片input Ref   // 使用ref引用DOM元素
+  const uploadLongImageFileInputRef = ref(null);
+
+  //上传轮播图图片input Ref   // 使用ref引用DOM元素
+  const uploadCarouselImageFileInputRef = ref(null)
+
+  //上传图片地址
+  const image_url = ref();
+
+  //点击图片类型单选框选中值
+  function checkImageTypeRadioInfo(val) {
+    // console.log('checkColumnRadioInfo =',val);
+    //图片类型下上传图片控件？清除上传文件？
+  }
+
+  //获取选择的log图片信息
+  function handleLogImage() {
+    const file = uploadLongImageFileInputRef.value.files[0]; // 获取文件信息
+    //如果没有图片文件，那么直接返回
+    if (!file) {
+      return;
+    }
+  //  校验图片的文件大小、后缀名、比例（值为0则不检验）、尺寸(最大宽、最大高、最小宽、最小高)
+  let verify_image_result=false;
+  
+  verify_image_result = verifyImageMaxSizeOrSuffixNameOrAspectRatioOrMaxWidthHeightOrMinWidthHeight(file, 0, 200, 72, 100, 40);
+  if(verify_image_result===false){
+    return;
+  }else{
+ // 预览图片
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      image_url.value = e.target.result; // 更新图片预览的URL
+    };
+    //接收图片bs64数据；
+    ruleForm.image_path = compressionFile(file);
+    console.log('ruleForm.image_path', ruleForm.image_path);
+    reader.readAsDataURL(file); // 读取文件内容
+  }
 
 
 
+  }
 
 
+  // 处理文件上传
+  // const handleFileUpload = () => {
+  //   //这里可以执行文件上传的操作，axios等
+  //   console.log(file);
+  // };
+
+  //选择log图片
+  function handleLogImageSelect() {
+    uploadLongImageFileInputRef.value.click();
+  }
+
+
+  //路由相关
   const route = useRoute();
   const router = useRouter();
   //使用 provide inject 代替getCurrentInstance
   const $verify = inject('$verify');
   const $message = inject('$message');
-  
+
+
+
+  async function asyncLoadImage (file){
+    let a= await loadImage(file);
+    console.log('a:',a);
+  }
+  //加载图片文件
+  const loadImage = (file) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.src = file;
+    })
+  }
+
+
+  /**
+   * 校验图片的文件大小、后缀名、比例（值为0则不检验）、尺寸(最大宽、最大高、最小宽、最小高)
+   * @description: 
+   * @param {Object}  verify_file           图片文件对象
+   * @param {Number}  verify_aspect_ratio     比例
+   * @param {Number}  verify_image_max_width   最大宽
+   * @param {Number}  verify_image_max_height   最大高
+   * @param {Number}  verify_image_min_width  最小宽
+   * @param {Number}  verify_image_min_height 最小高
+   * @return {bool}    true  false
+   */
+  function verifyImageMaxSizeOrSuffixNameOrAspectRatioOrMaxWidthHeightOrMinWidthHeight(verify_file, verify_aspect_ratio, verify_image_max_width, verify_image_max_height, verify_image_min_width, verify_image_min_height) {
+    /* 校验图片文件大小 开始*/
+    
+    //图片文件大小
+    const verify_file_size = verify_file.size;
+    // 允许的最大文件大小，这里设置为2MB
+    const maxSize = 2 * 1024 * 1024;
+    // 检查文件大小是否超出限制
+    if (verify_file_size > maxSize) {
+      $message('文件大小超出限制!最大文件大小:2MB', 'error');
+      return false;
+    }
+    /* 校验图片文件大小 结束*/
+
+    /* 校验图片后缀名 开始*/
+    const file_extension = verify_file.name.split('.').pop().toLowerCase();
+    const valid_image_types = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    const is_valid_image_suffix_name = valid_image_types.includes(file_extension);
+    if (!is_valid_image_suffix_name) {
+      $message('请上传有效的图片格式文件！图片格式范围：jpg、jpeg、png、gif、webp', 'error');
+      return false;
+    }
+    /* 校验图片后缀名 结束*/
+
+    /* 校验图片比例 开始*/
+    // 调用封装好loadImage方法 这样就可以使用同步的方式去绘制canvas
+    const img =  asyncLoadImage(verify_file);
+    console.log('img.width:',img);
+  //  return 1;
+    const img_ratio = img.width / img.height;
+    if (verify_aspect_ratio) {
+      //检查比例是否合法
+      const isValidRatio = Math.abs(img_ratio - verify_aspect_ratio) < 0.01;
+      if (!isValidRatio) {
+        const fraction = decimalToFraction(verify_aspect_ratio);
+        const error_msg = '不支持的图片比例！比例范围：' + fraction + '（宽/高)';
+        $message(error_msg, 'error');
+        return false;
+      }
+    }
+
+   
+    /* 校验图片比例 结束*/
+    /* 校验尺寸(最大宽、最大高、最小宽、最小高) 开始*/
+    if (img.width > verify_image_max_width || img.height > verify_image_max_height) {
+      const error_msg = '不支持图片尺寸！尺寸范围：最大宽' + verify_image_max_width + '，最大高' + verify_image_max_height + '；最小宽' + verify_image_min_width + '，最小高' + verify_image_min_height + '。';
+      $message(error_msg, 'error');
+      return false;
+    }
+
+
+    // if (img.width < verify_image_min_width || img.height < verify_image_min_height) {
+    //   const error_msg = '不支持图片尺寸！尺寸范围：最大宽' + verify_image_max_width + '，最大高' + verify_image_max_height + '；最小宽' + verify_image_min_width + '，最小高' + verify_image_min_height + '。';
+    //   $message(error_msg, 'error');
+    //   return false;
+    // }
+
+    // 通过校验返回true
+    return true;
+
+
+    /* 校验尺寸(最大宽、最大高、最小宽、最小高) 结束*/
+  }
+
+
+  /**
+   * 接收一个小数作为输入，并尝试将其转换为分数表示形式。如果无法转换为最简分数，它会返回原始小数。
+   * @description: 这个函数通过迭代试图找到一个分母，使得乘以这个分母的结果是输入的小数。
+   * 如果找到了这样的分子和分母，它就返回分数形式的字符串；否则，函数返回原始小数。
+   * 这个简单的实现不会找到所有可能的分数表示，只会找到一些可能的分数。对于无法表示为最简分数的情况，它会返回原始小数。
+   * @param {*} decimal 小数
+   * @return {*}
+   */
+  function decimalToFraction(decimal) {
+    for (let denominator = 2; denominator <= 20; denominator++) {
+      let numerator = (decimal * denominator).toFixed(0);
+      if (Number(numerator) / denominator === decimal) {
+        return `${numerator}/${denominator}`;
+      }
+    }
+    return decimal;
+  }
 
 
   //监听图片上传
   const canvas = ref(null);
   const carouselContainerRef = ref(null);
 
+  //获取选择的轮播图图片信息
   function handleImageUpload(event) {
     const image = event.target.files[0];
     if (!image) {
-      return;
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      const validImageTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+      const isValidImage = validImageTypes.includes(fileExtension);
+
+      if (!isValidImage) {
+        $message('请上传有效的图片格式文件！', 'error');
+        // 重置input，以便可以选择同一文件再次上传
+        event.target.value = '';
+      }
+
+
+
     }
     const img = new Image();
     const maxWidth = 1920;
@@ -151,8 +324,8 @@ const imageUrl = ref('')
       console.log('000');
       const img_ratio = img.width / img.height;
       if (img_ratio != aspectRatio || img.width > maxWidth || img.height > maxHeight) {
-        // console.log('图片格式或尺寸超限');
-        $message('图片比例或尺寸非法。比例16/9，尺寸范围：最大宽1920，最大高1080。', 'error');
+
+        $message('图片比例或尺寸非法！比例范围：16/9（宽/高）；尺寸范围：最大宽1920，最大高1080。', 'error');
         return;
       } else {
         // 设置轮播图元素的宽度和高度 （注意页面显示最小数据，非原图尺寸）
@@ -201,8 +374,6 @@ const imageUrl = ref('')
   }
 
 
-
-  // 处理图片
   /**
    * 图片压缩方法
    * @param {Object}  file 图片文件
@@ -288,10 +459,10 @@ const imageUrl = ref('')
     image_id: 0,
     image_name: "",
     image_path: "",
-    image_type: "",
+    image_type: 1,
     is_pulled: false,
     vui_carousel_color: "",
-    vui_carousel_title:""
+    vui_carousel_title: ""
   })
 
 
@@ -417,8 +588,6 @@ const imageUrl = ref('')
 
   }
 
-
-
   //选择器数据
   const options_image_type_data = ref([]);
 
@@ -433,17 +602,14 @@ const imageUrl = ref('')
       })
 
   }
-
+  // 页面操作标题
   const page_title = ref('');
   onMounted(() => {
-
-
     if (Object.keys(route.query).length > 0) {
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
         // getEditCurrentIdData(route.query);
         getAddOrEditPageLayoutData();
-
         page_title.value = '编辑图片';
       } else if (route.query.action == "add") {
         getAddOrEditPageLayoutData();
@@ -523,9 +689,6 @@ const imageUrl = ref('')
     flex: 0 0 100%;
   }
 
-
-
-
   .carousel-inner img {
     width: 100%;
     height: 100%;
@@ -546,8 +709,6 @@ const imageUrl = ref('')
     /* 相对定位 */
     position: relative;
   }
-
-
 
   /* 图片底部的渐变部分 */
   .vui-carousel::before {
@@ -682,32 +843,29 @@ const imageUrl = ref('')
 
   /* 轮播图 结束*/
 
-  .avatar-uploader .avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
- :deep(.avatar-uploader .el-upload) {
-  border: 1px dashed #dcdfe6;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: var(--el-transition-duration-fast);
-}
 
-:deep(.avatar-uploader .el-upload:hover) {
-  border-color: #409eff;
-}
+  /* 上传图片 */
+  .image-uploader {
+    border: 1px dashed #dcdfe6;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--el-transition-duration-fast);
+  }
 
-.svg-icon-uploader{
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  text-align: center;
-  display: flex;
+  .image-uploader:hover {
+    border-color: #409eff;
+  }
+
+  .svg-icon-uploader {
+    font-size: 28px;
+    color: #8c939d;
+    width: 200px;
+    height: 115px;
+    text-align: center;
+    display: flex;
     justify-content: center;
     align-items: center;
-}
+  }
 </style>
