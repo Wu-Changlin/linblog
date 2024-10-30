@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="content">
     <div class="info">
@@ -28,7 +26,7 @@
 
   //选择图片
   const handleSelect = () => {
-  console.log('fileInput.value:',fileInput.value);
+    console.log('fileInput.value:', fileInput.value);
 
     fileInput.value.click()
   }
@@ -46,6 +44,87 @@
     };
     reader.readAsDataURL(file.value); // 读取文件内容
   }
+
+
+  /**
+
+* @Description 图片尺寸验证
+
+* @Author： yanxh
+
+* @Date 2019/10/28 13:06
+
+* @Version 1.0
+
+* @Params file 文件上传的input
+
+* @Params fixedWidth 上传图片的规格宽度
+
+* @Params fixedHeight 上传图片的规格高度
+
+* @Params callBack 图片上传回显成功后需要执行的回调方法
+
+*/
+
+  function checkImageSize(file, fixedWidth, fixedHeight, callBack) {
+
+    var filePath = file.value;
+
+    if (filePath) {
+
+      //读取图片数据
+
+      var filePic = file.files[0];
+
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+
+        var data = e.target.result;
+
+        //加载图片获取图片真实宽度和高度
+
+        var image = new Image();
+
+        image.onload = function () {
+
+          var width = image.width;
+
+          var height = image.height;
+
+          if (width == fixedWidth && height == fixedHeight) {
+
+            // 执行回调
+
+            callBack(file);
+
+          } else {
+
+            layer.alert("图片规格限于" + fixedWidth + "*" + fixedHeight + "px", { icon: 4 });
+
+            file.value = "";
+
+          }
+
+        };
+
+        image.src = data;
+
+      };
+
+      reader.readAsDataURL(filePic);
+
+    } else {
+
+      file.value = "";
+
+    }
+
+  }
+
+  callBack
+
+
 </script>
 <style scoped>
   .content {

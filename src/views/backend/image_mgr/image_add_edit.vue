@@ -25,7 +25,9 @@
 
       <div class="image-uploader">
 
-        <img v-if="image_url" :src="image_url" class="avatar" @click="handleLogImageSelect">
+        <!-- <img v-if="image_url" :src="image_url" ref="imageRef" class="avatar" @click="handleLogImageSelect"> -->
+        <img  ref="imageRef" class="avatar" @click="handleLogImageSelect">
+
 
         <div class="svg-icon-uploader" @click="handleLogImageSelect">
 
@@ -132,35 +134,65 @@
     //图片类型下上传图片控件？清除上传文件？
   }
 
+  const imageRef=ref(null);
+
   //获取选择的log图片信息
   function handleLogImage() {
     const file = uploadLongImageFileInputRef.value.files[0]; // 获取文件信息
+  
     //如果没有图片文件，那么直接返回
     if (!file) {
       return;
     }
   //  校验图片的文件大小、后缀名、比例（值为0则不检验）、尺寸(最大宽、最大高、最小宽、最小高)
-  let verify_image_result=false;
+//   let verify_image_result=false;
   
-  verify_image_result = verifyImageMaxSizeOrSuffixNameOrAspectRatioOrMaxWidthHeightOrMinWidthHeight(file, 0, 200, 72, 100, 40);
-  if(verify_image_result===false){
-    return;
-  }else{
- // 预览图片
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      image_url.value = e.target.result; // 更新图片预览的URL
+//   verify_image_result = verifyImageMaxSizeOrSuffixNameOrAspectRatioOrMaxWidthHeightOrMinWidthHeight(file, 0, 200, 72, 100, 40);
+//   if(verify_image_result===false){
+//     return;
+//   }else{
+//  // 预览图片
+//     const reader = new FileReader();
+//     reader.onload = (e) => {
+//       image_url.value = e.target.result; // 更新图片预览的URL
+//     };
+//     //接收图片bs64数据；
+//     ruleForm.image_path = compressionFile(file);
+//     console.log('ruleForm.image_path', ruleForm.image_path);
+//     reader.readAsDataURL(file); // 读取文件内容
+//   }
+
+verifyAspectRatioOrDimensions(file,0,1920,1080,700,700);
+
+
+  }
+
+  function verifyAspectRatioOrDimensions(verify_file, verify_aspect_ratio, verify_image_max_width, verify_image_max_height, verify_image_min_width, verify_image_min_height) {
+  
+  
+    // 使用示例
+    let image = new Image(); // 假设这是你要验证的图片对象
+    image.onload = function() {
+  
+      // let isValidMax = image.width > verify_image_max_width  || image.width < verify_image_min_width;
+      
+      let is_valid_dimensions = (image.width <= verify_image_max_width  && image.width >= verify_image_min_width) || (image.height <= verify_image_max_height && image.height >= verify_image_min_height)
+  
+      if(is_valid_dimensions){//如果验证通过，继续执行其他操作
+        console.log(222);
+      }else{// 如果验证失败，直接返回，不执行后续操作
+        return false;
+        // console.log(111);
+      }
+
+      
+      
     };
-    //接收图片bs64数据；
-    ruleForm.image_path = compressionFile(file);
-    console.log('ruleForm.image_path', ruleForm.image_path);
-    reader.readAsDataURL(file); // 读取文件内容
-  }
+    
+    image.src = URL.createObjectURL(verify_file); // 替换为你的图片路径
 
 
-
-  }
-
+}
 
   // 处理文件上传
   // const handleFileUpload = () => {
@@ -184,19 +216,48 @@
 
 
   async function asyncLoadImage (file){
-    let a= await loadImage(file);
-    console.log('a:',a);
+    let data= await loadImage(file);
+    console.log('data:',data);
+    return data;
+    
+  
   }
+
+
   //加载图片文件
-  const loadImage = (file) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.src = file;
-    })
+  function loadImage(file, verify_aspect_ratio, verify_image_max_width, verify_image_max_height, verify_image_min_width, verify_image_min_height)
+  {
+    return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload =function(){
+
+      if (img.width > verify_image_max_width || img.height > verify_image_max_height) {
+      const error_msg = '不支持图片尺寸！尺寸范围：最大宽' + verify_image_max_width + '，最大高' + verify_image_max_height + '；最小宽' + verify_image_min_width + '，最小高' + verify_image_min_height + '。';
+      $message(error_msg, 'error');
+      // reject();
+      return false;
+    }
+
+    }
+    img.src =  URL.createObjectURL(file);
+     // 不再需要时释放内存
+  URL.revokeObjectURL(img.src);
+  })
   }
 
 
+  
+// function loadImage(file) {
+//   return new Promise((resolve, reject) => {
+//     const img = new Image();
+//     img.onload = function() {
+//       resolve(img);
+//     };
+//     img.src =URL.createObjectURL(file);
+//   });
+// }
+
+const s=ref();
   /**
    * 校验图片的文件大小、后缀名、比例（值为0则不检验）、尺寸(最大宽、最大高、最小宽、最小高)
    * @description: 
@@ -234,29 +295,35 @@
 
     /* 校验图片比例 开始*/
     // 调用封装好loadImage方法 这样就可以使用同步的方式去绘制canvas
-    const img =  asyncLoadImage(verify_file);
-    console.log('img.width:',img);
+
+    const s=ref();
+
+    loadImage(verify_file, verify_aspect_ratio, verify_image_max_width, verify_image_max_height, verify_image_min_width, verify_image_min_height)
+
+    
+console.log('s.value:',s.value);
+    
   //  return 1;
-    const img_ratio = img.width / img.height;
-    if (verify_aspect_ratio) {
-      //检查比例是否合法
-      const isValidRatio = Math.abs(img_ratio - verify_aspect_ratio) < 0.01;
-      if (!isValidRatio) {
-        const fraction = decimalToFraction(verify_aspect_ratio);
-        const error_msg = '不支持的图片比例！比例范围：' + fraction + '（宽/高)';
-        $message(error_msg, 'error');
-        return false;
-      }
-    }
+    // const img_ratio = img.width / img.height;
+    // if (verify_aspect_ratio) {
+    //   //检查比例是否合法
+    //   const isValidRatio = Math.abs(img_ratio - verify_aspect_ratio) < 0.01;
+    //   if (!isValidRatio) {
+    //     const fraction = decimalToFraction(verify_aspect_ratio);
+    //     const error_msg = '不支持的图片比例！比例范围：' + fraction + '（宽/高)';
+    //     $message(error_msg, 'error');
+    //     return false;
+    //   }
+    // }
 
    
-    /* 校验图片比例 结束*/
-    /* 校验尺寸(最大宽、最大高、最小宽、最小高) 开始*/
-    if (img.width > verify_image_max_width || img.height > verify_image_max_height) {
-      const error_msg = '不支持图片尺寸！尺寸范围：最大宽' + verify_image_max_width + '，最大高' + verify_image_max_height + '；最小宽' + verify_image_min_width + '，最小高' + verify_image_min_height + '。';
-      $message(error_msg, 'error');
-      return false;
-    }
+    // /* 校验图片比例 结束*/
+    // /* 校验尺寸(最大宽、最大高、最小宽、最小高) 开始*/
+    // if (img.width > verify_image_max_width || img.height > verify_image_max_height) {
+    //   const error_msg = '不支持图片尺寸！尺寸范围：最大宽' + verify_image_max_width + '，最大高' + verify_image_max_height + '；最小宽' + verify_image_min_width + '，最小高' + verify_image_min_height + '。';
+    //   $message(error_msg, 'error');
+    //   return false;
+    // }
 
 
     // if (img.width < verify_image_min_width || img.height < verify_image_min_height) {
