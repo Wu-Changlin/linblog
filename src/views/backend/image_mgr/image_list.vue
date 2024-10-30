@@ -371,10 +371,10 @@
 
     //监听跨标签消息
     const cancelListen = listenMsg((msgInfo) => {
-        if (msgInfo.type === 'add-article') {
+        if (msgInfo.type === 'add-image') {
             // unshift()方法将一个或多个元素添加到数组的开头，并返回新数组的长度。
             image_list_data.value.unshift(msgInfo.content);
-        } else if (msgInfo.type === 'edit-article') {
+        } else if (msgInfo.type === 'edit-image') {
             const i = image_list_data.value.findIndex((e) => e.image_id === msgInfo.content.image_id);
 
             if (i >= 0) {

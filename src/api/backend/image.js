@@ -77,7 +77,7 @@ clickSubmitAddOrEditData(params) {
 
 
       //获取编辑id的数据
-      getEditCurrentIdData(params) {
+    getEditCurrentIdData(params) {
         return axiosService.post("/data/backend/edit_image_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {

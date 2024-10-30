@@ -11,7 +11,7 @@
   <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
     label-position="left">
     <el-form-item label="图片名称" prop="img_name">
-      <el-input v-model="ruleForm.img_name" placeholder="亲，请输入图片名称（没有输入，默认文件名）"></el-input>
+      <el-input v-model="ruleForm.image_name" placeholder="亲，请输入图片名称（没有输入，默认文件名）"></el-input>
     </el-form-item>
 
     <el-form-item label="类型" prop="image_type">
@@ -21,28 +21,35 @@
       </el-radio-group>
     </el-form-item>
 
-    <el-form-item label="图片" prop="is_pulled">
+    <div v-if="image_types[ruleForm.image_type]==='log_image'">
+      <el-form-item label="log图片" prop="image_path">
 
-      <div class="image-uploader">
-
-        <!-- <img v-if="image_url" :src="image_url" ref="imageRef" class="avatar" @click="handleLogImageSelect"> -->
-        <img  ref="imageRef" class="avatar" @click="handleLogImageSelect">
-
-
-        <div class="svg-icon-uploader" @click="handleLogImageSelect">
-
-
-          <svg-icon class="svg-icon" icon-class="plus"></svg-icon>
-
-          <input ref="uploadLongImageFileInputRef" type="file" @change="handleLogImage" accept="image/*"
-            style="display: none;width: 178px;height: 178px;">
+        <div class="image-uploader">
+          <img  v-if="log_image_url"  ref="logImageRef" :src="log_image_url" class="avatar" @click="handleLogImageSelect">
+          <div v-else class="svg-icon-uploader" @click="handleLogImageSelect">
+            <svg-icon class="svg-icon" icon-class="plus"></svg-icon>
+          </div>
+          <input ref="uploadLongImageFileInputRef" type="file" @change="handleLogImage" accept="image/*" style="display: none;">
         </div>
-      </div>
+  
+      </el-form-item>
 
-    </el-form-item>
+    </div>
+    
+    <div v-if="image_types[ruleForm.image_type]==='carousel_image'">
 
-    <div v-if="ruleForm.image_type===1">
+      <el-form-item label="轮播图片" prop="image_path">
 
+        <div class="image-uploader">
+          <img  v-if="carouselImageRef"  ref="carouselImageRef" src="" class="avatar" @click="handleLogImageSelect">
+          <div v-else class="svg-icon-uploader" @click="handleLogImageSelect">
+            <svg-icon class="svg-icon" icon-class="plus"></svg-icon>
+          </div>
+          
+          <input ref="uploadCarouselImageFileInputRef" type="file" @change="handleLogImage" accept="image/*" style="display: none;">
+        </div>
+  
+      </el-form-item>
 
       <el-form-item label="底部标题" prop="vui_carousel_title">
         <el-input v-model="ruleForm.vui_carousel_title" placeholder="亲，请输入底部标题"></el-input>
@@ -118,15 +125,37 @@
   import ArticleCoverList from '@/components/backend/article_cover_list.vue';
   import { sendMsg } from '@/components/cross_tag_msg/crossTagMsg.js';
   import imageModuleApi from "@/api/backend/image.js";//api接口
+    //路由相关
+    const route = useRoute();
+  const router = useRouter();
+  //使用 provide inject 代替getCurrentInstance
+  const $verify = inject('$verify');
+  const $message = inject('$message');
 
-  //上传log图片input Ref   // 使用ref引用DOM元素
-  const uploadLongImageFileInputRef = ref(null);
+  //轮播图画布 Ref   // 使用ref引用DOM元素
+  const canvas = ref(null);
+  //轮播图容器 Ref   // 使用ref引用DOM元素
+  const carouselContainerRef = ref(null);
 
-  //上传轮播图图片input Ref   // 使用ref引用DOM元素
-  const uploadCarouselImageFileInputRef = ref(null)
 
-  //上传图片地址
-  const image_url = ref();
+  //上传图片作用类型
+  const image_types=reactive({'1':'carousel_image','2':'log_image'});
+
+
+  //预览上传log图片地址
+  const log_image_url = ref();
+  //预览上传log图片img Ref   // 使用ref引用DOM元素
+  const logImageRef  = ref(null);
+//上传log图片input Ref   // 使用ref引用DOM元素
+const uploadLongImageFileInputRef = ref(null);
+
+
+   //预览上传轮播图图片地址
+  const carousel_image_url = ref();
+  //预览上传轮播图图片img Ref   // 使用ref引用DOM元素
+  const carouselImageRef  = ref(null);
+    //上传轮播图图片input Ref   // 使用ref引用DOM元素
+    const uploadCarouselImageFileInputRef = ref(null)
 
   //点击图片类型单选框选中值
   function checkImageTypeRadioInfo(val) {
@@ -134,142 +163,49 @@
     //图片类型下上传图片控件？清除上传文件？
   }
 
-  const imageRef=ref(null);
+
 
   //获取选择的log图片信息
   function handleLogImage() {
     const file = uploadLongImageFileInputRef.value.files[0]; // 获取文件信息
-  
+    
     //如果没有图片文件，那么直接返回
     if (!file) {
       return;
     }
-  //  校验图片的文件大小、后缀名、比例（值为0则不检验）、尺寸(最大宽、最大高、最小宽、最小高)
-//   let verify_image_result=false;
-  
-//   verify_image_result = verifyImageMaxSizeOrSuffixNameOrAspectRatioOrMaxWidthHeightOrMinWidthHeight(file, 0, 200, 72, 100, 40);
-//   if(verify_image_result===false){
-//     return;
-//   }else{
+  /* 校验图片的文件大小、后缀名 开始*/
+  let verify_image_max_sizeOr_suffix_name_result = verifyImageMaxSizeOrSuffixName(file);
+  if(!verify_image_max_sizeOr_suffix_name_result){//如果验证图片的文件大小、后缀名失败，直接返回，不执行后续操作
+    return;
+  }
+  /* 校验图片的文件大小、后缀名 结束*/
+
 //  // 预览图片
 //     const reader = new FileReader();
 //     reader.onload = (e) => {
-//       image_url.value = e.target.result; // 更新图片预览的URL
+//       log_image_url.value = e.target.result; // 更新图片预览的URL
 //     };
-//     //接收图片bs64数据；
+//     //接收图片base64数据；
 //     ruleForm.image_path = compressionFile(file);
 //     console.log('ruleForm.image_path', ruleForm.image_path);
 //     reader.readAsDataURL(file); // 读取文件内容
-//   }
+console.log(111)
+// 校验图片比例（值为0则不检验）、尺寸(最大宽、最大高、最小宽、最小高)
 
-verifyAspectRatioOrDimensions(file,0,1920,1080,700,700);
+verifyAspectRatioOrDimensions(file,'',200,72,100,40,String(ruleForm.image_type));
+
+console.log(555)
 
 
   }
 
-  function verifyAspectRatioOrDimensions(verify_file, verify_aspect_ratio, verify_image_max_width, verify_image_max_height, verify_image_min_width, verify_image_min_height) {
-  
-  
-    // 使用示例
-    let image = new Image(); // 假设这是你要验证的图片对象
-    image.onload = function() {
-  
-      // let isValidMax = image.width > verify_image_max_width  || image.width < verify_image_min_width;
-      
-      let is_valid_dimensions = (image.width <= verify_image_max_width  && image.width >= verify_image_min_width) || (image.height <= verify_image_max_height && image.height >= verify_image_min_height)
-  
-      if(is_valid_dimensions){//如果验证通过，继续执行其他操作
-        console.log(222);
-      }else{// 如果验证失败，直接返回，不执行后续操作
-        return false;
-        // console.log(111);
-      }
 
-      
-      
-    };
-    
-    image.src = URL.createObjectURL(verify_file); // 替换为你的图片路径
-
-
-}
-
-  // 处理文件上传
-  // const handleFileUpload = () => {
-  //   //这里可以执行文件上传的操作，axios等
-  //   console.log(file);
-  // };
-
-  //选择log图片
-  function handleLogImageSelect() {
-    uploadLongImageFileInputRef.value.click();
-  }
-
-
-  //路由相关
-  const route = useRoute();
-  const router = useRouter();
-  //使用 provide inject 代替getCurrentInstance
-  const $verify = inject('$verify');
-  const $message = inject('$message');
-
-
-
-  async function asyncLoadImage (file){
-    let data= await loadImage(file);
-    console.log('data:',data);
-    return data;
-    
-  
-  }
-
-
-  //加载图片文件
-  function loadImage(file, verify_aspect_ratio, verify_image_max_width, verify_image_max_height, verify_image_min_width, verify_image_min_height)
-  {
-    return new Promise((resolve, reject) => {
-    const img = new Image()
-    img.onload =function(){
-
-      if (img.width > verify_image_max_width || img.height > verify_image_max_height) {
-      const error_msg = '不支持图片尺寸！尺寸范围：最大宽' + verify_image_max_width + '，最大高' + verify_image_max_height + '；最小宽' + verify_image_min_width + '，最小高' + verify_image_min_height + '。';
-      $message(error_msg, 'error');
-      // reject();
-      return false;
-    }
-
-    }
-    img.src =  URL.createObjectURL(file);
-     // 不再需要时释放内存
-  URL.revokeObjectURL(img.src);
-  })
-  }
-
-
-  
-// function loadImage(file) {
-//   return new Promise((resolve, reject) => {
-//     const img = new Image();
-//     img.onload = function() {
-//       resolve(img);
-//     };
-//     img.src =URL.createObjectURL(file);
-//   });
-// }
-
-const s=ref();
-  /**
-   * 校验图片的文件大小、后缀名、比例（值为0则不检验）、尺寸(最大宽、最大高、最小宽、最小高)
+    /**
+   * 校验图片的文件大小、后缀名
    * @description: 
-   * @param {Object}  verify_file           图片文件对象
-   * @param {Number}  verify_aspect_ratio     比例
-   * @param {Number}  verify_image_max_width   最大宽
-   * @param {Number}  verify_image_max_height   最大高
-   * @param {Number}  verify_image_min_width  最小宽
-   * @param {Number}  verify_image_min_height 最小高
-   * @return {bool}    true  false
+   * @param {Object} verify_file 图片文件对象
    */
-  function verifyImageMaxSizeOrSuffixNameOrAspectRatioOrMaxWidthHeightOrMinWidthHeight(verify_file, verify_aspect_ratio, verify_image_max_width, verify_image_max_height, verify_image_min_width, verify_image_min_height) {
+  function verifyImageMaxSizeOrSuffixName(verify_file){
     /* 校验图片文件大小 开始*/
     
     //图片文件大小
@@ -293,75 +229,130 @@ const s=ref();
     }
     /* 校验图片后缀名 结束*/
 
-    /* 校验图片比例 开始*/
-    // 调用封装好loadImage方法 这样就可以使用同步的方式去绘制canvas
-
-    const s=ref();
-
-    loadImage(verify_file, verify_aspect_ratio, verify_image_max_width, verify_image_max_height, verify_image_min_width, verify_image_min_height)
-
-    
-console.log('s.value:',s.value);
-    
-  //  return 1;
-    // const img_ratio = img.width / img.height;
-    // if (verify_aspect_ratio) {
-    //   //检查比例是否合法
-    //   const isValidRatio = Math.abs(img_ratio - verify_aspect_ratio) < 0.01;
-    //   if (!isValidRatio) {
-    //     const fraction = decimalToFraction(verify_aspect_ratio);
-    //     const error_msg = '不支持的图片比例！比例范围：' + fraction + '（宽/高)';
-    //     $message(error_msg, 'error');
-    //     return false;
-    //   }
-    // }
-
-   
-    // /* 校验图片比例 结束*/
-    // /* 校验尺寸(最大宽、最大高、最小宽、最小高) 开始*/
-    // if (img.width > verify_image_max_width || img.height > verify_image_max_height) {
-    //   const error_msg = '不支持图片尺寸！尺寸范围：最大宽' + verify_image_max_width + '，最大高' + verify_image_max_height + '；最小宽' + verify_image_min_width + '，最小高' + verify_image_min_height + '。';
-    //   $message(error_msg, 'error');
-    //   return false;
-    // }
-
-
-    // if (img.width < verify_image_min_width || img.height < verify_image_min_height) {
-    //   const error_msg = '不支持图片尺寸！尺寸范围：最大宽' + verify_image_max_width + '，最大高' + verify_image_max_height + '；最小宽' + verify_image_min_width + '，最小高' + verify_image_min_height + '。';
-    //   $message(error_msg, 'error');
-    //   return false;
-    // }
-
-    // 通过校验返回true
     return true;
-
-
-    /* 校验尺寸(最大宽、最大高、最小宽、最小高) 结束*/
   }
 
 
-  /**
-   * 接收一个小数作为输入，并尝试将其转换为分数表示形式。如果无法转换为最简分数，它会返回原始小数。
-   * @description: 这个函数通过迭代试图找到一个分母，使得乘以这个分母的结果是输入的小数。
-   * 如果找到了这样的分子和分母，它就返回分数形式的字符串；否则，函数返回原始小数。
-   * 这个简单的实现不会找到所有可能的分数表示，只会找到一些可能的分数。对于无法表示为最简分数的情况，它会返回原始小数。
-   * @param {*} decimal 小数
-   * @return {*}
+
+  
+    /**
+   *  校验图片比例（值为0则不检验）、尺寸(最大宽、最大高、最小宽、最小高)
+   * @description: 
+   * @param {Object}  verify_file           图片文件对象
+   * @param {String}  verify_aspect_ratio     比例
+   * @param {Number}  verify_image_max_width   最大宽
+   * @param {Number}  verify_image_max_height   最大高
+   * @param {Number}  verify_image_min_width  最小宽
+   * @param {Number}  verify_image_min_height 最小高
+   * @param {String}  image_type              图片类型
+   * @return {bool}    true  false
    */
-  function decimalToFraction(decimal) {
-    for (let denominator = 2; denominator <= 20; denominator++) {
-      let numerator = (decimal * denominator).toFixed(0);
-      if (Number(numerator) / denominator === decimal) {
-        return `${numerator}/${denominator}`;
+  function verifyAspectRatioOrDimensions(verify_file, verify_aspect_ratio, verify_image_max_width, verify_image_max_height, verify_image_min_width,verify_image_min_height,image_type) {
+    let image = new Image(); 
+      // 不再需要时释放内存
+      // console.log('image.src:',image.src)
+      // if(image.src){
+      //   URL.revokeObjectURL(image.src);
+      // }
+    image.onload = function() {
+    /* 校验图片尺寸 开始*/
+      let is_valid_dimensions = (image.width <= verify_image_max_width  && image.width >= verify_image_min_width) || (image.height <= verify_image_max_height && image.height >= verify_image_min_height)
+  
+      if(!is_valid_dimensions){//如果验证图片尺寸失败，直接返回，不执行后续操作
+        const error_msg = '不支持图片尺寸！尺寸范围：最大宽' + verify_image_max_width + '，最大高' + verify_image_max_height + '；最小宽' + verify_image_min_width + '，最小高' + verify_image_min_height + '。';
+        $message(error_msg, 'error');
+        return;
+      }
+    /* 校验图片尺寸 结束*/
+
+    /* 校验图片比例 开始*/
+    if (verify_aspect_ratio) {
+      // 图片尺寸比例
+    const img_ratio = image.width / image.height;
+    // 字符串比例转小数
+      let verify_aspect_ratio_to_number=getStrRatioToNumber(verify_aspect_ratio);
+      const isValidRatio = Math.abs(img_ratio - verify_aspect_ratio_to_number) < 0.01;
+      if (!isValidRatio) {//如果验证图片比例失败，直接返回，不执行后续操作
+        const error_msg = '不支持的图片比例！比例范围：' + verify_aspect_ratio + '（宽/高)';
+        $message(error_msg, 'error');
+        return false;
       }
     }
-    return decimal;
+    /* 校验图片比例 结束*/
+
+
+      //如果是轮播图，那么继续
+      if(image_types[image_type]==='carousel_image'){
+
+        
+      }else if(image_types[image_type]==='log_image'){//如果是log图，那么继续
+        log_image_url.value = URL.createObjectURL(verify_file); //输出地址预览log 
+        console.log(222);
+      }
+
+
+      //接收图片base64数据；
+    // ruleForm.image_path = compressionFile(verify_file);
+    compressionFile(verify_file).then(base64_str => {
+      ruleForm.image_path=base64_str;
+  console.log('接收图片base64数据；',base64_str); // 输出: Hello, world!
+});
+    console.log('ruleForm.image_path', ruleForm.image_path);
+
+      console.log(333);
+      
+      
+    };
+
+    console.log(444);
+    
+    image.src = URL.createObjectURL(verify_file); // 替换为你的图片路径
+    //  // 不再需要时释放内存
+    // URL.revokeObjectURL(image.src);
+
+}
+
+
+
+
+/**
+ * 字符串比例转小数
+ * @description: indexOf() 方法可返回某个指定的字符串值在字符串中首次出现的位置
+ * 截取字符串比例获取分子和分母；后转数值
+ * @param {*} strRatio  字符串比例
+ * @return {*} result_number  比例小数
+ */
+function getStrRatioToNumber(str_ratio){
+  //找到字符串中第一个'/'的位置
+  let index = str_ratio.indexOf('/');
+  //从0开始截取到字符串中第一个'/'的位置截止 （‌分子）
+  let numerator = str_ratio.substring(0, index);
+  //从字符串中第一个'/'的位置到最后截止 （‌分母）
+  let denominator = str_ratio.substring(index + 1);
+  //字符串值转数字值
+  numerator=Number(numerator);
+  denominator=Number(denominator);
+  //计算小数
+  const result_number= numerator/denominator;
+  //返回比例小数
+  return result_number;
+  // console.log('/前字符',result); // 输出: "16"
+  // console.log('/后字符',results); // 输出: "16"
+}
+
+
+  // 处理文件上传
+  // const handleFileUpload = () => {
+  //   //这里可以执行文件上传的操作，axios等
+  //   console.log(file);
+  // };
+
+  //选择log图片
+  function handleLogImageSelect() {
+    uploadLongImageFileInputRef.value.click();
   }
 
 
-  //监听图片上传
-  const canvas = ref(null);
-  const carouselContainerRef = ref(null);
 
   //获取选择的轮播图图片信息
   function handleImageUpload(event) {
@@ -407,7 +398,7 @@ console.log('s.value:',s.value);
         // canvas.value.width = img.width;
         // canvas.value.height = img.height;
         ctx.drawImage(img, 0, 0, minWidth, minHeight);
-        //接收图片bs64数据；
+        //接收图片base64数据；
         ruleForm.image_path = compressionFile(image);
       }
     }
@@ -447,7 +438,6 @@ console.log('s.value:',s.value);
    * @param {String} type 想压缩成的文件类型  如果输入和输出图片都是png类型，那么输出图片比原图大33%
    * @param {Nubmber} quality 压缩质量参数
    * @returns 压缩后的新图片
-   * 
    * toDataURL是用base64对图像进行编码的，且编码后的源文件比编码前大33%，base64只是对图片对应的二进制码，
    * 按照六位对应一个字符规则做转换，转码后是反而比原图片文件大的。
    * 但是对于小图片而言，经转换后多出来的字节传输远比多建立一个http连接开销小，所以会利用base64对小图转码来提高页面加载速度。
@@ -457,7 +447,6 @@ console.log('s.value:',s.value);
       return;
     }
     const file = files;
-    console.log('file.name:', file);
     const fileName = file.name;
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
@@ -466,7 +455,7 @@ console.log('s.value:',s.value);
     canvas.width = img.width;
     canvas.height = img.height;
     context.clearRect(0, 0, img.width, img.height);
-    // 在canvas绘制前填充白色背景
+    // 在canvas绘制前填充白色背景  ！！！ 注意：填充白色背景可能出现图片全白；可改为黑色背景
     context.fillStyle = '#fff';
     context.fillRect(0, 0, img.width, img.height);
     context.drawImage(img, 0, 0, img.width, img.height);
@@ -481,8 +470,9 @@ console.log('s.value:',s.value);
     //   type: file.type
     // }]
     console.log('f:', f);
-    // 图片文件转bs64
+    // 图片文件转base64
     const img_base64_str = await fileToDataURL(f);
+    console.log('img_base64_str:', img_base64_str);
     // 返回数据；
     return img_base64_str;
     // imgs.src = URL.createObjectURL(f);
@@ -544,6 +534,7 @@ console.log('s.value:',s.value);
   }
 
 
+
   //校验
   const rules = {
     email: [
@@ -558,54 +549,44 @@ console.log('s.value:',s.value);
     //valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
     ruleFormRef.value.validate((valid, fields) => {
       if (valid) {
-        console.log("表单数据:", ruleForm)
+        console.log("表单数据:",JSON.stringify(ruleForm))
         // 处理提交逻辑
-        $postData('/data/backend/edit_tag_data.json', ruleForm)
+        imageModuleApi.clickSubmitAddOrEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
             // const msg_content=response.action_success_data;
             if (route.query.action == "edit") {
               //模拟
               let msg_content = {
-                tag_id: route.query.id ? Number(route.query.id) : 1,
-                menu_id: ruleForm.menu_id,
-                menu_name: ruleForm.menu_name,
-                menu_title: ruleForm.menu_title,
-                tag_name: ruleForm.tag_name,
-                tag_keywords: ruleForm.tag_keywords,
-                tag_description: ruleForm.tag_description,
+                image_id: route.query.id ? Number(route.query.id) : 1,
+                image_name: ruleForm.image_name,
+                image_path:ruleForm.image_path,
+                image_type: ruleForm.image_type,
+                vui_carousel_color: ruleForm.vui_carousel_color,
+                vui_carousel_title: ruleForm.vui_carousel_title,
                 is_pulled: ruleForm.is_pulled === true ? 1 : 0,
-                account_status: "edit-tag",
                 created_time: "1687938191",
                 update_time: "1728874350",
               }
 
-
-              sendMsg('edit-tag', msg_content);
+              sendMsg('edit-image', msg_content);
               $message('修改成功', 'success');
 
             } else if (route.query.action == "add") {
               //模拟
               let msg_content = {
-                tag_id: 999,
-                menu_id: ruleForm.menu_id,
-                menu_name: ruleForm.menu_name,
-                menu_title: ruleForm.menu_title,
-                tag_name: ruleForm.tag_name,
-                tag_keywords: ruleForm.tag_keywords,
-                tag_description: ruleForm.tag_description,
+                image_id: 999,
+                image_name: ruleForm.image_name,
+                image_path:ruleForm.image_path,
+                image_type: ruleForm.image_type,
                 is_pulled: ruleForm.is_pulled === true ? 1 : 0,
-                account_status: "edit-tag",
                 created_time: "1687938191",
                 update_time: "1728874350",
               }
 
-
-              sendMsg('add-tag', msg_content);
+              sendMsg('add-image', msg_content);
               $message('添加成功', 'success');
-
             }
-
 
           })
           .catch(error => {
@@ -613,9 +594,6 @@ console.log('s.value:',s.value);
             $message('请求未找到', 'error');
             // $message('请求未找到', 'error');
           });
-
-
-
 
       } else {
         // 有字段没有通过验证
@@ -628,30 +606,25 @@ console.log('s.value:',s.value);
     });
   }
 
-
+   //获取编辑id的数据
   function getEditCurrentIdData(edit_current_id_data) {
-    $postData('/data/backend/edit_tag_data.json', edit_current_id_data)
+    imageModuleApi.getEditCurrentIdData(edit_current_id_data)
       .then(response => {
-
-        ruleForm.tag_id = response.tag_id;
-        ruleForm.menu_id = response.menu_id;
-        ruleForm.menu_name = response.menu_name;
-        ruleForm.menu_title = response.menu_title;
-
-        ruleForm.tag_name = response.tag_name;
-        ruleForm.tag_keywords = response.tag_keywords;
-        ruleForm.tag_description = response.tag_description;
+        ruleForm.image_id = response.image_id;
+        ruleForm.image_name = response.image_name;
+        ruleForm.image_path = response.image_path;
+        ruleForm.image_type = response.image_type;
+        ruleForm.vui_carousel_color = response.vui_carousel_color;
+        ruleForm.vui_carousel_title = response.vui_carousel_title;
         ruleForm.is_pulled = response.is_enable == 1 ? true : false;
+        if(image_types[ruleForm.image_type]==='carousel_image'){
 
-        //模拟数据 id=route.query.id
-        ruleForm.menu_id = route.query.id;
-
+                
+        }else if(image_types[ruleForm.image_type]==='log_image'){//如果是log图，那么继续
+          log_image_url.value =  ruleForm.image_path; //输出地址预览log 
+          console.log(222);
+        }
       })
-      .catch(error => {
-        // console.log(' getPageLayoutData()=>error:',error)
-        $message('请求未找到', 'error');
-        // $message('请求未找到', 'error');
-      });
 
   }
 
@@ -660,8 +633,6 @@ console.log('s.value:',s.value);
 
   // 获取页面框架数据
   function getAddOrEditPageLayoutData() {
-
-
     imageModuleApi.getPageLayoutData({})
       .then(response => {
         options_image_type_data.value = response.options_image_type_data;
@@ -675,7 +646,7 @@ console.log('s.value:',s.value);
     if (Object.keys(route.query).length > 0) {
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
-        // getEditCurrentIdData(route.query);
+        getEditCurrentIdData(route.query);
         getAddOrEditPageLayoutData();
         page_title.value = '编辑图片';
       } else if (route.query.action == "add") {
@@ -919,6 +890,11 @@ console.log('s.value:',s.value);
     position: relative;
     overflow: hidden;
     transition: var(--el-transition-duration-fast);
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   .image-uploader:hover {
