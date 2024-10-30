@@ -84,14 +84,12 @@
   import { useRouter, useRoute } from "vue-router";
   import ArticleCoverList from '@/components/backend/article_cover_list.vue';
   import {sendMsg} from '@/components/cross_tag_msg/crossTagMsg.js';
-
+  import menuModuleApi from "@/api/backend/menu.js";//api接口
 
   const route = useRoute();
   const router = useRouter();
   //使用 provide inject 代替getCurrentInstance
   const $verify = inject('$verify');
-  const $getData = inject('$getData');
-  const $postData = inject('$postData');
   const $message = inject('$message');
 
 
@@ -133,7 +131,7 @@
       if (valid) {
         console.log("表单数据:", ruleForm)
         // 处理提交逻辑
-        $postData('/data/backend/edit_menu_data.json', ruleForm)
+        menuModuleApi.clickSubmitAddOrEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
             // const msg_content=response.action_success_data;
@@ -170,23 +168,12 @@
                 delete_time: "1687938191"
               }
 
-
               sendMsg('add-menu', msg_content);
               $message('添加成功', 'success');
 
             }
 
-
           })
-          .catch(error => {
-            // console.log(' getPageLayoutData()=>error:',error)
-            $message('请求未找到', 'error');
-            // $message('请求未找到', 'error');
-          });
-
-
-
-
 
       } else {
         // 有字段没有通过验证
@@ -201,7 +188,7 @@
 
 
   function getEditCurrentIdData(edit_current_id_data) {
-    $postData('/data/backend/edit_menu_data.json', edit_current_id_data)
+    menuModuleApi.getEditCurrentIdData(edit_current_id_data)
       .then(response => {
 
         ruleForm.menu_id = response.menu_id;
@@ -235,9 +222,7 @@
 
   // 获取页面框架数据
   function getAddOrEditPageLayoutData() {
-
-
-    $getData('/data/backend/menu_page_layout_data.json')
+    menuModuleApi.getPageLayoutData({})
       .then(response => {
         options_business_level_data.value = response.options_business_level_data;
         options_parent_id_data.value = response.options_parent_id_data;
@@ -250,17 +235,9 @@
           menu_title: "根目录"
         }
 
-
         options_parent_id_data.value.unshift(root_directory)
 
-
       })
-      .catch(error => {
-        // console.log(' getPageLayoutData()=>error:',error)
-        $message('请求未找到', 'error');
-        // $message('请求未找到', 'error');
-      });
-
   }
 
   const page_title=ref('');

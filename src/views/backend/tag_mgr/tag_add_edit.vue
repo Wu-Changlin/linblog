@@ -48,14 +48,14 @@
   import { useRouter, useRoute } from "vue-router";
   import ArticleCoverList from '@/components/backend/article_cover_list.vue';
   import {sendMsg} from '@/components/cross_tag_msg/crossTagMsg.js';
+  import tagModuleApi from "@/api/backend/tag.js";//api接口
+
 
 
   const route = useRoute();
   const router = useRouter();
   //使用 provide inject 代替getCurrentInstance
   const $verify = inject('$verify');
-  const $getData = inject('$getData');
-  const $postData = inject('$postData');
   const $message = inject('$message');
 
   //表单ref
@@ -101,7 +101,7 @@
       if (valid) {
         console.log("表单数据:", ruleForm)
         // 处理提交逻辑
-        $postData('/data/backend/edit_tag_data.json', ruleForm)
+        tagModuleApi.clickSubmitAddOrEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
             // const msg_content=response.action_success_data;
@@ -149,14 +149,6 @@
 
 
           })
-          .catch(error => {
-            // console.log(' getPageLayoutData()=>error:',error)
-            $message('请求未找到', 'error');
-            // $message('请求未找到', 'error');
-          });
-
-
-
 
       } else {
         // 有字段没有通过验证
@@ -171,7 +163,7 @@
 
 
   function getEditCurrentIdData(edit_current_id_data) {
-    $postData('/data/backend/edit_tag_data.json', edit_current_id_data)
+    tagModuleApi.getEditCurrentIdData(edit_current_id_data)
       .then(response => {
 
         ruleForm.tag_id = response.tag_id;
@@ -205,7 +197,7 @@
   function getAddOrEditPageLayoutData() {
 
 
-    $getData('/data/backend/tag_page_layout_data.json')
+    tagModuleApi.getPageLayoutData({})
       .then(response => {
 
         options_menu_data.value = response.options_menu_data;

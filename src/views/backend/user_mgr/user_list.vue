@@ -69,16 +69,15 @@ import { ref,reactive,inject,onMounted,onUnmounted,computed} from "vue";
 import {useRoute,useRouter}  from "vue-router";
 import ArticleCoverList from '@/components/backend/article_cover_list.vue';
 import Table from "@/components/backend/table.vue";
-
 import {listenMsg} from '@/components/cross_tag_msg/crossTagMsg.js';
+import userModuleApi from "@/api/backend/user.js";//api接口
+
 
 const route=useRoute();
 const router=useRouter();
 
   //使用 provide inject 代替getCurrentInstance
   const $verify = inject('$verify');
-  const $getData = inject('$getData');
-const $postData = inject('$postData');
 const $message = inject('$message');
 
 /*操作表格数据 开始*/ 
@@ -125,16 +124,11 @@ const options_role_data = ref([]);
 // 获取页面框架数据
 function getPageLayoutData(){
 
-  $getData('/data/backend/user_page_layout_data.json')
+  userModuleApi.getPageLayoutData({})
   .then(response => {
     table_header.value=response.table_header;
     options_role_data.value=response.options_role_data;
   })
-  .catch(error => {
-    // console.log(' getPageLayoutData()=>error:',error)
-    $message('请求未找到', 'error');
-    // $message('请求未找到', 'error');
-  });
 
 }
 
@@ -170,7 +164,7 @@ const resetQueryFormData = () => {
       router.push({ name:route.name, query: query_data, key: new Date().getTime() });
 
       // 获取查询数据
-      $postData('/data/backend/user_query_data.json',query_data)
+      userModuleApi.queryInputData(query_data)
   .then(response => {
     user_list_data.value=response.user_list_data;
     pagination_data.current_page=response.current_page;
@@ -190,10 +184,6 @@ user_list_data.value=math_role_data.value;
     // is_loading.value = false;
 
   })
-  .catch(error => {
-    $message('请求未找到', 'error');
-    // $message('请求未找到', 'error');
-  });
 
     }else{
       $message('请先输入查询内容', 'warning');
@@ -219,10 +209,10 @@ const pagination_data = reactive({
 //   "total_count":12,
 //   "current_page":1,
 //   "current_page_limit":10,
-  //获取数据
+  //获取表格数据
   function getUserListPageData() {
 
-$getData('/data/backend/user_list.json')
+  userModuleApi.getUserListPageData(pagination_data)
   .then(response => {
     user_list_data.value=response.user_list_data;
     pagination_data.current_page=response.current_page;
@@ -235,10 +225,6 @@ $getData('/data/backend/user_list.json')
     // is_loading.value = false;
 
   })
-  .catch(error => {
-    $message('请求未找到', 'error');
-    // $message('请求未找到', 'error');
-  });
 }
 
 
@@ -261,7 +247,7 @@ function getChildPaginationChangeData(article_pagination){
       // 执行跳转
 router.push({ name:route.name, query: payload_data, key: new Date().getTime() });
         // 获取查询数据
-        $postData('/data/backend/user_list.json',payload_data)
+        userModuleApi.getChildPaginationChangeData(payload_data)
   .then(response => {
     user_list_data.value=response.user_list_data;
     pagination_data.current_page=response.current_page;
@@ -299,11 +285,6 @@ router.push({ name:route.name, query: payload_data, key: new Date().getTime() })
     flag.value = true;
     // is_loading.value = false;
   })
-  .catch(error => {
-// console.log('error:',error)
-    $message('请求未找到', 'error');
-    // $message('请求未找到', 'error');
-  });
 
 }
 

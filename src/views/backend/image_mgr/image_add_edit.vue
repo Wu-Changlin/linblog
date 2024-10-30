@@ -41,7 +41,7 @@
       <el-form-item label="轮播图片" prop="image_path">
 
         <div class="image-uploader">
-          <img  v-if="carouselImageRef"  ref="carouselImageRef" src="" class="avatar" @click="handleLogImageSelect">
+          <img  v-if="carousel_image_url"  ref="carouselImageRef" :src="carousel_image_url" class="avatar" @click="handleLogImageSelect">
           <div v-else class="svg-icon-uploader" @click="handleLogImageSelect">
             <svg-icon class="svg-icon" icon-class="plus"></svg-icon>
           </div>
@@ -58,7 +58,7 @@
       <el-form-item label="底部背景" prop="vui_carousel_color" style="height: 500px;">
 
         <div style="display: flex;width: 100%;height: 100%;">
-          <div style="display: flex;width: 200px;height: 450px;margin-right: 10px;">
+          <div style="display: flex;width: 200px;height: 480px;margin-right: 10px;">
             <div style="display: flex;flex-direction: column; /* 设置为垂直布局 */width: 100%;height: 100%;">
               <div>点击选取颜色</div>
               <div :style="{'background-color':ruleForm.vui_carousel_color,'width':'100%','height': '100%'}"></div>
@@ -469,10 +469,10 @@ function getStrRatioToNumber(str_ratio){
     //   size: f.size,
     //   type: file.type
     // }]
-    console.log('f:', f);
+    // console.log('f:', f);
     // 图片文件转base64
     const img_base64_str = await fileToDataURL(f);
-    console.log('img_base64_str:', img_base64_str);
+    // console.log('img_base64_str:', img_base64_str);
     // 返回数据；
     return img_base64_str;
     // imgs.src = URL.createObjectURL(f);
@@ -504,8 +504,8 @@ function getStrRatioToNumber(str_ratio){
     const b = data[2];
     const a = data[3];
     ruleForm.vui_carousel_color = `rgba(${r}, ${g}, ${b}, ${a})`;
-    console.log(`Clicked RGBA: (${r}, ${g}, ${b}, ${a})`);
-    console.log(`ruleForm.vui_carousel_color: (${ruleForm.vui_carousel_color})`);
+    // console.log(`Clicked RGBA: (${r}, ${g}, ${b}, ${a})`);
+    // console.log(`ruleForm.vui_carousel_color: (${ruleForm.vui_carousel_color})`);
   };
 
 
@@ -579,6 +579,8 @@ function getStrRatioToNumber(str_ratio){
                 image_name: ruleForm.image_name,
                 image_path:ruleForm.image_path,
                 image_type: ruleForm.image_type,
+                vui_carousel_color: '',
+                vui_carousel_title: '',
                 is_pulled: ruleForm.is_pulled === true ? 1 : 0,
                 created_time: "1687938191",
                 update_time: "1728874350",
@@ -618,10 +620,34 @@ function getStrRatioToNumber(str_ratio){
         ruleForm.vui_carousel_title = response.vui_carousel_title;
         ruleForm.is_pulled = response.is_enable == 1 ? true : false;
         if(image_types[ruleForm.image_type]==='carousel_image'){
+          
+          carousel_image_url.value =  ruleForm.image_path; //轮播图 小图
+
+           //轮播图 大图 用于点击选取颜色和显示标题
+          const img = new Image();
+          const minWidth = 800;
+          const minHeight = 450;
+    img.onload = () => {
+        // 设置轮播图元素的宽度和高度 （注意页面显示最小数据，非原图尺寸）
+        carouselContainerRef.value.style.width = minWidth + 'px';
+        carouselContainerRef.value.style.height = minHeight + 'px';
+        // carouselContainerRef.value.style.width = img.width + 'px';
+        // carouselContainerRef.value.style.height = img.height + 'px';
+        // 设置画布元素的宽度、高度及相关属性（注意页面显示最小数据，非原图尺寸）
+        const ctx = canvas.value.getContext('2d');
+        canvas.value.width = minWidth;
+        canvas.value.height = minHeight;
+        // canvas.value.width = img.width;
+        // canvas.value.height = img.height;
+        ctx.drawImage(img, 0, 0, minWidth, minHeight);
+        //接收图片base64数据；
+  
+    }
+    img.src = ruleForm.image_path;
 
                 
         }else if(image_types[ruleForm.image_type]==='log_image'){//如果是log图，那么继续
-          log_image_url.value =  ruleForm.image_path; //输出地址预览log 
+          log_image_url.value =  ruleForm.image_path; //预览log 
           console.log(222);
         }
       })

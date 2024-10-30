@@ -190,7 +190,9 @@
       for (let i = 0; i < tableData.length; i++) {
         let t = tableData[i][id_name.value];
         if (t == Ele[id_name.value]) {
-          removeBatchId.push(Ele[id_name.value]);
+          // ES6，可以使用Set来保证元素的唯一性
+          removeBatchId = [...new Set([...removeBatchId, Ele[id_name.value]])];
+          // removeBatchId.push(Ele[id_name.value]);//单选情景：出现重复添加同一id
           // console.log("Ele[id_name.value]:", Ele[id_name.value]);
           //如果原始数据中的id等于选中数据id，那么执行删除
           tableData.splice(i, 1); //删除原始数据数组中选中数据id索引

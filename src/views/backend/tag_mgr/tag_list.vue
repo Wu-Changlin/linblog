@@ -64,14 +64,14 @@
     import ArticleCoverList from '@/components/backend/article_cover_list.vue';
     import Table from "@/components/backend/table.vue";
     import {listenMsg} from '@/components/cross_tag_msg/crossTagMsg.js';
+    import tagModuleApi from "@/api/backend/tag.js";//api接口
+
 
     const route = useRoute();
     const router = useRouter();
 
     //使用 provide inject 代替getCurrentInstance
     const $verify = inject('$verify');
-    const $getData = inject('$getData');
-    const $postData = inject('$postData');
     const $message = inject('$message');
 
     /*操作表格数据 开始*/
@@ -118,8 +118,7 @@
     // 获取页面框架数据
     function getPageLayoutData() {
 
-
-        $getData('/data/backend/tag_page_layout_data.json')
+        tagModuleApi.getPageLayoutData({})
             .then(response => {
                 table_header.value = response.table_header;
                 options_menu_data.value = response.options_menu_data;
@@ -163,7 +162,7 @@
             router.push({ name: route.name, query: query_data, key: new Date().getTime() });
 
             // 获取查询数据
-            $postData('/data/backend/tag_list.json', query_data)
+            tagModuleApi.queryInputData(query_data)
                 .then(response => {
                     tag_list_data.value = response.tag_list_data;
                     pagination_data.current_page = response.current_page;
@@ -210,7 +209,7 @@
     //获取数据
     function getTagListPageData() {
 
-        $getData('/data/backend/tag_list.json')
+        tagModuleApi.getTagListPageData(pagination_data)
             .then(response => {
                 tag_list_data.value = response.tag_list_data;
                 pagination_data.current_page = response.current_page;
@@ -249,7 +248,7 @@
         // 执行跳转
         router.push({ name: route.name, query: payload_data, key: new Date().getTime() });
         // 获取查询数据
-        $postData('/data/backend/tag_list.json', payload_data)
+        tagModuleApi.getChildPaginationChangeData(payload_data)
             .then(response => {
                 tag_list_data.value = response.tag_list_data;
                 pagination_data.current_page = response.current_page;

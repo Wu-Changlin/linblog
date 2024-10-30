@@ -70,16 +70,15 @@
     import { useRoute, useRouter } from "vue-router";
     import ArticleCoverList from '@/components/backend/article_cover_list.vue';
     import Table from "@/components/backend/table.vue";
-
     import {listenMsg} from '@/components/cross_tag_msg/crossTagMsg.js';
+    import menuModuleApi from "@/api/backend/menu.js";//api接口
+
 
     const route = useRoute();
     const router = useRouter();
 
     //使用 provide inject 代替getCurrentInstance
     const $verify = inject('$verify');
-    const $getData = inject('$getData');
-    const $postData = inject('$postData');
     const $message = inject('$message');
 
     /*操作表格数据 开始*/
@@ -125,18 +124,11 @@
 
     // 获取页面框架数据
     function getPageLayoutData() {
-
-
-        $getData('/data/backend/menu_page_layout_data.json')
+        menuModuleApi.getPageLayoutData({})
             .then(response => {
                 table_header.value = response.table_header;
                 options_business_level_data.value = response.options_business_level_data;
             })
-            .catch(error => {
-                console.log('error:',error)
-                $message('请求未找到', 'error');
-                // $message('请求未找到', 'error');
-            });
 
     }
 
@@ -172,7 +164,7 @@
             router.push({ name: route.name, query: query_data, key: new Date().getTime() });
 
             // 获取查询数据
-            $postData('/data/backend/menu_list.json', query_data)
+            menuModuleApi.queryInputData(query_data)
                 .then(response => {
                     menu_list_data.value = response.menu_list_data;
                     pagination_data.current_page = response.current_page;
@@ -192,10 +184,6 @@
                     // is_loading.value = false;
 
                 })
-                .catch(error => {
-                    $message('请求未找到', 'error');
-                    // $message('请求未找到', 'error');
-                });
 
         } else {
             $message('请先输入查询内容', 'warning');
@@ -219,24 +207,19 @@
 
     //获取数据  
     function getMenuListPageData() {
-
-        $getData('/data/backend/menu_list.json')
+        menuModuleApi.getMenuListPageData(pagination_data)
             .then(response => {
                 menu_list_data.value = response.menu_list_data;
                 pagination_data.current_page = response.current_page;
                 pagination_data.current_page_limit = response.current_page_limit;
                 pagination_data.total_count = response.total_count;
 
-                // console.log('menu_list_data',menu_list_data.value);
+                console.log('menu_list_data',menu_list_data.value);
 
                 flag.value = true;
                 // is_loading.value = false;
 
             })
-            .catch(error => {
-                $message('请求未找到', 'error');
-                // $message('请求未找到', 'error');
-            });
     }
 
 
@@ -260,7 +243,7 @@
         // 执行跳转
         router.push({ name: route.name, query: payload_data, key: new Date().getTime() });
         // 获取查询数据
-        $postData('/data/backend/menu_list.json', payload_data)
+        menuModuleApi.getChildPaginationChangeData(payload_data)
             .then(response => {
                 menu_list_data.value = response.menu_list_data;
                 pagination_data.current_page = response.current_page;
@@ -298,11 +281,6 @@
                 flag.value = true;
                 // is_loading.value = false;
             })
-            .catch(error => {
-                console.log('error:',error)
-                $message('请求未找到', 'error');
-                // $message('请求未找到', 'error');
-            });
 
     }
 

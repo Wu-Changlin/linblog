@@ -20,7 +20,7 @@ const image = {
             })
     },
     //获取表格数据
-    getArticleListPageData(params) {
+    getImageListPageData(params) {
         return axiosService.post("/data/backend/image_list.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {

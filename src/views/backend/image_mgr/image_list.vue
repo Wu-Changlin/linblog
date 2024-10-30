@@ -219,9 +219,9 @@
     //   "current_page":1,
     //   "current_page_limit":10,
     //获取表格数据
-    function getArticleListPageData() {
+    function getImageListPageData() {
 
-        imageModuleApi.getArticleListPageData(pagination_data)
+        imageModuleApi.getImageListPageData(pagination_data)
             .then(response => {
                 image_list_data.value = response.image_list_data;
                 pagination_data.current_page = response.current_page;
@@ -235,7 +235,7 @@
 
             })
             .catch(error => {
-                console.log('getArticleListPageData-error:', error)
+                console.log('getImageListPageData-error:', error)
                 // $message('请求未找到', 'error');
                 // $message('请求未找到', 'error');
             });
@@ -324,7 +324,7 @@
             let route_query_obj = JSON.parse(route_query_str);
             getChildPaginationChangeData(route_query_obj);
         } else {
-            getArticleListPageData();
+            getImageListPageData();
         }
         getPageLayoutData();
 

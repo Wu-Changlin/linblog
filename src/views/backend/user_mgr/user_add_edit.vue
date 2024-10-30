@@ -94,14 +94,14 @@ import { ref,reactive, onMounted,computed,nextTick,inject} from "vue";
 import { useRouter,useRoute} from "vue-router";
 import ArticleCoverList from '@/components/backend/article_cover_list.vue';
 import {sendMsg} from '@/components/cross_tag_msg/crossTagMsg.js';
+import userModuleApi from "@/api/backend/user.js";//api接口
+
 
 
 const route=useRoute();
 const router=useRouter();
   //使用 provide inject 代替getCurrentInstance
   const $verify = inject('$verify');
-  const $getData = inject('$getData');
-  const $postData = inject('$postData');
   const $message = inject('$message');
 
   
@@ -190,7 +190,7 @@ function clickSubmit(){
     if (valid) {
       console.log("表单数据:",ruleForm)
   // 处理提交逻辑
-      $postData('/data/backend/edit_user_data.json',ruleForm)
+  userModuleApi.clickSubmitAddOrEditData(ruleForm)
   .then(response => {
     //把修改或添加消息广播出去
     // const msg_content=response.action_success_data;
@@ -234,15 +234,7 @@ function clickSubmit(){
     
     
   })
-  .catch(error => {
-    // console.log(' getPageLayoutData()=>error:',error)
-    $message('请求未找到', 'error');
-    // $message('请求未找到', 'error');
-  });
-
-
-
-    
+  
     } else {
       // 有字段没有通过验证
      let obj=Object.keys(fields)[0];
@@ -256,7 +248,7 @@ function clickSubmit(){
 
 
 function getEditCurrentIdData(edit_current_id_data){
-  $postData('/data/backend/edit_user_data.json',edit_current_id_data)
+  userModuleApi.getEditCurrentIdData(edit_current_id_data)
   .then(response => {
     
     ruleForm.user_id=response.user_id;
@@ -268,16 +260,10 @@ function getEditCurrentIdData(edit_current_id_data){
     ruleForm.role=response.role;
     ruleForm.is_enable=response.is_enable==1?true:false;
 
-
     //模拟数据 id=route.query.id
     ruleForm.menu_id = route.query.id;
     
   })
-  .catch(error => {
-    // console.log(' getPageLayoutData()=>error:',error)
-    $message('请求未找到', 'error');
-    // $message('请求未找到', 'error');
-  });
 
 }
 
@@ -289,7 +275,7 @@ const options_role_data = ref([]);
 function getAddOrEditPageLayoutData(){
 
 
-  $getData('/data/backend/user_page_layout_data.json')
+  userModuleApi.getPageLayoutData({})
   .then(response => {
 
     options_role_data.value=response.options_role_data;
