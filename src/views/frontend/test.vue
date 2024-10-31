@@ -125,6 +125,50 @@
   callBack
 
 
+  function getEditCurrentIdData(edit_current_id_data) {
+    imageModuleApi.getEditCurrentIdData(edit_current_id_data)
+      .then(response => {
+        ruleForm.image_id = response.image_id;
+        ruleForm.image_name = response.image_name;
+        ruleForm.image_path = response.image_path;
+        ruleForm.image_type = response.image_type;
+        ruleForm.vui_carousel_color = response.vui_carousel_color;
+        ruleForm.vui_carousel_title = response.vui_carousel_title;
+        ruleForm.is_pulled = response.is_enable == 1 ? true : false;
+        if (image_types[ruleForm.image_type] === 'carousel_image') {
+
+          carousel_image_url.value = ruleForm.image_path; //轮播图 小图
+
+          //轮播图 大图 用于点击选取颜色和显示标题
+          const img = new Image();
+          const minWidth = 800;
+          const minHeight = 450;
+          img.onload = () => {
+            // 设置轮播图元素的宽度和高度 （注意页面显示最小数据，非原图尺寸）
+            carouselContainerRef.value.style.width = minWidth + 'px';
+            carouselContainerRef.value.style.height = minHeight + 'px';
+            // carouselContainerRef.value.style.width = img.width + 'px';
+            // carouselContainerRef.value.style.height = img.height + 'px';
+            // 设置画布元素的宽度、高度及相关属性（注意页面显示最小数据，非原图尺寸）
+            const ctx = canvas.value.getContext('2d');
+            canvas.value.width = minWidth;
+            canvas.value.height = minHeight;
+            // canvas.value.width = img.width;
+            // canvas.value.height = img.height;
+            ctx.drawImage(img, 0, 0, minWidth, minHeight);
+
+          }
+          img.src = ruleForm.image_path;
+
+
+        } else if (image_types[ruleForm.image_type] === 'log_image') {//如果是log图，那么继续
+          log_image_url.value = ruleForm.image_path; //预览log 
+          console.log(222);
+        }
+      })
+
+  }
+
 </script>
 <style scoped>
   .content {

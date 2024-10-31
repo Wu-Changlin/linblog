@@ -127,8 +127,6 @@
   const router = useRouter();
   //使用 provide inject 代替getCurrentInstance
   const $verify = inject('$verify');
-  const $getData = inject('$getData');
-  const $postData = inject('$postData');
   const $message = inject('$message');
 
   const is_show_panel = ref(false);
