@@ -11,6 +11,7 @@ const routes = [
                 path: '/index',
                 name: "index",
                 component: () => import('@/views/frontend/index.vue'),//引入该路由使用的组件
+                meta: {title: '管理员面板' },
 
             },
 

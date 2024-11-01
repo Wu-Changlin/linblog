@@ -298,6 +298,40 @@ function resetPageData(){
   getUserListPageData();
 }
 
+
+
+
+/**
+* 配置 seo
+* @param title 网页标题
+* @param key 关键词
+* @param des 描述
+*/
+function setMeta (title,key,des){
+let  title_default = "网站名称";
+if(title){
+title_default += title;
+}
+
+
+key= key  || '默认关键词',
+des=  des   || '默认描述',
+
+document.title = title_default;
+let meta = document.querySelector('meta[name="keywords"]');
+
+if (meta) {
+console.log('meta:',meta)
+meta.setAttribute('content', key);
+} else {
+console.error('No meta tag with name="keywords" found');
+}
+document.querySelector('meta[name="keywords"]').setAttribute('content', key);
+document.querySelector('meta[name="description"]').setAttribute('content', des);
+}
+
+
+
 onMounted(() => {
 
   
@@ -314,7 +348,7 @@ let route_query_obj =JSON.parse(route_query_str);
     getUserListPageData();
   }
   getPageLayoutData();
-
+// setMeta();
 });
 
 

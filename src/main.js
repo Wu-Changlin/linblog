@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router/index.js'; //引入配置路由文件
 import ElementPlus from 'element-plus'; //引入ElementPlus依赖
 import 'element-plus/dist/index.css'; // 引入样式文件index.css
+import { createMetaManager} from 'vue-meta'
 
 
 //  安装tooltip
@@ -50,6 +51,7 @@ app.provide('$verify',verify)
 // const $message = inject('$message');
 //   const $verify = inject('$verify');
 
+
 //注册SvgIcon组件
 app.component('svg-icon', SvgIcon);
 
@@ -64,4 +66,7 @@ app.component('svg-icon', SvgIcon);
 app.use(router)
     .use(ElementPlus)
     .use(tooltip)
+    .use(createMetaManager(false, {
+        meta: { tag: 'meta', nameless: true }
+    }))
 app.mount('#app')

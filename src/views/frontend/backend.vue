@@ -28,7 +28,7 @@
 
 
 <script setup>
-  import { reactive, ref, onMounted, inject } from 'vue';
+  import { reactive, ref, onMounted,onUpdated, inject } from 'vue';
   import { useRoute, useRouter } from "vue-router";
 
   import ContentTag from '@/components/content_tag.vue';
@@ -78,7 +78,7 @@
     // 如果你想使用axios来模拟请求，可以这样做
     backendModuleApi.getBackendPageData({})
       .then(response => {
-
+        mate_title_data.value='getBackendPageData';
         backend_tag_data.value = response.tag_data;
         backend_article_list_data.value = response.article_list_data;
         backend_carousel_img_data.value = response.carousel_img_data;
@@ -133,6 +133,7 @@
 
     backendModuleApi.getChildClickTag({ tag_id: active_tag_id, tag_name: active_tag_name, page: 1 })
       .then(response => {
+        mate_title_data.value='getChildClickTag';
 
         backend_tag_data.value = response.tag_data;
         backend_article_list_data.value = response.article_list_data;
@@ -260,7 +261,20 @@
 
   }
 
+  const mate_title_data=ref();
 
+  import { useMeta } from 'vue-meta'
+
+
+onUpdated(() => {
+  useMeta({
+    title: mate_title_data.value,
+    meta: [
+        { name: 'keywords', content:'后端'},
+        { name: 'description', content:'后端' }
+    ]
+})
+  })
 
 
   onMounted(() => {

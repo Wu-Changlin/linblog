@@ -22,13 +22,17 @@
 
 
 <script setup>
-import { reactive, ref,onMounted,provide ,inject} from 'vue';
+import { reactive, ref,onMounted,onUpdated,provide,inject} from 'vue';
 import { useRouter } from "vue-router";
 import NavBar from "@/components/nav_bar.vue";
 import SideBar from "@/components/side_bar.vue";
 import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 import Footer from "@/components/footer.vue";
 import layoutModuleApi from "@/api/frontend/layout.js";//api接口
+// import  useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
+
+
+
 
 //使用 provide inject 代替getCurrentInstance
 const $message = inject('$message');
@@ -96,6 +100,65 @@ function getLayoutLogOrMenuListData(){
 		// console.log('layout_page_menu_list_data:', response);
     })
 }
+
+
+
+  import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
+
+
+
+  // 修改当前页面meta元数据，标题、关键词、描述  开始
+
+  let current_meta_info = reactive({
+    meta_title: 'LinBlog 个人博客',
+    meta_keywords: '个人博客，笔记',
+    meta_description: '分享技术，写开源项目，工作日常等'
+  });
+  console.log('current_meta_info:', typeof current_meta_info, ',current_meta_info:', current_meta_info);
+
+
+  // 提供数据
+  provide('current_meta_info', current_meta_info);
+
+  // 修改当前页面meta元数据，标题、关键词、描述的方法 
+  //  使用展开运算符...  注意：如果两个对象有同名属性，后面对象的属性值会覆盖前面对象的属性值。
+  function updateCurrentMetaInfoFunction(new_current_meta_info) {
+    // ?? 运算符被称为非空运算符。如果第一个参数不是 null/undefined
+    // （译者注：这里只有两个假值，但是 JS 中假值包含：
+    // 未定义 undefined、空对象 null、数值 0、空数字 NaN、布尔 false，空字符串''，不要搞混了），
+    // 将返回第一个参数，否则返回第二个参数。
+
+    current_meta_info.meta_title = new_current_meta_info.meta_title ?? current_meta_info.meta_title;
+    current_meta_info.meta_keywords = new_current_meta_info.meta_title ?? current_meta_info.meta_keywords;
+    current_meta_info.meta_description = new_current_meta_info.meta_title ?? current_meta_info.meta_description;
+    console.log('current_meta_info:', typeof current_meta_info, ',current_meta_info:', current_meta_info);
+    // useMetaInfo(current_meta_info);//渲染meta
+
+  }
+
+  // 暴露方法(修改当前页面meta元数据，标题、关键词、描述的方法 )供子组件调用
+  provide('updateCurrentMetaInfoFunction', updateCurrentMetaInfoFunction);
+
+  // 修改当前页面meta元数据，标题、关键词、描述  结束
+
+
+
+  // 最开始是放在onMounted中，因为数据也是放在onMounted中，感觉数据没有请求完，meta就渲染完了，导致不生效，
+  // 暂时不知道怎么解决，误打误撞中，动态的页面会触发onUpdated事件，于是就取巧放在了onUpdated中
+  onUpdated(() => {
+      useMetaInfo(current_meta_info);//渲染meta
+  })
+
+
+
+
+
+//  // 最开始是放在onMounted中，因为数据也是放在onMounted中，感觉数据没有请求完，meta就渲染完了，导致不生效，
+//   // 暂时不知道怎么解决，误打误撞中，动态的页面会触发onUpdated事件，于是就取巧放在了onUpdated中
+//   onUpdated(() => {
+//       useMetaInfo();//渲染meta
+//   })
+
 
 
 onMounted(() => {

@@ -28,6 +28,7 @@
 import indexModuleApi from "@/api/frontend/index.js";//api接口
 
 
+
   const route = useRoute();
   const router = useRouter();
 
@@ -113,6 +114,8 @@ const $message = inject('$message');
       })
   }
 
+
+  
 
 
 

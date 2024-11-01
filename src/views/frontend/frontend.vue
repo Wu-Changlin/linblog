@@ -62,6 +62,13 @@ const $message = inject('$message');
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
 
+    //注入来自layout页面的页面meta元数据
+    const current_meta_info = inject('current_meta_info');
+
+// 注入来自App.vue页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
+const updateCurrentMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
+
+
 
   //获取前端栏页数据（内容标签栏数据、轮播图数据、博文列表数据（瀑布流组件））  
   function getFrontendPageData() {
@@ -80,6 +87,8 @@ const $message = inject('$message');
         current_active_tag_name.value = response.current_active_tag_name;
         //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
 updateCurrentActiveTagIdFunction(current_active_tag_id.value);
+
+updateCurrentMetaInfoFunction({meta_title:'世界，你好!'});
 
         //模拟数据返回随机数量
         let sliced_start = Math.floor(Math.random() * 5) + 1;

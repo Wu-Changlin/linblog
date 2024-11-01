@@ -1,5 +1,5 @@
 <template>
-
+  <metainfo></metainfo>
   <router-view>
 
   </router-view>
@@ -9,8 +9,8 @@
 <!-- app.vue -->
 <script setup>
 
-  </script>
-  
+</script>
+
 
 <style>
 
