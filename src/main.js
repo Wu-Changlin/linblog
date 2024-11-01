@@ -3,7 +3,10 @@ import App from './App.vue';
 import router from './router/index.js'; //引入配置路由文件
 import ElementPlus from 'element-plus'; //引入ElementPlus依赖
 import 'element-plus/dist/index.css'; // 引入样式文件index.css
-import { createMetaManager} from 'vue-meta'
+
+import { createHead } from '@unhead/vue'
+
+const head = createHead()
 
 
 //  安装tooltip
@@ -66,7 +69,5 @@ app.component('svg-icon', SvgIcon);
 app.use(router)
     .use(ElementPlus)
     .use(tooltip)
-    .use(createMetaManager(false, {
-        meta: { tag: 'meta', nameless: true }
-    }))
+    .use(head)
 app.mount('#app')

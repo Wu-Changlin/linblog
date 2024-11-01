@@ -62,6 +62,13 @@
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
+        //注入来自layout页面的页面meta元数据
+    // const current_meta_info = inject('current_meta_info');
+
+// 注入来自App.vue页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
+const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
+
+
 
 
 
@@ -72,6 +79,9 @@
     // 如果你想使用axios来模拟请求，可以这样做
     resourceModuleApi.getResourcePageData({})
       .then(response => {
+      
+        updatePageMetaInfoFunction({meta_title:'资源，你好!'});
+        console.log('getResourcePageData:');
 
         resource_tag_data.value = response.tag_data;
         resource_article_list_data.value = response.article_list_data;

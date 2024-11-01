@@ -175,17 +175,24 @@
   provide('yearDropdownPageUpdateYear', year_dropdown_page_update_year);//父传子，默认选中当年年份。当前选中年份
 
 
-
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
+      //注入来自layout页面的页面meta元数据
+    // const current_meta_info = inject('current_meta_info');
 
+// 注入来自App.vue页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
+const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
+
+
+  // 是否开启瀑布流骨架屏 
   const is_loading_contribution_article_list_data = ref(true);
 
   //获取归档页网站统计栏、标签统计栏、贡献统计栏数据
   function getArchivesPageData() {
     archivesModuleApi.getArchivesPageData({})
       .then(response => {
+        updatePageMetaInfoFunction({meta_title:'归档，你好!'});
 
         website_content_count_data.value = response.website_content_count_data;
         tag_count_data.value = response.tag_count_data;

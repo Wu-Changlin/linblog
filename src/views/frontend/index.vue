@@ -63,12 +63,22 @@ const $message = inject('$message');
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
+      //注入来自layout页面的页面meta元数据
+    // const current_meta_info = inject('current_meta_info');
+
+// 注入来自App.vue页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
+const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
+
 
   //获取首页数据（内容标签栏数据、博文列表数据（瀑布流组件））  
   function getIndexPageData() {
 
     indexModuleApi.getIndexPageData({})
       .then(response => {
+
+updatePageMetaInfoFunction({meta_title:'首页，你好!'});
+
+
         index_tag_data.value = response.tag_data; // 标签数据
         index_article_list_data.value = response.article_list_data; // // 博文列表数据
         current_active_tag_id.value = response.current_active_tag_id;

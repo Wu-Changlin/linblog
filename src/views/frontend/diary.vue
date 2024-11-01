@@ -66,7 +66,11 @@
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
+    //注入来自layout页面的页面meta元数据
+    // const current_meta_info = inject('current_meta_info');
 
+// 注入来自App.vue页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
+const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
 
   //获取随笔栏页数据（内容标签栏数据、轮播图数据、博文列表数据（瀑布流组件）） 
@@ -77,6 +81,10 @@
     diaryModuleApi.getDiaryPageData({})
       .then(response => {
         // setTimeout(() => {
+
+          updatePageMetaInfoFunction({meta_title:'随笔，你好!'});
+
+
         diary_tag_data.value = response.tag_data;
         diary_article_list_data.value = response.article_list_data;
         diary_carousel_img_data.value = response.carousel_img_data;

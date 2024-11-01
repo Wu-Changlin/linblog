@@ -68,6 +68,12 @@
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
+      //注入来自layout页面的页面meta元数据
+    // const current_meta_info = inject('current_meta_info');
+
+// 注入来自App.vue页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
+const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
+
 
 
 
@@ -78,7 +84,8 @@
     // 如果你想使用axios来模拟请求，可以这样做
     backendModuleApi.getBackendPageData({})
       .then(response => {
-        mate_title_data.value='getBackendPageData';
+updatePageMetaInfoFunction({meta_title:'后端，你好!'});
+    
         backend_tag_data.value = response.tag_data;
         backend_article_list_data.value = response.article_list_data;
         backend_carousel_img_data.value = response.carousel_img_data;
@@ -133,7 +140,7 @@
 
     backendModuleApi.getChildClickTag({ tag_id: active_tag_id, tag_name: active_tag_name, page: 1 })
       .then(response => {
-        mate_title_data.value='getChildClickTag';
+  
 
         backend_tag_data.value = response.tag_data;
         backend_article_list_data.value = response.article_list_data;
@@ -261,20 +268,37 @@
 
   }
 
-  const mate_title_data=ref();
 
-  import { useMeta } from 'vue-meta'
+// import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
 
 
-onUpdated(() => {
-  useMeta({
-    title: mate_title_data.value,
-    meta: [
-        { name: 'keywords', content:'后端'},
-        { name: 'description', content:'后端' }
-    ]
-})
-  })
+//   const mate_title_data=ref();
+
+// //   import { useMeta } from 'vue-meta'
+
+//   // 修改当前页面meta元数据，标题、关键词、描述  开始
+
+//   let current_meta_info = reactive({
+//     meta_title: '后端',
+//     meta_keywords: '后端',
+//     meta_description: '后端'
+//   });
+//   console.log('current_meta_info:', typeof current_meta_info, ',current_meta_info:', current_meta_info);
+
+
+
+// onUpdated(() => {
+//   useMetaInfo(current_meta_info);//渲染meta
+
+  
+// //   useMeta({
+// //     title: mate_title_data.value,
+// //     meta: [
+// //         { name: 'keywords', content:'后端'},
+// //         { name: 'description', content:'后端' }
+// //     ]
+// // })
+//   })
 
 
   onMounted(() => {
