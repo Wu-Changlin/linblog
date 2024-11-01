@@ -52,7 +52,7 @@
   import TagCount from '@/components/tag_count.vue';
   import Waterfall from '@/components/waterfall.vue';
   import EmptyState from '@/components/empty_state.vue';
-  import { debounce, throttle } from '@/hooks/debounce_throttle.js';
+  import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
   import NavBar from "@/components/nav_bar.vue";
   import FloatingBtnSets from "@/components/floating_btn_sets.vue";
   import searchModuleApi from "@/api/frontend/search.js";//api接口

@@ -1,6 +1,4 @@
 <template>
-
-
 	<div class="container">
 		<BackendNavBar  :parentPageLogData="admin_page_log" ></BackendNavBar>
 		<div class="main">

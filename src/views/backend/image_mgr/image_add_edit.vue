@@ -21,15 +21,15 @@
       </el-radio-group>
     </el-form-item>
 
-    <div v-if="image_types[ruleForm.image_type]==='log_image'">
-      <el-form-item label="log图片" prop="image_path">
+    <div v-if="image_types[ruleForm.image_type]==='logo_image'">
+      <el-form-item label="logo图片" prop="image_path">
 
         <div class="image-uploader">
-          <img v-if="log_image_url" ref="logImageRef" :src="log_image_url" class="avatar" @click="handleLogImageSelect">
-          <div v-else class="svg-icon-uploader" @click="handleLogImageSelect">
+          <img v-if="logo_image_url" ref="logoImageRef" :src="logo_image_url" class="avatar" @click="handleLogoImageSelect">
+          <div v-else class="svg-icon-uploader" @click="handleLogoImageSelect">
             <svg-icon class="svg-icon" icon-class="plus"></svg-icon>
           </div>
-          <input ref="uploadLongImageFileInputRef" type="file" @change="handleLogImage" accept="image/*"
+          <input ref="uploadLogoImageFileInputRef" type="file" @change="handleLogoImage" accept="image/*"
             style="display: none;">
         </div>
 
@@ -142,16 +142,33 @@
 
 
   //上传图片作用类型
-  const image_types = reactive({ '1': 'carousel_image', '2': 'log_image' });
+  const image_types = reactive({ '1': 'carousel_image', '2': 'logo_image' });
+//上传logo图片和轮播图图片的限制尺寸、比例
+  const image_dimensions = reactive({
+    logo_image_dimensions :{
+    max_width:200,
+    max_height : 72,
+    min_width : 100,
+    min_height : 40,
+    aspect_ratio:''
+  },
+  carousel_image_dimensions:{
+    max_width:1920,
+    max_height : 1080,
+    min_width : 800,
+    min_height : 450,
+    aspect_ratio:'16/9'
+  }
+
+  })
 
 
-  //预览上传log图片地址
-  const log_image_url = ref();
-  //预览上传log图片img Ref   // 使用ref引用DOM元素
-  const logImageRef = ref(null);
-  //上传log图片input Ref   // 使用ref引用DOM元素
-  const uploadLongImageFileInputRef = ref(null);
-
+  //预览上传logo图片地址
+  const logo_image_url = ref();
+  //预览上传logo图片img Ref   // 使用ref引用DOM元素
+  const logoImageRef = ref(null);
+  //上传logo图片input Ref   // 使用ref引用DOM元素
+  const uploadLogoImageFileInputRef = ref(null);
 
   //预览上传轮播图图片地址
   const carousel_image_url = ref();
@@ -163,51 +180,56 @@
   //点击图片类型单选框选中值  保留选中图片
   function checkImageTypeRadioInfo(val) {
     // console.log('checkColumnRadioInfo =',val);
-    
-    //图片类型下上传图片控件？清除上传文件？
 
-        //显示图片
-        const img = new Image();
-          const minWidth = 800;
-          const minHeight = 450;
-          img.onload = () => {
-             // 预览图片
-      previewImage(image_types[ruleForm.image_type],img,minWidth,minHeight,img.src);
-          }
-          img.src = ruleForm.image_path;
+if(ruleForm.image_path){
+  // base64转文件
+  let image_object=base64toFile(ruleForm.image_path,ruleForm.image_name);
+if(image_object){
+  //拼接图片类型尺寸名称
+const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensions';
+  //图片类型尺寸数据
+const current_image_dimensions =image_dimensions[image_dimensions_name];
+// 校验图片
+    verifyAspectRatioOrDimensions(image_object, current_image_dimensions.aspect_ratio, current_image_dimensions.max_width, current_image_dimensions.max_height, current_image_dimensions.min_width, current_image_dimensions.min_height, String(ruleForm.image_type));
+}
+}
   }
 
 
 
-  //选择log图片
-  function handleLogImageSelect() {
-    uploadLongImageFileInputRef.value.click();
+  // base64转文件
+  function base64toFile(base64Str,fileName) {
+	//1,先将base64转换为blob
+    var arr = base64Str.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    let theBlob = new Blob([u8arr], { type: mime });
+    
+    //2,再将blob转换为file
+	theBlob.lastModifiedDate = new Date();  // 文件最后的修改日期
+	theBlob.name = fileName;                // 文件名
+	return new File([theBlob], fileName, {type: theBlob.type, lastModified: Date.now()});
+}
+
+
+
+  //选择logo图片
+  function handleLogoImageSelect() {
+    uploadLogoImageFileInputRef.value.click();
   }
 
   //TODO 上传文件先转base64,后校验？ 上传文件直接校验？ 
   //TODO verifyAspectRatioOrDimensions函数以上传文件为基准
   //TODO 原上传文件直接校验，出现点击图片类型单选框选中值保留选中图片无法使用校验
   //TODO 修改：上传文件先转base64,后校验，verifyAspectRatioOrDimensions函数以上传文件地址为基准
-  //获取选择的log图片信息
-  function handleLogImage() {
-    const file = uploadLongImageFileInputRef.value.files[0]; // 获取文件信息
-
-    console.log('file:',file);
-
-      // 如果需要在浏览器中预览文件，可以使用FileReader API
-      const reader = new FileReader();
-
-        reader.onload = function(event) {
-        let  dataURL = event.target.result; // 文件的Base64编码
-        console.log('1-dataURL:',dataURL);
-    verifyAspectRatioOrDimensions(file, '', 200, 72, 100, 40, String(ruleForm.image_type));
-
-            // 在这里可以使用dataURL进行预览等操作
-        };
-      
-        reader.readAsDataURL(file);
-  
-
+  //获取选择的logo图片信息
+  function handleLogoImage() {
+    const file = uploadLogoImageFileInputRef.value.files[0]; // 获取文件信息
     //如果没有图片文件，那么直接返回
     if (!file) {
       return;
@@ -220,7 +242,11 @@
     /* 校验图片的文件大小、后缀名 结束*/
 
     // 校验图片比例（值为0则不检验）、尺寸(最大宽、最大高、最小宽、最小高)
-    // verifyAspectRatioOrDimensions(file, '', 200, 72, 100, 40, String(ruleForm.image_type));
+     //拼接图片类型尺寸名称
+const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensions';
+  //图片类型尺寸数据
+ const current_image_dimensions =image_dimensions[image_dimensions_name];
+ verifyAspectRatioOrDimensions(file,current_image_dimensions.aspect_ratio, current_image_dimensions.max_width, current_image_dimensions.max_height, current_image_dimensions.min_width, current_image_dimensions.min_height, String(ruleForm.image_type));
   }
 
 
@@ -253,9 +279,9 @@ if (image_type=== 'carousel_image') {
         // canvas.value.height = image_object.height;
         ctx.drawImage(image_object, 0, 0, minWidth, minHeight);
 
-      } else if (image_type=== 'log_image') {//如果是log图，那么继续
-        // log_image_url.value = URL.createObjectURL(verify_file); //输出地址预览log 
-        log_image_url.value =  image_url; //输出地址预览log 
+      } else if (image_type=== 'logo_image') {//如果是log图，那么继续
+        // logo_image_url.value = URL.createObjectURL(verify_file); //输出地址预览log 
+        logo_image_url.value =  image_url; //输出地址预览log 
       }
 
 }
@@ -310,7 +336,7 @@ if (image_type=== 'carousel_image') {
   function verifyAspectRatioOrDimensions(verify_file, verify_aspect_ratio, verify_image_max_width, verify_image_max_height, verify_image_min_width, verify_image_min_height, image_type) {
     let image = new Image();
     // 不再需要时释放内存
-    // console.log('image.src:',image.src)
+    console.log('校验-ruleForm.image_path:', ruleForm.image_path)
     // if(image.src){
     //   URL.revokeObjectURL(image.src);
     // }
@@ -322,6 +348,8 @@ if (image_type=== 'carousel_image') {
       if (!is_valid_dimensions) {//如果验证图片尺寸失败，直接返回，不执行后续操作
         const error_msg = '不支持图片尺寸！尺寸范围：最大宽' + verify_image_max_width + '，最大高' + verify_image_max_height + '；最小宽' + verify_image_min_width + '，最小高' + verify_image_min_height + '。';
         $message(error_msg, 'error');
+        // 不再需要时释放内存
+        URL.revokeObjectURL(image.src);
         return;
       }
       /* 校验图片尺寸 结束*/
@@ -336,7 +364,9 @@ if (image_type=== 'carousel_image') {
         if (!isValidRatio) {//如果验证图片比例失败，直接返回，不执行后续操作
           const error_msg = '不支持的图片比例！比例范围：' + verify_aspect_ratio + '（宽/高)';
           $message(error_msg, 'error');
-          return false;
+          // 不再需要时释放内存
+          URL.revokeObjectURL(image.src);
+          return;
         }
       }
       /* 校验图片比例 结束*/
@@ -348,7 +378,7 @@ if (image_type=== 'carousel_image') {
       //接收图片base64数据；
       compressionFile(verify_file).then(base64_str => {
         ruleForm.image_path = base64_str;
-        // console.log('接收图片base64数据；', base64_str); // 输出: Hello, world!
+        console.log('接收图片base64数据；', base64_str); // 输出: Hello, world!
       });
     };
     image.src = URL.createObjectURL(verify_file); // 替换为你的图片路径
@@ -416,8 +446,13 @@ if (image_type=== 'carousel_image') {
     /* 校验图片的文件大小、后缀名 结束*/
 
     // 校验图片比例（值为0则不检验）、尺寸(最大宽、最大高、最小宽、最小高)
-    verifyAspectRatioOrDimensions(file, '16/9', 1920, 1080, 800, 450, String(ruleForm.image_type));
-  };
+     //拼接图片类型尺寸名称
+const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensions';
+  //图片类型尺寸数据
+ const current_image_dimensions =image_dimensions[image_dimensions_name];
+ verifyAspectRatioOrDimensions(file,current_image_dimensions.aspect_ratio, current_image_dimensions.max_width, current_image_dimensions.max_height, current_image_dimensions.min_width, current_image_dimensions.min_height, String(ruleForm.image_type));
+
+ };
 
 
 

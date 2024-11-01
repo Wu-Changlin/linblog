@@ -28,10 +28,7 @@ import message from  "@/components/message/message.js";
 //  校验方法
 import verify from "@/utils/verify.js"
 
-
-
 const app = createApp(App);
-
 
 //全局提供方法
 // app.provide('$putData',putData)

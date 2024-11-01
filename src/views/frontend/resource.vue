@@ -31,7 +31,7 @@
   import { useRoute, useRouter } from "vue-router";
   import ContentTag from '@/components/content_tag.vue';
   import Waterfall from '@/components/waterfall.vue';
-  import { debounce, throttle } from '@/hooks/debounce_throttle.js';
+  import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
   import resourceModuleApi from "@/api/frontend/resource.js";//api接口
 
 

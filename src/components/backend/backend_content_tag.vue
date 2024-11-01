@@ -23,7 +23,7 @@
 <script setup>
   import { reactive, ref, nextTick, onMounted, getCurrentInstance, onUnmounted, watch, inject, computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import { debounce, throttle } from '@/hooks/debounce_throttle.js';
+  import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
 
   const route=useRoute();
   const router=useRouter();

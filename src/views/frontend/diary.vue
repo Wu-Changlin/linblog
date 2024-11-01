@@ -33,7 +33,7 @@
   import ContentTag from '@/components/content_tag.vue';
   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
-  import { debounce, throttle } from '@/hooks/debounce_throttle.js';
+  import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
   import diaryModuleApi from "@/api/frontend/diary.js";//api接口
 
   const $message = inject('$message');
