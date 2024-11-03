@@ -40,7 +40,7 @@
 
             <p>本站已运行：</p>
             <div class="run-time-count-content">
-              <WebsiteRunTime :parentPageWebsiteCreationTime="data.website_creation_time"></WebsiteRunTime>
+              <WebsiteRunTime :parentPageWebsiteCreationTime="website_creation_time"></WebsiteRunTime>
             </div>
 
 
@@ -52,7 +52,7 @@
           <h2>标签</h2>
           <div class="tag-count">
             <div class="tag-count-content">
-              <TagCount @getTagCountPageClickTagArticleDataEmit="getTagCountPageClickTagArticleData"
+              <TagCount @getTagCountPageClickTagArticleDataEmit="gotoActiveTagPage"
                 :parentPageTagCountData="tag_count_data"></TagCount>
             </div>
           </div>
@@ -152,18 +152,19 @@
   const is_selected_data = ref();
 
 
-  const data = reactive(
-    {
-      page_head_title: "归档",
-      page_head_keyword: "关键字",
-      page_head_description: "描述归档",
-      website_creation_time: "2023-01-01T00:00:00",
-
-    }
-  );
-
+   //当前页面meta元数据，标题、关键词、描述  开始
+   const current_page_meta_data = reactive({
+    meta_title: '',
+    meta_keywords: '',
+    meta_description: ''
+  });
+  //网站创建时间
+  const website_creation_time = ref('');
+   //网站创建时间
   const website_content_count_data = ref([]);
+   //标签统计
   const tag_count_data = ref([]);
+   //贡献统计
   const contribution_calendar_count_data = ref([]);
 
 
@@ -171,19 +172,14 @@
   const year_dropdown_page_update_year = ref(2024);
   provide('contributionYear', select_contribution_year);//父传子，默认选中当年年份。年份数据
 
-
+  // 更新选中年份在本页中转把值到contribution_calendar贡献图页
   provide('yearDropdownPageUpdateYear', year_dropdown_page_update_year);//父传子，默认选中当年年份。当前选中年份
-
 
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
-      //注入来自layout页面的页面meta元数据
-    // const current_meta_info = inject('current_meta_info');
-
-// 注入来自App.vue页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
+// 注入来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
 const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
-
 
   // 是否开启瀑布流骨架屏 
   const is_loading_contribution_article_list_data = ref(true);
@@ -192,7 +188,13 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
   function getArchivesPageData() {
     archivesModuleApi.getArchivesPageData({})
       .then(response => {
-        updatePageMetaInfoFunction({meta_title:'归档，你好!'});
+        
+        //页面 meta 元数据
+        current_page_meta_data.meta_title=response.meta_title;
+  current_page_meta_data.meta_keywords=response.meta_keywords;
+  current_page_meta_data.meta_description=response.meta_description;
+//使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
+  updatePageMetaInfoFunction(current_page_meta_data);
 
         website_content_count_data.value = response.website_content_count_data;
         tag_count_data.value = response.tag_count_data;
@@ -206,17 +208,8 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
         current_year_month.value = contribution_calendar_count_data.value.current_year_month;
         last_month_article_list_data.value = contribution_calendar_count_data.value.last_month_article_list_data;
 
-
         is_loading.value = false;
         is_loading_contribution_article_list_data.value = false;
-        // setTimeout(() => {
-        // index_tag_data.value = response.tag_data; // 数据加载完毕，关闭骨架屏
-        // index_article_list_data.value = response.article_list_data; // 数据加载完毕，关闭骨架屏
-        // flag.value=true;
-        // is_loading.value=false;
-        // console.log('response:',response);
-        // }, 3000); // 假设加载时间是3秒
-
       })
 
   }
@@ -294,14 +287,12 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
   }
 
 
-  //获取tag_count页选中标签下的博文数据
-  function getTagCountPageClickTagArticleData(active_tag_menu_name, active_tag_id, active_tag_name) {
+  //跳转到选中标签页
+  function gotoActiveTagPage(active_tag_menu_name, active_tag_id, active_tag_name) {
     //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
     updateCurrentActiveTagIdFunction(active_tag_id);
     //跳转到标签所属的菜单栏页
     router.push({ name: active_tag_menu_name, query: { tag_id: active_tag_name }, key: new Date().getTime() });
-
-
   }
 
 

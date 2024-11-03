@@ -19,7 +19,7 @@
       </div>
     </div>
   </div>
- 
+
   <!-- align-items: center; -->
 
   <div class="tag-fixed" :style="{display: is_fixed ? 'block' : 'none'}">
@@ -87,9 +87,6 @@
   import { useRoute, useRouter } from 'vue-router';
   import Skeleton from '@/components/skeleton.vue'
   import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
-
-
-  
 
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
@@ -172,7 +169,6 @@
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
-
   //点击标签
   function clickTag(item) {
     // console.log('tag_id:', tag_id);
@@ -188,7 +184,6 @@
 
   }
 
-
   //使用 provide inject 代替getCurrentInstance
   const $message = inject('$message');
 
@@ -199,7 +194,8 @@
     data.show_arrow_more_tag_data = [];
     data.show_tag_count = 0;
     // data.more_tag_icon = false;//指向下折叠false
-    //如果计算标签数量dom对象为空，直接返回
+    //如果计算标签数量dom对象为空，直接返回(！！！注意开发期间出现dom引用undefined，重复渲染？同一打印出现在不同位置)
+    // console.log('!hiddenTagContentRef.value:',!hiddenTagContentRef.value,',hiddenTagContentRef.value:',hiddenTagContentRef);
     if(!hiddenTagContentRef.value){$message('数据加载出错', 'error');return;}
     // children返回的是元素节点，不包含文本节点，而childNodes则返回所有子节点，包括元素节点和文本节点。(childNodes.length children.length)
     //如果没有子节点，直接返回
@@ -302,7 +298,6 @@
   }
 
   onMounted(() => {
-   
     //如果路由有查询参数tag_id，那么参数值赋值选中标签名变量。
     //(点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）)
     // if(route.query.tag_id){
@@ -316,7 +311,7 @@
       maxItemsPerLines();
     })
     //监听窗口响应式每行最多标签数量
-    window.addEventListener('resize', throttle(() => { maxItemsPerLines() }, 300));//监听窗口缩放 加节流
+    window.addEventListener('resize', throttle(() => { maxItemsPerLines() }, 100));//监听窗口缩放 加节流
     //吸顶效果
     window.addEventListener("scroll", handleScroll, true);
   })

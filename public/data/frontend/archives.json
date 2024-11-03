@@ -1,9 +1,9 @@
 {
   "code":200,
   "data":{
-    "page_head_title": "归档",
-    "page_head_keyword": "关键字",
-    "page_head_description": "描述归档",
+    "meta_title": "归档",
+    "meta_keywords": "关键字",
+    "meta_description": "描述归档",
     "website_creation_time": "2023-01-01T00:00:00",
     "website_content_count_data": [
       { "title": "分类", "count": 6 },

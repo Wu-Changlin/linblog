@@ -1,0 +1,147 @@
+{
+  "code":200,
+  "data":  {
+    "total_pages": 2,
+    "total_count": 12,
+    "current_page": 1,
+    "current_page_limit": 10,
+    "configuration_list_data": [
+      {
+        "configuration_id": 20,
+        "cn_name": "网站关键词",
+        "en_name": "keywords",
+        "form_tag_type": 1, "form_tag_name": "input",
+        "form_tag_value‌s":"",
+        "form_tag_active_value‌":"网站关键词值",
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "configuration_id": 21,
+        "cn_name": "网站描述",
+        "en_name": "desc",
+        "form_tag_type": 1, "form_tag_name": "input",
+        "form_tag_value‌s":"",
+        "form_tag_active_value‌":"网站描述值",
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "configuration_id": 22,
+        "cn_name": "关闭网站",
+        "en_name": "off",
+        "form_tag_type": 3,"form_tag_name": "radio",
+        "form_tag_value‌s":"是,否",
+        "form_tag_active_value‌":"否",
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "configuration_id": 23,
+        "cn_name": "文本域",
+        "en_name": "",
+        "form_tag_type": 2,"form_tag_name": "textarea",
+        "form_tag_value‌s":"",
+        "form_tag_active_value‌":"文本域值",
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "configuration_id": 24,
+        "cn_name": "复选按钮",
+        "en_name": "",
+        "form_tag_type": 4,"form_tag_name": "checkbox",
+        "form_tag_value‌s":"复选按钮值1，复选按钮值2",
+        "form_tag_active_value‌":"复选按钮值1",
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"  
+      },
+      {
+        "configuration_id": 25,
+        "cn_name": "下拉菜单",
+        "en_name": "",
+        "form_tag_type": 5,"form_tag_name": "select",
+        "form_tag_value‌s":"下拉菜单选项1，下拉菜单选项2",
+        "form_tag_active_value‌":"下拉菜单选项2",
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "configuration_id": 30,
+        
+        "cn_name": "下拉菜单1",
+        "en_name": "",
+        "form_tag_type": 5,"form_tag_name": "select",
+        "form_tag_value‌s":"下拉菜单选项2，下拉菜单选项3",
+        "form_tag_active_value‌":"下拉菜单选项2",
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "configuration_id": 31,
+        "cn_name": "复选按钮1",
+        "en_name": "",
+        "form_tag_type": 4,"form_tag_name": "checkbox",
+        "form_tag_value‌s":"复选按钮值2，复选按钮值3",
+        "form_tag_active_value‌":"复选按钮值3",
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "configuration_id": 32,
+        "cn_name": "文本域1",
+        "en_name": "",
+        "form_tag_type": 2,"form_tag_name": "textarea",
+        "form_tag_value‌s":"",
+        "form_tag_active_value‌":"文本域值2",
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "configuration_id": 51,
+       
+        "menu_name": "diary","menu_title": "随笔",
+        "tag_name": "笔记",
+        "tag_keywords":"标签关键词",
+        "tag_description":"标签描述",
+        "is_pulled": 1,
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "configuration_id": 52,
+       "cn_name": "网站关键词1",
+        "en_name": "keywords",
+        "form_tag_type": 1, "form_tag_name": "input",
+        "form_tag_value‌s":"",
+        "form_tag_active_value‌":"网站关键词值1",
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      },
+      {
+        "configuration_id": 53,
+       "cn_name": "网站关键词3",
+        "en_name": "keywords",
+        "form_tag_type": 1, "form_tag_name": "input",
+        "form_tag_value‌s":"",
+        "form_tag_active_value‌":"网站关键词值3",
+        "created_time": "1687938191",
+        "update_time": "1687938191",
+        "delete_time": "1687938191"
+      }
+    ]
+  },
+  "msg":"成功"
+  }
+

@@ -50,6 +50,7 @@
     // 接收爷爷的响应式选中年份数据  选中年份默认值是当年
     const contributionYearInject = inject('contributionYear');
 
+    // 接收父页面的响应式选中年份数据，本页更新选中年份以父页面中转把值到contribution_calendar贡献图页
     const yearDropdownPageUpdateYearInject = inject('yearDropdownPageUpdateYear');
 
     //子传父
@@ -95,12 +96,6 @@
         }
         // console.log('watch-contributionYearInject:',contributionYearInject)
     });
-
-
-
-
-
-
 
 
     // 使用ref来存储watch返回的函数

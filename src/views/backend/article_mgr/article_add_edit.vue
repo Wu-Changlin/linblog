@@ -32,7 +32,7 @@
 
 
               <el-form-item label="栏目" prop="menu_id">
-                <el-radio-group v-model="ruleForm.menu_id" @change="checkColumnRadioInfo">
+                <el-radio-group v-model="ruleForm.menu_id" @change="checkColumnRadio">
                   <el-radio  v-for="item in options_menu_data" :key="item.menu_id" :value="item.menu_id"> {{
                     item.menu_title }}</el-radio>
                 </el-radio-group>
@@ -136,8 +136,8 @@
   }
 
   //点击栏目单选框选中值
-  function checkColumnRadioInfo(val) {
-    // console.log('checkColumnRadioInfo =',val);
+  function checkColumnRadio(val) {
+    // console.log('checkColumnRadio =',val);
     //显示栏目下标签
     options_tags_data.value = response_tags_data.value.filter(tag => tag.menu_id === val);
   }

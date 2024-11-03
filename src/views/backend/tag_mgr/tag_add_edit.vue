@@ -23,15 +23,19 @@
       </el-input>
     </el-form-item>
 
+    <el-form-item label="所属栏目" prop="menu_id">
+      <el-radio-group v-model="ruleForm.menu_id" @change="checkColumnRadio">
+        <el-radio  v-for="item in options_menu_data" :key="item.menu_id" :value="item.menu_id"> {{
+          item.menu_title }}</el-radio>
+      </el-radio-group>
+    </el-form-item>
+
     <el-form-item label="下架" prop="is_pulled">
       <el-switch v-model="ruleForm.is_pulled" inline-prompt active-text="是" inactive-text="否" />
     </el-form-item>
 
-    <el-form-item label="所属栏目" prop="menu_id">
-      <el-select @change="selectColumnInfo" v-model="ruleForm.menu_id" placeholder="请选择">
-        <el-option v-for="item in options_menu_data" :key="item.menu_id" :label="item.menu_title" :value="item.menu_id" />
-      </el-select>
-    </el-form-item>
+    
+  
 
     <el-form-item>
       <div style="width: 100%;">
@@ -73,16 +77,14 @@
   })
 
 
-  
-    //栏目选择器的选中值
-    function selectColumnInfo(val) {
-
-      // 查找相等id返回menu_title。find() 方法返回数组中满足提供的测试函数的第一个元素的值。否则返回 undefined。
-      const current_active_menu_id_data = options_menu_data.value.find(menu => menu.menu_id === ruleForm.menu_id);
+    //点击栏目单选框选中值
+  function checkColumnRadio(val) {
+     // 查找相等id返回menu_title。find() 方法返回数组中满足提供的测试函数的第一个元素的值。否则返回 undefined。
+    const current_active_menu_id_data = options_menu_data.value.find(menu => menu.menu_id === ruleForm.menu_id);
       ruleForm.menu_title=current_active_menu_id_data.menu_title;
       // console.log('ruleForm. ruleForm.menu_title:',ruleForm.menu_title)
       // console.log('selectColumnInfo（val） =',val)
-    }
+  }
 
 
   //校验

@@ -54,6 +54,14 @@
   const current_active_tag_name = ref('');
   const is_empty_article_list_data = ref(false);
 
+   //当前页面meta元数据，标题、关键词、描述  开始
+   const current_page_meta_data = reactive({
+    meta_title: '',
+    meta_keywords: '',
+    meta_description: ''
+  });
+
+
   //没有更多数据占位图（页面已经渲染到最后一页，没有更多数据可以加载渲染。
   //点击标签需初始化，否则因没有更多数据占位导致页面无法滚动到底部，上拉加载更多功能失效）
   const is_no_more_data = ref(false);
@@ -66,10 +74,9 @@
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
-    //注入来自layout页面的页面meta元数据
-    // const current_meta_info = inject('current_meta_info');
+    
 
-// 注入来自App.vue页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
+// 注入来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
 const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
 
@@ -82,7 +89,12 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
       .then(response => {
         // setTimeout(() => {
 
-          updatePageMetaInfoFunction({meta_title:'随笔，你好!'});
+        //页面 meta 元数据
+        current_page_meta_data.meta_title=response.meta_title;
+  current_page_meta_data.meta_keywords=response.meta_keywords;
+  current_page_meta_data.meta_description=response.meta_description;
+//使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
+  updatePageMetaInfoFunction(current_page_meta_data);
 
 
         diary_tag_data.value = response.tag_data;
@@ -140,6 +152,14 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
     diaryModuleApi.getChildClickTag({ tag_id: active_tag_id, tag_name: active_tag_name })
       .then(response => {
         // setTimeout(() => {
+
+        //页面 meta 元数据
+        current_page_meta_data.meta_title=response.meta_title;
+  current_page_meta_data.meta_keywords=response.meta_keywords;
+  current_page_meta_data.meta_description=response.meta_description;
+//使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
+  updatePageMetaInfoFunction(current_page_meta_data);
+
         diary_tag_data.value = response.tag_data;
         diary_article_list_data.value = response.article_list_data;
         diary_carousel_img_data.value = response.carousel_img_data;

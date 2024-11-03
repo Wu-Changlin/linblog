@@ -1,0 +1,17 @@
+
+{
+  "code":200,
+  "data":  {
+      "configuration_id": 24,
+      "cn_name": "复选按钮",
+      "en_name": "",
+      "form_tag_type": 4,"form_tag_name": "checkbox",
+      "form_tag_value‌s":"复选按钮值1，复选按钮值2",
+      "form_tag_active_value‌":"复选按钮值1",
+      "created_time": "1687938191",
+      "update_time": "1687938191",
+      "delete_time": "1687938191"  
+  },
+  "msg":"成功"
+  }
+

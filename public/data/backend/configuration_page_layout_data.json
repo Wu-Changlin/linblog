@@ -1,0 +1,45 @@
+{
+  "code":200,
+  "data":{
+    "table_header": [
+      { "prop": "configuration_id", "label": "configuration_id", "key": "configuration_id" },
+      { "prop": "cn_name", "label": "中文名称", "key": "cn_name" },
+      { "prop": "en_name", "label": "英文名称", "key": "en_name"},
+      { "prop": "form_tag_name", "label": "表单标签", "key": "form_tag_name","scopedSlot":"form_tag_name"},
+      { "prop": "form_tag_value‌s", "label": "标签配置值", "key": "form_tag_value‌s" },
+      { "prop": "form_tag_active_value‌", "label": "活跃配置值", "key": "form_tag_active_value‌" },
+      { "prop": "created_time", "label": "创建时间", "key": "created_time" },
+      { "prop": "update_time", "label": "更新时间", "key": "update_time" },
+      { "prop": "delete_time", "label": "删除时间", "key": "delete_time" }
+    ],
+    "options_form_tag_type_data":[
+      {
+        "form_tag_type":1,
+        "form_tag_name": "input",
+        "form_tag_title":"单行文本"
+      },
+      {
+        "form_tag_type":2,
+        "form_tag_name": "textarea",
+        "form_tag_title":"文本域"
+      },
+      {
+        "form_tag_type":3,
+        "form_tag_name": "radio",
+        "form_tag_title":"单选按钮"
+      },
+      {
+        "form_tag_type":4,
+        "form_tag_name": "checkbox",
+        "form_tag_title":"复选按钮"
+      },
+      {
+        "form_tag_type":5,
+        "form_tag_name": "select",
+        "form_tag_title":"下拉菜单"
+      }
+    ]
+  },
+  "msg":"成功"
+  }
+

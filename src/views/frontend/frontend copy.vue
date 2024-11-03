@@ -31,9 +31,9 @@
 import frontendModuleApi from "@/api/frontend/frontend.js";//api接口
 
 
-
 const $message = inject('$message');
 
+  
   const route = useRoute();
   const router = useRouter();
 
@@ -48,14 +48,6 @@ const $message = inject('$message');
   const current_active_tag_id = ref(1);
   const current_active_tag_name = ref('');
   const is_empty_article_list_data = ref(false);
-
-
-      //当前页面meta元数据，标题、关键词、描述  开始
-	const current_page_meta_data = reactive({
-		meta_title: '',
-		meta_keywords: '',
-		meta_description: ''
-	});
 
   //没有更多数据占位图（页面已经渲染到最后一页，没有更多数据可以加载渲染。
   //点击标签需初始化，否则因没有更多数据占位导致页面无法滚动到底部，上拉加载更多功能失效）
@@ -77,22 +69,13 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
 
 
-  // 获取前端栏页数据（内容标签栏数据、轮播图数据、博文列表数据（瀑布流组件））  
+  //获取前端栏页数据（内容标签栏数据、轮播图数据、博文列表数据（瀑布流组件））  
   function getFrontendPageData() {
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
     is_loading.value=true;
     frontendModuleApi.getFrontendPageData({})
       .then(response => {
         // setTimeout(() => {
-
-    
-        //页面 meta 元数据
-        current_page_meta_data.meta_title=response.meta_title;
-  current_page_meta_data.meta_keywords=response.meta_keywords;
-  current_page_meta_data.meta_description=response.meta_description;
-//使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
-  updatePageMetaInfoFunction(current_page_meta_data);
-
         frontend_tag_data.value = response.tag_data;
         total_pages.value = response.total_pages; //总页数
         current_page.value = response.current_page; //当前页数
@@ -104,8 +87,7 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
         //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
 updateCurrentActiveTagIdFunction(current_active_tag_id.value);
 
-
-
+updatePageMetaInfoFunction({meta_title:'前端，你好!'});
 
         //模拟数据返回随机数量
         let sliced_start = Math.floor(Math.random() * 5) + 1;
@@ -140,15 +122,6 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
     frontendModuleApi.getChildClickTag({ tag_id: active_tag_id, tag_name: active_tag_name,page:1  })
       .then(response => {
         // setTimeout(() => {
-
-        
-        //页面 meta 元数据
-        current_page_meta_data.meta_title=response.meta_title;
-  current_page_meta_data.meta_keywords=response.meta_keywords;
-  current_page_meta_data.meta_description=response.meta_description;
-//使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
-  updatePageMetaInfoFunction(current_page_meta_data);
-
         frontend_tag_data.value = response.tag_data;
         total_pages.value = response.total_pages; //总页数
         current_page.value = response.current_page; //当前页数
@@ -272,7 +245,17 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
 
   }
 
+
+
+
   onMounted(() => {
+
+    // 假设JSON文件与组件在同一目录下
+    // import('./mock-data.json').then(res => {
+    //   items.value = res.data;
+    // }).catch(error => {
+    //   $message('请求未找到', 'error');
+    // });
     // 如果路由没有查询参数tag_id，那么执行getFrontendPageData。
     if (!route.query.tag_id) {
       getFrontendPageData();
@@ -289,9 +272,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
       }
       getChildClickTag(active_tag_id_from_archives_page, active_tag_name_from_archives_page);
     }
-    // updatePageMetaInfoFunction({meta_title:'资源，你好!'});
-    // useMetaInfo(current_page_meta_data);//渲染meta
-    console.log('onMounted:');
+
 
     //   fetchTag();
   });

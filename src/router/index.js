@@ -11,8 +11,6 @@ const routes = [
                 path: '/index',
                 name: "index",
                 component: () => import('@/views/frontend/index.vue'),//引入该路由使用的组件
-                meta: {title: '管理员面板' },
-
             },
 
             {
@@ -71,7 +69,7 @@ const routes = [
                 name:"user_list",
                 component:()=>import('@/views/backend/user_mgr/user_list.vue'),
             },
-           
+        
             {
                 path:'article_list',
                 name:"article_list",
@@ -88,14 +86,14 @@ const routes = [
                 name:"image_list",
                 component:()=>import('@/views/backend/image_mgr/image_list.vue'),
             },
-           
+        
             {
                 path:'menu_list',
                 name:"menu_list",
                 component:()=>import('@/views/backend/menu_mgr/menu_list.vue'),
             },
 
-           
+        
             {
                 path:'auth_list',
                 name:"auth_list",
@@ -108,20 +106,18 @@ const routes = [
                 component:()=>import('@/views/backend/role_mgr/role_list.vue'),
             },
 
-           
-
             {
                 path:'configuration_list',
                 name:"configuration_list",
                 component:()=>import('@/views/backend/configuration_mgr/configuration_list.vue'),
             },
 
-          
-        
-            
-           
+            {
+                path:'config_item',
+                name:"config_item",
+                component:()=>import('@/views/backend/configuration_mgr/config_item.vue'),
+            },
 
-           
         ]
     },
 

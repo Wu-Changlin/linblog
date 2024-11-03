@@ -57,8 +57,22 @@
   import FloatingBtnSets from "@/components/floating_btn_sets.vue";
   import searchModuleApi from "@/api/frontend/search.js";//api接口
   import layoutModuleApi from "@/api/frontend/layout.js";//api接口
+  import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
 
+
+  const route = useRoute();
   const $message = inject('$message');
+
+const search_page_search_keyword = ref('');
+const search_keyword_count = ref(0);
+const search_keyword_match_data_page = ref(1);
+const total_pages = ref(0); //总页数
+const current_page = ref(1);//当前页数
+//没有更多数据占位图（页面已经渲染到最后一页，没有更多数据可以加载渲染。
+//再次搜索需初始化，否则因没有更多数据占位导致页面无法滚动到底部，上拉加载更多功能失效）
+const is_no_more_data = ref(false);
+const is_loading = ref(true);
+const search_page_search_article_list_data = ref([]);//关键词文章列表
 
   const search_page_article_count = ref(0);
   const search_page_article_list_data = ref();
@@ -109,24 +123,35 @@
 
   }
 
-  const route = useRoute();
 
-  const search_page_search_keyword = ref('');
-  const search_keyword_count = ref(0);
-  const search_keyword_match_data_page = ref(1);
-  const total_pages = ref(0); //总页数
-  const current_page = ref(1);//当前页数
-  //没有更多数据占位图（页面已经渲染到最后一页，没有更多数据可以加载渲染。
-  //再次搜索需初始化，否则因没有更多数据占位导致页面无法滚动到底部，上拉加载更多功能失效）
-  const is_no_more_data = ref(false);
-  const is_loading = ref(true);
-  const search_page_search_article_list_data = ref([]);//关键词文章列表
+
+
+
+/* 修改当前页面meta元数据，标题、关键词、描述  开始  */
+
+// meta元数据，标题、关键词、描述 
+const current_meta_title = ref('');
+const current_meta_keywords = ref('');
+const current_meta_description = ref('');
+
+// 调用封装函数使用@unhead/vue的useHead修改页面meta元数据
+useMetaInfo(current_meta_title,current_meta_keywords,current_meta_description);
+
+/* 修改当前页面meta元数据，标题、关键词、描述  结束  */
+
+
 
   //获取搜索关键字匹配结果   总页数>=当前页数 ，模拟时总页数没有axios赋值，随机数赋值
   function getSearchKeywordMatchData() {
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
     searchModuleApi.getSearchKeywordMatchData({ search_keyword: search_page_search_keyword.value }, { responseType: 'json' })
       .then(response => {
+
+        //页面 meta 元数据
+current_meta_title.value = response.meta_title;
+     current_meta_keywords.value = response.meta_keywords;
+     current_meta_description.value = response.meta_description;
+     //使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
 
         search_keyword_count.value = response.search_keyword_count; // 博文数量
         total_pages.value = response.total_pages; //总页数

@@ -56,6 +56,14 @@
   const current_active_tag_name = ref('');
   const is_empty_article_list_data = ref(false);
 
+   //当前页面meta元数据，标题、关键词、描述  开始
+   const current_page_meta_data = reactive({
+    meta_title: '',
+    meta_keywords: '',
+    meta_description: ''
+  });
+
+
   //没有更多数据占位图（页面已经渲染到最后一页，没有更多数据可以加载渲染。
   //点击标签需初始化，否则因没有更多数据占位导致页面无法滚动到底部，上拉加载更多功能失效）
   const is_no_more_data = ref(false);
@@ -68,10 +76,7 @@
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
-      //注入来自layout页面的页面meta元数据
-    // const current_meta_info = inject('current_meta_info');
-
-// 注入来自App.vue页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
+// 注入来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
 const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
 
@@ -84,8 +89,15 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
     // 如果你想使用axios来模拟请求，可以这样做
     backendModuleApi.getBackendPageData({})
       .then(response => {
-updatePageMetaInfoFunction({meta_title:'后端，你好!'});
-    
+
+
+        //页面 meta 元数据
+        current_page_meta_data.meta_title=response.meta_title;
+  current_page_meta_data.meta_keywords=response.meta_keywords;
+  current_page_meta_data.meta_description=response.meta_description;
+//使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
+  updatePageMetaInfoFunction(current_page_meta_data);
+
         backend_tag_data.value = response.tag_data;
         backend_article_list_data.value = response.article_list_data;
         backend_carousel_img_data.value = response.carousel_img_data;
@@ -141,7 +153,13 @@ updatePageMetaInfoFunction({meta_title:'后端，你好!'});
     backendModuleApi.getChildClickTag({ tag_id: active_tag_id, tag_name: active_tag_name, page: 1 })
       .then(response => {
   
-
+//页面 meta 元数据
+        current_page_meta_data.meta_title=response.meta_title;
+  current_page_meta_data.meta_keywords=response.meta_keywords;
+  current_page_meta_data.meta_description=response.meta_description;
+//使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
+  updatePageMetaInfoFunction(current_page_meta_data);
+  
         backend_tag_data.value = response.tag_data;
         backend_article_list_data.value = response.article_list_data;
         backend_carousel_img_data.value = response.carousel_img_data;
@@ -268,39 +286,6 @@ updatePageMetaInfoFunction({meta_title:'后端，你好!'});
 
   }
 
-
-// import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
-
-
-//   const mate_title_data=ref();
-
-// //   import { useMeta } from 'vue-meta'
-
-//   // 修改当前页面meta元数据，标题、关键词、描述  开始
-
-//   let current_meta_info = reactive({
-//     meta_title: '后端',
-//     meta_keywords: '后端',
-//     meta_description: '后端'
-//   });
-//   console.log('current_meta_info:', typeof current_meta_info, ',current_meta_info:', current_meta_info);
-
-
-
-// onUpdated(() => {
-//   useMetaInfo(current_meta_info);//渲染meta
-
-  
-// //   useMeta({
-// //     title: mate_title_data.value,
-// //     meta: [
-// //         { name: 'keywords', content:'后端'},
-// //         { name: 'description', content:'后端' }
-// //     ]
-// // })
-//   })
-
-
   onMounted(() => {
     // 如果路由没有查询参数tag_id，那么执行getFrontendPageData。
     if (!route.query.tag_id) {
@@ -317,7 +302,7 @@ updatePageMetaInfoFunction({meta_title:'后端，你好!'});
       }
       getChildClickTag(active_tag_id_from_archives_page, active_tag_name_from_archives_page);
     }
-    //   fetchTag();
+  
   });
 
 

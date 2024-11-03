@@ -104,7 +104,7 @@ function submitLogin(){
 
 //提交数据进行重置密码
 function submitRetrievePassword(){
-  formDataRef.value.validate((valid) => {
+  formDataRef.value.validate((valid,fields) => {
     if (valid) {
       console.log("重置密码:",login_form_data)
       $message('登录成功', 'success');

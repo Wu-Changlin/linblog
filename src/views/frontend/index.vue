@@ -4,8 +4,9 @@
     <!-- <div style="position: sticky;top:72px;z-index: 1000;"> -->
     <div style="padding-top:72px;">
 
-    <ContentTag :parentPageTagData="index_tag_data"  :currentActiveTagName="current_active_tag_name" @childClickTag="getChildClickTag" v-if="flag"></ContentTag>
-  </div>
+      <ContentTag :parentPageTagData="index_tag_data" :currentActiveTagName="current_active_tag_name"
+        @childClickTag="getChildClickTag" v-if="flag"></ContentTag>
+    </div>
     <div class="feeds-container">
 
       <!-- <ContentCarouselImg></ContentCarouselImg> -->
@@ -25,16 +26,14 @@
   import Waterfall from '@/components/waterfall.vue';
   import Footer from '@/components/footer.vue';
   import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
-import indexModuleApi from "@/api/frontend/index.js";//api接口
+  import indexModuleApi from "@/api/frontend/index.js";//api接口
 
 
 
   const route = useRoute();
   const router = useRouter();
-
-const $message = inject('$message');
-
-
+  // 消息提示
+  const $message = inject('$message');
 
   const flag = ref(false);
   const is_loading = ref(true);
@@ -49,7 +48,12 @@ const $message = inject('$message');
   const website_approve_title = ref('');//备案号
   const website_approve_url = ref('');//查询备案号链接
 
-
+  //当前页面meta元数据，标题、关键词、描述  开始
+  const current_page_meta_data = reactive({
+    meta_title: '',
+    meta_keywords: '',
+    meta_description: ''
+  });
 
   //没有更多数据占位图（页面已经渲染到最后一页，没有更多数据可以加载渲染。
   //点击标签需初始化，否则因没有更多数据占位导致页面无法滚动到底部，上拉加载更多功能失效）
@@ -63,11 +67,8 @@ const $message = inject('$message');
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
-      //注入来自layout页面的页面meta元数据
-    // const current_meta_info = inject('current_meta_info');
-
-// 注入来自App.vue页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
-const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
+  // 注入来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
+  const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
 
   //获取首页数据（内容标签栏数据、博文列表数据（瀑布流组件））  
@@ -76,8 +77,12 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
     indexModuleApi.getIndexPageData({})
       .then(response => {
 
-updatePageMetaInfoFunction({meta_title:'首页，你好!'});
-
+        //页面 meta 元数据
+        current_page_meta_data.meta_title = response.meta_title;
+        current_page_meta_data.meta_keywords = response.meta_keywords;
+        current_page_meta_data.meta_description = response.meta_description;
+        //使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
+        updatePageMetaInfoFunction(current_page_meta_data);
 
         index_tag_data.value = response.tag_data; // 标签数据
         index_article_list_data.value = response.article_list_data; // // 博文列表数据
@@ -87,6 +92,7 @@ updatePageMetaInfoFunction({meta_title:'首页，你好!'});
         website_approve_url.value = response.website_approve_url;//查询备案号链接
         //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
         updateCurrentActiveTagIdFunction(current_active_tag_id.value);
+
 
         flag.value = true;
         is_loading.value = false;
@@ -100,6 +106,15 @@ updatePageMetaInfoFunction({meta_title:'首页，你好!'});
     is_loading.value = true;
     indexModuleApi.getChildClickTag({ tag_id: active_tag_id, tag_name: active_tag_name, page: 1 })
       .then(response => {
+
+        //页面 meta 元数据
+        current_page_meta_data.meta_title = response.meta_title;
+
+        current_page_meta_data.meta_keywords = response.meta_keywords;
+        current_page_meta_data.meta_description = response.meta_description;
+        //使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
+        updatePageMetaInfoFunction(current_page_meta_data);
+
         index_tag_data.value = response.tag_data; // 标签数据
         index_article_list_data.value = response.article_list_data; // // 博文列表
         current_active_tag_id.value = response.current_active_tag_id;
@@ -120,13 +135,9 @@ updatePageMetaInfoFunction({meta_title:'首页，你好!'});
         flag.value = true;
         is_loading.value = false;
 
-        
+
       })
   }
-
-
-  
-
 
 
   onMounted(() => {
@@ -149,9 +160,7 @@ updatePageMetaInfoFunction({meta_title:'首页，你好!'});
       getChildClickTag(active_tag_id_from_archives_page, active_tag_name_from_archives_page);
     }
 
-
   });
-
 
 
 
@@ -172,6 +181,7 @@ updatePageMetaInfoFunction({meta_title:'首页，你好!'});
     overflow: auto;
     /* 底部栏内容高度 */
     margin-bottom: -60px;
+
     .feeds-container {
       /* top: 72px; */
       position: relative;

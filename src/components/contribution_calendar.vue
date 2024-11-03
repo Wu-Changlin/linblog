@@ -38,7 +38,7 @@
                   </el-tooltip>
                     <span>
                       {{ item.month }} -{{item.date}} : {{item.number}}次贡献
-                       
+                      
                     </span>
                     
                   </div>

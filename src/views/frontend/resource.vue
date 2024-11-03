@@ -50,6 +50,14 @@
   const current_active_tag_name = ref('');
   const is_empty_article_list_data = ref(false);
 
+
+    //当前页面meta元数据，标题、关键词、描述  开始
+	const current_page_meta_data = reactive({
+		meta_title: '',
+		meta_keywords: '',
+		meta_description: ''
+	});
+
   //没有更多数据占位图（页面已经渲染到最后一页，没有更多数据可以加载渲染。
   //点击标签需初始化，否则因没有更多数据占位导致页面无法滚动到底部，上拉加载更多功能失效）
   const is_no_more_data = ref(false);
@@ -62,15 +70,10 @@
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
-        //注入来自layout页面的页面meta元数据
-    // const current_meta_info = inject('current_meta_info');
+        
 
-// 注入来自App.vue页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
+// 注入来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
 const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
-
-
-
-
 
   //获取资源栏页数据（内容标签栏数据、轮播图数据、博文列表数据（瀑布流组件）） 
   function getResourcePageData() {
@@ -79,12 +82,17 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
     // 如果你想使用axios来模拟请求，可以这样做
     resourceModuleApi.getResourcePageData({})
       .then(response => {
-      
-        updatePageMetaInfoFunction({meta_title:'资源，你好!'});
-        console.log('getResourcePageData:');
+
+        //页面 meta 元数据
+        current_page_meta_data.meta_title=response.meta_title;
+  current_page_meta_data.meta_keywords=response.meta_keywords;
+  current_page_meta_data.meta_description=response.meta_description;
+//使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
+  updatePageMetaInfoFunction(current_page_meta_data);
 
         resource_tag_data.value = response.tag_data;
         resource_article_list_data.value = response.article_list_data;
+        console.log('resource_article_list_data.value:', resource_article_list_data.value)
 
         total_pages.value = response.total_pages; //总页数
         current_page.value = response.current_page; //当前页数
@@ -93,8 +101,6 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
         current_active_tag_name.value = response.current_active_tag_name;
         //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
         updateCurrentActiveTagIdFunction(current_active_tag_id.value);
-
-
 
         //模拟数据返回随机数量
         let sliced_start = Math.floor(Math.random() * 5) + 1;
@@ -120,10 +126,6 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
 
       })
-      .catch(error => {
-
-        $message('请求未找到', 'error');
-      });
   }
 
 
@@ -135,6 +137,14 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
     is_loading.value = true;
     resourceModuleApi.getChildClickTag({ tag_id: active_tag_id, tag_name: active_tag_name })
       .then(response => {
+
+        //页面 meta 元数据
+        current_page_meta_data.meta_title=response.meta_title;
+  current_page_meta_data.meta_keywords=response.meta_keywords;
+  current_page_meta_data.meta_description=response.meta_description;
+//使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
+  updatePageMetaInfoFunction(current_page_meta_data);
+
 
         resource_tag_data.value = response.tag_data;
         resource_article_list_data.value = response.article_list_data;
@@ -171,10 +181,6 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
         is_loading.value = false;
 
       })
-      .catch(error => {
-
-        $message('请求未找到', 'error');
-      });
 
   }
 
@@ -256,14 +262,8 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
           // is_next_page_loading.value = false;//取消加载中动画
         }
       })
-      .catch(error => {
-
-        $message('请求未找到', 'error');
-      });
-
 
   }
-
 
 
 
@@ -283,7 +283,9 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
       }
       getChildClickTag(active_tag_id_from_archives_page, active_tag_name_from_archives_page);
     }
-    //   fetchTag();
+    
+    console.log('onMounted')
+
   });
 
 </script>

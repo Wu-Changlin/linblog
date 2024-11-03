@@ -147,6 +147,8 @@
   import '/public/github-markdown.css';//使用github-markdown样式渲染HTML内容
   import articleModuleApi from "@/api/frontend/article.js";//api接口
   import layoutModuleApi from "@/api/frontend/layout.js";//api接口
+	import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
+
 
   const $message = inject('$message');
 
@@ -184,6 +186,19 @@
     license_description: "版权描述",
 
   })
+
+/* 修改当前页面meta元数据，标题、关键词、描述  开始  */
+
+// meta元数据，标题、关键词、描述 
+const current_meta_title = ref('');
+const current_meta_keywords = ref('');
+const current_meta_description = ref('');
+
+// 调用封装函数使用@unhead/vue的useHead修改页面meta元数据
+useMetaInfo(current_meta_title,current_meta_keywords,current_meta_description);
+
+/* 修改当前页面meta元数据，标题、关键词、描述  结束  */
+
   //获取博文详情数据
   function getArticlePageData() {
     articleModuleApi.getArticlePageData({})
@@ -213,6 +228,15 @@
         data.license_url = response.license_url;
         data.license_description = response.license_description;
 
+
+         //页面 meta 元数据
+        current_meta_title.value = response.meta_title;
+        current_meta_keywords.value = response.meta_keywords;
+        current_meta_description.value = response.meta_description;
+        //使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
+        // updatePageMetaInfoFunction(current_page_meta_data);
+
+
         //获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
         getLayoutLogOrMenuListData()
 
@@ -223,6 +247,7 @@
   }
 
 
+ 
   onMounted(() => {
     // getArticleDetail
     //两重校验路由查询参数，路由表加页面;否: 导航到404页面。 

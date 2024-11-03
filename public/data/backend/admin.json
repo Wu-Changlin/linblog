@@ -120,6 +120,13 @@
           "menu_name": "configuration_list",
           "menu_path": "/admin/configuration_list",
           "icon": "configuration_list"
+        },
+        {
+          "menu_id": 41,
+          "menu_title": "配置项",
+          "menu_name": "config_item",
+          "menu_path": "/admin/config_item",
+          "icon": "configitem"
         }
       ]
     }
