@@ -1,14 +1,14 @@
 import axiosService from "@/utils/request.js";  // 导入axiosService中创建的axios实例
 
 
-//archives 模块
+//home 模块
 
 
 /** * post方法，对应post请求 * @param {String} url [请求的url地址] * @param {Object} params [请求时携带的参数] */
-const archives = {    
+const home = {    
   //获取归档页网站统计栏、标签统计栏、贡献统计栏数据
-getArchivesPageData(params) {
-        return axiosService.post("/data/frontend/archives.json", params,{headers:{'Content-Type': 'application/json'}}) 
+getHomePageData(params) {
+        return axiosService.post("/data/backend/home.json", params,{headers:{'Content-Type': 'application/json'}}) 
         //是将对象 序列化成URL的形式，以&进行拼接   
         .then(response => {
             //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -55,4 +55,4 @@ getArchivesPageData(params) {
 }
 
 
-export default  archives;
+export default  home;

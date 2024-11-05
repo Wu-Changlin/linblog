@@ -30,10 +30,10 @@
     import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';//防抖、节流
 	import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
 
-
-
     const $message = inject('$message');
-    // 修改当前选中菜单id 结束
+
+
+
     const flag = ref(false)
     const admin_page_log = ref();
     const admin_page_menu_list_data = ref();
@@ -49,7 +49,7 @@
     }
 
 
-    // 修改当前侧边栏菜单折叠或展开 开始
+    /* 修改当前侧边栏菜单折叠或展开 开始*/
 
     const is_collapse_side_menu = ref(false);
     // 提供数据
@@ -63,9 +63,6 @@
     // 暴露方法(修改当前侧边栏菜单折叠或展开的方法)供子组件调用
     provide('updateIsCollapseSideMenuFunction', updateIsCollapseSideMenuFunction);
 
-    // 修改当前侧边栏菜单折叠或展开 结束
-
-
     //监听窗口响应式设置折叠菜单
     function settingCollapseSideMenu() {
         let page_width = window.innerWidth;
@@ -75,8 +72,26 @@
 
     }
 
+  /*修改当前侧边栏菜单折叠或展开 结束*/
+    
+	/*修改当前选中标签id 开始*/
 
-    // 修改当前页面meta元数据，标题、关键词、描述  开始
+	const current_active_tag_id = ref(0);
+	// 提供数据
+	provide('currentActiveTagId', current_active_tag_id);
+
+	// 修改当前选中标签id的方法
+	function updateCurrentActiveTagIdFunction(new_active_tag_id) {
+		current_active_tag_id.value = new_active_tag_id;
+	}
+
+	// 暴露方法(修改当前选中标签id的方法)供子组件调用
+	provide('updateCurrentActiveTagIdFunction', updateCurrentActiveTagIdFunction);
+
+	/* 修改当前选中标签id 结束*/
+
+
+    /*修改当前页面meta元数据，标题、关键词、描述  开始*/
 
 	// meta元数据，标题、关键词、描述 
 	const current_meta_title = ref('');
@@ -104,7 +119,7 @@
 	// 暴露方法(修改当前页面meta元数据，标题、关键词、描述的方法 )供子组件调用
 	provide('updateCurrentMetaInfoFunction', updateCurrentMetaInfoFunction);
 
-	// 修改当前页面meta元数据，标题、关键词、描述  结束
+	/* 修改当前页面meta元数据，标题、关键词、描述  结束*/
 
 
 

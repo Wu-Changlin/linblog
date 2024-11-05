@@ -25,6 +25,16 @@
                     </div>
 
                     <div v-else>
+
+                        <!-- 访问IP统计栏 开始-->
+                        <h2>访问IP</h2>
+                        <div class="visits-ip-count">
+                            <div class="visits-ip-count-content">
+                                <ChartPie :parentPageVisitsIpCountData="visits_ip_count_data"></ChartPie>
+                            </div>
+                        </div>
+                        <!-- 访问IP统计栏 结束-->
+
                         <!-- 网站统计栏 开始-->
                         <h2>网站统计</h2>
                         <!-- 网站内容 开始-->
@@ -46,7 +56,6 @@
                                 <WebsiteRunTime :parentPageWebsiteCreationTime="website_creation_time"></WebsiteRunTime>
                             </div>
 
-
                         </div>
                         <!-- 运行时间 结束-->
                         <!-- 网站统计栏 结束-->
@@ -59,8 +68,6 @@
                                     :parentPageTagCountData="tag_count_data"></TagCount>
                             </div>
                         </div>
-
-
                         <!-- 标签统计栏 结束-->
 
 
@@ -72,9 +79,11 @@
                                 <h3 style="flex: 1;">最近一年贡献： {{ last_year_contribution_count}} 次</h3>
 
                                 <div>
+
                                     <YearDropdown
                                         :yearDropdown="contribution_calendar_count_data.contribution_year_list"
                                         @yearDropdownPageUpdateYearEmit="getClickYearContributionData"></YearDropdown>
+
                                 </div>
 
                             </div>
@@ -136,6 +145,7 @@
 
 <script setup>
     import { ref, reactive, onMounted, provide, inject, watch, onUnmounted } from "vue";
+    import ChartPie from '@/components/chart_pie.vue';
     import WebsiteContentCount from '@/components/website_content_count.vue';
     import WebsiteRunTime from '@/components/website_run_time.vue';
     import ContributionCalendar from '@/components/contribution_calendar.vue';
@@ -169,6 +179,8 @@
         meta_keywords: '',
         meta_description: ''
     });
+
+    const visits_ip_count_data=ref();
     //网站创建时间
     const website_creation_time = ref('');
     //网站创建时间
@@ -195,11 +207,11 @@
     // 是否开启瀑布流骨架屏 
     const is_loading_contribution_article_list_data = ref(true);
 
-    //获取归档页网站统计栏、标签统计栏、贡献统计栏数据
-    function getArchivesPageData() {
-        homeModuleApi.getArchivesPageData({})
+    //获取后台首页网站统计栏、标签统计栏、贡献统计栏数据
+    function getHomePageData() {
+        homeModuleApi.getHomePageData({})
             .then(response => {
-
+                // visits_ip_count_data
                 //页面 meta 元数据
                 current_page_meta_data.meta_title = response.meta_title;
                 current_page_meta_data.meta_keywords = response.meta_keywords;
@@ -207,10 +219,20 @@
                 //使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
                 updatePageMetaInfoFunction(current_page_meta_data);
 
+                //数组类型
+                visits_ip_count_data.value=response.visits_ip_count_data;
+
+                // 使用展开运算符转换数组类型为对象类型
+                visits_ip_count_data.value = {
+                ...visits_ip_count_data.value[0],
+                };
+
+                // console.log('visits_ip_count_data:',visits_ip_count_data.value);
+
                 website_content_count_data.value = response.website_content_count_data;
                 tag_count_data.value = response.tag_count_data;
                 contribution_calendar_count_data.value = response.contribution_calendar_count_data;
-
+                
                 current_year_contribution_data.value = contribution_calendar_count_data.value.current_year_contribution_data;
                 last_year_contribution_count.value = contribution_calendar_count_data.value.last_year_contribution_count;
                 select_contribution_year.value = contribution_calendar_count_data.value.current_year;
@@ -226,7 +248,7 @@
     }
 
     onMounted(() => {
-        getArchivesPageData()
+        getHomePageData()
     });
 
 
@@ -256,9 +278,6 @@
                 // console.log('current_year_contribution_data:',JSON.stringify(current_year_contribution_data.value)); 
                 // }, 3000); // 假设加载时间是3秒
             })
-            .catch(error => {
-                $message('请求未找到', 'error');
-            });
 
     }
 
@@ -286,9 +305,6 @@
                     // console.log('current_year_contribution_data:',JSON.stringify(current_year_contribution_data.value)); 
                     // }, 3000); // 假设加载时间是3秒
                 })
-                .catch(error => {
-                    $message('请求未找到', 'error');
-                });
 
         } else {
             select_contribution_year.value = contribution_day_year;
@@ -339,21 +355,32 @@
 
     }
 
-
-
     .page-container {
         margin-top: 72px;
         background-color: var(--bg);
         height: 100%;
     }
 
-
-
-
     h2 {
         width: 100%;
         /* max-width:1260px;*/
         border-bottom: 3px solid #2ECC71;
+    }
+
+
+    .visits-ip-count {
+        width: 100%;
+        /* max-width:1260px;*/
+        user-select: none;
+        -webkit-user-select: none;
+        align-items: center;
+        justify-content: center;
+
+        .visits-ip-count-content {
+            padding: 20px;
+            /* box-sizing: border-box; */
+        }
+
     }
 
 

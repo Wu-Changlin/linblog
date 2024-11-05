@@ -161,25 +161,17 @@
             }
         });
 
-        let objects = [{ name: 'cbox', v: ['x', 'a'] }, { name: 'i', v: 'k' }];
-
-        // 提取configuration_id和form_tag_active_value值，并将form_tag_active_value值(数组)转换为字符串。
-        // 提交部分数据，例如configuration_id和form_tag_active_value‌
-        let part_data = config_item_list_data.value.map(obj => {
+         // 提取configuration_id和form_tag_active_value值，并将form_tag_active_value值(数组)转换为字符串。
+        // 提交部分数据，例如configuration_id和form_tag_active_value‌。创建一个新的对象，键是configuration_id，值是对应的form_tag_active_value
+        const configuration_id_or_form_tag_active_value_Map_to_obj = config_item_list_data.value.reduce((acc, obj) => {
             let configuration_id = obj.configuration_id;
             let form_tag_active_value = Array.isArray(obj.form_tag_active_value) ? obj.form_tag_active_value.join(',') : obj.form_tag_active_value; // 如果v是数组，使用join转换成字符串
-            return { configuration_id, form_tag_active_value };
-        });
+            acc[configuration_id] = form_tag_active_value;
+            return acc;
+        }, {});
 
-
-
-        let part_data_to_str = JSON.stringify(part_data);
-
-        let submit_data = {
-            part_data: part_data_to_str
-        }
-
-        configurationModuleApi.batchEditConfigItem(submit_data)
+    //提交批量修改表单数据
+        configurationModuleApi.batchEditConfigItem(configuration_id_or_form_tag_active_value_Map_to_obj)
             .then(response => {
                 $message('成功修改', 'success');
 
