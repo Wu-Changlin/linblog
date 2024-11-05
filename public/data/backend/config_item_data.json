@@ -6,96 +6,96 @@
         "configuration_id": 20,
         "cn_name": "网站关键词",
         "form_tag_name": "input",
-        "form_tag_value‌s": "",
-        "form_tag_active_value‌": "网站关键词值"
+        "form_tag_values": "",
+        "form_tag_active_value": "网站关键词值"
 
       },
       {
         "configuration_id": 21,
         "cn_name": "网站描述",
         "form_tag_name": "input",
-        "form_tag_value‌s": "",
-        "form_tag_active_value‌": "网站描述值"
+        "form_tag_values": "",
+        "form_tag_active_value": "网站描述值"
         
       },
       {
         "configuration_id": 22,
         "cn_name": "关闭网站",
         "form_tag_name": "radio",
-        "form_tag_value‌s": "是,否",
-        "form_tag_active_value‌": "否"
+        "form_tag_values": "是,否",
+        "form_tag_active_value": "否"
         
       },
       {
         "configuration_id": 23,
         "cn_name": "文本域",
         "form_tag_name": "textarea",
-        "form_tag_value‌s": "",
-        "form_tag_active_value‌": "文本域值"
+        "form_tag_values": "",
+        "form_tag_active_value": "文本域值"
         
       },
       {
         "configuration_id": 24,
         "cn_name": "复选按钮",
         "form_tag_name": "checkbox",
-        "form_tag_value‌s": "复选按钮值1，复选按钮值2",
-        "form_tag_active_value‌": "复选按钮值1"
+        "form_tag_values": "复选按钮值1,复选按钮值2",
+        "form_tag_active_value": ["复选按钮值1"]
         
       },
       {
         "configuration_id": 25,
         "cn_name": "下拉菜单",
         "form_tag_name": "select",
-        "form_tag_value‌s": "下拉菜单选项1，下拉菜单选项2",
-        "form_tag_active_value‌": "下拉菜单选项2"
+        "form_tag_values": "下拉菜单选项1,下拉菜单选项2",
+        "form_tag_active_value": "下拉菜单选项2"
         
       },
       {
         "configuration_id": 30,
         "cn_name": "下拉菜单1",
         "form_tag_name": "select",
-        "form_tag_value‌s": "下拉菜单选项2，下拉菜单选项3",
-        "form_tag_active_value‌": "下拉菜单选项2"
+        "form_tag_values": "下拉菜单选项3,下拉菜单选项4",
+        "form_tag_active_value": "下拉菜单选项4"
         
       },
       {
         "configuration_id": 31,
         "cn_name": "复选按钮1",
         "form_tag_name": "checkbox",
-        "form_tag_value‌s": "复选按钮值2，复选按钮值3",
-        "form_tag_active_value‌": "复选按钮值3"
+        "form_tag_values": "复选按钮值3,复选按钮值4",
+        "form_tag_active_value":["复选按钮值4"]
         
       },
       {
         "configuration_id": 32,
         "cn_name": "文本域1",
         "form_tag_name": "textarea",
-        "form_tag_value‌s": "",
-        "form_tag_active_value‌": "文本域值2"
+        "form_tag_values": "",
+        "form_tag_active_value": "文本域值2"
         
       },
       {
         "configuration_id": 51,
         "cn_name": "文本域4",
         "form_tag_name": "textarea",
-        "form_tag_value‌s": "",
-        "form_tag_active_value‌": "文本域值4"
+        "form_tag_values": "",
+        "form_tag_active_value": "文本域值4"
         
       },
       {
         "configuration_id": 52,
         "cn_name": "网站关键词1",
         "form_tag_name": "input",
-        "form_tag_value‌s": "",
-        "form_tag_active_value‌": "网站关键词值1"
+        "form_tag_values": "",
+        "form_tag_active_value": "网站关键词值1"
         
       },
       {
         "configuration_id": 53,
         "cn_name": "网站关键词3",
         "form_tag_name": "input",
-        "form_tag_value‌s": "",
-        "form_tag_active_value‌": "网站关键词值3"
+        "form_tag_values": "",
+        "form_tag_active_value": "网站关键词值3"
         
       }
     ]

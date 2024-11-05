@@ -45,10 +45,7 @@
 
 		</el-aside>
 
-
-
 	</div>
-
 
 </template>
 
@@ -59,8 +56,6 @@
 	const router = useRouter();
 	// menu_name: string //菜单唯一标识，与路由名保持一致
 	// menu_title: string //菜单显示名称
-
-
 
 	const is_collapse_side_menu = inject('isCollapseSideMenu');
 
@@ -74,11 +69,8 @@
 	//侧边栏菜单点击
 	function clickMenu(menu_path) {
 		// console.log('menu_path:', menu_path);
-
 		//路由跳转
 		router.push({path: menu_path})
-
-
 	}
 
 	//计算属性active_menu_name来获取路由的名称高亮对应菜单项

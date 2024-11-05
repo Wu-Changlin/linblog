@@ -15,7 +15,8 @@
       </el-form-item>
   
       <el-form-item label="英文名称" prop="en_name">
-        <el-input v-model="ruleForm.en_name" placeholder="亲，请输入英文名称"></el-input>
+        <!-- 非英文的全局替换成空 -->
+        <el-input v-model="ruleForm.en_name" placeholder="亲，请输入英文名称"  @input="ruleForm.en_name =ruleForm.en_name.replace(/[^a-zA-Z ]+/g,'')"></el-input>
       </el-form-item>
 
       <el-form-item label="表单标签" prop="form_tag_type">
@@ -90,7 +91,7 @@
     const rules = {
       email: [
         { required: true, message: "请输入邮箱" },
-        { maxlength: 150, message: "邮箱长度超限" },
+        { max: 50, message: "邮箱长度超限" },
         // { validator: proxy.$verify.email, message: "邮箱格式有误" },
       ],
     };

@@ -575,7 +575,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
   const rules = {
     email: [
       { required: true, message: "请输入邮箱" },
-      { maxlength: 150, message: "邮箱长度超限" },
+      { max: 50, message: "邮箱长度超限" },
       // { validator: proxy.$verify.email, message: "邮箱格式有误" },
     ],
   };

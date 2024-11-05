@@ -90,6 +90,8 @@
 
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
+    //使用 provide inject 代替getCurrentInstance
+    const $message = inject('$message');
 
   const props = defineProps({
     parentPageTagData: {//父页面传标签数据
@@ -184,8 +186,7 @@
 
   }
 
-  //使用 provide inject 代替getCurrentInstance
-  const $message = inject('$message');
+
 
   //每行最多标签数量
   function maxItemsPerLines() {

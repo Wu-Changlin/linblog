@@ -204,7 +204,7 @@ const routes = [
     {
         path: '/404', //添加一个指向404页面组件的路由
         // name:"404",
-        component: () => import('@/views/frontend/404.vue'),
+        component: () => import('@/views/404.vue'),
         meta: { hidden: true } // 使用meta字段隐藏侧边栏或导航菜单中的链接（如果适用）
     },
 
@@ -213,7 +213,7 @@ const routes = [
     {
         path: '/test',
         name: "test",
-        component: () => import('@/views/frontend/test.vue'),//引入该路由使用的组件
+        component: () => import('@/views/test.vue'),//引入该路由使用的组件
     },
 
     {

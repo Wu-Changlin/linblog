@@ -106,7 +106,7 @@ clickSubmitAddOrEditData(params) {
     },
 
  //批量修改配置项的数据
-    batchEditConfigItem(){
+    batchEditConfigItem(params){
         return axiosService.post("/data/backend/config_item_data.json", params, { headers: { 'Content-Type': 'application/json' } })
         //是将对象 序列化成URL的形式，以&进行拼接   
         .then(response => {
