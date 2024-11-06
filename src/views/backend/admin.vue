@@ -7,7 +7,7 @@
 
             <div class="main-content with-side-bar"
                 :style="{marginLeft: is_collapse_side_menu ? '82px !important' : '', paddingLeft: is_collapse_side_menu ? '10px !important' : ''}">
-                <BackendContentTag></BackendContentTag>
+                <BackendContentTabs></BackendContentTabs>
 
                 <router-view />
 
@@ -24,7 +24,7 @@
     import { useRouter } from "vue-router";
     import BackendNavBar from "@/components/backend/backend_nav_bar.vue";
     import BackendSideBar from "@/components/backend/backend_side_bar.vue";
-    import BackendContentTag from "@/components/backend/backend_content_tag.vue";
+    import BackendContentTabs from "@/components/backend/backend_content_tabs.vue";
     import Footer from "@/components/footer.vue";
     import adminModuleApi from "@/api/backend/admin.js";//api接口
     import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';//防抖、节流
@@ -37,6 +37,7 @@
     const flag = ref(false)
     const admin_page_log = ref();
     const admin_page_menu_list_data = ref();
+    const tabs_list_data=ref({});
     //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
     function getAdminOrMenuListData() {
         const data = adminModuleApi.getAdminOrMenuListData({});
@@ -122,6 +123,62 @@
 	/* 修改当前页面meta元数据，标题、关键词、描述  结束*/
 
 
+
+    /* Tabs 标签页添加tag  开始*/
+    function addTagToTabs(new_tag){
+
+        // console.log('addTagToTabs:',new_tag.propName,new_tag.value)
+        tabs_list_data.value= addPropertyIfNotExists(tabs_list_data.value,new_tag.propName,new_tag.value);
+
+    // console.log('tabs_list_data:',tabs_list_data.value);
+
+
+    }
+
+
+
+
+
+
+    /**
+     * 使用Map对象来检查对象中是否存在特定的属性名，并据此决定是否添加新属性。以下是一个简单的函数，
+     *  它接受一个对象和要添加的属性名以及值，如果属性名不存在，则添加它
+     *
+     * @description: addPropertyIfNotExists函数首先检查propName是否存在于obj对象的键中。
+     * 如果不存在，它就添加这个属性并赋予它value值。如果属性名已经存在，它什么都不做。
+     * @param {*} obj        对象
+     * @param {*} propName   属性名
+     * @param {*} value      值
+     * @return {*}
+     */
+        function addPropertyIfNotExists(obj, propName, value) {
+        
+            if (!Object.keys(obj).includes(propName)) {
+            const prop_name_to_str= String(propName);
+        
+            const new_tags_obj={};
+            new_tags_obj[prop_name_to_str]=value;
+        
+            let new_obj= Object.assign(obj, new_tags_obj);
+              return  new_obj;
+            }else{
+                return  obj;
+            }
+
+        }
+
+// 暴露方法(Tabs 标签页添加tag的方法 )供子组件调用
+provide('addTagToTabs', addTagToTabs);
+
+provide('tabs_list_data', tabs_list_data);
+
+
+// provide('updateCurrentMetaInfoFunction', updateCurrentMetaInfoFunction);
+
+
+    /* Tabs 标签页添加tag  结束*/
+
+/* 修改当前页面meta元数据，标题、关键词、描述  结束*/
 
     onMounted(() => {
         //获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）

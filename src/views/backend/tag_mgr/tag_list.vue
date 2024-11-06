@@ -216,7 +216,7 @@
                 pagination_data.current_page_limit = response.current_page_limit;
                 pagination_data.total_count = response.total_count;
 
-                console.log('tag_list_data', tag_list_data.value)
+                // console.log('tag_list_data', tag_list_data.value)
 
                 flag.value = true;
                 // is_loading.value = false;

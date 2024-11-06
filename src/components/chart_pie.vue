@@ -21,15 +21,11 @@
     }
   });
 
-  console.log('parentPageVisitsIpCountData:',props.parentPageVisitsIpCountData);
-
 
   onMounted(() => {
 
     const ctx = chartCanvasRef.value.getContext('2d');
-  console.log('parentPageVisitsIpCountData:',props.parentPageVisitsIpCountData);
-
-    let chart = new chartJs(ctx, {
+    const chart = new chartJs(ctx, {
       type: 'pie', // 或者 'line', 'pie', 等等
       data: props.parentPageVisitsIpCountData,
       options: {}

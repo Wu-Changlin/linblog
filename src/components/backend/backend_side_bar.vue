@@ -23,7 +23,7 @@
 						</template>
 						<!-- 遍历子组件 start-->
 						<template v-for="(sub_menu,item) in menu.children">
-							<el-menu-item @click="clickMenu(sub_menu.menu_path)" :index="sub_menu.menu_name">
+							<el-menu-item @click="clickMenu(sub_menu.menu_path,sub_menu.menu_title)" :index="sub_menu.menu_name">
 								<svg-icon class="svg_icon" style="width: 1em; height: 1em; margin-right: 8px;"
 									:icon-class="sub_menu.icon" />
 								<span>{{ sub_menu.menu_title }}</span>
@@ -33,7 +33,7 @@
 					</el-sub-menu>
 
 					<!-- 无子组件，继续 -->
-					<el-menu-item v-else @click="clickMenu(menu.menu_path)" :index="menu.menu_name">
+					<el-menu-item v-else @click="clickMenu(menu.menu_path,menu.menu_title)" :index="menu.menu_name">
 						<svg-icon class="svg_icon" style="width: 1em; height: 1em; margin-right: 8px;"
 							:icon-class="menu.icon" />
 						<span>{{ menu.menu_title }}</span>
@@ -59,6 +59,12 @@
 
 	const is_collapse_side_menu = inject('isCollapseSideMenu');
 
+	// 注入来自admin页面（公共）提供Tabs 标签页添加tag的方法
+	const parentPageAddTagToTabsFunction = inject('addTagToTabs');
+
+
+	
+
 	const props = defineProps({
 		parentPageMenuData: {
 			type: Array,
@@ -67,10 +73,29 @@
 
 
 	//侧边栏菜单点击
-	function clickMenu(menu_path) {
-		// console.log('menu_path:', menu_path);
+	function clickMenu(menu_path,menu_title) {
+
+		let menu_title_to_str= String(menu_title);
+		// 替换第一个匹配项,将字符串中的"列表"替换为"页"
+		menu_title_to_str = menu_title_to_str.replace(/列表/, "页");
+		parentPageAddTagToTabsFunction({propName:menu_title_to_str,value:menu_path})
+		// lastIndexOf方法找到最后一个'/'的位置，然后使用slice方法从该位置截取到字符串的末尾，并且还去掉了'/'字符。
 		//路由跳转
-		router.push({path: menu_path})
+		router.push({ path: menu_path })
+	}
+
+
+
+	/**
+	  * 找到最后一个'/'的位置，使用slice方法从该位置截取到字符串的末尾，获取路径名称。
+	  * @description: lastIndexOf方法找到最后一个'/'的位置，然后使用slice方法从该位置截取到字符串的末尾，并且还去掉了'/'字符。
+	  * @param {*} menu_path_str 
+	  * @return {*}
+	  */
+	function sliceMenuPathToPathName(menu_path_str) {
+		let index = menu_path_str.lastIndexOf('/');
+		let result_str = menu_path_str.slice(index + 1);
+		return result_str
 	}
 
 	//计算属性active_menu_name来获取路由的名称高亮对应菜单项

@@ -1,21 +1,17 @@
 <template>
 
   <div style="padding-top: 72px;"></div>
-   <div class="tags">
-   
+  <div class="tags">
+
     <div style="margin-left: 10px;">
-      <el-tag
-      v-for="(tag,index) in tags"
-      :key="tag.menu_name"
-      :closable="tag.menu_name!=='admin'"
-      :effect="route.name===tag.menu_name?'dark':'plain'"
-      >
-     {{tag.menu_title }}
+      <el-tag v-for="(menu_path,menu_title) in parent_page_tabs_list_data" :key="menu_path" :closable="menu_path!=='/admin/home'"
+        :effect="route.path===menu_path?'dark':'plain'"  @click="clickMenu(menu_path)">
+        {{menu_title}}
       </el-tag>
     </div>
-     
- 
-   </div>
+
+
+  </div>
 
 </template>
 
@@ -25,33 +21,28 @@
   import { useRoute, useRouter } from 'vue-router';
   import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
 
-  const route=useRoute();
-  const router=useRouter();
+  const route = useRoute();
+  const router = useRouter();
 
-  const tags=ref([
-    {
-          "menu_id": 30,
-          "menu_title": "首页",
-          "menu_name": "admin",
-          "menu_path": "/admin",
-         
 
-    },
-    {
-          "menu_id": 90,
-          "menu_title": "页",
-          "menu_name": "sss",
-          "menu_path": "/sss",
-          
 
-    }
-])
+	const parent_page_tabs_list_data = inject('tabs_list_data');
+
+  console.log('parent_page_tabs_list_data:',parent_page_tabs_list_data)
+
+
+
+  	//侧边栏菜单点击
+	function clickMenu(menu_path) {
+//路由跳转
+router.push({ path: menu_path })
+}
 
 
 
   onMounted(() => {
-   
- 
+
+
   })
 
 
@@ -66,18 +57,20 @@
 </script>
 
 <style scoped>
-.tags{
-  width: 100%;
-  height: 70px;
-  z-index: 10;
-  display: flex;
-  position: fixed;
-  align-items: center;
-    margin:0px 12px;
+  .tags {
+    width: 100%;
+    height: 70px;
+    z-index: 10;
+    display: flex;
+    position: fixed;
+    align-items: center;
+    margin: 0px 12px;
     background-color: var(--bg);
     /* height: 72px; */
-}
-.el-tag{
-    margin-right:10px;
-}
+  }
+
+  .el-tag {
+    margin-right: 10px;
+    cursor: pointer;
+  }
 </style>

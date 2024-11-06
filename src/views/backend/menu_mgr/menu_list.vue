@@ -214,7 +214,7 @@
                 pagination_data.current_page_limit = response.current_page_limit;
                 pagination_data.total_count = response.total_count;
 
-                console.log('menu_list_data',menu_list_data.value);
+                // console.log('menu_list_data',menu_list_data.value);
 
                 flag.value = true;
                 // is_loading.value = false;
