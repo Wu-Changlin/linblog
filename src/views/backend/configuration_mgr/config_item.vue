@@ -1,7 +1,7 @@
 <template>
     <div class="feeds-page">
         <div class="feeds-container">
-
+            <BackendContentTabs></BackendContentTabs>
             <div class="page-container">
                 <el-form v-if="loading" :model="config_item_list_data" :rules="rules" ref="ruleFormRef"
                     label-width="120px" class="demo-ruleForm" label-position="left">
@@ -74,6 +74,7 @@
 
 <script setup>
     import { ref, onMounted, inject, watch } from 'vue';
+    import BackendContentTabs from "@/components/backend/backend_content_tabs.vue";  
     import configurationModuleApi from "@/api/backend/configuration.js";//api接口
     import configItemDynamicForm from "@/views/backend/configuration_mgr/config_item_dynamic_form.vue";
     //配置项数据

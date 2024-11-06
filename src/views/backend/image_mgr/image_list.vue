@@ -1,9 +1,8 @@
 <template>
 
-
     <div class="feeds-page">
         <div class="feeds-container">
-
+            <BackendContentTabs></BackendContentTabs>
             <Table v-if="flag" :parentPageTableData="image_list_data" :parentPagePaginationData="pagination_data"
                 :tableHeader="table_header" @getPaginationChangeData="getChildPaginationChangeData"
                 @batchRemoveCurrentActiveIds="batchRemoveChildCurrentActiveIds"
@@ -72,6 +71,7 @@
 <script setup>
     import { ref, reactive, inject, onMounted, onUnmounted, computed } from "vue";
     import { useRoute, useRouter } from "vue-router";
+    import BackendContentTabs from "@/components/backend/backend_content_tabs.vue";  
     import ArticleCoverList from '@/components/backend/article_cover_list.vue';
     import Table from "@/components/backend/table.vue";
     import { listenMsg } from '@/components/cross_tag_msg/crossTagMsg.js';

@@ -3,7 +3,7 @@
     <div class="feeds-page">
 
         <div class="feeds-container">
-
+            <BackendContentTabs></BackendContentTabs>
             <div class="page-container">
 
                 <transition name="scale-down" mode="out-in">
@@ -145,6 +145,7 @@
 
 <script setup>
     import { ref, reactive, onMounted, provide, inject, watch, onUnmounted } from "vue";
+    import BackendContentTabs from "@/components/backend/backend_content_tabs.vue";  
     import ChartPie from '@/components/chart_pie.vue';
     import WebsiteContentCount from '@/components/website_content_count.vue';
     import WebsiteRunTime from '@/components/website_run_time.vue';

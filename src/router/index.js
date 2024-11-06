@@ -94,17 +94,17 @@ const routes = [
             },
 
         
-            {
-                path:'auth_list',
-                name:"auth_list",
-                component:()=>import('@/views/backend/auth_mgr/auth_list.vue'),
-            },
+            // {
+            //     path:'auth_list',
+            //     name:"auth_list",
+            //     component:()=>import('@/views/backend/auth_mgr/auth_list.vue'),
+            // },
             
-            {
-                path:'role_list',
-                name:"role_list",
-                component:()=>import('@/views/backend/role_mgr/role_list.vue'),
-            },
+            // {
+            //     path:'role_list',
+            //     name:"role_list",
+            //     component:()=>import('@/views/backend/role_mgr/role_list.vue'),
+            // },
 
             {
                 path:'configuration_list',
@@ -150,16 +150,16 @@ const routes = [
         name:"image_add_edit",
         component:()=>import('@/views/backend/image_mgr/image_add_edit.vue'),
     },
-    {
-        path:'/admin/auth_add_edit',
-        name:"auth_add_edit",
-        component:()=>import('@/views/backend/auth_mgr/auth_add_edit.vue'),
-    },
-    {
-        path:'/admin/role_add_edit',
-        name:"role_add_edit",
-        component:()=>import('@/views/backend/role_mgr/role_add_edit.vue'),
-    },
+    // {
+    //     path:'/admin/auth_add_edit',
+    //     name:"auth_add_edit",
+    //     component:()=>import('@/views/backend/auth_mgr/auth_add_edit.vue'),
+    // },
+    // {
+    //     path:'/admin/role_add_edit',
+    //     name:"role_add_edit",
+    //     component:()=>import('@/views/backend/role_mgr/role_add_edit.vue'),
+    // },
     {
         path:'/admin/configuration_add_edit',
         name:"configuration_add_edit",

@@ -1,14 +1,14 @@
 <template>
-    
+
     <div class="container">
         <BackendNavBar :parentPageLogData="admin_page_log"></BackendNavBar>
         <div class="main">
             <BackendSideBar v-if="flag" :parentPageMenuData="admin_page_menu_list_data"></BackendSideBar>
 
-            <div class="main-content with-side-bar"
+            <div ref="mainContentRef" class="main-content with-side-bar"
                 :style="{marginLeft: is_collapse_side_menu ? '82px !important' : '', paddingLeft: is_collapse_side_menu ? '10px !important' : ''}">
-                <BackendContentTabs></BackendContentTabs>
-
+                <!-- <BackendContentTabs></BackendContentTabs> -->
+                
                 <router-view />
 
             </div>
@@ -19,16 +19,23 @@
 </template>
 
 
+
+
+
+
 <script setup>
     import { reactive, ref, onMounted, onUnmounted, provide, inject } from 'vue';
-    import { useRouter } from "vue-router";
+    import { useRoute,useRouter } from "vue-router";
     import BackendNavBar from "@/components/backend/backend_nav_bar.vue";
     import BackendSideBar from "@/components/backend/backend_side_bar.vue";
-    import BackendContentTabs from "@/components/backend/backend_content_tabs.vue";
     import Footer from "@/components/footer.vue";
     import adminModuleApi from "@/api/backend/admin.js";//api接口
     import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';//防抖、节流
-	import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
+    import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
+
+
+    const router = useRouter();
+    const route = useRoute();
 
     const $message = inject('$message');
 
@@ -37,7 +44,14 @@
     const flag = ref(false)
     const admin_page_log = ref();
     const admin_page_menu_list_data = ref();
-    const tabs_list_data=ref({});
+    const tabs_list_data = ref({});
+
+    const mainContentRef=ref(null)
+
+    // 设置后台首页为默认页
+    tabs_list_data.value = {
+        "首页": "/admin/home"
+    }
     //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
     function getAdminOrMenuListData() {
         const data = adminModuleApi.getAdminOrMenuListData({});
@@ -59,6 +73,13 @@
     // 修改当前侧边栏菜单折叠或展开的方法
     function updateIsCollapseSideMenuFunction(new_state) {
         is_collapse_side_menu.value = new_state;
+
+        // 折叠状态需减除is_collapse_side_menu的宽度
+        let main_content_width='100%';
+        if(new_state){
+            main_content_width = `calc(100% - 82px)`;
+        }
+        mainContentRef.value.style.width = main_content_width;
     }
 
     // 暴露方法(修改当前侧边栏菜单折叠或展开的方法)供子组件调用
@@ -68,76 +89,139 @@
     function settingCollapseSideMenu() {
         let page_width = window.innerWidth;
         if (page_width <= 965) {//页面宽度小于965px开启折叠模式
-            updateIsCollapseSideMenuFunction(true)
+            updateIsCollapseSideMenuFunction(true);
+        
         }
 
     }
 
-  /*修改当前侧边栏菜单折叠或展开 结束*/
-    
-	/*修改当前选中标签id 开始*/
+    /*修改当前侧边栏菜单折叠或展开 结束*/
 
-	const current_active_tag_id = ref(0);
-	// 提供数据
-	provide('currentActiveTagId', current_active_tag_id);
+    /*修改当前选中标签id 开始*/
 
-	// 修改当前选中标签id的方法
-	function updateCurrentActiveTagIdFunction(new_active_tag_id) {
-		current_active_tag_id.value = new_active_tag_id;
-	}
+    const current_active_tag_id = ref(0);
+    // 提供数据
+    provide('currentActiveTagId', current_active_tag_id);
 
-	// 暴露方法(修改当前选中标签id的方法)供子组件调用
-	provide('updateCurrentActiveTagIdFunction', updateCurrentActiveTagIdFunction);
+    // 修改当前选中标签id的方法
+    function updateCurrentActiveTagIdFunction(new_active_tag_id) {
+        current_active_tag_id.value = new_active_tag_id;
+    }
 
-	/* 修改当前选中标签id 结束*/
+    // 暴露方法(修改当前选中标签id的方法)供子组件调用
+    provide('updateCurrentActiveTagIdFunction', updateCurrentActiveTagIdFunction);
+
+    /* 修改当前选中标签id 结束*/
 
 
     /*修改当前页面meta元数据，标题、关键词、描述  开始*/
 
-	// meta元数据，标题、关键词、描述 
-	const current_meta_title = ref('');
-	const current_meta_keywords = ref('');
-	const current_meta_description = ref('');
+    // meta元数据，标题、关键词、描述 
+    const current_meta_title = ref('');
+    const current_meta_keywords = ref('');
+    const current_meta_description = ref('');
 
-	// 调用封装函数使用@unhead/vue的useHead修改页面meta元数据
-	useMetaInfo(current_meta_title,current_meta_keywords,current_meta_description);
+    // 调用封装函数使用@unhead/vue的useHead修改页面meta元数据
+    useMetaInfo(current_meta_title, current_meta_keywords, current_meta_description);
 
-	// 提供数据
-	provide('current_meta_title', current_meta_title);
-	provide('current_meta_keywords', current_meta_keywords);
-	provide('current_meta_description', current_meta_description);
-
-
-
-	// 修改当前页面meta元数据，标题、关键词、描述的方法。接收子路由页面的新值 
-	function updateCurrentMetaInfoFunction(new_current_meta_info) {
-		current_meta_title.value=new_current_meta_info.meta_title;
-		current_meta_keywords.value=new_current_meta_info.meta_keywords;
-		current_meta_description.value=new_current_meta_info.meta_description;
-    // console.log(`updateCurrentMetaInfoFunction:meta_title=${meta_title},meta_keywords=${meta_keywords},meta_description=${meta_description}`)
-	}
-
-	// 暴露方法(修改当前页面meta元数据，标题、关键词、描述的方法 )供子组件调用
-	provide('updateCurrentMetaInfoFunction', updateCurrentMetaInfoFunction);
-
-	/* 修改当前页面meta元数据，标题、关键词、描述  结束*/
+    // 提供数据
+    provide('current_meta_title', current_meta_title);
+    provide('current_meta_keywords', current_meta_keywords);
+    provide('current_meta_description', current_meta_description);
 
 
 
-    /* Tabs 标签页添加tag  开始*/
-    function addTagToTabs(new_tag){
+    // 修改当前页面meta元数据，标题、关键词、描述的方法。接收子路由页面的新值 
+    function updateCurrentMetaInfoFunction(new_current_meta_info) {
+        current_meta_title.value = new_current_meta_info.meta_title;
+        current_meta_keywords.value = new_current_meta_info.meta_keywords;
+        current_meta_description.value = new_current_meta_info.meta_description;
+        // console.log(`updateCurrentMetaInfoFunction:meta_title=${meta_title},meta_keywords=${meta_keywords},meta_description=${meta_description}`)
+    }
 
-        // console.log('addTagToTabs:',new_tag.propName,new_tag.value)
-        tabs_list_data.value= addPropertyIfNotExists(tabs_list_data.value,new_tag.propName,new_tag.value);
+    // 暴露方法(修改当前页面meta元数据，标题、关键词、描述的方法 )供子组件调用
+    provide('updateCurrentMetaInfoFunction', updateCurrentMetaInfoFunction);
 
-    // console.log('tabs_list_data:',tabs_list_data.value);
+    /* 修改当前页面meta元数据，标题、关键词、描述  结束*/
 
 
+
+    /* 操作Tabs标签页tag  开始*/
+    // Tabs 标签页添加tag 
+    function addTagToTabs(new_tag) {
+        tabs_list_data.value = addPropertyIfNotExists(tabs_list_data.value, new_tag.propName, new_tag.value);
+
+        // console.log('tabs_list_data:',tabs_list_data.value);
     }
 
 
 
+    // Tabs 标签页关闭tag 
+    function closeTag(close_menu_title) {
+        // 获取删除指定属性后对象是否只剩一个属性。布尔值
+        let only_one_property_result= hasOnlyOneProperty(tabs_list_data.value, close_menu_title);
+        if(only_one_property_result){
+            const tabs_list_data_to_array = Object.values(tabs_list_data.value);
+            
+            // 使用解构赋值获取数组的第一个元素
+            const [firstElement] = tabs_list_data_to_array;
+            console.log('firstElement:',firstElement);
+            router.push({ path:firstElement })
+        }else{
+            //激活选项卡,跳转到临近页面。
+            activeTag(close_menu_title)
+        }
+        // 对象属性删除：Reflect.deleteProperty(对象，属性名)，返回一个布尔值
+        let delete_result = Reflect.deleteProperty(tabs_list_data.value, close_menu_title);
+        if (delete_result) {
+            let msg = '成功关闭' + close_menu_title;
+            $message(msg, 'success')
+        }
+        console.log('closeTag:tabs_list_data:',tabs_list_data.value);
 
+    }
+
+        // 暴露方法(Tabs 标签页添加tag的方法 )供子组件调用
+        provide('addTagToTabs', addTagToTabs);
+
+// 暴露方法(Tabs 标签页关闭tag的方法 )供子组件调用
+provide('closeTag', closeTag);
+// 提供tabs_list_data数据到子组件
+provide('tabs_list_data', tabs_list_data);
+
+
+/* 操作Tabs标签页tag  结束*/
+
+
+//执行关闭tag，操作当前激活的选项卡（当前所在的路由） 跳转到临近页面，
+    function activeTag(close_menu_title) {
+        let close_tag_path = tabs_list_data.value[close_menu_title];//删除路由
+        let active_path='';//跳转活跃地址
+        let current_path = route.path; //当前路由
+
+        //如果当前的路由是要删除的页面
+        if (current_path === close_tag_path) {
+            const tabs_list_data_to_array = Object.values(tabs_list_data.value);
+            tabs_list_data_to_array.forEach((tab, index) => {
+                if (tab === current_path) {
+                    
+                    const nextTab = tabs_list_data_to_array[index + 1] || tabs_list_data_to_array[index - 1]  //如果在中间的tab，删除会选择在后面的一个；如果在最后，会选择在前面的一个tab
+                    if (nextTab) {
+                        active_path = nextTab  //更换当前路由的地址
+                    }
+                    // console.log('tab:', tab, ',current_path', current_path,',nextTab:',active_path);
+                }
+            })
+        }else{ //如果当前的路由非删除的页面
+            active_path=current_path;
+            // console.log('active_path=current_path:',active_path)
+        }
+    
+    
+    
+        //跳转路由
+        router.push({ path: active_path })
+    }
 
 
     /**
@@ -151,34 +235,52 @@
      * @param {*} value      值
      * @return {*}
      */
-        function addPropertyIfNotExists(obj, propName, value) {
-        
-            if (!Object.keys(obj).includes(propName)) {
-            const prop_name_to_str= String(propName);
-        
-            const new_tags_obj={};
-            new_tags_obj[prop_name_to_str]=value;
-        
-            let new_obj= Object.assign(obj, new_tags_obj);
-              return  new_obj;
-            }else{
-                return  obj;
-            }
+    function addPropertyIfNotExists(obj, propName, value) {
 
+        if (!Object.keys(obj).includes(propName)) {
+            const prop_name_to_str = String(propName);
+
+            const new_tags_obj = {};
+            new_tags_obj[prop_name_to_str] = value;
+
+            let new_obj = Object.assign(obj, new_tags_obj);
+            return new_obj;
+        } else {
+            return obj;
         }
 
-// 暴露方法(Tabs 标签页添加tag的方法 )供子组件调用
-provide('addTagToTabs', addTagToTabs);
-
-provide('tabs_list_data', tabs_list_data);
+    }
 
 
-// provide('updateCurrentMetaInfoFunction', updateCurrentMetaInfoFunction);
+    
+/**
+ * hasOnlyOneProperty函数接受一个对象和要忽略的属性名称，然后返回一个布尔值，表示在删除指定属性后对象是否只剩一个属性
+ * @description: 检查对象是否只剩下一个属性，可以通过Object.keys()方法获取对象的所有键，然后检查数组的长度。
+ * @param {*} obj                   对象
+ * @param {*} propertyToIgnore      属性名
+ * @return {*}
+ */
+function hasOnlyOneProperty(obj, propertyToIgnore) {
+    // 使用 Object.keys 获取对象的所有属性，并过滤掉要忽略的属性
+    const keys = Object.keys(obj).filter(key => key !== propertyToIgnore);
+
+    // 检查是否只剩一个属性
+    if(keys.length === 1){
+        console.log('keys.length:',keys.length)
+        return true;
+    }
+    return false;
+}
+
+
+
+
+    // provide('updateCurrentMetaInfoFunction', updateCurrentMetaInfoFunction);
 
 
     /* Tabs 标签页添加tag  结束*/
 
-/* 修改当前页面meta元数据，标题、关键词、描述  结束*/
+    /* 修改当前页面meta元数据，标题、关键词、描述  结束*/
 
     onMounted(() => {
         //获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
@@ -220,6 +322,7 @@ provide('tabs_list_data', tabs_list_data);
 
         .main {
             display: flex;
+
             .main-content {
                 width: 100%;
             }
