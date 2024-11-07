@@ -7,8 +7,9 @@
     "menu_title": "首页",
     "menu_path": "/index",
     "icon": "index",
-    "business_level": "frontend",
+    "business_level":1,
     "parent_id": 0,
+    "is_pull":1,
     "created_time": "1687938191",
     "update_time": "1687938191",
     "delete_time": "1687938191"

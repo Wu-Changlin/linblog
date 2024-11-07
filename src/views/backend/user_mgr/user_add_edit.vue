@@ -63,9 +63,9 @@
     </el-input>
   </el-form-item>
       
-  <el-form-item label="启用" prop="is_enable">
+  <el-form-item label="启用" prop="is_pulled">
   <el-switch
-  v-model="ruleForm.is_enable"
+  v-model="ruleForm.is_pulled"
   inline-prompt
   active-text="是"
   inactive-text="否"
@@ -119,7 +119,7 @@ const ruleForm=reactive({
   password:"",
   again_password:"",
   role:"",
-  is_enable:false,
+  is_pulled:false,
 
 })
 /*封面 开始*/
@@ -202,7 +202,7 @@ function clickSubmit(){
       avatar: "/logo.png",
       email: "xxx@qq.com",  
       role: 1,
-      is_enable:ruleForm.is_pulled===true?1:0,
+      is_pulled:ruleForm.is_pulled===true?1:0,
       account_status: "edit-user",
       created_time: "1687938191",
       update_time: "1728874350",
@@ -220,7 +220,7 @@ function clickSubmit(){
       avatar: "/logo.png",
       email: "xxx@qq.com",  
       role: 1,
-      is_enable:ruleForm.is_pulled===true?1:0,
+      is_pulled:ruleForm.is_pulled===true?1:0,
       account_status: "add-user",
       created_time: "1687938191",
       update_time: "1687938191",
@@ -258,7 +258,7 @@ function getEditCurrentIdData(edit_current_id_data){
     ruleForm.password=response.password;
     ruleForm.again_password=response.again_password;
     ruleForm.role=response.role;
-    ruleForm.is_enable=response.is_enable==1?true:false;
+    ruleForm.is_pulled=response.is_pulled==1?true:false;
 
     //模拟数据 id=route.query.id
     ruleForm.menu_id = route.query.id;

@@ -12,7 +12,7 @@
         "scopedSlot": "avatar"
       },
       { "prop": "email", "label": "邮箱", "key": "email" },
-      { "prop": "is_enable", "label": "启用", "key": "is_enable" },
+      { "prop": "is_pulled", "label": "启用", "key": "is_pulled" },
       { "prop": "role", "label": "角色", "key": "role" },
       { "prop": "account_status", "label": "账号状态", "key": "account_status" },
       { "prop": "ip", "label": "登陆ip", "key": "ip" },
@@ -30,7 +30,7 @@
         "label": "普通用户"
       }
     ],
-    "is_enable_data": [
+    "is_pulled_data": [
       {
         "value": 0,
         "label": "否"

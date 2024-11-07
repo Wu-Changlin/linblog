@@ -108,7 +108,10 @@
     </div>
 
     <el-form-item label="下架" prop="is_pulled">
-      <el-switch v-model="ruleForm.is_pulled" inline-prompt active-text="是" inactive-text="否" />
+      <el-radio-group v-model="ruleForm.is_pulled">
+        <el-radio v-for="(item,index) in is_pulled_data" :key="index" :value="item.is_pulled"> {{
+          item.label }}</el-radio>
+      </el-radio-group>
     </el-form-item>
 
 
@@ -566,7 +569,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
     image_name: "",
     image_path: "",
     image_type: 1,
-    is_pulled: false,
+    is_pulled: 0,
     vui_carousel_color: "",
     vui_carousel_title: ""
   })
@@ -600,7 +603,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
                 image_type: ruleForm.image_type,
                 vui_carousel_color: ruleForm.vui_carousel_color,
                 vui_carousel_title: ruleForm.vui_carousel_title,
-                is_pulled: ruleForm.is_pulled === true ? 1 : 0,
+                is_pulled: ruleForm.is_pulled,
                 created_time: "1687938191",
                 update_time: "1728874350",
               }
@@ -617,7 +620,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
                 image_type: ruleForm.image_type,
                 vui_carousel_color: '',
                 vui_carousel_title: '',
-                is_pulled: ruleForm.is_pulled === true ? 1 : 0,
+                is_pulled: ruleForm.is_pulled,
                 created_time: "1687938191",
                 update_time: "1728874350",
               }
@@ -654,7 +657,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
         ruleForm.image_type = response.image_type;
         ruleForm.vui_carousel_color = response.vui_carousel_color;
         ruleForm.vui_carousel_title = response.vui_carousel_title;
-        ruleForm.is_pulled = response.is_enable == 1 ? true : false;
+        ruleForm.is_pulled = response.is_pulled;
          //显示图片
         const img = new Image();
           const minWidth = 800;
@@ -671,13 +674,16 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
 
   //选择器数据
   const options_image_type_data = ref([]);
+  const is_pulled_data=ref();
 
   // 获取页面框架数据
   function getAddOrEditPageLayoutData() {
     imageModuleApi.getPageLayoutData({})
       .then(response => {
         options_image_type_data.value = response.options_image_type_data;
-
+        is_pulled_data.value = response.is_pulled_data;
+        
+        
       })
 
   }

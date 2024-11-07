@@ -31,11 +31,12 @@
     </el-form-item>
 
     <el-form-item label="下架" prop="is_pulled">
-      <el-switch v-model="ruleForm.is_pulled" inline-prompt active-text="是" inactive-text="否" />
+      <el-radio-group v-model="ruleForm.is_pulled">
+        <el-radio v-for="(item,index) in is_pulled_data" :key="index" :value="item.is_pulled"> {{
+          item.label }}</el-radio>
+      </el-radio-group>
     </el-form-item>
 
-    
-  
 
     <el-form-item>
       <div style="width: 100%;">
@@ -73,7 +74,7 @@
     tag_name: "",
     tag_keywords: "",
     tag_description: "",
-    is_pulled: false,
+    is_pulled: 0,
   })
 
 
@@ -117,7 +118,7 @@
                 tag_name:ruleForm.tag_name ,
                 tag_keywords: ruleForm.tag_keywords,
                 tag_description: ruleForm.tag_description,
-                is_pulled: ruleForm.is_pulled === true ? 1 : 0,
+                is_pulled: ruleForm.is_pulled,
                 account_status: "edit-tag",
                 created_time: "1687938191",
                 update_time: "1728874350",
@@ -137,7 +138,7 @@
                 tag_name:ruleForm.tag_name ,
                 tag_keywords: ruleForm.tag_keywords,
                 tag_description: ruleForm.tag_description,
-                is_pulled: ruleForm.is_pulled === true ? 1 : 0,
+                is_pulled: ruleForm.is_pulled,
                 account_status: "edit-tag",
                 created_time: "1687938191",
                 update_time: "1728874350",
@@ -162,7 +163,7 @@
     });
   }
 
-
+  // 获取编辑id数据
   function getEditCurrentIdData(edit_current_id_data) {
     tagModuleApi.getEditCurrentIdData(edit_current_id_data)
       .then(response => {
@@ -175,7 +176,7 @@
         ruleForm.tag_name = response.tag_name;
         ruleForm.tag_keywords = response.tag_keywords;
         ruleForm.tag_description = response.tag_description;
-        ruleForm.is_pulled = response.is_enable == 1 ? true : false;
+        ruleForm.is_pulled = response.is_pulled;
 
         //模拟数据 id=route.query.id
         ruleForm.menu_id = route.query.id;
@@ -193,15 +194,15 @@
 
   //选择器数据
   const options_menu_data = ref([]);
+  const is_pulled_data = ref();
 
   // 获取页面框架数据
   function getAddOrEditPageLayoutData() {
-
-
     tagModuleApi.getPageLayoutData({})
       .then(response => {
 
         options_menu_data.value = response.options_menu_data;
+        is_pulled_data.value = response.is_pulled_data;
 
       })
       .catch(error => {

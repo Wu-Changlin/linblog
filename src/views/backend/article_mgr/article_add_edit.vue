@@ -81,12 +81,10 @@
 
 
               <el-form-item label="下架" prop="is_pulled">
-                <el-switch
-                v-model="ruleForm.is_pulled"
-                inline-prompt
-                active-text="是"
-                inactive-text="否"
-              />
+                <el-radio-group v-model="ruleForm.is_pulled">
+                  <el-radio v-for="(item,index) in is_pulled_data" :key="index" :value="item.is_pulled"> {{
+                    item.label }}</el-radio>
+                </el-radio-group>
               </el-form-item>
 
             </div>
@@ -188,7 +186,7 @@
     author_name: "",
     menu_id: "",
     article_content: "",
-    is_pulled:false
+    is_pulled:0
 
   })
 
@@ -228,7 +226,7 @@
                 title: "edit-article",
                 menu_title: "后端",
                 cover: "/logo.png",
-                is_pulled:ruleForm.is_pulled===true?1:0,
+                is_pulled:ruleForm.is_pulled,
                 // JavaScript数组转换为逗号分隔的字符串，可以使用join()方法。
                 tag_ids:ruleForm.tag_ids.join(','),
                 tag_ids_names:  ruleForm.tag_ids_names ?  ruleForm.tag_ids_names: '',
@@ -250,7 +248,7 @@
                 title: "add-article",
                 menu_title: "前端",
                 cover: "/logo.png",
-                is_pulled:ruleForm.is_pulled===true?1:0,
+                is_pulled:ruleForm.is_pulled,
                 // JavaScript数组转换为逗号分隔的字符串，可以使用join()方法。
                 tag_ids: ruleForm.tag_ids.join(','),
                 tag_ids_names:  ruleForm.tag_ids_names ?  ruleForm.tag_ids_names: '',
@@ -328,6 +326,10 @@
   const response_tags_data = ref();
 
 
+  const is_pulled_data = ref();
+
+
+
 
   // 获取页面框架数据
   function getAddOrEditPageLayoutData() {
@@ -336,6 +338,9 @@
 
         options_menu_data.value = response.options_menu_data;
         response_tags_data.value = response.options_tags_data;
+        is_pulled_data.value = response.is_pulled_data;
+
+        
         if (ruleForm.menu_id) {
 
           options_tags_data.value = response_tags_data.value.filter(tag => tag.menu_id === ruleForm.menu_id);

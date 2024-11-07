@@ -69,6 +69,13 @@
 
     </el-form-item>
 
+    <el-form-item label="下架" prop="is_pulled">
+      <el-radio-group v-model="ruleForm.is_pulled">
+        <el-radio v-for="(item,index) in is_pulled_data" :key="index" :value="item.is_pulled"> {{
+          item.label }}</el-radio>
+      </el-radio-group>
+    </el-form-item>
+
     <el-form-item>
       <div style="width: 100%;">
         <el-button type="primary" @click="clickSubmit()">提交</el-button>
@@ -107,6 +114,7 @@
     icon: "",
     business_level: "",
     parent_id: 0,
+    is_pulled: 0
   })
 
   //校验
@@ -134,9 +142,12 @@
         menuModuleApi.clickSubmitAddOrEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
+          
             // const msg_content=response.action_success_data;
             if (route.query.action == "edit") {
               //模拟
+              
+
               let msg_content = {
                 menu_id: route.query.id ? Number(route.query.id) : 1,
                 menu_name: ruleForm.menu_name,
@@ -145,11 +156,13 @@
                 icon: ruleForm.icon,
                 business_level: ruleForm.business_level,
                 parent_id: ruleForm.parent_id,
+                is_pulled:ruleForm.is_pulled,
                 created_time: "1687938191",
                 update_time: "1687938191",
                 delete_time: "1687938191"
               }
 
+              console.log('msg_content:',msg_content);
               sendMsg('edit-menu', msg_content);
               $message('修改成功', 'success');
 
@@ -163,6 +176,7 @@
                 icon: ruleForm.icon,
                 business_level: ruleForm.business_level,
                 parent_id: ruleForm.parent_id,
+                is_pulled: ruleForm.is_pulled,
                 created_time: "1687938191",
                 update_time: "1687938191",
                 delete_time: "1687938191"
@@ -187,6 +201,7 @@
   }
 
 
+  // 获取编辑id数据
   function getEditCurrentIdData(edit_current_id_data) {
     menuModuleApi.getEditCurrentIdData(edit_current_id_data)
       .then(response => {
@@ -198,6 +213,7 @@
         ruleForm.icon = response.icon;
         ruleForm.business_level = response.business_level;
         ruleForm.parent_id = response.parent_id;
+        ruleForm.is_pulled = response.is_pulled;
 
         //模拟数据 id=route.query.id
         ruleForm.menu_id = route.query.id;
@@ -217,6 +233,7 @@
   const options_business_level_data = ref([])
   const options_parent_id_data = ref([]);
   const options_icon_data = ref([]);
+  const is_pulled_data=ref();
 
 
 
@@ -227,7 +244,7 @@
         options_business_level_data.value = response.options_business_level_data;
         options_parent_id_data.value = response.options_parent_id_data;
         options_icon_data.value = response.options_icon_data;
-
+        is_pulled_data.value=response.is_pulled_data;
         // unshift()方法将一个或多个元素添加到数组的开头，并返回新数组的长度。
 
         const root_directory = {
