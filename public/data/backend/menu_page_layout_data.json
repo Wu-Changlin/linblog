@@ -241,7 +241,9 @@
       "archives",
       "backend",
       "frontend",
-      "diary"
+      "diary",
+      "operation_log",
+      "operation_log_list"
     ]
   },
   "msg":"成功"
