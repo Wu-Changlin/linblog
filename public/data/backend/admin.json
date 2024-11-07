@@ -99,6 +99,21 @@
           "icon": "configitem"
         }
       ]
+    },
+    {
+      "menu_id": 99,
+      "menu_title": "操作日志",
+      "menu_name": "operation_log",
+      "icon": "configuration",
+      "children": [
+        {
+          "menu_id": 100,
+          "menu_title": "操作日志列表",
+          "menu_name": "operation_log",
+          "menu_path": "/admin/operation_log",
+          "icon": "operation_log"
+        }
+      ]
     }
   ]
 },

@@ -9,7 +9,7 @@
       { "prop": "menu_path", "label": "路由Path", "key": "menu_path" },
       { "prop": "business_level", "label": "业务层面", "key": "business_level" },
       { "prop": "parent_id", "label": "父节点", "key": "parent_id" },
-      { "prop": "is_pull", "label": "下架", "key": "is_pull" },
+      { "prop": "is_pulled", "label": "下架", "key": "is_pulled" },
       { "prop": "created_time", "label": "创建时间", "key": "created_time" },
       { "prop": "update_time", "label": "更新时间", "key": "update_time" },
       { "prop": "delete_time", "label": "删除时间", "key": "delete_time" }
@@ -43,7 +43,7 @@
         "icon": "index",
         "business_level": "frontend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -55,7 +55,7 @@
         "icon": "frontend",
         "business_level": "frontend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -67,7 +67,7 @@
         "icon": "backend",
         "business_level": "frontend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -79,7 +79,7 @@
         "icon": "resource",
         "business_level": "frontend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -91,7 +91,7 @@
         "icon": "archives",
         "business_level": "frontend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -103,7 +103,7 @@
         "icon": "diary",
         "business_level": "frontend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -114,7 +114,7 @@
         "icon": "user",
         "business_level": "backend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -125,7 +125,7 @@
         "icon": "article",
         "business_level": "backend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -136,7 +136,7 @@
         "icon": "menus",
         "business_level": "backend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -147,7 +147,7 @@
         "icon": "tags",
         "business_level": "backend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -158,7 +158,7 @@
         "icon": "image",
         "business_level": "backend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -169,7 +169,7 @@
         "icon": "auth",
         "business_level": "backend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -180,7 +180,7 @@
         "icon": "role",
         "business_level": "backend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       },
@@ -191,7 +191,7 @@
         "icon": "configuration",
         "business_level": "backend",
         "parent_id": 0,
-        "is_pull":1,"created_time": "1687938191",
+        "is_pulled":1,"created_time": "1687938191",
         "update_time": "1687938191",
         "delete_time": "1687938191"
       }

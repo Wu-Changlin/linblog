@@ -118,6 +118,16 @@ const routes = [
                 component:()=>import('@/views/backend/configuration_mgr/config_item.vue'),
             },
 
+            {
+                path:'operation_log',
+                name:"operation_log",
+                component:()=>import('@/views/backend/operation_log_mgr/operation_log.vue'),
+            },
+
+
+            
+
+
         ]
     },
 

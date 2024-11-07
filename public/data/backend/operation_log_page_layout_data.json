@@ -1,0 +1,25 @@
+{
+  "code":200,
+  "data":{
+    "table_header": [
+      { "prop": "operation_log_id", "label": "operation_log_id", "key": "operation_log_id" },
+      { "prop": "operation_nike_name", "label": "操作人昵称( 1：前端请求；其他查表)", "key": "operation_nike_name" },
+      { "prop": "user_id", "label": "用户id", "key": "user_id"},
+      { "prop": "request_time", "label": "请求时间", "key": "request_time" },
+      { "prop": "response_code", "label": "响应状态码", "key": "response_code" },
+      { "prop": "request_ip", "label": "请求ip", "key": "request_ip" },
+      { "prop": "request_method", "label": "请求方法", "key": "request_method" },
+      { "prop": "request_parameters", "label": "请求路径", "key": "request_parameters" },
+      { "prop": "response_data", "label": "响应数据", "key": "response_data" },
+      { "prop": "operation_object", "label": "执行操作对象 0:默认 1：用户， 2：文章 ，3：菜单，4：标签，5：图片，6：网站配置 ，7：操作日志，", "key": "operation_object" },
+      { "prop": "operation_type", "label": "执行操作类型 0:默认 1：添加， 2：删除， 3：修改，4：查询， 5：登录， 6：退出，", "key": "operation_type" },
+      { "prop": "operation_object_ids", "label": "执行操作对象id集", "key": "operation_object_ids" },
+      { "prop": "login_ip", "label": "登录IP", "key": "login_ip" },
+      { "prop": "created_at", "label": "创建时间", "key": "created_at" }
+
+
+    ]
+  },
+  "msg":"成功"
+  }
+
