@@ -12,13 +12,22 @@
                 <template #query>
                     <el-form :inline="false" class="flex-form" :model="query_form_data" @keyup.enter="queryInputData()">
                         
-                            <el-form-item label="标签名">
-                                <el-input v-model="query_form_data.tag_name" placeholder="搜索标签名">
-                                </el-input>
+                        <el-form-item label="状态码">
+                            <el-select  v-model="query_form_data.response_code" placeholder="请选择">
+    <el-option v-for="item in options_response_code_data" :key="item.response_code" :label="item.label" :value="item.response_code" />
+                            
+                            </el-select>
+                        </el-form-item>
+                            <el-form-item label="操作人员">
+                                <el-select  v-model="query_form_data.user_id" placeholder="请选择">
+        <el-option v-for="item in options_operation_nike_name_data " :key="item.user_id" :label="item.operation_nike_name" :value="item.user_id" />
+                                
+                                </el-select>
                             </el-form-item>
-                            <el-form-item label="所属栏目">
-                                <el-select  v-model="query_form_data.menu_id" placeholder="请选择">
-        <el-option v-for="item in options_menu_data" :key="item.menu_id" :label="item.menu_title" :value="item.menu_id" />
+
+                            <el-form-item label="操作类型">
+                                <el-select  v-model="query_form_data.operation_type" placeholder="请选择">
+        <el-option v-for="item in options_operation_type_data" :key="item.operation_type" :label="item.label" :value="item.operation_type" />
                                 
                                 </el-select>
                             </el-form-item>
@@ -114,7 +123,13 @@
     //表头  //scopedSlot 自定义插槽的名字
     const table_header = ref([]);
     //选择器数据
-    const options_menu_data = ref([]);
+
+    const options_response_code_data = ref([]);
+
+    const options_operation_nike_name_data = ref([]);
+
+    const options_operation_type_data = ref([]);
+
 
     // 获取页面框架数据
     function getPageLayoutData() {
@@ -122,7 +137,10 @@
         operationLogModuleApi.getPageLayoutData({})
             .then(response => {
                 table_header.value = response.table_header;
-                options_menu_data.value = response.options_menu_data;
+                
+                options_response_code_data.value = response.options_response_code_data;
+                options_operation_nike_name_data.value = response.options_operation_nike_name_data;                
+                options_operation_type_data.value = response.options_operation_type_data;
             })
             .catch(error => {
                 // console.log(' getPageLayoutData()=>error:',error)
@@ -135,8 +153,9 @@
 
     //保存初始化数据
     const init_query_form_data = {
-        tag_name: '',
-        menu_id: '',
+        response_code: '',
+        user_id: 0,
+        operation_type:0,
     }
     //查询当前活动的输入数据，使用reactive变成响应式数据
     const query_form_data = reactive({ ...init_query_form_data });
@@ -172,12 +191,12 @@
 
                     // 
                     // TODO   如果有查询数据，那么过滤表格数据
-                    let math_role_data = computed(() => {
-                        return operation_log_data.value.filter(tag => tag.menu_id === query_data.menu_id);
+                    let math_response_code_data = computed(() => {
+                        return operation_log_data.value.filter(operation => operation.response_code === query_data.response_code);
                     })
                     // console.log('math_role_data:',math_role_data.value);
 
-                    operation_log_data.value = math_role_data.value;
+                    operation_log_data.value = math_response_code_data.value;
 
                     flag.value = true;
                     // is_loading.value = false;

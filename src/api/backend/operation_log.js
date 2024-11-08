@@ -35,7 +35,7 @@ const operation_log = {
 
     // 获取查询数据
     queryInputData(params) {
-        return axiosService.post("/data/backend/operation_log_query_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("/data/backend/operation_log_list.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
