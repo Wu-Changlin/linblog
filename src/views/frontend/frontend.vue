@@ -291,7 +291,6 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
     }
     // updatePageMetaInfoFunction({meta_title:'资源，你好!'});
     // useMetaInfo(current_page_meta_data);//渲染meta
-    console.log('onMounted:');
 
     //   fetchTag();
   });

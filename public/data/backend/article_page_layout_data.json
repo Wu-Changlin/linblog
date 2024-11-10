@@ -5,7 +5,7 @@
       {"prop": "article_id","label": "article_id","key":"article_id"},
       {"prop": "title","label": "标题","key":"title","scopedSlot":"title"},
       {"prop": "menu_title","label": "分栏","key":"menu_title"},
-  
+
       {"prop": "tag_ids_names","label": "标签","key":"tag_ids_names","scopedSlot":"tag_ids_names"},
       {"prop": "cover","label": "封面","key":"cover","scopedSlot":"cover"},
       {"prop": "visits","label": "浏览量","key":"visits"},

@@ -92,7 +92,7 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
         resource_tag_data.value = response.tag_data;
         resource_article_list_data.value = response.article_list_data;
-        console.log('resource_article_list_data.value:', resource_article_list_data.value)
+        // console.log('resource_article_list_data.value:', resource_article_list_data.value);
 
         total_pages.value = response.total_pages; //总页数
         current_page.value = response.current_page; //当前页数
@@ -283,8 +283,7 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
       }
       getChildClickTag(active_tag_id_from_archives_page, active_tag_name_from_archives_page);
     }
-    
-    console.log('onMounted')
+
 
   });
 
