@@ -66,11 +66,15 @@
 
   //注入来自layout页面的当前选中标签id
   const parent_page_current_active_tag_id = inject('currentActiveTagId');
+  
+//注入来自layout页面的当前选中菜单路由名称
+const parent_page_current_active_menu_name = inject('currentActiveMenuName');
 
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
-        
+   // 当前菜单id
+  const  current_menu_id = ref(null);
 
 // 注入来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
 const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
@@ -80,7 +84,7 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
     is_loading.value = true;
     // 如果你想使用axios来模拟请求，可以这样做
-    resourceModuleApi.getResourcePageData({})
+    resourceModuleApi.getResourcePageData({menu_id:current_menu_id.value,menu_name:parent_page_current_active_menu_name.value,page:1})
       .then(response => {
 
         //页面 meta 元数据
@@ -228,7 +232,7 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
     console.log('进入getActiveTagNextPageData,current_page.value:', current_page.value)
     current_page.value++;//当前页数加一
-    resourceModuleApi.getActiveTagNextPageData({ tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
+    resourceModuleApi.getActiveTagNextPageData({ tag_id: current_active_tag_id.value, tag_name: current_active_tag_name.value, page: current_page.value })
       .then(response => {
         // setTimeout(() => {
         is_next_page_loading.value = false;//取消加载中动画
@@ -268,6 +272,8 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
 
   onMounted(() => {
+    // 组件挂载后，从sessionStorage获取menuId
+    current_menu_id.value = sessionStorage.getItem('currentMenuId') || 1;
     // 如果路由没有查询参数tag_id，那么执行getFrontendPageData。
     if (!route.query.tag_id) {
       getResourcePageData();

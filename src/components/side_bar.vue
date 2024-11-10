@@ -3,41 +3,66 @@
     <div class="side-bar">
 
         <ul class="channel-list">
-			<li  v-for="(menu,index) in parentPageMenuData"  :data-active_menu_path="active_menu_name" :data-menu.menu_path="menu.menu_path" :class="{'active-channel': active_menu_name==menu.menu_name?true:''}">
+			<li  v-for="(menu,index) in parentPageMenuData" :class="{'active-channel': active_menu_name==menu.menu_name?true:''}" @click="clickMenu(menu.menu_id)">
 				<a class="link-wrapper":href="menu.menu_path">
 					<svg-icon  class="svg_icon"  style="width: 1em; height: 1em; margin-right: 8px;"  :icon-class="menu.menu_name" />
 					<span class="channel"> {{menu.menu_title}}</span>
 				</a>
 			</li>
+
+			<!-- <li  v-for="(menu,index) in parentPageMenuData" :class="{'active-channel': active_menu_name==menu.menu_name?true:''}" @click="clickMenu(menu.menu_id,menu.menu_path)">
+				<div class="link-wrapper">
+					<svg-icon  class="svg_icon"  style="width: 1em; height: 1em; margin-right: 8px;"  :icon-class="menu.menu_name" />
+					<span class="channel"> {{menu.menu_title}}</span>
+				</div>
+			</li> -->
+
         </ul>
 
-      </div>
+    </div>
 
 </template>
 
 <script setup>
-import { reactive, ref,onMounted ,computed} from 'vue';
+import { reactive, ref,onMounted ,computed,inject} from 'vue';
 import { useRoute,useRouter } from "vue-router";
+import { useMenuStore } from '@/stores/menu_data_store.js';//临时存储活跃菜单id  会话级
 const route=useRoute();
+const router=useRouter();
+
 // menu_name: string //菜单唯一标识，与路由名保持一致
 // menu_title: string //菜单显示名称
 
 
+// 注入来自layout页面（公共）提供修改当前选中菜单id的方法
+const updateCurrentActiveMenuIdFunction = inject('updateCurrentActiveMenuId');
+
 const props = defineProps({
 	parentPageMenuData: {
 			type: Array,
-    	},
+    },
 });
 
 //计算属性active_menu_name来获取路由的名称
 const active_menu_name = computed(() => route.name);
 
+// 实例
+const menuStore = useMenuStore();
+
+function clickMenu(menu_id){
+	// 使用来自layout页面（公共）提供修改当前选中菜单id的方法
+	updateCurrentActiveMenuIdFunction(menu_id);
+	// console.log('menu_id:',menu_id);
+	 // 调用方法以sessionStorage存储菜单id
+	menuStore.setCurrentMenuId(menu_id);
+
+}
 
 </script>
 
 <style scoped>
 
-  	.side-bar {
+.side-bar {
 		height: calc(100vh - 72px);
 		overflow-y: scroll;
 		background-color: var(--bg);

@@ -28,8 +28,6 @@
   import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
   import indexModuleApi from "@/api/frontend/index.js";//api接口
 
-
-
   const route = useRoute();
   const router = useRouter();
   // 消息提示
@@ -63,18 +61,27 @@
 
   //注入来自layout页面的当前选中标签id
   const parent_page_current_active_tag_id = inject('currentActiveTagId');
+  
+//注入来自layout页面的当前选中菜单路由名称
+const parent_page_current_active_menu_name = inject('currentActiveMenuName');
 
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
+    //注入来自layout页面的当前选中菜单id
+    const parent_page_current_active_menu_id = inject('currentActiveMenuId');
+
   // 注入来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
   const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
+
+  // 当前菜单id
+  const  current_menu_id = ref(null);
 
 
   //获取首页数据（内容标签栏数据、博文列表数据（瀑布流组件））  
   function getIndexPageData() {
 
-    indexModuleApi.getIndexPageData({})
+    indexModuleApi.getIndexPageData({menu_id:current_menu_id.value,menu_name:parent_page_current_active_menu_name.value,page:1})
       .then(response => {
 
         //页面 meta 元数据
@@ -140,7 +147,10 @@
   }
 
 
+
   onMounted(() => {
+ // 组件挂载后，从sessionStorage获取menuId
+  current_menu_id.value = sessionStorage.getItem('currentMenuId') || 1;
 
     //   fetchTag();
     // 如果路由没有查询参数tag_id，那么执行getFrontendPageData。

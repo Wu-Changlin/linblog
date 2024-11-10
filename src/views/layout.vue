@@ -23,14 +23,17 @@
 
 
 <script setup>
-	import { reactive, ref, onMounted, onUpdated, onBeforeUpdate, provide, inject } from 'vue';
-	import { useRouter } from "vue-router";
+	import { reactive, ref, onMounted, onUpdated, onBeforeUpdate, provide, inject,computed ,onUnmounted} from 'vue';
+	import {useRoute, useRouter } from "vue-router";
 	import NavBar from "@/components/nav_bar.vue";
 	import SideBar from "@/components/side_bar.vue";
 	import FloatingBtnSets from "@/components/floating_btn_sets.vue";
 	import Footer from "@/components/footer.vue";
 	import layoutModuleApi from "@/api/frontend/layout.js";//api接口
-	import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
+	import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述
+	import { useMenuStore } from '@/stores/menu_data_store.js';//临时存储活跃菜单id  会话级
+	
+	const route= useRoute();
 
 	//使用 provide inject 代替getCurrentInstance
 	const $message = inject('$message');
@@ -68,20 +71,34 @@
 	// 修改当前选中标签id 结束
 
 	// 修改当前选中菜单id 开始
+
+	
 	const current_active_active_menu_id = ref(1);
+
+	
+	
 	// 提供数据
 	provide('currentActiveMenuId', current_active_active_menu_id);
 
+	
 	// 修改当前选中菜单id的方法
 	function updateCurrentActiveMenuId(new_active_menu_id) {
+		// current_active_active_menu_id.value = new_active_menu_id;
 		current_active_active_menu_id.value = new_active_menu_id;
+		// console.log('current_active_active_menu_id.value:',current_active_active_menu_id.value)
 	}
+
 
 	// 暴露方法(修改当前选中菜单id的方法)供子组件调用
 	provide('updateCurrentActiveMenuId', updateCurrentActiveMenuId);
 
 	// 修改当前选中菜单id 结束
 
+	//current_active_menu_name=计算属性来获取路由的名称
+	const current_active_menu_name = computed(() => route.name);
+
+	// 提供数据，当前路由的名称
+	provide('currentActiveMenuName', current_active_menu_name);
 
 	const layout_page_log = ref();
 	const layout_page_menu_list_data = ref();
@@ -130,11 +147,20 @@
 
 
 	onMounted(() => {
+		
 		//获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
 		getLayoutLogOrMenuListData();
 	});
 
 
+	
+// 实例
+const menuStore = useMenuStore();
+
+// 组件销毁前调用方法移除sessionStorage
+onUnmounted(() => {
+	menuStore.removeStoreMenuId();
+});
 
 
 </script>

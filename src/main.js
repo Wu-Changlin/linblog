@@ -3,9 +3,13 @@ import App from './App.vue';
 import router from './router/index.js'; //引入配置路由文件
 import ElementPlus from 'element-plus'; //引入ElementPlus依赖
 import 'element-plus/dist/index.css'; // 引入样式文件index.css
-
+import { createPinia } from 'pinia'
 import { createHead } from '@unhead/vue'
 
+// pinia
+const pinia = createPinia()
+
+// meta 元数据
 const head = createHead()
 
 
@@ -67,6 +71,7 @@ app.component('svg-icon', SvgIcon);
 // import http from '@/utils/request.js';
     // .use(http)
 app.use(router)
+    .use(pinia)
     .use(ElementPlus)
     .use(tooltip)
     .use(head)

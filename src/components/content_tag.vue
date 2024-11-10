@@ -280,8 +280,9 @@
        */
 
        data.show_more_tag_container = false; //关闭显示更多标签数据容器
-       data.more_tag_icon = false;//指向图标恢复默认值（指向箭头）
-       const tabOffsetTop = tagContainerRef.value.getBoundingClientRect().top;
+      data.more_tag_icon = false;//指向图标恢复默认值（指向箭头）
+      console.log('tagContainerRef.value:',tagContainerRef.value);
+      const tabOffsetTop = tagContainerRef.value.getBoundingClientRect().top;
     if((tabOffsetTop + tagContainerRef.value.clientHeight)<0){
       is_fixed.value = true;
     }else{
@@ -310,11 +311,14 @@
     nextTick(() => {
       //初始化每行最多标签数量
       maxItemsPerLines();
+    
+
     })
-    //监听窗口响应式每行最多标签数量
+          //监听窗口响应式每行最多标签数量
     window.addEventListener('resize', throttle(() => { maxItemsPerLines() }, 100));//监听窗口缩放 加节流
     //吸顶效果
     window.addEventListener("scroll", handleScroll, true);
+  
   })
 
 

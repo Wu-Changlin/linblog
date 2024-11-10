@@ -62,8 +62,6 @@ const $message = inject('$message');
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
 
-    
-
 // 注入来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
 const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
@@ -207,7 +205,7 @@ updatePageMetaInfoFunction({meta_title:'前端，你好!'});
 
     // console.log('进入getActiveTagNextPageData,current_page.value:', current_page.value)
     current_page.value++;//当前页数加一
-    frontendModuleApi.getActiveTagNextPageData({ tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
+    frontendModuleApi.getActiveTagNextPageData({ tag_id: current_active_tag_id.value, tag_name: current_active_tag_name.value, page: current_page.value })
       .then(response => {
         // setTimeout(() => {
         is_next_page_loading.value = false;//取消加载中动画

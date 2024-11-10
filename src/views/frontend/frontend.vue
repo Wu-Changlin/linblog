@@ -43,7 +43,7 @@ const $message = inject('$message');
   const frontend_tag_data = ref();
   const frontend_article_list_data = ref();
   const frontend_carousel_img_data = ref();
-  const total_pages = ref(0); //总页数
+  const total_pages = ref(1); //总页数
   const current_page = ref(1);//当前页数
   const current_active_tag_id = ref(1);
   const current_active_tag_name = ref('');
@@ -66,26 +66,27 @@ const $message = inject('$message');
   //注入来自layout页面的当前选中标签id
   const parent_page_current_active_tag_id = inject('currentActiveTagId');
 
+//注入来自layout页面的当前选中菜单路由名称
+  const parent_page_current_active_menu_name = inject('currentActiveMenuName');
+
+
    // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
 
-    
-
 // 注入来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
 const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
-
-
+  // 当前菜单id
+  const  current_menu_id = ref(null);
   // 获取前端栏页数据（内容标签栏数据、轮播图数据、博文列表数据（瀑布流组件））  
   function getFrontendPageData() {
     is_no_more_data.value = false;//初始化,防止上拉加载更多失效。
     is_loading.value=true;
-    frontendModuleApi.getFrontendPageData({})
+  
+    frontendModuleApi.getFrontendPageData({menu_id:current_menu_id.value,menu_name:parent_page_current_active_menu_name.value,page:1})
       .then(response => {
-        // setTimeout(() => {
-
-    
+        // setTimeout(() => { 
         //页面 meta 元数据
         current_page_meta_data.meta_title=response.meta_title;
   current_page_meta_data.meta_keywords=response.meta_keywords;
@@ -103,9 +104,6 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
         current_active_tag_name.value = response.current_active_tag_name;
         //使用来自layout页面（公共）提供修改当前选中标签id的方法修改选中标签id值，用于菜单栏页（导航栏）获取选中标签id数据来添加选中样式
 updateCurrentActiveTagIdFunction(current_active_tag_id.value);
-
-
-
 
         //模拟数据返回随机数量
         let sliced_start = Math.floor(Math.random() * 5) + 1;
@@ -141,7 +139,6 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
       .then(response => {
         // setTimeout(() => {
 
-        
         //页面 meta 元数据
         current_page_meta_data.meta_title=response.meta_title;
   current_page_meta_data.meta_keywords=response.meta_keywords;
@@ -177,9 +174,6 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
         if (!frontend_article_list_data.value) {
           is_empty_article_list_data.value = true;
         }
-
-
-        
 
         flag.value = true;//true：显示内容标签栏
 
@@ -234,7 +228,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
 
     // console.log('进入getActiveTagNextPageData,current_page.value:', current_page.value)
     current_page.value++;//当前页数加一
-    frontendModuleApi.getActiveTagNextPageData({ tag_id: current_active_tag_id, tag_name: current_active_tag_name, page: current_page.value })
+    frontendModuleApi.getActiveTagNextPageData({ tag_id: current_active_tag_id.value, tag_name: current_active_tag_name.value, page: current_page.value })
       .then(response => {
         // setTimeout(() => {
         is_next_page_loading.value = false;//取消加载中动画
@@ -273,6 +267,9 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
   }
 
   onMounted(() => {
+ 
+     // 组件挂载后，从sessionStorage获取menuId
+    current_menu_id.value = sessionStorage.getItem('currentMenuId') || 1;
     // 如果路由没有查询参数tag_id，那么执行getFrontendPageData。
     if (!route.query.tag_id) {
       getFrontendPageData();

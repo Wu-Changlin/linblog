@@ -178,15 +178,22 @@
   // 注入来自layout页面（公共）提供修改当前选中标签id的方法
   const updateCurrentActiveTagIdFunction = inject('updateCurrentActiveTagIdFunction');
 
+
 // 注入来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法
 const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
   // 是否开启瀑布流骨架屏 
   const is_loading_contribution_article_list_data = ref(true);
 
-  //获取归档页网站统计栏、标签统计栏、贡献统计栏数据
+  
+//注入来自layout页面的当前选中菜单路由名称
+const parent_page_current_active_menu_name = inject('currentActiveMenuName');
+  // 当前菜单id
+  const  current_menu_id = ref(null);
+
+  //获取归档栏页网站统计栏、标签统计栏、贡献统计栏数据
   function getArchivesPageData() {
-    archivesModuleApi.getArchivesPageData({})
+    archivesModuleApi.getArchivesPageData({menu_id:current_menu_id.value,menu_name:parent_page_current_active_menu_name.value,page:1})
       .then(response => {
         
         //页面 meta 元数据
@@ -215,6 +222,8 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
   }
 
   onMounted(() => {
+    // 组件挂载后，从sessionStorage获取menuId
+    current_menu_id.value = sessionStorage.getItem('currentMenuId') || 1;
     getArchivesPageData()
   });
 
