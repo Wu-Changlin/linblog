@@ -8,7 +8,7 @@ import axiosService from "@/utils/request.js";  // 导入axiosService中创建�
 const menu = {
     // 获取list页面框架数据
     getPageLayoutData(params) {
-        return axiosService.post("/data/backend/menu_page_layout_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("data/backend/menu_page_layout_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -21,7 +21,7 @@ const menu = {
     },
     //获取表格数据
     getMenuListPageData(params) {
-        return axiosService.post("/data/backend/menu_list.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("data/backend/menu_list.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 // 返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -35,7 +35,7 @@ const menu = {
 
     // 获取查询数据
     queryInputData(params) {
-        return axiosService.post("/data/backend/menu_query_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("data/backend/menu_query_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -48,7 +48,7 @@ const menu = {
     },
     // 分页数据
     getChildPaginationChangeData(params) {
-        return axiosService.post("/data/backend/menu_list.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("data/backend/menu_list.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -63,7 +63,7 @@ const menu = {
 
 // 提交添加或编辑数据
 clickSubmitAddOrEditData(params) {
-        return axiosService.post("/data/backend/edit_menu_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("data/backend/edit_menu_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -78,7 +78,7 @@ clickSubmitAddOrEditData(params) {
 
       //获取编辑id的数据
     getEditCurrentIdData(params) {
-        return axiosService.post("/data/backend/edit_menu_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("data/backend/edit_menu_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}

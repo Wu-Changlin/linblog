@@ -8,7 +8,7 @@ import axiosService from "@/utils/request.js";  // 导入axiosService中创建�
 const article = {    
   //获取博文详情数据
 getArticlePageData(params) {
-        return axiosService.post("/data/frontend/article_detail.json", params,{headers:{'Content-Type': 'application/json'}}) 
+        return axiosService.post("data/frontend/article_detail.json", params,{headers:{'Content-Type': 'application/json'}}) 
         //是将对象 序列化成URL的形式，以&进行拼接   
         .then(response => {
             //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}

@@ -1,0 +1,123 @@
+{
+"code":200,
+"data":{
+  "log_data": "/logo.png",
+  "menu_data": [
+    {
+      "menu_id": 7,
+      "menu_title": "用户管理",
+      "menu_name": "user",
+      "icon": "user",
+      "children": [
+        {
+          "menu_id": 8,
+          "menu_title": "用户列表",
+          "menu_name": "user_list",
+          "menu_path": "/admin/user_list",
+          "icon": "user_list"
+        }
+      ]
+    },
+    {
+      "menu_id": 9,
+      "menu_title": "文章管理",
+      "menu_name": "article",
+      "icon": "article",
+      "children": [
+        {
+          "menu_id": 10,
+          "menu_title": "文章列表",
+          "menu_name": "article_list",
+          "menu_path": "/admin/article_list",
+          "icon": "article_list"
+        }
+      ]
+    },
+    {
+      "menu_id": 12,
+      "menu_title": "菜单管理",
+      "menu_name": "menu",
+      "icon": "menus",
+      "children": [
+        {
+          "menu_id": 13,
+          "menu_title": "菜单列表",
+          "menu_name": "menu_list",
+          "menu_path": "/admin/menu_list",
+          "icon": "menu_list"
+        }
+      ]
+    },
+    {
+      "menu_id": 14,
+      "menu_title": "标签管理",
+      "menu_name": "tag",
+      "icon": "tags",
+      "children": [
+        {
+          "menu_id": 15,
+          "menu_title": "标签列表",
+          "menu_name": "tag_list",
+          "menu_path": "/admin/tag_list",
+          "icon": "tag_list"
+        }
+      ]
+    },
+    {
+      "menu_id": 16,
+      "menu_title": "图片管理",
+      "menu_name": "image",
+      "icon": "image",
+      "children": [
+        {
+          "menu_id": 17,
+          "menu_title": "图片列表",
+          "menu_name": "image_list",
+          "menu_path": "/admin/image_list",
+          "icon": "image_list"
+        }
+      ]
+    },
+    {
+      "menu_id": 22,
+      "menu_title": "配置管理",
+      "menu_name": "configuration",
+      "icon": "configuration",
+      "children": [
+        {
+          "menu_id": 21,
+          "menu_title": "配置列表",
+          "menu_name": "configuration_list",
+          "menu_path": "/admin/configuration_list",
+          "icon": "configuration_list"
+        },
+        {
+          "menu_id": 41,
+          "menu_title": "配置项",
+          "menu_name": "config_item",
+          "menu_path": "/admin/config_item",
+          "icon": "configitem"
+        }
+      ]
+    },
+    {
+      "menu_id": 99,
+      "menu_title": "操作日志",
+      "menu_name": "operation_log",
+      "icon": "operation_log",
+      "children": [
+        {
+          "menu_id": 100,
+          "menu_title": "操作日志列表",
+          "menu_name": "operation_log",
+          "menu_path": "/admin/operation_log",
+          "icon": "operation_log_list"
+        }
+      ]
+    }
+  ]
+},
+"msg":"成功"
+
+}
+

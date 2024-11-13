@@ -177,6 +177,7 @@ const routes = [
     },
 
 
+    // 博文详情页
 
     {
         path: '/article',
@@ -191,6 +192,8 @@ const routes = [
         }
     },
 
+
+// 搜索页
     {
         path: '/search',
         name: "search",
@@ -204,6 +207,7 @@ const routes = [
         }
     },
 
+    // 登录页
 
     {
         path: '/login',//路径
@@ -211,6 +215,16 @@ const routes = [
         component: () => import('@/views/login.vue'),//引入该路由使用的组件
     },
 
+
+    
+    // 校验邮箱验证码 
+    {
+        path: '/verification',//路径
+        name: "verification",//路由名称
+        component: () => import('@/views/verification.vue'),//引入该路由使用的组件
+    },
+
+    // 404页面
     {
         path: '/404', //添加一个指向404页面组件的路由
         // name:"404",
@@ -219,15 +233,14 @@ const routes = [
     },
 
 
-
     {
         path: '/test',
         name: "test",
         component: () => import('@/views/test.vue'),//引入该路由使用的组件
     },
 
+//在路由列表的底部添加一个通配符路由，它会捕获所有未匹配到具体路由的URL，并将用户重定向到/404页面。
     {
-        //在路由列表的底部添加一个通配符路由，它会捕获所有未匹配到具体路由的URL，并将用户重定向到/404页面。
         path: '/:pathMatch(.*)', // 使用:pathMatch(.*)作为通配符
         redirect: '/404', // 重定向到404页面
         meta: { hidden: true } // 同样，隐藏这个路由

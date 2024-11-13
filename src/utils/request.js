@@ -1,8 +1,13 @@
 /**axios封装* 请求拦截、相应拦截、错误统一处理*/
 import axios from 'axios';
-import router from '@/router/index.js'
+import router from '@/router';
+// import router from '@/router/index.js'; //Vue Router实例导出自`@/router`
 import { getAchieveUseSignData } from "@/hooks/useSign.js";
 import $message from "@/components/message/message.js";
+
+
+
+// console.log('route.name:',route);
 
 
 // 使用create 创建axios示例 （当然这里存在很多配置选项，具体需要具体配置）
@@ -15,9 +20,12 @@ const axiosService = axios.create()
 //来自相应环境.env文件VITE_BASE_API
 axiosService.defaults.baseURL = import.meta.env.VITE_BASE_API;
 
+let token_data={
+    backend: sessionStorage.getItem('jwt'),
+}
+
 //请求拦截
 axiosService.interceptors.request.use(
-
     config => {
         // console.log(config)
         // 每次发送请求之前判断vuex中是否存在token        
@@ -32,14 +40,30 @@ axiosService.interceptors.request.use(
         // 添加公共的query参数
         // config.params = { ...config.params, params: 'params' };
         // 添加公共的body参数
+        let data={};
         if (config.method === 'post') {
-            const data = getAchieveUseSignData(config.data);
+            data = getAchieveUseSignData(config.data);
             config.data = data;
 
         } else if (config.method === 'get') {
-            const data = getAchieveUseSignData(config.params);
+            data = getAchieveUseSignData(config.params);
             config.params = data;
         }
+        // 使用签名作为前端token
+        token_data.frontend=data.sign;
+
+    // 可以在这里获取请求地址(没有域名部分),如：backend/backend/getAdminOrMenuListData
+    const request_url_str= config.url;
+     //找到字符串中第一个'/'的位置
+    let one_path = request_url_str.indexOf('/');
+     //从0开始截取到字符串中第一个'/'的位置截止 （前缀）
+    let prefix_name = request_url_str.substring(0, one_path);
+    // 根据前缀名称添加相应的token
+    
+    let authorization_str=token_data[prefix_name]??data.sign;
+    config.headers['Authorization'] = 'Bearer '+authorization_str;
+
+
         return config;
     },
     error => {
@@ -54,7 +78,7 @@ axiosService.interceptors.response.use(
         if (response.data.code === 200) {
             // $message(response.data.msg,'success');
             //返回response数据中的data对象
-          
+        
             return Promise.resolve(response.data);
 
             //进行中
@@ -62,11 +86,13 @@ axiosService.interceptors.response.use(
             if (response.data.msg) {//如果存在错误消息，那么在顶部显示消息提示。
                 $message(response.data.msg, 'error');
             }
-           
+        
             return Promise.reject(response); //失败
         }
     },
     error => {
+console.log('error:',error);
+
         $message('服务器异常', 'error');
         // if (error.response.status) {
         //     switch (error.response.status) {

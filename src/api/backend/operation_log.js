@@ -8,7 +8,7 @@ import axiosService from "@/utils/request.js";  // 导入axiosService中创建�
 const operation_log = {
     // 获取list页面框架数据
     getPageLayoutData(params) {
-        return axiosService.post("/data/backend/operation_log_page_layout_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("data/backend/operation_log_page_layout_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -21,7 +21,7 @@ const operation_log = {
     },
     //获取表格数据
     getOperationLogListPageData(params) {
-        return axiosService.post("/data/backend/operation_log_list.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("data/backend/operation_log_list.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 // 返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -35,7 +35,7 @@ const operation_log = {
 
     // 获取查询数据
     queryInputData(params) {
-        return axiosService.post("/data/backend/operation_log_list.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("data/backend/operation_log_list.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -48,7 +48,7 @@ const operation_log = {
     },
     // 分页数据
     getChildPaginationChangeData(params) {
-        return axiosService.post("/data/backend/operation_log_list.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosService.post("data/backend/operation_log_list.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}

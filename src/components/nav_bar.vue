@@ -169,20 +169,23 @@
 
 
 
-	//input事件匹配关键字
+	//input事件匹配关键字，下拉菜单展示匹配结果
 	function handleInput() {
 		debounce(() => {//防抖
 			if (search_keyword.value == '') {
 				// console.log('请输入内容...');
+				// 初始化关键字数据和关闭匹配关键字列表
 				matchKeywordDataInit();
 			} else if (search_keyword.value.search(/^\s+$/) >= 0) {
 				// 检测输入值全是空白的情况
+				//初始化关键字数据和关闭匹配关键字列表
 				matchKeywordDataInit();
 				search_keyword.value = '请输入有效内容...';
 
 			} else {
 
 				// 合法输入值的情况
+				// 初始化关键字数据和关闭匹配关键字列表
 				matchKeywordDataInit();
 				//数据为空或者值小于1或者数组长度小于1，即数据异常重新请求接口获取新数据
 				if (!article_count.value || article_count.value < 1 || !article_list.value || article_list.length < 1) {
@@ -270,6 +273,7 @@
 		if (data.search_keyword_match_count > 0) {
 			match_keyword_list.value = true;
 		} else {
+			// 初始化关键字数据和关闭匹配关键字列表
 			matchKeywordDataInit();
 		}
 
@@ -307,9 +311,11 @@
 
 		if (search_keyword.value == '') {
 			// console.log('请输入内容...');
+			// 初始化关键字数据和关闭匹配关键字列表
 			matchKeywordDataInit();
 		} else if (search_keyword.value.search(/^\s+$/) >= 0) {
 			// 检测输入值全是空白的情况
+			// 初始化关键字数据和关闭匹配关键字列表
 			matchKeywordDataInit();
 			search_keyword.value = '请输入有效内容...';
 			// var itemDiv = tmpDiv.cloneNode(true);
@@ -326,7 +332,7 @@
 			window.open(routeUrl.href, '_blank');//打开新窗口搜索结果页
 
 
-
+// 初始化关键字数据和关闭匹配关键字列表
 			matchKeywordDataInit();
 
 		}
@@ -365,6 +371,7 @@
 	function searchInputBlur() {
 		//如果没有输入关键字，那么初始化关键字数据和关闭匹配关键字列表
 		if (!search_keyword.value) {
+			// 初始化关键字数据和关闭匹配关键字列表
 			matchKeywordDataInit();
 		}
 
