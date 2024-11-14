@@ -6,11 +6,11 @@ import axiosService from "@/utils/request.js";  // 导入axiosService中创建�
 
 /** * post方法，对应post请求 * @param {String} url [请求的url地址] * @param {Object} params [请求时携带的参数] */
 const reset_password = {
-    
-	//获取页面配置（如页面标题、页面关键词、页面描述、、网站log）
-    getResetPasswordPageConfigData(params){
+
+	//获取发送重置密码邮件页面配置（如页面标题、页面关键词、页面描述、、网站log）
+    getSendRetrievePasswordEmailPageData(params){
         
-        return axiosService.post("data/reset_password/reset_password_page_config.json", params,{headers:{'Content-Type': 'application/json'}}) 
+        return axiosService.post("data/reset_password/send_reset_password_email_page_data.json", params,{headers:{'Content-Type': 'application/json'}}) 
         //是将对象 序列化成URL的形式，以&进行拼接   
         .then(response => {
             //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -22,9 +22,27 @@ const reset_password = {
         })
     },    
 
-        //获取重置密码链接
-        getRetrievePasswordUrl(params){
-            return axiosService.post("data/reset_password/get_reset_password_url.json", params,{headers:{'Content-Type': 'application/json'}}) 
+
+
+       //获取重置密码页面配置（如页面标题、页面关键词、页面描述、、网站log）
+       getResetPasswordPageData(params){
+        
+        return axiosService.post("data/reset_password/reset_password_page_data.json", params,{headers:{'Content-Type': 'application/json'}}) 
+        //是将对象 序列化成URL的形式，以&进行拼接   
+        .then(response => {
+            //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
+            return response.data;
+        })
+        .catch(error => {
+            // console.log('api-error:',error)
+            return error;
+        })
+    }, 
+
+
+        //发送重置密码邮件
+        sendRetrievePasswordEmail(params){
+            return axiosService.post("data/reset_password/send_reset_password_email.json", params,{headers:{'Content-Type': 'application/json'}}) 
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -35,6 +53,8 @@ const reset_password = {
                 return error;
             })
         },
+
+        
 
 
     //去重置密码

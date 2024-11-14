@@ -216,19 +216,19 @@ const routes = [
     },
 
     
-    // 重置密码
+    // 获取重置密码邮件
     {
-        path: '/reset_password',//路径
-        name: "reset_password",//路由名称
-        component: () => import('@/views/reset_password.vue'),//引入该路由使用的组件
+        path: '/send_retrieve_password_email',//路径
+        name: "send_retrieve_password_email",//路由名称
+        component: () => import('@/views/send_retrieve_password_email.vue'),//引入该路由使用的组件
     },
 
 
-     // 输入密码进行重置密码
+     // 重置密码
      {
-        path: '/reset_password_input',//路径
-        name: "reset_password_input",//路由名称
-        component: () => import('@/views/reset_password_input.vue'),//引入该路由使用的组件
+        path: '/reset_password',//路径
+        name: "reset_password",//路由名称
+        component: () => import('@/views/reset_password.vue'),//引入该路由使用的组件
     },
 
 

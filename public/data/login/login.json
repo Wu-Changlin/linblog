@@ -1,7 +1,9 @@
 {
 "code":200,
 "data":{
-    "temporary_token":"kdkfkkgkkukuiluyllluluyluluiluil"
+    "nike_name":"lin",
+    "jwt_access_token": "jwt_access_tokenvavasvavavavava",
+    "jwt_refresh_token": "jwt_refresh_tokenvavs99999"
 },
 "msg":"成功"
 

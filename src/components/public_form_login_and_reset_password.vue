@@ -32,7 +32,9 @@
                 </div>
             </el-form-item>
         
-            <el-form-item>
+
+            
+            <el-form-item class="submit-button">
                 <el-button type="primary" style="width:100%;" @click="submitFormDataToParent">{{ formPageLayoutData.button_title }}</el-button>
             </el-form-item>
         </el-form>
@@ -85,9 +87,6 @@
 
     const formDataRef = ref();
 
-
-
-
     //两次密码一致性校验      第二次输入需和第一次输入一致
     const checkPassword = (rule, value, callback) => {
         // console.log(form_data.password);
@@ -132,39 +131,41 @@
 // 提交表单到父页面
 
     function submitFormDataToParent(){
-
-        emit('completeInputFormData',props.formData);
+            //1秒防抖
+        debounce(() => {
+             //valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
+            formDataRef.value.validate((valid, fields) => {
+            if (valid) {
+                // 处理提交逻辑    通过emit事件提交表单数据到父页面
+                emit('completeInputFormData',props.formData);
             
-        // debounce(() => {//3秒防抖
+            } else {
+                // 有字段没有通过验证
+                let obj = Object.keys(fields)[0];
+                //使用formEl.scrollToField方法来焦点定位并滚动到特定的表单字段,这里跳到第一个字段
+                formDataRef.value.scrollToField(obj);
+                $message('输入数据有误，请检查!', 'warning');
+                return false;
+            }
+        });
             
-        // }, 3000)
-                //valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
-        //         formDataRef.value.validate((valid, fields) => {
-        //     if (valid) {
-    
-
-        //         // special_str
-        //         // getEncryptData
-
-        //         emit('completeInputFormData',props.formData);
-            
-        //         // 处理提交逻辑
-        //     } else {
-        //         // 有字段没有通过验证
-        //         let obj = Object.keys(fields)[0];
-        //         //使用formEl.scrollToField方法来焦点定位并滚动到特定的表单字段,这里跳到第一个字段
-        //         formDataRef.value.scrollToField(obj);
-        //         $message('输入数据有误，请检查', 'warning');
-        //         return false;
-        //     }
-        // });
-        
+        }, 1000);  
 
     }
 
 </script>
 
 <style scoped>
+
+/* 设置表单项间隔 */
+:deep(.el-form-item) {
+margin-bottom: 30px;
+}
+/* 设置提交按钮项间隔 */
+.submit-button{
+    margin-bottom: 10px;
+}
+
     .login-page {
         width: 100%;
         height: 100%;
@@ -185,7 +186,7 @@
     }
 
     .login-title {
-        margin: 0px auto 48px auto;
+        margin: 0px auto 15px auto;
         text-align: center;
         font-size: 40px;
         color: white;
