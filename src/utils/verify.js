@@ -26,7 +26,7 @@ const regs={
 
 const verify=(rule,value,reg,callback)=>{
     if(value){
-        console.log('value:',value,',reg.test(value):',reg.test(value));
+        // console.log('value:',value,',reg.test(value):',reg.test(value));
         if(reg.test(value)){
             callback();
         }else{

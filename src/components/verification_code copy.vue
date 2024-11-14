@@ -28,7 +28,7 @@
 
 <script setup>
     // vue 3.x setup 模式
-    import { defineEmits, defineProps, nextTick, onMounted,onUnmounted,ref, watch } from 'vue'
+    import {nextTick, onMounted,onUnmounted,ref, watch } from 'vue'
     
     const props = defineProps({
         value: {

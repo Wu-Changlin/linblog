@@ -28,13 +28,8 @@
     import { ref, reactive, onMounted, onUnmounted, inject, watch } from 'vue';
     import { useRoute, useRouter } from 'vue-router';
 
-
-
-
     const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
     const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
-
-
 
     //选中年份数据来源
     //1.默认值来源，组件逻辑操作放在父页面，子页面仅渲染数据。父页面请求接口得到默认选中年份值，

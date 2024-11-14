@@ -215,6 +215,24 @@ const routes = [
         component: () => import('@/views/login.vue'),//引入该路由使用的组件
     },
 
+    
+    // 重置密码
+    {
+        path: '/reset_password',//路径
+        name: "reset_password",//路由名称
+        component: () => import('@/views/reset_password.vue'),//引入该路由使用的组件
+    },
+
+
+     // 输入密码进行重置密码
+     {
+        path: '/reset_password_input',//路径
+        name: "reset_password_input",//路由名称
+        component: () => import('@/views/reset_password_input.vue'),//引入该路由使用的组件
+    },
+
+
+    
 
     
     // 校验邮箱验证码 

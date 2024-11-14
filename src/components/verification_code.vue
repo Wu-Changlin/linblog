@@ -28,7 +28,7 @@
 
 <script setup>
     // vue 3.x setup 模式
-    import { defineEmits, defineProps, nextTick, onMounted,onUnmounted,ref, watch,computed } from 'vue'
+    import {nextTick, onMounted,onUnmounted,ref, watch,computed } from 'vue'
     
 
     // 使用该变量在中文输入法输入时，阻止@input事件的触发。
