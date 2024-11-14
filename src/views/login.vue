@@ -96,9 +96,13 @@
     loginModuleApi.goVerifyLoginAccount(params_data)
       .then(response => {
         let temporary_token = response.temporary_token;
-        $message('账号通过验证,请输入您收到的邮箱验证码完成登录', 'success');
-        //路由携参跳转
-        router.push({ name: 'verification', query: { temporary_token: temporary_token }, key: new Date().getTime() });
+        if(temporary_token){
+          $message('账号通过验证,请输入您收到的邮箱验证码完成登录', 'success');
+
+          //路由携参跳转到输入邮箱验证码页
+          router.push({ name: 'verification', query: { temporary_token: temporary_token }, key: new Date().getTime() });
+            
+        }
       })
 
   }

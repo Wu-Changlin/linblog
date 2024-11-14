@@ -1,7 +1,7 @@
 {
 "code":200,
 "data":{
-    "nike_name":"lin",
+    "nick_name":"lin",
     "jwt_access_token": "jwt_access_tokenvavasvavavavava",
     "jwt_refresh_token": "jwt_refresh_tokenvavs99999"
 },

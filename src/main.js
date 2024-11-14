@@ -3,7 +3,8 @@ import App from './App.vue';
 import router from './router/index.js'; //引入配置路由文件
 import ElementPlus from 'element-plus'; //引入ElementPlus依赖
 import 'element-plus/dist/index.css'; // 引入样式文件index.css
-import { createPinia } from 'pinia'
+import { createPinia } from 'pinia'     
+import piniaPluginPersist from 'pinia-plugin-persist'//Pinia持久化存储
 import { createHead } from '@unhead/vue'
 
 // pinia
@@ -11,6 +12,11 @@ const pinia = createPinia()
 
 // meta 元数据
 const head = createHead()
+
+
+//pinia 安装持久化存储
+pinia.use(piniaPluginPersist)
+
 
 
 //  安装tooltip

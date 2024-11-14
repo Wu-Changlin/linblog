@@ -26,7 +26,7 @@
 <script setup>
 import { reactive, ref,onMounted ,computed,inject} from 'vue';
 import { useRoute,useRouter } from "vue-router";
-import { useMenuStore } from '@/stores/menu_data_store.js';//临时存储活跃菜单id  会话级
+import { useMenuStore } from '@/stores/useMenuStore.js';//临时存储活跃菜单id  会话级
 const route=useRoute();
 const router=useRouter();
 

@@ -120,6 +120,11 @@
   import { MdEditor } from 'md-editor-v3';
   import 'md-editor-v3/lib/style.css';
   import articleModuleApi from "@/api/backend/article.js";//api接口
+  import { useUserStore } from '@/stores/useUserStore.js';//临时存储登录用户相关信息(昵称、令牌、刷新令牌)  会话级
+
+    let jwtRefreshToken=useUserStore().getNickName;
+    console.log('article-jwtRefreshToken:',jwtRefreshToken);
+
 
   const route = useRoute();
   const router = useRouter();

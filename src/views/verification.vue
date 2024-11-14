@@ -12,6 +12,8 @@
     import { useRouter, useRoute } from "vue-router";
     import loginModuleApi from "@/api/login/login.js";//api接口
     import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
+    import { useUserStore } from '@/stores/useUserStore.js';//临时存储登录用户相关信息(昵称、令牌、刷新令牌)  会话级
+
 
 
     const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
@@ -31,12 +33,17 @@
         loginModuleApi.goLogin(params_data)
       .then(response => {
         
-          if (response && response.jwt_access_token && response.jwt_refresh_token) {
+
+    //     "nick_name":"lin",
+    // "jwt_access_token": "jwt_access_tokenvavasvavavavava",
+    // "jwt_refresh_token": "jwt_refresh_tokenvavs99999"
+
+          if (response && response.nick_name && response.jwt_access_token && response.jwt_refresh_token) {
             $message('成功登录', 'success');
             // //保存数据到本地存储
-            // username= that.form.username;
-            // useUserStore().login(this.username,Response.access,Response.refresh)
-            
+            console.log('response.nick_name,response.jwt_access_token,response.jwt_refresh_token:',response.nick_name,response.jwt_access_token,response.jwt_refresh_token)
+            useUserStore().login(response.nick_name,response.jwt_access_token,response.jwt_refresh_token)
+        
             // 导航到后台首页
             router.push({ name: 'admin', key: new Date().getTime() });
 
