@@ -31,7 +31,7 @@
 	import Footer from "@/components/footer.vue";
 	import layoutModuleApi from "@/api/frontend/layout.js";//api接口
 	import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述
-	import { useMenuStore } from '@/stores/useMenuStore.js';//临时存储活跃菜单id  会话级
+
 	
 	const route= useRoute();
 
@@ -154,13 +154,6 @@
 
 
 	
-// 实例
-const menuStore = useMenuStore();
-
-// 组件销毁前调用方法移除sessionStorage
-onUnmounted(() => {
-	menuStore.removeStoreMenuId();
-});
 
 
 </script>

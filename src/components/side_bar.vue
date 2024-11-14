@@ -26,7 +26,7 @@
 <script setup>
 import { reactive, ref,onMounted ,computed,inject} from 'vue';
 import { useRoute,useRouter } from "vue-router";
-import { useMenuStore } from '@/stores/useMenuStore.js';//临时存储活跃菜单id  会话级
+
 const route=useRoute();
 const router=useRouter();
 
@@ -46,15 +46,13 @@ const props = defineProps({
 //计算属性active_menu_name来获取路由的名称
 const active_menu_name = computed(() => route.name);
 
-// 实例
-const menuStore = useMenuStore();
+
 
 function clickMenu(menu_id){
 	// 使用来自layout页面（公共）提供修改当前选中菜单id的方法
 	updateCurrentActiveMenuIdFunction(menu_id);
 	// console.log('menu_id:',menu_id);
-	 // 调用方法以sessionStorage存储菜单id
-	menuStore.setCurrentMenuId(menu_id);
+	
 
 }
 

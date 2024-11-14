@@ -23,7 +23,7 @@
 						</template>
 						<!-- 遍历子组件 start-->
 						<template v-for="(sub_menu,item) in menu.children">
-							<el-menu-item @click="clickMenu(sub_menu.menu_path,sub_menu.menu_title)" :index="sub_menu.menu_name">
+							<el-menu-item @click="clickMenu(sub_menu.menu_path,sub_menu.menu_title,sub_menu.menu_id)" :index="sub_menu.menu_name">
 								<svg-icon class="svg_icon" style="width: 1em; height: 1em; margin-right: 8px;"
 									:icon-class="sub_menu.icon" />
 								<span>{{ sub_menu.menu_title }}</span>
@@ -33,7 +33,7 @@
 					</el-sub-menu>
 
 					<!-- 无子组件，继续 -->
-					<el-menu-item v-else @click="clickMenu(menu.menu_path,menu.menu_title)" :index="menu.menu_name">
+					<el-menu-item v-else @click="clickMenu(menu.menu_path,menu.menu_title,menu.menu_id)" :index="menu.menu_name">
 						<svg-icon class="svg_icon" style="width: 1em; height: 1em; margin-right: 8px;"
 							:icon-class="menu.icon" />
 						<span>{{ menu.menu_title }}</span>
@@ -52,6 +52,9 @@
 <script setup>
 	import { reactive, ref, onMounted, computed, inject } from 'vue';
 	import { useRoute, useRouter } from "vue-router";
+	import { useMenuStore } from '@/stores/useMenuStore.js';//临时存储活跃菜单id  会话级
+
+
 	const route = useRoute();
 	const router = useRouter();
 	// menu_name: string //菜单唯一标识，与路由名保持一致
@@ -73,7 +76,7 @@
 
 
 	//侧边栏菜单点击
-	function clickMenu(menu_path,menu_title) {
+	function clickMenu(menu_path,menu_title,menu_id) {
 
 		let menu_title_to_str= String(menu_title);
 		// 替换第一个匹配项,将字符串中的"列表"替换为"页"
@@ -81,6 +84,16 @@
 		parentPageAddTagToTabsFunction({propName:menu_title_to_str,value:menu_path})
 		// lastIndexOf方法找到最后一个'/'的位置，然后使用slice方法从该位置截取到字符串的末尾，并且还去掉了'/'字符。
 		//路由跳转
+		let Menu_data={
+			prop_name:menu_title_to_str,
+			menu_path:menu_path,
+			menu_id:menu_id
+		}
+
+
+			// 调用方法以sessionStorage存储菜单数据
+			useMenuStore().setCurrentMenuId(Menu_data);
+
 		router.push({ path: menu_path })
 	}
 
