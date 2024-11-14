@@ -2,17 +2,24 @@
   <Transition name="down">
 
 
-    <div class="my-message" :style="style[type]" v-show='isShow'>
-      <!-- 上面绑定的是样式 -->
-      <!-- 不同提示图标会变 -->
-
-      <svg class="svg-icon" :style="style[type]" aria-hidden="true">
-        <use :xlink:href="'#icon-'+type"></use>
-      </svg>
-
-      <span class="text">{{text}}</span>
+    <div style="width: 100%; padding: 0; margin: 0; display: flex;  justify-content: center;">
+      <div class="my-message" :style="style[type]" v-show='isShow'>
+        <!-- 上面绑定的是样式 -->
+        <!-- 不同提示图标会变 -->
+  
+        <div style="padding:0px 10px;">
+          <svg class="svg-icon" :style="style[type]" aria-hidden="true">
+            <use :xlink:href="'#icon-'+type"></use>
+          </svg>
+        </div>
+        
+  
+        <span class="text">{{text}}</span>
+  
+      </div>
 
     </div>
+    
 
 
 
@@ -61,14 +68,12 @@
     warning: {
       color: '#E6A23C',
       fill: '#E6A23C',
-
       backgroundColor: 'rgb(253, 246, 236)',
       borderColor: 'rgb(250, 236, 216)'
     },
     error: {
       color: '#F56C6C',
       fill: '#F56C6C',
-
       backgroundColor: 'rgb(254, 240, 240)',
       borderColor: 'rgb(253, 226, 226)'
     }
@@ -116,16 +121,16 @@
   .my-message {
     padding: 0;
     margin: 0;
-    /* width: 300px; */
-    max-width: 900px;
-    height: 50px;
+    width: auto;
+    height: auto;
+    margin: 5px;
+    display: flex;
     position: fixed;
     z-index: 9999;
-    left: 50%;
-    margin-left: -150px;
+    align-items: center;
     top: 15px;
     line-height: 50px;
-    padding: 0 25px;
+    /* padding: 5px; */
     border: 1px solid #e4e4e4;
     background: #f5f5f5;
     color: #999;
@@ -140,7 +145,6 @@
     }
 
     .text {
-      margin-left: 10px;
       vertical-align: middle;
     }
   }

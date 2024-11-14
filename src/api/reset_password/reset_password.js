@@ -22,6 +22,20 @@ const reset_password = {
         })
     },    
 
+        //获取重置密码链接
+        getRetrievePasswordUrl(params){
+            return axiosService.post("data/reset_password/get_reset_password_url.json", params,{headers:{'Content-Type': 'application/json'}}) 
+            //是将对象 序列化成URL的形式，以&进行拼接   
+            .then(response => {
+                //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
+                return response.data;
+            })
+            .catch(error => {
+                // console.log('api-error:',error)
+                return error;
+            })
+        },
+
 
     //去重置密码
 goRetrievePassword(params){

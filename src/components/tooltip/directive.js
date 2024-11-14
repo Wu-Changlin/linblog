@@ -1,7 +1,8 @@
 // 引入组件
 import { nextTick, createApp } from "vue";
 import tooltip from '@/components/tooltip/tooltip.vue'
-import { tokenFun } from '@/utils/token.js'
+import { tokenFun } from '@/utils/tooltip_token.js'
+
 
 // 清除监听
 function clearEvent(el) {

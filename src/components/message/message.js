@@ -2,13 +2,17 @@
 // 文本
 import { createVNode,render } from 'vue'
 import myMessage from './message.vue'
+
 // 动态创建一个DOM容器
 const div=document.createElement('div')
 div.setAttribute('class','my-message-container')
 document.body.appendChild(div)
 
+
 export default function Messages (text,type){
-  let timer=null
+  
+  let timer=null;
+
  //createVNode 用于创建一个虚拟节点
  // 参数1 支持组件
  // 参数2 表示传递给组件的选项
@@ -23,8 +27,8 @@ render(vnode,div);
  clearTimeout(timer)
    timer=setTimeout(()=>{
     // 清空div里面的内容
-    render(null,div)
-   },3000)
+    render(null,div);
+   },30000000)
 }
 
 

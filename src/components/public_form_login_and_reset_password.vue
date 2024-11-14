@@ -1,9 +1,11 @@
 <template>
     <div class="login-page">
+        
         <el-form  label-position="top" :model="formData" ref="formDataRef" :rules="rules" class="login-container">
             <h3 class="login-title">
                 {{ formPageLayoutData.page_title }}
             </h3>
+            
         
             <slot name="email">
             
@@ -81,7 +83,6 @@
 
     }
 
-  
     const formDataRef = ref();
 
 
@@ -131,35 +132,35 @@
 // 提交表单到父页面
 
     function submitFormDataToParent(){
+
+        emit('completeInputFormData',props.formData);
+            
+        // debounce(() => {//3秒防抖
+            
+        // }, 3000)
                 //valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
-                formDataRef.value.validate((valid, fields) => {
-            if (valid) {
+        //         formDataRef.value.validate((valid, fields) => {
+        //     if (valid) {
     
 
-                // special_str
-                // getEncryptData
+        //         // special_str
+        //         // getEncryptData
 
-                emit('completeInputFormData',props.formData);
+        //         emit('completeInputFormData',props.formData);
             
-                // 处理提交逻辑
-            } else {
-                // 有字段没有通过验证
-                let obj = Object.keys(fields)[0];
-                //使用formEl.scrollToField方法来焦点定位并滚动到特定的表单字段,这里跳到第一个字段
-                formDataRef.value.scrollToField(obj);
-                $message('输入数据有误，请检查', 'warning');
-                return false;
-            }
-        });
+        //         // 处理提交逻辑
+        //     } else {
+        //         // 有字段没有通过验证
+        //         let obj = Object.keys(fields)[0];
+        //         //使用formEl.scrollToField方法来焦点定位并滚动到特定的表单字段,这里跳到第一个字段
+        //         formDataRef.value.scrollToField(obj);
+        //         $message('输入数据有误，请检查', 'warning');
+        //         return false;
+        //     }
+        // });
         
 
     }
-
-    onMounted(() => {
-
-
-    });
-
 
 </script>
 
@@ -175,7 +176,6 @@
     }
 
     .login-container {
-
         border-radius: 15px;
         margin: 180px auto;
         width: 350px;

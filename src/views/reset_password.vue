@@ -3,9 +3,9 @@
     <div>
         <PublicFormLoginAndResetPassword :formData="reset_password_form_data"
             :formPageLayoutData="reset_password_form_page_layout_data" :validateCodePath="validate_code_path"
-            @completeInputFormData="submitRetrievePassword">
+            @completeInputFormData="submitDataGetRetrievePasswordUrl">
             <template #email>
-                <el-form-item prop="email" label="邮箱">
+                <el-form-item prop="email" label="输入您的用户帐户的验证电子邮件地址，我们将向您发送密码重置链接。">
                     <el-input v-model="reset_password_form_data.email" type="text" placeholder="亲，请输入邮箱">
                     </el-input>
                 </el-form-item>
@@ -24,7 +24,7 @@
     import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
     import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
 
-    import PublicFormLoginAndResetPassword from '@/components/publicFormLoginAndResetPassword.vue';
+    import PublicFormLoginAndResetPassword from '@/components/public_form_login_and_reset_password.vue';
 
 
     const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
@@ -58,15 +58,26 @@
     })
 
 
-    //提交数据进行重置密码
-    function submitRetrievePassword(val) {
+    //提交数据获取重置密码链接
+    function submitDataGetRetrievePasswordUrl(val) {
         const params_data = val;
-
-        console.log('submitRetrievePassword', val);
-        resetPasswordModuleApi.goRetrievePassword(params_data)
+        resetPasswordModuleApi.getRetrievePasswordUrl(params_data)
             .then(response => {
-                $message('重置密码链接已发送到您的邮箱，有效期3小时', 'success');
+               const get_reset_password_url_result=response.get_reset_password_url;
+               if(get_reset_password_url_result){
+            
+                $message('发送密码重置链接，请注意查收！自动跳转到登录界面！', 'success');
+            
+                // debounce(() => {//3秒防抖
+                //     $message('自动跳转到登录界面！', 'success');
+                //     // 导航到登录页
+                //     router.push({ name: 'login', key: new Date().getTime() });
+                // }, 3000)
+                
 
+                return;
+               }
+            
             })
 
 
