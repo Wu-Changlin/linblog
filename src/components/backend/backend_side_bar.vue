@@ -81,7 +81,7 @@
 		let menu_title_to_str= String(menu_title);
 		// 替换第一个匹配项,将字符串中的"列表"替换为"页"
 		menu_title_to_str = menu_title_to_str.replace(/列表/, "页");
-		parentPageAddTagToTabsFunction({propName:menu_title_to_str,value:menu_path})
+		// parentPageAddTagToTabsFunction({propName:menu_title_to_str,value:menu_path})
 		// lastIndexOf方法找到最后一个'/'的位置，然后使用slice方法从该位置截取到字符串的末尾，并且还去掉了'/'字符。
 		//路由跳转
 		let Menu_data={
@@ -92,9 +92,24 @@
 
 
 			// 调用方法以sessionStorage存储菜单数据
-			useMenuStore().setCurrentMenuId(Menu_data);
+			useMenuStore().setCurrentMenuData(Menu_data);
+					// 菜单数据
+		// currentActiveMenuData= [
+//     {
+//         "prop_name": "首页",
+//         "menu_path": "/admin/home",
+//         "menu_id": 0
+//     },
+//     {
+//         "prop_name": "用户页",
+//         "menu_path": "/admin/user_list",
+//         "menu_id": 8
+//     }
+// ]
 
-		router.push({ path: menu_path })
+		//导航到指定页面
+		router.push({ path: menu_path });
+		
 	}
 
 
