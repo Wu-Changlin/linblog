@@ -64,7 +64,7 @@
     function handleInputContainsLetterOrDigitOrSpecialSymbols(value) {
         console.log('handleInputContainsLetterOrDigitOrSpecialSymbols:', value)
         // 使用正则表达式匹配字母、数字和特定符号(. - @)，其他字符替换为空
-        const regex = /^[a-zA-Z0-9.\-@]*$/;
+        // const regex = /^[a-zA-Z0-9.\-@]*$/;
         const new_value = value.replace(/[^a-zA-Z0-9.\-@]/g, '');
         reset_password_form_data.email = new_value;
     }

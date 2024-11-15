@@ -12,7 +12,7 @@
     import { useRouter, useRoute } from "vue-router";
     import loginModuleApi from "@/api/login/login.js";//api接口
     import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
-    import { useUserStore } from '@/stores/useUserStore.js';//临时存储登录用户相关信息(昵称、令牌、刷新令牌)  会话级
+    import { useUserStore } from '@/stores/useUserStore.js';//持久存储登录用户相关信息(昵称、令牌、刷新令牌)  会话级
 
 
 

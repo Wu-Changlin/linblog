@@ -65,9 +65,7 @@
 
 const is_collapse_side_menu = inject('isCollapseSideMenu');
 
-// 注入来自admin页面（公共）提供修改当前选中标签id的方法
-const updateIsCollapseSideMenuFunction = inject('updateIsCollapseSideMenuFunction');
-	
+
 
 	function isCollapse(){
 

@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 // import { refreshToken } from '../api/user'
 
 
-
 export const useUserStore = defineStore('user', {
     persist: {
         enabled: true, //开启数据持久化

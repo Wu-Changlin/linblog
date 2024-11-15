@@ -1,18 +1,20 @@
 <template>
 
     <div>
-        <PublicFormLoginAndResetPassword :formData="reset_password_form_data" :formPageLayoutData="reset_password_form_page_layout_data" @completeInputFormData="submitRetrievePassword">
-            
+        <PublicFormLoginAndResetPassword :formData="reset_password_form_data"
+            :formPageLayoutData="reset_password_form_page_layout_data" @completeInputFormData="submitRetrievePassword">
+
             <template #password>
                 <el-form-item prop="password" label="密码">
-                <el-input v-model="reset_password_form_data.password" type="password" placeholder="亲，请输入密码" show-password>
-                </el-input>
-            </el-form-item>
-        </template>
+                    <el-input v-model="reset_password_form_data.password" type="password" placeholder="亲，请输入密码"
+                        show-password>
+                    </el-input>
+                </el-form-item>
+            </template>
             <template #confirm_password>
                 <el-form-item prop="confirm_password" label="确认密码">
-                    <el-input v-model="reset_password_form_data.confirm_password" type="password" placeholder="亲，请再次输入密码"
-                        show-password>
+                    <el-input v-model="reset_password_form_data.confirm_password" type="password"
+                        placeholder="亲，请再次输入密码" show-password>
                     </el-input>
                 </el-form-item>
             </template>
@@ -37,7 +39,7 @@
     const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。
     const $message = inject('$message');
 
-        /* 修改当前页面meta元数据，标题、关键词、描述  开始  */
+    /* 修改当前页面meta元数据，标题、关键词、描述  开始  */
 
     // meta元数据，标题、关键词、描述 
     const current_meta_title = ref('');
@@ -55,42 +57,38 @@
         confirm_password: "",
     })
 
-      // 页面标题和按钮标题
-      const reset_password_form_page_layout_data=reactive({
-      page_title:current_meta_title,
-      button_title:current_meta_title
+    // 页面标题和按钮标题
+    const reset_password_form_page_layout_data = reactive({
+        page_title: current_meta_title,
+        button_title: current_meta_title
     })
 
 
-    
-// 122333.w
+    //提交数据进行重置密码
+    function submitRetrievePassword(val) {
 
-        //提交数据进行重置密码
-        function submitRetrievePassword(val) {
-  
-            // 使用扩展运算符进行深拷贝 避免修改一个变量时影响到另一个变量。
-let params_data = { ...val };
-    // 加密密码
-                const encrypt_password_result = getEncryptData(params_data.password);
-                const encrypt_confirm_password_result = getEncryptData(params_data.password);
+        // 使用扩展运算符进行深拷贝 避免修改一个变量时影响到另一个变量。
+        let params_data = { ...val };
+        // 加密密码
+        const encrypt_password_result = getEncryptData(params_data.password);
+        const encrypt_confirm_password_result = getEncryptData(params_data.password);
 
-                params_data.password = encrypt_password_result;
-                params_data.confirm_password = encrypt_confirm_password_result;
-console.log('encrypt_password_result:',encrypt_password_result);
-            resetPasswordModuleApi.goRetrievePassword(params_data)
-                    .then(response => {
-                        $message('重置密码链接已发送到您的邮箱，有效期3小时', 'success');
+        params_data.password = encrypt_password_result;
+        params_data.confirm_password = encrypt_confirm_password_result;
+        console.log('encrypt_password_result:', encrypt_password_result);
+        resetPasswordModuleApi.goRetrievePassword(params_data)
+            .then(response => {
+                $message('重置密码链接已发送到您的邮箱，有效期3小时', 'success');
 
-                    })
+            })
 
-          
+
     }
-
-
 
 
     //获取页面配置（如页面标题、页面关键词、页面描述、、网站log）
     function getResetPasswordPageData() {
+        // 
         resetPasswordModuleApi.getResetPasswordPageData({ method: 'getResetPasswordPageData' })
             .then(response => {
 
@@ -101,16 +99,13 @@ console.log('encrypt_password_result:',encrypt_password_result);
                 //使用来自layout页面（公共）提供修改当前页面meta元数据，标题、关键词、描述的方法的方法修改页面meta 数据。
                 // updatePageMetaInfoFunction(current_page_meta_data);
 
-            
-            
+
+
             })
 
     }
-    // 8b0abbe01c595d61d1c6658f2a5f8e68e23650d45958183306d9268e049c25b5
 
     onMounted(() => {
-
-
 
         //获取页面配置（如页面标题、页面关键词、页面描述、、网站log）
         getResetPasswordPageData();

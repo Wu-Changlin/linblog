@@ -57,11 +57,7 @@
 
   const $message = inject('$message');
 
-  // 注入来自admin页面（公共）提供标签数据集
-	const parent_page_tabs_list_data = inject('tabs_list_data');
 
-  // 注入来自admin页面（公共）提供Tabs 标签页关闭tag的方法
-	const parentPageCloseTagFunction = inject('closeTag');
 
   // console.log('parent_page_tabs_list_data:',parent_page_tabs_list_data)
 

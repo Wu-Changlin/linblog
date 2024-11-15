@@ -62,12 +62,6 @@
 
 	const is_collapse_side_menu = inject('isCollapseSideMenu');
 
-	// 注入来自admin页面（公共）提供Tabs 标签页添加tag的方法
-	const parentPageAddTagToTabsFunction = inject('addTagToTabs');
-
-
-	
-
 	const props = defineProps({
 		parentPageMenuData: {
 			type: Array,

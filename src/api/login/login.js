@@ -9,8 +9,9 @@ const login = {
     
 	//获取页面配置（如页面标题、页面关键词、页面描述、、网站log）
     getLoginPageData(params){
-        
-        return axiosService.post("data/login/login_page_data.json", params,{headers:{'Content-Type': 'application/json'}}) 
+
+        return axiosService.post("login/login/loginPageData", params,{headers:{'Content-Type': 'application/json'}}) 
+        // return axiosService.post("data/login/login_page_data.json", params,{headers:{'Content-Type': 'application/json'}}) 
         //是将对象 序列化成URL的形式，以&进行拼接   
         .then(response => {
             //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}

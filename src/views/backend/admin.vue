@@ -32,7 +32,7 @@
     import adminModuleApi from "@/api/backend/admin.js";//api接口
     import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';//防抖、节流
     import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
-    import { useUserStore } from '@/stores/useUserStore.js';//临时存储登录用户相关信息(昵称、令牌、刷新令牌)  会话级
+    import { useUserStore } from '@/stores/useUserStore.js';//持久存储登录用户相关信息(昵称、令牌、刷新令牌)  会话级
 
     let jwtRefreshToken=useUserStore().getNickName;
     console.log('jwtRefreshToken:',jwtRefreshToken);

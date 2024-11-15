@@ -280,11 +280,6 @@ function getAddOrEditPageLayoutData(){
 
     options_role_data.value=response.options_role_data;
   })
-  .catch(error => {
-    // console.log(' getPageLayoutData()=>error:',error)
-    $message('请求未找到', 'error');
-    // $message('请求未找到', 'error');
-  });
 
 }
 
