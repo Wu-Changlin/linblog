@@ -56,17 +56,18 @@
     // 完成填写表单传递事件到父页面
     const emit = defineEmits(['completeInputFormData']);
 
-            const props = defineProps({
-                formData: {
-                    type: Object,
-                },
-                formPageLayoutData:{
-                    type:Object,
-                },
-                validateCodePath:{
-                    type:String,
-                }
-            });
+    // 父页面传值到子页面
+    const props = defineProps({
+        formData: {
+            type: Object,
+        },
+        formPageLayoutData:{
+            type:Object,
+        },
+        validateCodePath:{
+            type:String,
+        }
+    });
 
 
     // validate_code_path
@@ -131,25 +132,26 @@
 // 提交表单到父页面
 
     function submitFormDataToParent(){
+        emit('completeInputFormData',props.formData);
             //1秒防抖
-        debounce(() => {
-             //valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
-            formDataRef.value.validate((valid, fields) => {
-            if (valid) {
-                // 处理提交逻辑    通过emit事件提交表单数据到父页面
-                emit('completeInputFormData',props.formData);
+        // debounce(() => {
+        //      //valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
+        //     formDataRef.value.validate((valid, fields) => {
+        //     if (valid) {
+        //         // 处理提交逻辑    通过emit事件提交表单数据到父页面
+        //         emit('completeInputFormData',props.formData);
             
-            } else {
-                // 有字段没有通过验证
-                let obj = Object.keys(fields)[0];
-                //使用formEl.scrollToField方法来焦点定位并滚动到特定的表单字段,这里跳到第一个字段
-                formDataRef.value.scrollToField(obj);
-                $message('输入数据有误，请检查!', 'warning');
-                return false;
-            }
-        });
+        //     } else {
+        //         // 有字段没有通过验证
+        //         let obj = Object.keys(fields)[0];
+        //         //使用formEl.scrollToField方法来焦点定位并滚动到特定的表单字段,这里跳到第一个字段
+        //         formDataRef.value.scrollToField(obj);
+        //         $message('输入数据有误，请检查!', 'warning');
+        //         return false;
+        //     }
+        // });
             
-        }, 1000);  
+        // }, 1000);  
 
     }
 

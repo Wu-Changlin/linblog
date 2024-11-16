@@ -75,15 +75,15 @@
 
         params_data.password = encrypt_password_result;
         params_data.confirm_password = encrypt_confirm_password_result;
-        console.log('encrypt_password_result:', encrypt_password_result);
+        // console.log('encrypt_password_result:', encrypt_password_result);
         resetPasswordModuleApi.goRetrievePassword(params_data)
             .then(response => {
                 $message('重置密码链接已发送到您的邮箱，有效期3小时', 'success');
 
             })
-
-
     }
+
+
 
 
     //获取页面配置（如页面标题、页面关键词、页面描述、、网站log）

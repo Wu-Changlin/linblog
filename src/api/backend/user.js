@@ -93,20 +93,6 @@ clickSubmitAddOrEditData(params) {
     
 
 
-  //获取刷新AccessToken 访问令牌数据,提交token是刷新令牌useUserStore().getRefreshToken
- getRefreshAccessToken(params) {
-    return axiosService.post("backend/user/getRefreshAccessToken", params, { headers: { 'Content-Type': 'application/json' } })
-    // return axiosService.post("data/backend/get_refresh_access_token_data.json", params, { headers: { 'Content-Type': 'application/json' } })
-        //是将对象 序列化成URL的形式，以&进行拼接   
-        .then(response => {
-            //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
-            return response.data;
-        })
-        .catch(error => {
-            // console.log('api-error:',error)
-            return error;
-        })
-}
 
 
 
