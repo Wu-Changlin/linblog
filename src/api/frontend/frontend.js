@@ -1,4 +1,4 @@
-import axiosService from "@/utils/request.js";  // 导入axiosService中创建的axios实例
+import {axiosServiceFrontend} from "@/utils/request.js";  // 导入axiosServiceFrontend中创建的axios实例
 
 
 //admin 模块
@@ -10,7 +10,7 @@ const frontend = {
 
     getFrontendPageData(params){
     
-        return axiosService.post("data/frontend/frontend.json", params,{headers:{'Content-Type': 'application/json'}}) 
+        return axiosServiceFrontend.post("data/frontend/frontend.json", params,{headers:{'Content-Type': 'application/json'}}) 
         //是将对象 序列化成URL的形式，以&进行拼接   
         .then(response => {
             //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -24,7 +24,7 @@ const frontend = {
      //获取把子页面选中的标签id和标签名称传到父页面或者点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）
 getChildClickTag(params) {
 
-    return axiosService.post("data/frontend/frontend.json", params,{headers:{'Content-Type': 'application/json'}}) 
+    return axiosServiceFrontend.post("data/frontend/frontend.json", params,{headers:{'Content-Type': 'application/json'}}) 
     //是将对象 序列化成URL的形式，以&进行拼接   
     .then(response => {
         //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -38,7 +38,7 @@ getChildClickTag(params) {
 //根据触底获取选中标签下一页数据  
 getActiveTagNextPageData(params) {
 
-    return axiosService.post("data/frontend/active_tag_next_page_data.json", params,{headers:{'Content-Type': 'application/json'}}) 
+    return axiosServiceFrontend.post("data/frontend/active_tag_next_page_data.json", params,{headers:{'Content-Type': 'application/json'}}) 
     //是将对象 序列化成URL的形式，以&进行拼接   
     .then(response => {
         //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}

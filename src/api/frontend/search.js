@@ -1,4 +1,4 @@
-import axiosService from "@/utils/request.js";  // 导入axiosService中创建的axios实例
+import {axiosServiceFrontend} from "@/utils/request.js";  // 导入axiosServiceFrontend中创建的axios实例
 
 
 //search 模块
@@ -8,7 +8,7 @@ import axiosService from "@/utils/request.js";  // 导入axiosService中创建�
 const search = {    
     //获取搜索关键字匹配结果   总页数>=当前页数 ，模拟时总页数没有axios赋值，随机数赋值
 getSearchKeywordMatchData(params){
-        return axiosService.post("data/frontend/search_keyword.json", params,{headers:{'Content-Type': 'application/json'}}) 
+        return axiosServiceFrontend.post("data/frontend/search_keyword.json", params,{headers:{'Content-Type': 'application/json'}}) 
         //是将对象 序列化成URL的形式，以&进行拼接   
         .then(response => {
             //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -23,7 +23,7 @@ getSearchKeywordMatchData(params){
 
      //根据触底数据判断获取搜索关键字匹配结果下一页
     getSearchKeywordMatchNextPageData(params){
-        return axiosService.post("data/frontend/search_keyword.json", params,{headers:{'Content-Type': 'application/json'}}) 
+        return axiosServiceFrontend.post("data/frontend/search_keyword.json", params,{headers:{'Content-Type': 'application/json'}}) 
         //是将对象 序列化成URL的形式，以&进行拼接   
         .then(response => {
             //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}

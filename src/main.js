@@ -14,6 +14,7 @@ const pinia = createPinia()
 const head = createHead()
 
 
+
 //pinia 安装持久化存储
 pinia.use(piniaPluginPersist)
 
@@ -77,8 +78,8 @@ app.component('svg-icon', SvgIcon);
 // import http from '@/utils/request.js';
     // .use(http)
 app.use(router)
+    .use(head)
     .use(pinia)
     .use(ElementPlus)
     .use(tooltip)
-    .use(head)
 app.mount('#app')

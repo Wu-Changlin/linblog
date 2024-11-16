@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useUserStore } from '@/stores/useUserStore';//持久存储登录用户相关信息(昵称、令牌、刷新令牌)  会话级
 
 const routes = [
     {
@@ -42,11 +43,6 @@ const routes = [
                 name: "diary",
                 component: () => import('@/views/frontend/diary.vue')
             },
-
-
-
-
-
 
         ]
     },
@@ -264,25 +260,14 @@ const routes = [
         meta: { hidden: true } // 同样，隐藏这个路由
     }
 
-
-
-
 ]
-
 const router = createRouter({
     history: createWebHistory(),//设置为history模式
     routes
 })
 
-
-
-
-
-
-
 //滚动class_name
 const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.feeds-page', resource: '.feeds-page', archives: '.feeds-page', diary: '.feeds-page' }
-
 router.beforeEach((to, from, next) => {
     //导航守卫逻辑  如果目的路由等于来源路由，那么滚动条置顶。
     //    路由切换实际是组件间的切换，引用相同组件的时候，页面就无法更新。
@@ -293,6 +278,24 @@ router.beforeEach((to, from, next) => {
             scrollElem.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
+
+    // 因为路由器是在其被安装之后开始导航的，而此时 Pinia 也已经被安装; 访问令牌
+    const jwt_access_token = useUserStore().getUserAccessToken;
+
+      // 检查目标路由的默认组件
+  const targetComponents = to.matched.flatMap(record => Object.values(record.components));
+  console.log('from:',from);
+  console.log('to:',to);
+
+//   if (targetComponents.includes(Secret)) {
+//     // 如果目标组件是 Secret，执行某些操作，例如身份验证
+//     // ...
+//     next(); // 允许导航
+//   } else {
+//     next(); // 不是 Secret 组件，直接导航
+//   }
+
+
     next();
 
 });

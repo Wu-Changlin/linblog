@@ -1,5 +1,4 @@
-import axiosService from "@/utils/request.js";  // 导入axiosService中创建的axios实例
-
+import {axiosServiceBackend} from "@/utils/request.js";  // 导入axiosServiceBackend中创建的axios实例
 
 //configuration 模块
 
@@ -8,7 +7,7 @@ import axiosService from "@/utils/request.js";  // 导入axiosService中创建�
 const configuration = {
     // 获取list页面框架数据
     getPageLayoutData(params) {
-        return axiosService.post("data/backend/configuration_page_layout_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosServiceBackend.post("data/backend/configuration_page_layout_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -21,7 +20,7 @@ const configuration = {
     },
     //获取表格数据
     getConfigurationListPageData(params) {
-        return axiosService.post("data/backend/configuration_list.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosServiceBackend.post("data/backend/configuration_list.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 // 返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -35,7 +34,7 @@ const configuration = {
 
     // 获取查询数据
     queryInputData(params) {
-        return axiosService.post("data/backend/configuration_list.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosServiceBackend.post("data/backend/configuration_list.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -48,7 +47,7 @@ const configuration = {
     },
     // 分页数据
     getChildPaginationChangeData(params) {
-        return axiosService.post("data/backend/configuration_list.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosServiceBackend.post("data/backend/configuration_list.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -63,7 +62,7 @@ const configuration = {
 
 // 提交添加或编辑数据
 clickSubmitAddOrEditData(params) {
-        return axiosService.post("data/backend/edit_configuration_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosServiceBackend.post("data/backend/edit_configuration_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -78,7 +77,7 @@ clickSubmitAddOrEditData(params) {
 
       //获取编辑id的数据
     getEditCurrentIdData(params) {
-        return axiosService.post("data/backend/edit_configuration_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosServiceBackend.post("data/backend/edit_configuration_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -93,7 +92,7 @@ clickSubmitAddOrEditData(params) {
 
        //获取配置项的数据
     getConfigItemData(params) {
-        return axiosService.post("data/backend/config_item_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosServiceBackend.post("data/backend/config_item_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
                 //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
@@ -107,7 +106,7 @@ clickSubmitAddOrEditData(params) {
 
  //批量修改配置项的数据
     batchEditConfigItem(params){
-        return axiosService.post("data/backend/config_item_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+        return axiosServiceBackend.post("data/backend/config_item_data.json", params, { headers: { 'Content-Type': 'application/json' } })
         //是将对象 序列化成URL的形式，以&进行拼接   
         .then(response => {
             //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}

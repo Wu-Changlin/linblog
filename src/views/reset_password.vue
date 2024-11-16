@@ -78,6 +78,7 @@
         // console.log('encrypt_password_result:', encrypt_password_result);
         resetPasswordModuleApi.goRetrievePassword(params_data)
             .then(response => {
+                console.log('response:',response)
                 $message('重置密码链接已发送到您的邮箱，有效期3小时', 'success');
 
             })
@@ -92,6 +93,7 @@
         resetPasswordModuleApi.getResetPasswordPageData({ method: 'getResetPasswordPageData' })
             .then(response => {
 
+        
                 //页面 meta 元数据
                 current_meta_title.value = response.meta_title;
                 current_meta_keywords.value = response.meta_keywords;
