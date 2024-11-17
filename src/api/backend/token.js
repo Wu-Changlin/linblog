@@ -8,7 +8,7 @@ import { useUserStore } from '@/stores/useUserStore.js';//持久存储登录用�
 let isRefreshing = false
 // 1.2保存请求的promise对象
 let promiseRT;
-console.log(111);
+
   //获取刷新AccessToken 访问令牌数据,提交token是刷新令牌useUserStore().getRefreshToken
 async function getRefreshAccessToken(params) {
     if (isRefreshing) {
@@ -26,7 +26,7 @@ async function getRefreshAccessToken(params) {
         // 刷新token成功，本地保存访问令牌
         let new_jwt_access_token= response.data.jwt_access_token;
         useUserStore().setToken(new_jwt_access_token, jwt_refresh_token)
-        console.log('return response-----------'+ response)
+        console.log('return response-----------'+ JSON.stringify(response))
         console.log('return refresh__access_token-----------'+new_jwt_access_token)
         return response;
     }).catch(error => {
@@ -34,6 +34,7 @@ async function getRefreshAccessToken(params) {
 
     })
     .finally(() => {
+        // 请求完成后重置flag
         isRefreshing = false
     })
     

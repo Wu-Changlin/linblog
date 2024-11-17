@@ -140,7 +140,7 @@ const routes = [
     },
 
     {
-        path:'/menu_add_edit',
+        path:'/admin/menu_add_edit',
         name:"menu_add_edit",
         component:()=>import('@/views/backend/menu_mgr/menu_add_edit.vue'),
     },
@@ -218,8 +218,7 @@ const routes = [
         name: "send_retrieve_password_email",//路由名称
         component: () => import('@/views/send_retrieve_password_email.vue'),//引入该路由使用的组件
     },
-
-
+   
      // 重置密码
      {
         path: '/reset_password',//路径

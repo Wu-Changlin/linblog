@@ -64,14 +64,16 @@
 
 
 const is_collapse_side_menu = inject('isCollapseSideMenu');
+//  来自公共页admin 修改当前侧边栏菜单折叠或展开的方法
+const parentUpdateIsCollapseSideMenuFunction = inject('updateIsCollapseSideMenuFunction');
 
 
 
+// 设置侧边栏折叠状态
 	function isCollapse(){
-
 		console.log('is_collapse_side_menu:',is_collapse_side_menu.value)
 		is_collapse_side_menu.value=!is_collapse_side_menu.value;
-		updateIsCollapseSideMenuFunction(is_collapse_side_menu.value);
+		parentUpdateIsCollapseSideMenuFunction(is_collapse_side_menu.value);
 		
 	}
 

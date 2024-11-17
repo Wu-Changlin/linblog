@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-    import { ref, reactive, onMounted, nextTick, inject,defineProps } from "vue";
+    import { ref, reactive, onMounted, nextTick, inject } from "vue";
     import { useRouter, useRoute } from "vue-router";
     import { getEncryptData } from "@/hooks/useSign.js";//加密
     import loginModuleApi from "@/api/login/login.js";//api接口
