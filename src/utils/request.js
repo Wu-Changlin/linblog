@@ -242,10 +242,10 @@ axiosServiceBackend.interceptors.response.use(
             return new Promise((resolve) => {
  // 将resolve放进队列，用一个函数形式来保存，等token刷新后直接执行
 
-                originalRequestQueue.push({
+                originalRequestQueue.push(()=>{
                 
-                    config,
-                    resolve
+                    resolve(config)
+                    
                 });
             });
         }
@@ -258,27 +258,28 @@ axiosServiceBackend.interceptors.response.use(
             // 刷新访问令牌 AccessToken
             const get_refresh_access_token_res = await getRefreshAccessToken();
 
-            refreshing = false;
+          
             console.log('get_refresh_access_token_res:',get_refresh_access_token_res);
 
             if(get_refresh_access_token_res.code === 200) {
-
-                originalRequestQueue.forEach(({config, resolve}) => {
+                
+                // 循环队列 
+                originalRequestQueue.forEach((fn) => {
                      //   清空队列
-                originalRequestQueue = [];
-                    resolve(axiosServiceBackend(config))
+                 fn()
                 })
-  //   清空队列
-//   originalRequestQueue = [];
-                return axiosServiceBackend(config);
+    // 清空队列
+  originalRequestQueue = [];
+    // 改变flag状态，  表示没有在刷新Token
+    refreshing = false;
+                return axiosServiceBackend.request(config);
+                
             } else {
         $message('登录过期，请重新登录!', 'error');
         router.push('/login');
             
             }
-        } else {
-            return error.response;
-        }
+        } 
 
 
         // 重新请求
