@@ -265,6 +265,8 @@ const router = createRouter({
     routes
 })
 
+// 路由地址包含admin字符串需要有访问令牌才可访问
+const path_contains_admin_string='admin';
 //滚动class_name
 const class_name = { index: '.feeds-page', frontend: '.feeds-page', backend: '.feeds-page', resource: '.feeds-page', archives: '.feeds-page', diary: '.feeds-page' }
 router.beforeEach((to, from, next) => {
@@ -281,20 +283,14 @@ router.beforeEach((to, from, next) => {
     // 因为路由器是在其被安装之后开始导航的，而此时 Pinia 也已经被安装; 访问令牌
     const jwt_access_token = useUserStore().getUserAccessToken;
 
-      // 检查目标路由的默认组件
-  const targetComponents = to.matched.flatMap(record => Object.values(record.components));
-  console.log('from:',from);
-  console.log('to:',to);
+    // 路由地址包含admin字符串且没有jwt_access_token
+    if(to.path.includes(path_contains_admin_string) && !jwt_access_token){
+        // 如果用户没有token，并且访问的页面需要token，则阻止进入页面
+        next('/login'); // 重定向到登录页面
+        return; // 停止执行
+    }
 
-//   if (targetComponents.includes(Secret)) {
-//     // 如果目标组件是 Secret，执行某些操作，例如身份验证
-//     // ...
-//     next(); // 允许导航
-//   } else {
-//     next(); // 不是 Secret 组件，直接导航
-//   }
-
-
+// 继续导航
     next();
 
 });
