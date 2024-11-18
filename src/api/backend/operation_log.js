@@ -15,7 +15,7 @@ const operation_log = {
             })
             .catch(error => {
                 // console.log('api-error:',error)
-                return error;
+throw error; // 重新抛出错误，让外部处理
             })
     },
     //获取表格数据
@@ -28,7 +28,7 @@ const operation_log = {
             })
             .catch(error => {
                 // console.log('api-error:',error)
-                return error;
+throw error; // 重新抛出错误，让外部处理
             })
     },
 
@@ -42,7 +42,7 @@ const operation_log = {
             })
             .catch(error => {
                 // console.log('api-error:',error)
-                return error;
+throw error; // 重新抛出错误，让外部处理
             })
     },
     // 分页数据
@@ -55,7 +55,7 @@ const operation_log = {
             })
             .catch(error => {
                 // console.log('api-error:',error)
-                return error;
+throw error; // 重新抛出错误，让外部处理
             })
     },
     // 其他接口…………

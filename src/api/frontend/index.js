@@ -16,7 +16,7 @@ getIndexPageData(params){
         })
         .catch(error => {
             // console.log('api-error:',error)
-            return error;
+throw error; // 重新抛出错误，让外部处理
         })
     },
   //获取子页面选中的标签id数据 
@@ -30,7 +30,7 @@ getIndexPageData(params){
         })
         .catch(error => {
             // console.log('api-error:',error)
-            return error;
+throw error; // 重新抛出错误，让外部处理
         })
     },
 

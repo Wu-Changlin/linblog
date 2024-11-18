@@ -16,7 +16,7 @@ getSearchKeywordMatchArticleListDataFunction(params){
         })
         .catch(error => {
             // console.log('api-error:',error)
-            return error;
+throw error; // 重新抛出错误，让外部处理
         })
     },
 
@@ -32,7 +32,7 @@ getSearchKeywordMatchArticleListDataFunction(params){
         })
         .catch(error => {
             // console.log('api-error:',error)
-            return error;
+throw error; // 重新抛出错误，让外部处理
         })
     },
 
@@ -51,7 +51,7 @@ getSearchKeywordMatchArticleListDataFunction(params){
         })
         .catch(error => {
             // console.log('api-error:',error)
-            return error;
+throw error; // 重新抛出错误，让外部处理
         })
     }
 

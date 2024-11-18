@@ -15,7 +15,7 @@ const menu = {
             })
             .catch(error => {
                 // console.log('api-error:',error)
-                return error;
+throw error; // 重新抛出错误，让外部处理
             })
     },
     //获取表格数据
@@ -28,7 +28,7 @@ const menu = {
             })
             .catch(error => {
                 // console.log('api-error:',error)
-                return error;
+throw error; // 重新抛出错误，让外部处理
             })
     },
 
@@ -42,7 +42,7 @@ const menu = {
             })
             .catch(error => {
                 // console.log('api-error:',error)
-                return error;
+throw error; // 重新抛出错误，让外部处理
             })
     },
     // 分页数据
@@ -55,7 +55,7 @@ const menu = {
             })
             .catch(error => {
                 // console.log('api-error:',error)
-                return error;
+throw error; // 重新抛出错误，让外部处理
             })
     },
 
@@ -70,7 +70,7 @@ clickSubmitAddOrEditData(params) {
             })
             .catch(error => {
                 // console.log('api-error:',error)
-                return error;
+throw error; // 重新抛出错误，让外部处理
             })
     },
 
@@ -85,7 +85,7 @@ clickSubmitAddOrEditData(params) {
             })
             .catch(error => {
                 // console.log('api-error:',error)
-                return error;
+throw error; // 重新抛出错误，让外部处理
             })
     },
 

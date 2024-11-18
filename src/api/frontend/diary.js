@@ -17,7 +17,7 @@ const diary = {
         })
         .catch(error => {
             // console.log('api-error:',error)
-            return error;
+throw error; // 重新抛出错误，让外部处理
         })
     },
      //获取把子页面选中的标签id和标签名称传到父页面或者点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）

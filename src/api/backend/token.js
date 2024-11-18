@@ -1,4 +1,4 @@
-import {axiosServiceBackend} from "@/utils/request.js";  // 导入axiosServiceBackend中创建的axios实例
+import {axiosServiceRefreshToken} from "@/utils/request.js";  // 导入axiosServiceBackend中创建的axios实例
 import { useUserStore } from '@/stores/useUserStore.js';//持久存储登录用户相关信息(昵称、令牌、刷新令牌)  会话级
 
 //token 模块
@@ -20,15 +20,15 @@ async function getRefreshAccessToken(params) {
     let jwt_refresh_token=useUserStore().getRefreshToken;
     promiseRT = await 
     // axiosServiceBackend.post("backend/token/getRefreshAccessToken", params, { headers: { 'Content-Type': 'application/json' } })
-    axiosServiceBackend.post("data/backend/get_refresh_access_token_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+    axiosServiceRefreshToken.post("data/backend/get_refresh_access_token_data.json", params, { headers: { 'Content-Type': 'application/json' } })
     .then(response => {
         //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
         // 刷新token成功，本地保存访问令牌
-        let new_jwt_access_token= response.data.jwt_access_token;
+        let new_jwt_access_token= response.data.data.jwt_access_token;
         useUserStore().setToken(new_jwt_access_token, jwt_refresh_token)
         console.log('return response-----------'+ JSON.stringify(response))
-        console.log('return refresh__access_token-----------'+new_jwt_access_token)
-        return response;
+        console.log('return refresh_access_token-----------'+new_jwt_access_token)
+        return response.data;
     }).catch(error => {
         console.log('请求刷新AccessToken接口失败',error)
 
