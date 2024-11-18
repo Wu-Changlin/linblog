@@ -130,6 +130,16 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
 
 
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
   }
 
 
@@ -185,6 +195,16 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
         is_loading.value = false;
 
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
   }
 
@@ -266,6 +286,16 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
           // is_next_page_loading.value = false;//取消加载中动画
         }
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
   }
 

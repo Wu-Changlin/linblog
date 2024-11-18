@@ -55,6 +55,16 @@
                 admin_page_menu_list_data.value = response.menu_data; // 菜单数据
                 flag.value = true;
             })
+            .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
     }
 
     /* 修改当前侧边栏菜单折叠或展开 开始*/

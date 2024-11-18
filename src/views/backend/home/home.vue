@@ -245,6 +245,16 @@
                 is_loading.value = false;
                 is_loading_contribution_article_list_data.value = false;
             })
+            .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
     }
 
@@ -279,6 +289,16 @@
                 // console.log('current_year_contribution_data:',JSON.stringify(current_year_contribution_data.value)); 
                 // }, 3000); // 假设加载时间是3秒
             })
+            .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
     }
 
@@ -306,6 +326,16 @@
                     // console.log('current_year_contribution_data:',JSON.stringify(current_year_contribution_data.value)); 
                     // }, 3000); // 假设加载时间是3秒
                 })
+                .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
         } else {
             select_contribution_year.value = contribution_day_year;

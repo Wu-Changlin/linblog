@@ -147,6 +147,16 @@
               }
   
             })
+            .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
   
         } else {
           // 有字段没有通过验证

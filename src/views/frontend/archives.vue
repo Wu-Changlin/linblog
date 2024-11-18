@@ -218,6 +218,16 @@ const parent_page_current_active_menu_name = inject('currentActiveMenuName');
         is_loading.value = false;
         is_loading_contribution_article_list_data.value = false;
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
   }
 

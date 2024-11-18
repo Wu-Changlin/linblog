@@ -127,6 +127,16 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
         is_loading.value = false;
 
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
   }
 
   //获取把子页面选中的标签id和标签名称传到父页面或者点击归档页标签统计栏的标签（路由携参?tag_id=标签名称跳转和来自父页面的当前选中标签id）
@@ -180,6 +190,16 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
         is_loading.value = false;
 
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
 
   }
@@ -262,6 +282,16 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
           // is_next_page_loading.value = false;//取消加载中动画
         }
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
 
   }

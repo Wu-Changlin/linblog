@@ -84,16 +84,14 @@
 
             })
             .catch(error => {
-                console.log('请求接口错误-提示：', error);
-                // 处理错误
-                let message_str = error.message;
-                if (error.data) {
-                    message_str = error.data.data.msg;
-                }
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
 
-                $message(message_str, 'error');
-
-
+                // $message(message_str, 'error');
             });
 
 
@@ -142,6 +140,16 @@
                 // updatePageMetaInfoFunction(current_page_meta_data);
 
             })
+            .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
     }
 

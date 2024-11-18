@@ -243,6 +243,16 @@ useMetaInfo(current_meta_title,current_meta_keywords,current_meta_description);
         is_loading.value = false;//取消骨架屏
 
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
   
   }
 
@@ -279,6 +289,16 @@ useMetaInfo(current_meta_title,current_meta_keywords,current_meta_description);
 
 
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
   }
 
 
@@ -306,6 +326,16 @@ useMetaInfo(current_meta_title,current_meta_keywords,current_meta_description);
         // }, 3000); // 延迟3秒
 
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
   }
 

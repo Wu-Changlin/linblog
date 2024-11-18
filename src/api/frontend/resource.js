@@ -30,7 +30,7 @@ getChildClickTag(params) {
     })
     .catch(error => {
         // console.log('api-error:',error)
-        return error;
+throw error; // 重新抛出错误，让外部处理
     })
 },
 //根据触底获取选中标签下一页数据  
@@ -43,7 +43,7 @@ getActiveTagNextPageData(params) {
     })
     .catch(error => {
         // console.log('api-error:',error)
-        return error;
+throw error; // 重新抛出错误，让外部处理
     })
 }
 

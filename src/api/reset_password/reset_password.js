@@ -63,10 +63,10 @@ throw error; // 重新抛出错误，让外部处理
             return response.data;
             
         }
-    ) .catch(error => {
-       
+    ) 
+    .catch(error => {
         // 这里可以处理错误，比如设置默认值或重新抛出错误
-        console.error('使用throw error:');
+        console.log('使用throw error:');
         throw error; // 重新抛出错误，让外部处理
     });
 },

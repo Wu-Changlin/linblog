@@ -130,6 +130,16 @@
                 table_header.value = response.table_header;
                 options_business_level_data.value = response.options_business_level_data;
             })
+            .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
     }
 
@@ -185,6 +195,16 @@
                     // is_loading.value = false;
 
                 })
+                .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
         } else {
             $message('请先输入查询内容', 'warning');
@@ -221,6 +241,16 @@
                 // is_loading.value = false;
 
             })
+            .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
     }
 
 
@@ -282,6 +312,16 @@
                 flag.value = true;
                 // is_loading.value = false;
             })
+            .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
     }
 

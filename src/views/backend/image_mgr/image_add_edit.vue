@@ -669,6 +669,16 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
           }
           img.src = ruleForm.image_path;
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
   }
 
@@ -685,6 +695,16 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
         
         
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
   }
   // 页面操作标题

@@ -50,6 +50,16 @@
 				// }, 3000); // 假设加载时间是3秒
 
 			})
+			.catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 	}
 	// 使用 provide 向下传递方法
 	provide('getSearchKeywordMatchArticleListDataFunction', getSearchKeywordMatchArticleListDataFunction);
@@ -113,6 +123,16 @@
 				getSearchKeywordMatchArticleListDataFunction();//匹配关键字数据源
 				// console.log('layout_page_menu_list_data:', response);
 			})
+			.catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 	}
 
 	// 修改当前页面meta元数据，标题、关键词、描述  开始
