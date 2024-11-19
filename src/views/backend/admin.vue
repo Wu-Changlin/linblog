@@ -48,7 +48,6 @@
 
     //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
     function getAdminOrMenuListData() {
-        const data = adminModuleApi.getAdminOrMenuListData({});
         adminModuleApi.getAdminOrMenuListData({})
             .then(response => {
                 admin_page_log.value = response.log_data; // log

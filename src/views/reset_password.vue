@@ -12,7 +12,7 @@
                 </el-form-item>
             </template>
             <template #confirm_password>
-                <el-form-item prop="confirm_password" label="确认密码">
+                <el-form-item prop="confirm_password" label="确认密码" label-class="custom-label">
                     <el-input v-model="reset_password_form_data.confirm_password" type="password"
                         placeholder="亲，请再次输入密码" show-password>
                     </el-input>
@@ -162,3 +162,7 @@
 
 
 </script>
+<style scoped>
+    /* 表单项label字体颜色 */
+    :deep(.el-form-item__label) {color: #ffffff;}
+</style>

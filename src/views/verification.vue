@@ -32,8 +32,7 @@
         params_data.verification_code.val;
         loginModuleApi.goLogin(params_data)
             .then(response => {
-
-
+            
                 //     "nick_name":"lin",
                 // "jwt_access_token": "jwt_access_tokenvavasvavavavava",
                 // "jwt_refresh_token": "jwt_refresh_tokenvavs99999"
@@ -46,8 +45,11 @@
 
                     // 导航到后台首页
                     router.push({ name: 'admin', key: new Date().getTime() });
+                    
 
                 }
+
+              
 
 
                 //路由携参跳转

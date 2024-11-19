@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from '@/stores/useUserStore';//持久存储登录用户相关信息(昵称、令牌、刷新令牌)  会话级
+import $message from "@/components/message/message.js";
 
 const routes = [
     {
@@ -286,6 +287,7 @@ router.beforeEach((to, from, next) => {
     // 路由地址包含admin字符串且没有jwt_access_token
     if(to.path.includes(path_contains_admin_string) && !jwt_access_token){
         // 如果用户没有token，并且访问的页面需要token，则阻止进入页面
+        $message('请先登录！','warning');
         next('/login'); // 重定向到登录页面
         return; // 停止执行
     }

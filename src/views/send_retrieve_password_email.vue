@@ -136,3 +136,8 @@
 
 
 </script>
+
+<style scoped>
+    /* 表单项label字体颜色 */
+    :deep(.el-form-item__label) {color: #ffffff;}
+</style>

@@ -95,6 +95,9 @@
     // return;
     loginModuleApi.goVerifyLoginAccount(params_data)
       .then(response => {
+                
+        // throw '出错了';    
+        // throw new Error('Data is empty');
         let temporary_token = response.temporary_token;
         if(temporary_token){
           $message('账号通过验证,请输入您收到的邮箱验证码完成登录', 'success');
@@ -104,6 +107,16 @@
             
         }
       })
+      .catch(error => {
+                // console.log('请求接口错误-提示：', error);
+                // // 处理错误
+                // let message_str = error.message;
+                // if (error.data) {
+                //     message_str = error.data.data.msg;
+                // }
+
+                // $message(message_str, 'error');
+            });
 
   }
 
@@ -144,3 +157,7 @@
   });
 
 </script>
+<style scoped>
+  /* 表单项label字体颜色 */
+  :deep(.el-form-item__label) {color: #ffffff;}
+</style>

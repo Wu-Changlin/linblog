@@ -44,7 +44,6 @@
               </el-form-item>
 
 
-
               <el-form-item v-model="ruleForm.cover" label="封面" prop="cover">
                 <div v-if="ruleForm.cover">
                   <el-image style="width: 100px; height: 100px" :src="ruleForm.cover"
