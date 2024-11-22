@@ -158,8 +158,9 @@ axiosServiceFrontend.interceptors.response.use(
         }
     },
     error => {
-
+        
         if (isCancel(error)) {
+
             // 通过AbortController取消的请求不做任何处理
             return Promise.reject({
                 message: '重复请求，已取消'
@@ -293,13 +294,10 @@ axiosServiceBackend.interceptors.response.use(
             return Promise.resolve(response.data);
             // return Promise.reject(error)
             //进行中
-        } else {// 服务器状态码不是200的情况
-            if (response.data.msg) {//如果存在错误消息，那么在顶部显示消息提示。
-                $message(response.data.msg, 'error');
-            }
+        }
 
             return Promise.reject(response); //失败
-        }
+        
     },
     async error => {
 
@@ -365,16 +363,8 @@ axiosServiceBackend.interceptors.response.use(
             }
         }
 
-
-        // 重新请求
-        //     originalRequest.headers.Authorization = `Bearer ${new_jwt_access_token}`
-        //     return axiosService.request(originalRequest)  
-        /* 刷新token 开始*/
-
-        /* 刷新token 结束*/
-
-
-        return Promise.reject(error)
+// 返回Promise.reject结束请求，不再向下执行
+return Promise.reject(error)
     }
 );
 /* 后端axios实例 结束*/

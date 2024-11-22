@@ -48,14 +48,20 @@
 
     //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
     function getAdminOrMenuListData() {
-        adminModuleApi.getAdminOrMenuListData({})
+        adminModuleApi.getAdminOrMenuListData({ method: "getAdminOrMenuListData" })
             .then(response => {
+                $message("getAdminOrMenuListData", 'error');
                 admin_page_log.value = response.log_data; // log
                 admin_page_menu_list_data.value = response.menu_data; // 菜单数据
                 flag.value = true;
+                // 中断promise链:
+                return new Promise(() => {})
             })
             .catch(error => {
-                // console.log('请求接口错误-提示：', error);
+                console.log('请求接口错误-提示：', error);
+                // 中断promise链:
+                return new Promise(() => {})
+                console.log('中断promise链-提示：', error);
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
@@ -64,7 +70,10 @@
 
                 // $message(message_str, 'error');
             });
+           
+            console.log(22)     
     }
+
 
     /* 修改当前侧边栏菜单折叠或展开 开始*/
 

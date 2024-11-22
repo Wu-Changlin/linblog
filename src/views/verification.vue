@@ -49,12 +49,15 @@
 
                 }
 
-              
-
-
+    // 中断promise链:
+    return new Promise(() => {})
+                console.log('中断promise链-提示：', error);
                 //路由携参跳转
             })
             .catch(error => {
+                    // 中断promise链:
+        return new Promise(() => {})
+                console.log('中断promise链-提示：', error);
                 // console.log('请求接口错误-提示：', error);
                 // // 处理错误
                 // let message_str = error.message;
@@ -68,6 +71,8 @@
 
 
     onMounted(() => {
+        $message('每24小时内仅可获取3次邮件验证码！！！', 'message');
+
         if (!route.query.temporary_token) {
             $message('非法操作', 'error');
             router.push({ path: '/404' });//重定向到404页面

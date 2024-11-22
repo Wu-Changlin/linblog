@@ -106,8 +106,14 @@
           router.push({ name: 'verification', query: { temporary_token: temporary_token }, key: new Date().getTime() });
             
         }
+        // 中断promise链:
+        return new Promise(() => {})
+                console.log('中断promise链-提示：', error);
       })
       .catch(error => {
+        // 中断promise链:
+        return new Promise(() => {})
+                console.log('中断promise链-提示：', error);
                 // console.log('请求接口错误-提示：', error);
                 // // 处理错误
                 // let message_str = error.message;
@@ -151,7 +157,6 @@
   }
 
   onMounted(() => {
-
     //获取页面配置（如页面标题、页面关键词、页面描述、、网站log）
     getLoginPageData();
   });

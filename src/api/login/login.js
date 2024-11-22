@@ -38,7 +38,7 @@ throw error; // 重新抛出错误，让外部处理
     
  //去登录
 goLogin(params){
-        return axiosServiceBackend.post("data/login/login.json", params,{headers:{'Content-Type': 'application/json'}}) 
+        return axiosServiceBackend.post("data/login/user_login.json", params,{headers:{'Content-Type': 'application/json'}}) 
         //是将对象 序列化成URL的形式，以&进行拼接   
         .then(response => {
             //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
