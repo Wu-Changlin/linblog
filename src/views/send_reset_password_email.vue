@@ -3,7 +3,7 @@
     <div>
         <PublicFormLoginAndResetPassword :formData="reset_password_form_data"
             :formPageLayoutData="reset_password_form_page_layout_data" :validateCodePath="validate_code_path"
-            @completeInputFormData="submitDataSendRetrievePasswordEmail">
+            @completeInputFormData="submitDataSendResetPasswordEmail">
             <template #email>
                 <el-form-item prop="email" label="输入您的用户帐户的验证电子邮件地址，我们将向您发送密码重置链接。">
                     <el-input v-model="reset_password_form_data.email"
@@ -71,14 +71,14 @@
 
 
     //提交数据发送重置密码邮件
-    function submitDataSendRetrievePasswordEmail(val) {
+    function submitDataSendResetPasswordEmail(val) {
         const params_data = val;
-        resetPasswordModuleApi.sendRetrievePasswordEmail(params_data)
+        resetPasswordModuleApi.sendResetPasswordEmail(params_data)
             .then(response => {
                 const send_reset_password_email_result = response.send_reset_password_email;
                 if (send_reset_password_email_result) {//如果值是true，那么弹出消息
 
-                    $message('已发送发送重置密码邮件，请注意查收！3秒后自动跳转到登录界面！', 'success');
+                    $message('已发送重置密码邮件，请注意查收！3秒后自动跳转到登录界面！', 'success');
 
                     debounce(() => {//3秒防抖
                         $message('自动跳转到登录界面！', 'success');
@@ -102,8 +102,8 @@
     }
 
     //获取页面配置（如页面标题、页面关键词、页面描述、、网站log）
-    function getSendRetrievePasswordEmailPageData() {
-        resetPasswordModuleApi.getSendRetrievePasswordEmailPageData({ method: 'getSendRetrievePasswordEmailPageData' })
+    function getSendResetPasswordEmailPageData() {
+        resetPasswordModuleApi.getSendResetPasswordEmailPageData({ method: 'getSendResetPasswordEmailPageData' })
             .then(response => {
 
                 //页面 meta 元数据
@@ -129,9 +129,9 @@
     }
 
     onMounted(() => {
-
+        $message('每24小时内仅可发送3次重置密码邮件！！！', 'message');
         //获取页面配置（如页面标题、页面关键词、页面描述、、网站log）
-        getSendRetrievePasswordEmailPageData();
+        getSendResetPasswordEmailPageData();
     });
 
 

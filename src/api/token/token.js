@@ -19,8 +19,8 @@ async function getRefreshAccessToken(params) {
 // 刷新令牌
     let jwt_refresh_token=useUserStore().getRefreshToken;
     promiseRT = await 
-    // axiosServiceBackend.post("backend/token/getRefreshAccessToken", params, { headers: { 'Content-Type': 'application/json' } })
-    axiosServiceRefreshToken.post("data/backend/get_refresh_access_token_data.json", params, { headers: { 'Content-Type': 'application/json' } })
+    // axiosServiceBackend.post("token/token/getRefreshAccessToken", params, { headers: { 'Content-Type': 'application/json' } })
+    axiosServiceRefreshToken.post("data/token/get_refresh_access_token_data.json", params, { headers: { 'Content-Type': 'application/json' } })
     .then(response => {
         //返回data对象数据中的data数据'data':{"code": 0,"data": [{}]"msg": "xxx"}
         // 刷新token成功，本地保存访问令牌

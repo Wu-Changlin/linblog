@@ -215,9 +215,9 @@ const routes = [
     
     // 获取重置密码邮件
     {
-        path: '/send_retrieve_password_email',//路径
-        name: "send_retrieve_password_email",//路由名称
-        component: () => import('@/views/send_retrieve_password_email.vue'),//引入该路由使用的组件
+        path: '/send_reset_password_email',//路径
+        name: "send_reset_password_email",//路由名称
+        component: () => import('@/views/send_reset_password_email.vue'),//引入该路由使用的组件
     },
    
      // 重置密码
@@ -225,6 +225,13 @@ const routes = [
         path: '/reset_password',//路径
         name: "reset_password",//路由名称
         component: () => import('@/views/reset_password.vue'),//引入该路由使用的组件
+        beforeEnter: (to, from, next) => {//使用Vue Router的前置守卫（beforeEach）来检查路由并重定向到404页面。
+            if (!to.query.temporary_token || to.path === '/reset_password/') {//当用户尝试访问/reset_password且没有查询参数id或者路由地址确实是/article/时，会被重定向到/404路由。
+                next('/404');
+            } else {
+                next();
+            }
+        }
     },
 
 
@@ -236,6 +243,13 @@ const routes = [
         path: '/verification',//路径
         name: "verification",//路由名称
         component: () => import('@/views/verification.vue'),//引入该路由使用的组件
+        beforeEnter: (to, from, next) => {//使用Vue Router的前置守卫（beforeEach）来检查路由并重定向到404页面。
+            if (!to.query.temporary_token || to.path === '/verification/') {//当用户尝试访问/reset_password且没有查询参数id或者路由地址确实是/article/时，会被重定向到/404路由。
+                next('/404');
+            } else {
+                next();
+            }
+        }
     },
 
     // 404页面

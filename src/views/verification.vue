@@ -24,12 +24,14 @@
     //提交参数 
     const params_data = reactive({
         temporary_token: '',
-        verification_code: ''
+        email_verification_code: ''
     });
 
     // 接收验证码，组装参数继续登录
     function submitVerificationCode(val) {
-        params_data.verification_code.val;
+        //邮箱验证码赋值
+        params_data.email_verification_code=val;
+
         loginModuleApi.goLogin(params_data)
             .then(response => {
             

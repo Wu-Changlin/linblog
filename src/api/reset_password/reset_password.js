@@ -6,7 +6,9 @@ import { axiosServiceBackend } from "@/utils/request.js";  // 导入axiosService
 const reset_password = {
 
     //获取发送重置密码邮件页面配置（如页面标题、页面关键词、页面描述、、网站log）
-    getSendRetrievePasswordEmailPageData(params) {
+    getSendResetPasswordEmailPageData(params) {
+        // return axiosServiceBackend.post("resetPassword/resetPassword/getSendResetPasswordEmailPageData", params, { headers: { 'Content-Type': 'application/json' } })
+
 
         return axiosServiceBackend.post("data/reset_password/send_reset_password_email_page_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
@@ -39,7 +41,7 @@ throw error; // 重新抛出错误，让外部处理
     
 
     //发送重置密码邮件
-    sendRetrievePasswordEmail(params) {
+    sendResetPasswordEmail(params) {
         return axiosServiceBackend.post("data/reset_password/send_reset_password_email.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {
@@ -53,9 +55,9 @@ throw error; // 重新抛出错误，让外部处理
     },
 
      //去重置密码
-    goRetrievePassword(params) {
+    goResetPassword(params) {
         // return axiosServiceBackend.post("data/reset_password/reset_password.json", params,{headers:{'Content-Type': 'application/json'}}) 
-    return axiosServiceBackend.post("data/reset_pass/reset_password.json", params, { headers: { 'Content-Type': 'application/json' } })
+    return axiosServiceBackend.post("data/reset_password/reset_password.json", params, { headers: { 'Content-Type': 'application/json' } })
         //是将对象 序列化成URL的形式，以&进行拼接   
         .then(response => {
             console.log('api-response:', response)

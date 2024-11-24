@@ -285,9 +285,17 @@ function hmac(key, data) {
 const encoder = new TextEncoder("utf-8");
 
 // 实现签名逻辑
+//  1.哈希处理数据生成Uint8Array;
+//  2.循环数组Uint8Array，实现十进制转换为十六进制的逻辑，生成字符串;
+//  3 十六进制字符串生成散列值。
 function sign(inputKey, inputData) {
     const key = typeof inputKey === "string" ? encoder.encode(inputKey) : inputKey;
     const data = typeof inputData === "string" ? encoder.encode(inputData) : inputData;
+    // console.log('sign-key',key)
+   
+    // console.log('sign-data',data)
+
+
     return hmac(key, data);
 }
 

@@ -2,8 +2,8 @@
 import axios from 'axios';
 // import router from '@/router';
 import router from '@/router/index.js'; //Vue Router实例导出自`@/router`
-import getRefreshAccessToken from "@/api/backend/token.js";
-import { getAchieveUseSignData } from "@/hooks/useSign.js";
+import getRefreshAccessToken from "@/api/token/token.js";//使用刷新令牌获取新访问令牌
+import { getAchieveUseSignData } from "@/hooks/useSign.js";//生成提交参数的签名
 import $message from "@/components/message/message.js";
 import { useUserStore } from '@/stores/useUserStore.js';//持久存储登录用户相关信息(昵称、令牌、刷新令牌)  会话级
 
@@ -11,7 +11,7 @@ import { useUserStore } from '@/stores/useUserStore.js';//持久存储登录用�
 // 在Axios库中，默认情况下，HTTP 4xx 和 5xx 的错误会被当作成功响应处理，虽然它们都不是 2xx 的成功状态码，但是会进入.then()。
 // 自定义validateStatus函数的例子，它将2xx状态码以外的所有状态码都认为是错误的，并将它们导向.catch()块
 const validateStatus = (status) => {
-    console.log('validateStatus-status:',status)
+    // console.log('validateStatus-status:',status)
     return status >= 200 && status < 300; // 只认为2xx状态码是成功的
 };
 

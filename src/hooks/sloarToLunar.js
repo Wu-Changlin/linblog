@@ -113,7 +113,7 @@ export function sloarToLunar(sy, sm, sd, current_timestamp) {
     let diZhiKey = (ly - 3) % 12;
     if (diZhiKey === 0) diZhiKey = 12;
 
-    ly = diZhiKey;
+    ly = sy % 12;;
 
 
       // 检查当前时间戳是否在某个2小时时间段内
@@ -211,15 +211,13 @@ function getDiZhi(ly) {
     return diZhi[diZhiKey - 1]
 }
 
-
-
-
+// TODO:    const month = date.getMonth();// 获取月份，需要加1?   加1后没有结果返回
 //检查当前时间是否在某个2小时时间段内,十二时辰划分；返回子1丑2……亥12
 function isInTwoHourPeriod(timestamp) {
-    // 当天的日期
-    const date = new Date();
+     //秒为单位时间戳转时格式
+    const date = new Date(timestamp * 1000); // 根据时间戳创建Date对象new Date(timestamp * 1000); // 根据时间戳创建Date对象
     const year = date.getFullYear();
-    const month = date.getMonth();
+    const month = date.getMonth();// 获取月份，需要加1?
     const day = date.getDate();
     // 时间戳数组
     let hourTimestamps = [];
