@@ -90,7 +90,7 @@
 
             <div class="bottom-button">
               <el-button>保存草稿</el-button>
-              <el-button type="primary" @click="clickSubmitAddOrEditData()">确定并发布</el-button>
+              <el-button type="primary" @click="clickSubmitAddAndEditData()">确定并发布</el-button>
 
             </div>
 
@@ -210,13 +210,13 @@
 
 
   //提交添加或修改数据
-  function clickSubmitAddOrEditData() {
+  function clickSubmitAddAndEditData() {
     //  valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
     ruleFormRef.value.validate((valid, fields) => {
       if (valid) {
         console.log("表单数据:", ruleForm)
         // 处理提交逻辑
-        articleModuleApi.clickSubmitAddOrEditData(ruleForm)
+        articleModuleApi.clickSubmitAddAndEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
             // const msg_content=response.action_success_data;
@@ -333,7 +333,7 @@
 
 
   // 获取页面框架数据
-  function getAddOrEditPageLayoutData() {
+  function getAddAndEditPageLayoutData() {
     articleModuleApi.getPageLayoutData({})
       .then(response => {
 
@@ -371,10 +371,10 @@
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
         getEditCurrentIdData(route.query);
-        getAddOrEditPageLayoutData();
+        getAddAndEditPageLayoutData();
         page_title.value='编辑文章';
       } else if (route.query.action == "add") {
-        getAddOrEditPageLayoutData();
+        getAddAndEditPageLayoutData();
         page_title.value='添加文章';
       } else {
         $message('非法操作', 'error');

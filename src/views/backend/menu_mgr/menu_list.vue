@@ -37,11 +37,11 @@
                 </template>
 
                 <template #add>
-                    <el-button type="primary" @click="clickGotoAddOrEditPage(0,'add')">添加菜单</el-button>
+                    <el-button type="primary" @click="clickGotoAddAndEditPage(0,'add')">添加菜单</el-button>
                 </template>
                 <template #edit="active_data">
                     <el-button size="small" type="primary"
-                        @click="clickGotoAddOrEditPage(active_data,'edit')">编辑</el-button>
+                        @click="clickGotoAddAndEditPage(active_data,'edit')">编辑</el-button>
                 </template>
 
                 <!-- 图标列特殊处理 开始-->
@@ -96,7 +96,7 @@
 
 
     //点击跳转到添加/编辑页面(同一页面)
-    function clickGotoAddOrEditPage(current_active_data, actions) {
+    function clickGotoAddAndEditPage(current_active_data, actions) {
 
 
         //获取页面名称前缀：使用slice方法，是从开始到"_"的位置之。
@@ -135,7 +135,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -200,7 +200,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -246,7 +246,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -317,7 +317,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');

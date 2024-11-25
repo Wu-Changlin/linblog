@@ -7,7 +7,7 @@
             <template #email>
                 <el-form-item prop="email" label="输入您的用户帐户的验证电子邮件地址，我们将向您发送密码重置链接。">
                     <el-input v-model="reset_password_form_data.email"
-                        @input="handleInputContainsLetterOrDigitOrSpecialSymbols" type="text" placeholder="亲，请输入邮箱">
+                        @input="handleInputContainsLetterAndDigitAndSpecialSymbols" type="text" placeholder="亲，请输入邮箱">
                     </el-input>
                 </el-form-item>
             </template>
@@ -23,7 +23,7 @@
     import { getEncryptData } from "@/hooks/useSign.js";//加密
     import resetPasswordModuleApi from "@/api/reset_password/reset_password.js";//api接口
     import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
-    import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
+    import { debounce, throttle } from '@/hooks/debounceAndThrottle.js';
 
     import PublicFormLoginAndResetPassword from '@/components/public_form_login_and_reset_password.vue';
 
@@ -61,8 +61,8 @@
 
     // 实时查询，每输入一个字符都会触发该事件。
     // 输入值是否包含匹配字母、数字和特定符号(. - @)
-    function handleInputContainsLetterOrDigitOrSpecialSymbols(value) {
-        console.log('handleInputContainsLetterOrDigitOrSpecialSymbols:', value)
+    function handleInputContainsLetterAndDigitAndSpecialSymbols(value) {
+        console.log('handleInputContainsLetterAndDigitAndSpecialSymbols:', value)
         // 使用正则表达式匹配字母、数字和特定符号(. - @)，其他字符替换为空
         // const regex = /^[a-zA-Z0-9.\-@]*$/;
         const new_value = value.replace(/[^a-zA-Z0-9.\-@]/g, '');
@@ -93,7 +93,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -101,7 +101,7 @@
 
     }
 
-    //获取页面配置（如页面标题、页面关键词、页面描述、、网站log）
+    //获取页面配置（如页面标题、页面关键词、页面描述、网站log）
     function getSendResetPasswordEmailPageData() {
         resetPasswordModuleApi.getSendResetPasswordEmailPageData({ method: 'getSendResetPasswordEmailPageData' })
             .then(response => {
@@ -121,7 +121,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -130,7 +130,7 @@
 
     onMounted(() => {
         $message('每24小时内仅可发送3次重置密码邮件！！！', 'message');
-        //获取页面配置（如页面标题、页面关键词、页面描述、、网站log）
+        //获取页面配置（如页面标题、页面关键词、页面描述、网站log）
         getSendResetPasswordEmailPageData();
     });
 

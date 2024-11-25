@@ -5,7 +5,7 @@ import { axiosServiceBackend } from "@/utils/request.js";  // 导入axiosService
 /** * post方法，对应post请求 * @param {String} url [请求的url地址] * @param {Object} params [请求时携带的参数] */
 const reset_password = {
 
-    //获取发送重置密码邮件页面配置（如页面标题、页面关键词、页面描述、、网站log）
+    //获取发送重置密码邮件页面配置（如页面标题、页面关键词、页面描述、网站log）
     getSendResetPasswordEmailPageData(params) {
         // return axiosServiceBackend.post("resetPassword/resetPassword/getSendResetPasswordEmailPageData", params, { headers: { 'Content-Type': 'application/json' } })
 
@@ -24,7 +24,7 @@ throw error; // 重新抛出错误，让外部处理
 
 
 
-    //获取重置密码页面配置（如页面标题、页面关键词、页面描述、、网站log）
+    //获取重置密码页面配置（如页面标题、页面关键词、页面描述、网站log）
     getResetPasswordPageData(params) {
 
         return axiosServiceBackend.post("data/reset_password/reset_password_page_data.json", params, { headers: { 'Content-Type': 'application/json' } })

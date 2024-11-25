@@ -174,7 +174,7 @@
       if (valid) {
         console.log("表单数据:", ruleForm)
         // 处理提交逻辑
-        userModuleApi.clickSubmitAddOrEditData(ruleForm)
+        userModuleApi.clickSubmitAddAndEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
             // const msg_content=response.action_success_data;
@@ -223,7 +223,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -263,7 +263,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -276,7 +276,7 @@
   const options_role_data = ref([]);
 
   // 获取页面框架数据
-  function getAddOrEditPageLayoutData() {
+  function getAddAndEditPageLayoutData() {
 
 
     userModuleApi.getPageLayoutData({})
@@ -289,7 +289,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -305,10 +305,10 @@
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
         getEditCurrentIdData(route.query);
-        getAddOrEditPageLayoutData();
+        getAddAndEditPageLayoutData();
         page_title.value = '编辑用户';
       } else if (route.query.action == "add") {
-        getAddOrEditPageLayoutData();
+        getAddAndEditPageLayoutData();
         page_title.value = '添加用户';
       } else {
         $message('非法操作', 'error');

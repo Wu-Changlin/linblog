@@ -139,7 +139,7 @@
       if (valid) {
         console.log("表单数据:", ruleForm)
         // 处理提交逻辑
-        menuModuleApi.clickSubmitAddOrEditData(ruleForm)
+        menuModuleApi.clickSubmitAddAndEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
           
@@ -193,7 +193,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -248,7 +248,7 @@
 
 
   // 获取页面框架数据
-  function getAddOrEditPageLayoutData() {
+  function getAddAndEditPageLayoutData() {
     menuModuleApi.getPageLayoutData({})
       .then(response => {
         options_business_level_data.value = response.options_business_level_data;
@@ -270,7 +270,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -285,10 +285,10 @@
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
         getEditCurrentIdData(route.query);
-        getAddOrEditPageLayoutData();
+        getAddAndEditPageLayoutData();
         page_title.value='编辑菜单';
       } else if (route.query.action == "add") {
-        getAddOrEditPageLayoutData();
+        getAddAndEditPageLayoutData();
         page_title.value='添加菜单';
       } else {
         $message('非法操作', 'error');

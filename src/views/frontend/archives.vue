@@ -223,7 +223,7 @@ const parent_page_current_active_menu_name = inject('currentActiveMenuName');
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');

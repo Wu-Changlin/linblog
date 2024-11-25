@@ -30,7 +30,7 @@
     import BackendSideBar from "@/components/backend/backend_side_bar.vue";
     import Footer from "@/components/footer.vue";
     import adminModuleApi from "@/api/backend/admin.js";//api接口
-    import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';//防抖、节流
+    import { debounce, throttle } from '@/hooks/debounceAndThrottle.js';//防抖、节流
     import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
     import { useUserStore } from '@/stores/useUserStore.js';//持久存储登录用户相关信息(昵称、令牌、刷新令牌)  会话级
 
@@ -47,10 +47,10 @@
     const mainContentRef=ref(null)
 
     //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
-    function getAdminOrMenuListData() {
-        adminModuleApi.getAdminOrMenuListData({ method: "getAdminOrMenuListData" })
+    function getAdminAndMenuListData() {
+        adminModuleApi.getAdminAndMenuListData({ method: "getAdminAndMenuListData" })
             .then(response => {
-                $message("getAdminOrMenuListData", 'error');
+                $message("getAdminAndMenuListData", 'error');
                 admin_page_log.value = response.log_data; // log
                 admin_page_menu_list_data.value = response.menu_data; // 菜单数据
                 flag.value = true;
@@ -65,7 +65,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -158,7 +158,7 @@
 
     onMounted(() => {
         //获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
-        getAdminOrMenuListData();
+        getAdminAndMenuListData();
         //监听窗口响应式设置折叠菜单
         window.addEventListener('resize', throttle(() => { settingCollapseSideMenu() }, 100));//监听窗口缩放 加节流
 

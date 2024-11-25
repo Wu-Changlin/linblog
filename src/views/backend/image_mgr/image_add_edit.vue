@@ -193,7 +193,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
   //图片类型尺寸数据
 const current_image_dimensions =image_dimensions[image_dimensions_name];
 // 校验图片
-    verifyAspectRatioOrDimensions(image_object, current_image_dimensions.aspect_ratio, current_image_dimensions.max_width, current_image_dimensions.max_height, current_image_dimensions.min_width, current_image_dimensions.min_height, String(ruleForm.image_type));
+    verifyAspectRatioAndDimensions(image_object, current_image_dimensions.aspect_ratio, current_image_dimensions.max_width, current_image_dimensions.max_height, current_image_dimensions.min_width, current_image_dimensions.min_height, String(ruleForm.image_type));
 }
 }
   }
@@ -227,9 +227,9 @@ const current_image_dimensions =image_dimensions[image_dimensions_name];
   }
 
   //TODO 上传文件先转base64,后校验？ 上传文件直接校验？ 
-  //TODO verifyAspectRatioOrDimensions函数以上传文件为基准
+  //TODO verifyAspectRatioAndDimensions函数以上传文件为基准
   //TODO 原上传文件直接校验，出现点击图片类型单选框选中值保留选中图片无法使用校验
-  //TODO 修改：上传文件先转base64,后校验，verifyAspectRatioOrDimensions函数以上传文件地址为基准
+  //TODO 修改：上传文件先转base64,后校验，verifyAspectRatioAndDimensions函数以上传文件地址为基准
   //获取选择的logo图片信息
   function handleLogoImage() {
     const file = uploadLogoImageFileInputRef.value.files[0]; // 获取文件信息
@@ -238,8 +238,8 @@ const current_image_dimensions =image_dimensions[image_dimensions_name];
       return;
     }
     /* 校验图片的文件大小、后缀名 开始*/
-    let verify_image_max_sizeOr_suffix_name_result = verifyImageMaxSizeOrSuffixName(file);
-    if (!verify_image_max_sizeOr_suffix_name_result) {//如果验证图片的文件大小、后缀名失败，直接返回，不执行后续操作
+    let verify_image_max_sizeAnd_suffix_name_result = verifyImageMaxSizeAndSuffixName(file);
+    if (!verify_image_max_sizeAnd_suffix_name_result) {//如果验证图片的文件大小、后缀名失败，直接返回，不执行后续操作
       return;
     }
     /* 校验图片的文件大小、后缀名 结束*/
@@ -249,7 +249,7 @@ const current_image_dimensions =image_dimensions[image_dimensions_name];
 const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensions';
   //图片类型尺寸数据
  const current_image_dimensions =image_dimensions[image_dimensions_name];
- verifyAspectRatioOrDimensions(file,current_image_dimensions.aspect_ratio, current_image_dimensions.max_width, current_image_dimensions.max_height, current_image_dimensions.min_width, current_image_dimensions.min_height, String(ruleForm.image_type));
+ verifyAspectRatioAndDimensions(file,current_image_dimensions.aspect_ratio, current_image_dimensions.max_width, current_image_dimensions.max_height, current_image_dimensions.min_width, current_image_dimensions.min_height, String(ruleForm.image_type));
   }
 
 
@@ -296,7 +296,7 @@ if (image_type=== 'carousel_image') {
  * @description: 
  * @param {Object} verify_file 图片文件对象
  */
-  function verifyImageMaxSizeOrSuffixName(verify_file) {
+  function verifyImageMaxSizeAndSuffixName(verify_file) {
     /* 校验图片文件大小 开始*/
 
     //图片文件大小
@@ -336,7 +336,7 @@ if (image_type=== 'carousel_image') {
  * @param {String}  image_type              图片类型
  * @return {bool}    true  false
  */
-  function verifyAspectRatioOrDimensions(verify_file, verify_aspect_ratio, verify_image_max_width, verify_image_max_height, verify_image_min_width, verify_image_min_height, image_type) {
+  function verifyAspectRatioAndDimensions(verify_file, verify_aspect_ratio, verify_image_max_width, verify_image_max_height, verify_image_min_width, verify_image_min_height, image_type) {
     let image = new Image();
     // 不再需要时释放内存
     console.log('校验-ruleForm.image_path:', ruleForm.image_path)
@@ -442,8 +442,8 @@ if (image_type=== 'carousel_image') {
       return;
     }
     /* 校验图片的文件大小、后缀名 开始*/
-    let verify_image_max_sizeOr_suffix_name_result = verifyImageMaxSizeOrSuffixName(file);
-    if (!verify_image_max_sizeOr_suffix_name_result) {//如果验证图片的文件大小、后缀名失败，直接返回，不执行后续操作
+    let verify_image_max_sizeAnd_suffix_name_result = verifyImageMaxSizeAndSuffixName(file);
+    if (!verify_image_max_sizeAnd_suffix_name_result) {//如果验证图片的文件大小、后缀名失败，直接返回，不执行后续操作
       return;
     }
     /* 校验图片的文件大小、后缀名 结束*/
@@ -453,7 +453,7 @@ if (image_type=== 'carousel_image') {
 const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensions';
   //图片类型尺寸数据
  const current_image_dimensions =image_dimensions[image_dimensions_name];
- verifyAspectRatioOrDimensions(file,current_image_dimensions.aspect_ratio, current_image_dimensions.max_width, current_image_dimensions.max_height, current_image_dimensions.min_width, current_image_dimensions.min_height, String(ruleForm.image_type));
+ verifyAspectRatioAndDimensions(file,current_image_dimensions.aspect_ratio, current_image_dimensions.max_width, current_image_dimensions.max_height, current_image_dimensions.min_width, current_image_dimensions.min_height, String(ruleForm.image_type));
 
  };
 
@@ -590,7 +590,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
       if (valid) {
         console.log("表单数据:", JSON.stringify(ruleForm))
         // 处理提交逻辑
-        imageModuleApi.clickSubmitAddOrEditData(ruleForm)
+        imageModuleApi.clickSubmitAddAndEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
             // const msg_content=response.action_success_data;
@@ -674,7 +674,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -687,7 +687,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
   const is_pulled_data=ref();
 
   // 获取页面框架数据
-  function getAddOrEditPageLayoutData() {
+  function getAddAndEditPageLayoutData() {
     imageModuleApi.getPageLayoutData({})
       .then(response => {
         options_image_type_data.value = response.options_image_type_data;
@@ -700,7 +700,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -714,10 +714,10 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
         getEditCurrentIdData(route.query);
-        getAddOrEditPageLayoutData();
+        getAddAndEditPageLayoutData();
         page_title.value = '编辑图片';
       } else if (route.query.action == "add") {
-        getAddOrEditPageLayoutData();
+        getAddAndEditPageLayoutData();
         page_title.value = '添加图片';
 
       } else {

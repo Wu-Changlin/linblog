@@ -39,10 +39,10 @@
     </template>
 <!-- 搜索区域 结束-->
     <template #add>
-      <el-button type="primary"  @click="clickGotoAddOrEditPage(0,'add')">添加用户</el-button>
+      <el-button type="primary"  @click="clickGotoAddAndEditPage(0,'add')">添加用户</el-button>
     </template>
     <template #edit="active_data">
-      <el-button size="small" type="primary"  @click="clickGotoAddOrEditPage(active_data,'edit')">编辑</el-button>
+      <el-button size="small" type="primary"  @click="clickGotoAddAndEditPage(active_data,'edit')">编辑</el-button>
     </template>
 
     <!-- 图片列特殊处理 开始-->
@@ -94,7 +94,7 @@ function deleteChildCurrentActiveId(active_id){
 
 
 //点击跳转到添加/编辑页面(同一页面)
-function clickGotoAddOrEditPage(current_active_data,actions){
+function clickGotoAddAndEditPage(current_active_data,actions){
 
   
 //获取页面名称前缀：使用slice方法，是从开始到"_"的位置之。
@@ -134,7 +134,7 @@ function getPageLayoutData(){
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -199,7 +199,7 @@ user_list_data.value=math_role_data.value;
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -250,7 +250,7 @@ const pagination_data = reactive({
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -320,7 +320,7 @@ router.push({ name:route.name, query: payload_data, key: new Date().getTime() })
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');

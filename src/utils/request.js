@@ -145,13 +145,13 @@ axiosServiceFrontend.interceptors.response.use(
         //response数据 
         // 示例{'config'{} 'headers':{} 'request':{}  'status':200,'statusText''Ok','data':{"code": 0,"data": [{}]"msg": "xxx"}}
         if (response.data.code === 200) {
-            // $message(response.data.msg,'success');
+            // $message(response.data.message,'success');
             //返回response数据中的data对象
             return Promise.resolve(response.data);
             //进行中
         } else {// 服务器状态码不是200的情况
-            if (response.data.msg) {//如果存在错误消息，那么在顶部显示消息提示。
-                $message(response.data.msg, 'error');
+            if (response.data.message) {//如果存在错误消息，那么在顶部显示消息提示。
+                $message(response.data.message, 'error');
             }
 
             return Promise.reject(response); //失败
@@ -170,24 +170,12 @@ axiosServiceFrontend.interceptors.response.use(
         console.log('Frontend-Error:', error);
 
         let { message } = error
-        if (message === 'Network Error') {
-            message = '网络异常'
-        } else if (message.includes('timeout')) {
-            message = '系统接口请求超时'
-        } else if (message.includes('failed with status code 500')) {
-            message = '系统接口异常'
-        } else if (message.includes('400')) {
-            message = '请求参数错误'
-        } else if (message.includes('405')) {
-            message = '请求方法错误'
-        } else if (message.includes('401')) {
-            message = '身份验证错误'
-        }
+    
         //防止空消息提示
-        message = message ?? '未知错误';
+        message = message ?? error.data.message;
 
         $message(message, 'error');
-
+        
         return Promise.reject(error)
     }
 );
@@ -287,7 +275,7 @@ axiosServiceBackend.interceptors.response.use(
         //response数据 
         // 示例{'config'{} 'headers':{} 'request':{}  'status':200,'statusText''Ok','data':{"code": 0,"data": [{}]"msg": "xxx"}}
         if (response.data.code === 200) {
-            // $message(response.data.msg,'success');
+            // $message(response.data.message,'success');
             //返回response数据中的data对象
 
 
@@ -311,7 +299,7 @@ axiosServiceBackend.interceptors.response.use(
 
         console.log('error:', error);
 
-        $message('服务器异常', 'error');
+
         /* 使用失效token原始请求数据、配置*/
 
         let { status, config } = error.response;
@@ -363,31 +351,25 @@ axiosServiceBackend.interceptors.response.use(
             }
         }
 
+
+        
+        let { message } = error
+    
+        //防止空消息提示
+        message = message ?? error.data.message;
+
+        $message(message, 'error');
+
+
+        
+
 // 返回Promise.reject结束请求，不再向下执行
 return Promise.reject(error)
     }
 );
 /* 后端axios实例 结束*/
 
-// let { message } = error
-// if (message === 'Network Error') {
-//   message = '网络异常'
-// } else if (message.includes('timeout')) {
-//   message = '系统接口请求超时'
-// } else if (message.includes('failed with status code 500')) {
-//   message = '系统接口异常'
-// } else if (message.includes('400')) {
-//   message = '请求参数错误'
-// } else if (message.includes('405')) {
-//   message = '请求方法错误'
-// } else if (message.includes('401')) {
-//   message = '身份验证错误'
-// }
-// Message({
-//   message: message,
-//   type: 'error',
-//   duration: 5 * 1000
-// })
+
 
 
 /* 刷新token axios实例 开始*/
@@ -423,13 +405,13 @@ axiosServiceRefreshToken.interceptors.response.use(
         //response数据 
         // 示例{'config'{} 'headers':{} 'request':{}  'status':200,'statusText''Ok','data':{"code": 0,"data": [{}]"msg": "xxx"}}
         if (response.data.code === 200) {
-            // $message(response.data.msg,'success');
+            // $message(response.data.message,'success');
             //返回response数据中的data对象
             return Promise.resolve(response.data);
             //进行中
         } else {// 服务器状态码不是200的情况
-            if (response.data.msg) {//如果存在错误消息，那么在顶部显示消息提示。
-                $message(response.data.msg, 'error');
+            if (response.data.message) {//如果存在错误消息，那么在顶部显示消息提示。
+                $message(response.data.message, 'error');
             }
 
             return Promise.reject(response); //失败
@@ -447,21 +429,9 @@ axiosServiceRefreshToken.interceptors.response.use(
         console.log('axiosServiceRefreshToken-Error:', error);
 
         let { message } = error
-        if (message === 'Network Error') {
-            message = '网络异常'
-        } else if (message.includes('timeout')) {
-            message = '系统接口请求超时'
-        } else if (message.includes('failed with status code 500')) {
-            message = '系统接口异常'
-        } else if (message.includes('400')) {
-            message = '请求参数错误'
-        } else if (message.includes('405')) {
-            message = '请求方法错误'
-        } else if (message.includes('401')) {
-            message = '身份验证错误'
-        }
+    
         //防止空消息提示
-        message = message ?? '未知错误';
+        message = message ?? error.data.message;
 
         $message(message, 'error');
 

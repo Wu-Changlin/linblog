@@ -61,7 +61,7 @@ throw error; // 重新抛出错误，让外部处理
 
 
 // 提交添加或编辑数据
-clickSubmitAddOrEditData(params) {
+clickSubmitAddAndEditData(params) {
         return axiosServiceBackend.post("data/backend/edit_menu_data.json", params, { headers: { 'Content-Type': 'application/json' } })
             //是将对象 序列化成URL的形式，以&进行拼接   
             .then(response => {

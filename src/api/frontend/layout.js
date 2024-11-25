@@ -22,7 +22,7 @@ throw error; // 重新抛出错误，让外部处理
 
 
 	//获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
-    getLayoutLogOrMenuListData(params){
+    getLayoutLogAndMenuListData(params){
 
         return axiosServiceFrontend.post("data/frontend/layout.json", params,{headers:{'Content-Type': 'application/json'}}) 
         //是将对象 序列化成URL的形式，以&进行拼接   

@@ -55,7 +55,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -113,9 +113,9 @@
 	const layout_page_log = ref();
 	const layout_page_menu_list_data = ref();
 	//获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
-	function getLayoutLogOrMenuListData() {
+	function getLayoutLogAndMenuListData() {
 
-		layoutModuleApi.getLayoutLogOrMenuListData({})
+		layoutModuleApi.getLayoutLogAndMenuListData({})
 			.then(response => {
 
 				layout_page_log.value = response.log_data; // log
@@ -128,7 +128,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -169,7 +169,7 @@
 	onMounted(() => {
 		
 		//获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
-		getLayoutLogOrMenuListData();
+		getLayoutLogAndMenuListData();
 	});
 
 

@@ -241,7 +241,7 @@
     //将当前页设置为1，确保每次都是从第一页开始
     pagination.current_page = 1;
     // 每页显示个数更改或当前页数更改共享函数
-    updatePageSizeOrCurrentPageCommunal();
+    updatePageSizeAndCurrentPageCommunal();
   };
   //current-change	current-page 当前页数改变时触发
   const handleCurrentChange = (val) => {
@@ -252,12 +252,12 @@
    
     // 每页显示个数更改或当前页数更改共享函数
 
-    updatePageSizeOrCurrentPageCommunal();
+    updatePageSizeAndCurrentPageCommunal();
 
   };
 
   // 每页显示个数更改或当前页数更改共享函数
-  function updatePageSizeOrCurrentPageCommunal() {
+  function updatePageSizeAndCurrentPageCommunal() {
    
     //发出分页器数据到父页面进行请求新表格数据
     emit('getPaginationChangeData', pagination);

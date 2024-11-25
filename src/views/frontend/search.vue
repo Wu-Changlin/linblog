@@ -52,7 +52,7 @@
   import TagCount from '@/components/tag_count.vue';
   import Waterfall from '@/components/waterfall.vue';
   import EmptyState from '@/components/empty_state.vue';
-  import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
+  import { debounce, throttle } from '@/hooks/debounceAndThrottle.js';
   import NavBar from "@/components/nav_bar.vue";
   import FloatingBtnSets from "@/components/floating_btn_sets.vue";
   import searchModuleApi from "@/api/frontend/search.js";//api接口
@@ -101,9 +101,9 @@ const search_page_search_article_list_data = ref([]);//关键词文章列表
   const search_page_menu_list_data = ref();
 
   //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
-  function getLayoutLogOrMenuListData() {
+  function getLayoutLogAndMenuListData() {
     // 如果你想使用axios来模拟请求，可以这样做
-    layoutModuleApi.getLayoutLogOrMenuListData({})
+    layoutModuleApi.getLayoutLogAndMenuListData({})
       .then(response => {
         // setTimeout(() => {
         search_page_log.value = response.log_data; // log
@@ -274,7 +274,7 @@ current_meta_title.value = response.meta_title;
     );
 
     //获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
-    getLayoutLogOrMenuListData()
+    getLayoutLogAndMenuListData()
 
 
   });

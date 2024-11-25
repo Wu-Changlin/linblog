@@ -27,7 +27,7 @@
   import ContentTag from '@/components/content_tag.vue';
   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
-  import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
+  import { debounce, throttle } from '@/hooks/debounceAndThrottle.js';
 import frontendModuleApi from "@/api/frontend/frontend.js";//api接口
 
 

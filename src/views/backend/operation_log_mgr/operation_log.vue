@@ -44,11 +44,11 @@
                 </template>
 
                 <template #add>
-                    <el-button type="primary" @click="clickGotoAddOrEditPage(0,'add')">添加标签</el-button>
+                    <el-button type="primary" @click="clickGotoAddAndEditPage(0,'add')">添加标签</el-button>
                 </template>
                 <template #edit="active_data">
                     <el-button size="small" type="primary"
-                        @click="clickGotoAddOrEditPage(active_data,'edit')">编辑</el-button>
+                        @click="clickGotoAddAndEditPage(active_data,'edit')">编辑</el-button>
                 </template>
 
                 <!-- 标签列特殊处理 开始-->
@@ -98,7 +98,7 @@
 
 
     //点击跳转到添加/编辑页面(同一页面)
-    function clickGotoAddOrEditPage(current_active_data, actions) {
+    function clickGotoAddAndEditPage(current_active_data, actions) {
 
 
         //获取页面名称前缀：使用slice方法，是从开始到"_"的位置之。

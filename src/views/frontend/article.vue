@@ -238,7 +238,7 @@ useMetaInfo(current_meta_title,current_meta_keywords,current_meta_description);
 
 
         //获取log和菜单导航栏（外加搜索匹配关键字数据）   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
-        getLayoutLogOrMenuListData()
+        getLayoutLogAndMenuListData()
 
         is_loading.value = false;//取消骨架屏
 
@@ -248,7 +248,7 @@ useMetaInfo(current_meta_title,current_meta_keywords,current_meta_description);
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -294,7 +294,7 @@ useMetaInfo(current_meta_title,current_meta_keywords,current_meta_description);
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -311,9 +311,9 @@ useMetaInfo(current_meta_title,current_meta_keywords,current_meta_description);
   const article_page_menu_list_data = ref();
 
   //获取log和菜单导航栏   // 获取网站配置（如网站标题、网站关键词、网站描述、底部备案、网站log）
-  function getLayoutLogOrMenuListData() {
+  function getLayoutLogAndMenuListData() {
     // 如果你想使用axios来模拟请求，可以这样做
-    layoutModuleApi.getLayoutLogOrMenuListData({})
+    layoutModuleApi.getLayoutLogAndMenuListData({})
       .then(response => {
         // setTimeout(() => {
         article_page_log.value = response.log_data; // log
@@ -331,7 +331,7 @@ useMetaInfo(current_meta_title,current_meta_keywords,current_meta_description);
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');

@@ -27,7 +27,7 @@
   import ContentTag from '@/components/content_tag.vue';
   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
-  import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
+  import { debounce, throttle } from '@/hooks/debounceAndThrottle.js';
 import frontendModuleApi from "@/api/frontend/frontend.js";//api接口
 
 
@@ -132,7 +132,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -195,7 +195,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -287,7 +287,7 @@ updateCurrentActiveTagIdFunction(current_active_tag_id.value);
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');

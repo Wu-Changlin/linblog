@@ -11,7 +11,7 @@
     import VerificationCode from '@/components/verification_code.vue';//验证码输入框组件
     import { useRouter, useRoute } from "vue-router";
     import loginModuleApi from "@/api/login/login.js";//api接口
-    import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
+    import { debounce, throttle } from '@/hooks/debounceAndThrottle.js';
     import { useUserStore } from '@/stores/useUserStore.js';//持久存储登录用户相关信息(昵称、令牌、刷新令牌)  会话级
 
 
@@ -64,7 +64,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');

@@ -30,7 +30,7 @@
     import { getEncryptData } from "@/hooks/useSign.js";//加密
     import resetPasswordModuleApi from "@/api/reset_password/reset_password.js";//api接口
     import useMetaInfo from '@/hooks/useMetaInfo.js';//设置页面meta元数据，标题、关键词、描述 
-    import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
+    import { debounce, throttle } from '@/hooks/debounceAndThrottle.js';
 
     import PublicFormLoginAndResetPassword from '@/components/public_form_login_and_reset_password.vue';
 
@@ -103,7 +103,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -116,7 +116,7 @@
 
 
 
-    //获取页面配置（如页面标题、页面关键词、页面描述、、网站log）
+    //获取页面配置（如页面标题、页面关键词、页面描述、网站log）
     function getResetPasswordPageData() {
         // { method: 'getResetPasswordPageData' }
 
@@ -136,7 +136,7 @@
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -154,7 +154,7 @@
         // 获取地址栏的临时令牌参数
         params_data.temporary_token = route.query.temporary_token;
 
-        //获取页面配置（如页面标题、页面关键词、页面描述、、网站log）
+        //获取页面配置（如页面标题、页面关键词、页面描述、网站log）
         getResetPasswordPageData();
     });
 

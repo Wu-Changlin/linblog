@@ -26,7 +26,7 @@
 <script setup>
   import { reactive, ref, nextTick, onMounted, getCurrentInstance, onUnmounted, watch, inject, computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
-  import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
+  import { debounce, throttle } from '@/hooks/debounceAndThrottle.js';
 	import { useMenuStore } from '@/stores/useMenuStore.js';//临时存储活跃菜单id  会话级
   import { storeToRefs } from 'pinia';// 从 pinia 中导入 storeToRefs
 

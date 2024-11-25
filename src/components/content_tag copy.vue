@@ -65,7 +65,7 @@
   import { reactive, ref, nextTick, onMounted, onUnmounted, watch,inject,computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import Skeleton from '@/components/skeleton.vue'
-	import { debounce, throttle} from '@/hooks/debounceOrThrottle.js';
+	import { debounce, throttle} from '@/hooks/debounceAndThrottle.js';
 
   const route = useRoute();//用于获取当前路由的信息。返回的是当前路由的路由对象，包含了当前路由的各种信息
   const router = useRouter();//进行路由的导航操作。返回的是路由的实例，可以进行各种路由操作。

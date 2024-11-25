@@ -140,7 +140,7 @@
 
 
 
-  const stopWatchContributionDataOrCurrentRouteQueryYear = ref(null);
+  const stopWatchContributionDataAndCurrentRouteQueryYear = ref(null);
   const parent_page_current_year_contribution_data = ref('');
 
   // 计算属性来监听路由查询参数中的 year
@@ -163,7 +163,7 @@
   // 在访问属性之前检查变量是否已初始化
 
 
-  stopWatchContributionDataOrCurrentRouteQueryYear.value = watch([props.parentPageCurrentYearContributionData, current_route_query_year.value],
+  stopWatchContributionDataAndCurrentRouteQueryYear.value = watch([props.parentPageCurrentYearContributionData, current_route_query_year.value],
     ([newContributionData, newRouteQueryYear], [oldContributionData, oldRouteQueryYear]) => {
       if (newContributionData) {//如有父页面所传数据更新,那么把父页面所传数据赋值到当前页面的data.list。取消骨架屏 
         parent_page_current_year_contribution_data.value = props.parentPageCurrentYearContributionData;
@@ -498,7 +498,7 @@
   // 组件销毁前清除watch
   onUnmounted(() => {
     // 如果watch返回了一个停止监听的函数，调用它
-    stopWatchContributionDataOrCurrentRouteQueryYear.value = null;
+    stopWatchContributionDataAndCurrentRouteQueryYear.value = null;
 
   });
 

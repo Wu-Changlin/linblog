@@ -31,7 +31,7 @@
   import { useRoute, useRouter } from "vue-router";
   import ContentTag from '@/components/content_tag.vue';
   import Waterfall from '@/components/waterfall.vue';
-  import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
+  import { debounce, throttle } from '@/hooks/debounceAndThrottle.js';
   import resourceModuleApi from "@/api/frontend/resource.js";//api接口
 
 
@@ -135,7 +135,7 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -200,7 +200,7 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -291,7 +291,7 @@ const updatePageMetaInfoFunction = inject('updateCurrentMetaInfoFunction');
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');

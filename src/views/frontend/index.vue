@@ -25,7 +25,7 @@
   //   import ContentCarouselImg from '@/components/content_carousel_img.vue';
   import Waterfall from '@/components/waterfall.vue';
   import Footer from '@/components/footer.vue';
-  import { debounce, throttle } from '@/hooks/debounceOrThrottle.js';
+  import { debounce, throttle } from '@/hooks/debounceAndThrottle.js';
   import indexModuleApi from "@/api/frontend/index.js";//api接口
 
   const route = useRoute();
@@ -109,7 +109,7 @@ const parent_page_current_active_menu_name = inject('currentActiveMenuName');
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
@@ -159,7 +159,7 @@ const parent_page_current_active_menu_name = inject('currentActiveMenuName');
                 // // 处理错误
                 // let message_str = error.message;
                 // if (error.data) {
-                //     message_str = error.data.data.msg;
+                //     message_str = error.data.data.message;
                 // }
 
                 // $message(message_str, 'error');
