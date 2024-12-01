@@ -74,7 +74,7 @@
     tag_name: "",
     tag_keywords: "",
     tag_description: "",
-    is_pulled: 0,
+    is_pulled: 2,
    action:''//操作
 
   })

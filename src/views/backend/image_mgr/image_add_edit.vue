@@ -569,7 +569,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
     image_name: "",
     image_path: "",
     image_type: 1,
-    is_pulled: 0,
+    is_pulled: 2,
     vui_carousel_color: "",
     vui_carousel_title: "",
     action:''//操作
@@ -690,7 +690,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
 
   // 获取页面框架数据
   function getAddAndEditPageLayoutData() {
-    imageModuleApi.getPageLayoutData({})
+    imageModuleApi.getPageLayoutData({'method':'getAddAndEditPageLayoutData'})
       .then(response => {
         options_image_type_data.value = response.options_image_type_data;
         is_pulled_data.value = response.is_pulled_data;

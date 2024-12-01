@@ -6,8 +6,8 @@
       { "prop": "cn_name", "label": "中文名称", "key": "cn_name" },
       { "prop": "en_name", "label": "英文名称", "key": "en_name"},
       { "prop": "form_tag_name", "label": "表单标签", "key": "form_tag_name","scopedSlot":"form_tag_name"},
-      { "prop": "form_tag_value‌s", "label": "标签配置值", "key": "form_tag_value‌s" },
-      { "prop": "form_tag_active_value‌", "label": "活跃配置值", "key": "form_tag_active_value‌" },
+      { "prop": "form_tag_values", "label": "标签配置值", "key": "form_tag_values" },
+      { "prop": "form_tag_active_value", "label": "活跃配置值", "key": "form_tag_active_value" },
       { "prop": "created_time", "label": "创建时间", "key": "created_time" },
       { "prop": "update_time", "label": "更新时间", "key": "update_time" },
       { "prop": "delete_time", "label": "删除时间", "key": "delete_time" }

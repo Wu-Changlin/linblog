@@ -187,7 +187,7 @@
     author_name: "",
     menu_id: "",
     article_content: "",
-    is_pulled:0,
+    is_pulled: 2,
    action:''//操作
 
   })

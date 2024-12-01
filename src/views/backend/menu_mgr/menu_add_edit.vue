@@ -129,7 +129,7 @@
     icon: "",
     business_level: "",
     parent_id: 0,
-    is_pulled: 0,
+    is_pulled: 2,
     action:'',
     menu_keywords:'',
     menu_description:''
