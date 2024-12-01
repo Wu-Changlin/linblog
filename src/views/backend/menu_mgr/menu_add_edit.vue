@@ -25,7 +25,22 @@
       </el-input>
     </el-form-item>
 
+    <!-- 选择根目录显示 开始-->
+    <div v-if="ruleForm.parent_id===0"> 
 
+    <el-form-item label="菜单关键词" prop="menu_keywords">
+      <el-input v-model="ruleForm.menu_keywords" placeholder="亲，请输入菜单关键词">
+      </el-input>
+    </el-form-item>
+  
+
+    <el-form-item label="菜单描述" prop="menu_description">
+      <el-input v-model="ruleForm.menu_description" placeholder="亲，请输入菜单描述">
+      </el-input>
+    </el-form-item>
+
+  </div>
+    <!-- 选择根目录显示 结束-->
 
     <el-form-item label="业务层面" prop="business_level">
       <el-select v-model="ruleForm.business_level" placeholder="请选择">
@@ -114,7 +129,10 @@
     icon: "",
     business_level: "",
     parent_id: 0,
-    is_pulled: 0
+    is_pulled: 0,
+    action:'',
+    menu_keywords:'',
+    menu_description:''
   })
 
   //校验
@@ -139,7 +157,7 @@
       if (valid) {
         console.log("表单数据:", ruleForm)
         // 处理提交逻辑
-        menuModuleApi.clickSubmitAddAndEditData(ruleForm)
+        menuModuleApi.clickSubmitAddOrEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
           
@@ -226,7 +244,7 @@
         ruleForm.is_pulled = response.is_pulled;
 
         //模拟数据 id=route.query.id
-        ruleForm.menu_id = route.query.id;
+        // ruleForm.menu_id = route.query.id;
 
       })
       .catch(error => {
@@ -249,7 +267,7 @@
 
   // 获取页面框架数据
   function getAddAndEditPageLayoutData() {
-    menuModuleApi.getPageLayoutData({})
+    menuModuleApi.getPageLayoutData({'method':'getAddAndEditPageLayoutData'})
       .then(response => {
         options_business_level_data.value = response.options_business_level_data;
         options_parent_id_data.value = response.options_parent_id_data;
@@ -284,12 +302,20 @@
     if (Object.keys(route.query).length > 0) {
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
-        getEditCurrentIdData(route.query);
+        // 字符串值转数字值
+        let id_string_to_number=Number(route.query.id);
+        // 拼接数据
+        let edit_current_id_data={
+          'id':id_string_to_number
+        }
+        getEditCurrentIdData(edit_current_id_data);
         getAddAndEditPageLayoutData();
         page_title.value='编辑菜单';
+        ruleForm.action = "edit";//编辑操作
       } else if (route.query.action == "add") {
         getAddAndEditPageLayoutData();
         page_title.value='添加菜单';
+        ruleForm.action = "add";//添加操作
       } else {
         $message('非法操作', 'error');
         router.push({ path: '/404' });//重定向到404页面

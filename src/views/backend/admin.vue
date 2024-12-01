@@ -50,7 +50,6 @@
     function getAdminAndMenuListData() {
         adminModuleApi.getAdminAndMenuListData({ method: "getAdminAndMenuListData" })
             .then(response => {
-                $message("getAdminAndMenuListData", 'error');
                 admin_page_log.value = response.log_data; // log
                 admin_page_menu_list_data.value = response.menu_data; // 菜单数据
                 flag.value = true;

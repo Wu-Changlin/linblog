@@ -73,8 +73,9 @@
       en_name: "",
       form_tag_type: 0,
       form_tag_name: "",
-      form_tag_value‌s: "",
-      form_tag_active_value‌: "",
+      form_tag_values: "",
+      form_tag_active_value: "",
+      action:''//操作
     })
 
     
@@ -103,7 +104,7 @@
         if (valid) {
           console.log("表单数据:", ruleForm)
           // 处理提交逻辑
-          configurationModuleApi.clickSubmitAddAndEditData(ruleForm)
+          configurationModuleApi.clickSubmitAddOrEditData(ruleForm)
             .then(response => {
               //把修改或添加消息广播出去
               // const msg_content=response.action_success_data;
@@ -115,8 +116,8 @@
                   en_name: ruleForm.en_name,
                   form_tag_type: ruleForm.form_tag_type,
                   form_tag_name: ruleForm.form_tag_name,
-                  form_tag_value‌s: ruleForm.form_tag_value‌s,
-                  form_tag_active_value‌: ruleForm.form_tag_active_value‌,
+                  form_tag_values: ruleForm.form_tag_values,
+                  form_tag_active_value: ruleForm.form_tag_active_value,
 
                   created_time: "1687938191",
                   update_time: "1728874350",
@@ -179,8 +180,8 @@
           ruleForm.en_name = response.en_name;
           ruleForm.form_tag_type = response.form_tag_type;
           ruleForm.form_tag_name = response.form_tag_name;
-          ruleForm.form_tag_value‌s = response.form_tag_value‌s;
-          ruleForm.form_tag_active_value‌ = response.form_tag_active_value‌;
+          ruleForm.form_tag_values = response.form_tag_values;
+          ruleForm.form_tag_active_value = response.form_tag_active_value;
   
         })
         .catch(error => {
@@ -220,13 +221,21 @@
       if (Object.keys(route.query).length > 0) {
         //如果是action=="edit"，那么获取当前编辑id数据
         if (route.query.action == "edit") {
-          getEditCurrentIdData(route.query);
+           // 字符串值转数字值
+        let id_string_to_number=Number(route.query.id);
+        // 拼接数据
+        let edit_current_id_data={
+          'id':id_string_to_number
+        }
+        getEditCurrentIdData(edit_current_id_data);
           getAddAndEditPageLayoutData();
-   
+  
           page_title.value='编辑配置';
+          ruleForm.action = "edit";//编辑操作
         } else if (route.query.action == "add") {
           getAddAndEditPageLayoutData();
           page_title.value='添加配置';
+          ruleForm.action == "add";//添加操作
   
         } else {
           $message('非法操作', 'error');

@@ -75,6 +75,8 @@
     tag_keywords: "",
     tag_description: "",
     is_pulled: 0,
+   action:''//操作
+
   })
 
 
@@ -104,7 +106,7 @@
       if (valid) {
         console.log("表单数据:", ruleForm)
         // 处理提交逻辑
-        tagModuleApi.clickSubmitAddAndEditData(ruleForm)
+        tagModuleApi.clickSubmitAddOrEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
             // const msg_content=response.action_success_data;
@@ -230,13 +232,22 @@ const page_title=ref('');
     if (Object.keys(route.query).length > 0) {
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
-        getEditCurrentIdData(route.query);
+         // 字符串值转数字值
+        let id_string_to_number=Number(route.query.id);
+        // 拼接数据
+        let edit_current_id_data={
+          'id':id_string_to_number
+        }
+        getEditCurrentIdData(edit_current_id_data);
         getAddAndEditPageLayoutData();
  
         page_title.value='编辑标签';
+        ruleForm.action = "edit";//编辑操作
+
       } else if (route.query.action == "add") {
         getAddAndEditPageLayoutData();
         page_title.value='添加标签';
+        ruleForm.action = "add";//添加操作
 
       } else {
         $message('非法操作', 'error');

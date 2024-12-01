@@ -236,7 +236,7 @@ axiosServiceBackend.interceptors.request.use(
         config.headers['Authorization'] = 'Bearer ' + token;
 
 
-
+console.log('axios data参数：',config.data)
 
         return config;
     },

@@ -494,7 +494,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
    * 按照六位对应一个字符规则做转换，转码后是反而比原图片文件大的。
    * 但是对于小图片而言，经转换后多出来的字节传输远比多建立一个http连接开销小，所以会利用base64对小图转码来提高页面加载速度。
    */
-  const compressionFile = async (files, type = 'image/jpeg', quality = 0.5) => {
+  const compressionFile = async (files, type = 'image/jpeg', quality = 0.3) => {
     if (!files) {
       return;
     }
@@ -571,7 +571,9 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
     image_type: 1,
     is_pulled: 0,
     vui_carousel_color: "",
-    vui_carousel_title: ""
+    vui_carousel_title: "",
+    action:''//操作
+
   })
 
   //校验
@@ -590,7 +592,7 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
       if (valid) {
         console.log("表单数据:", JSON.stringify(ruleForm))
         // 处理提交逻辑
-        imageModuleApi.clickSubmitAddAndEditData(ruleForm)
+        imageModuleApi.clickSubmitAddOrEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
             // const msg_content=response.action_success_data;
@@ -713,12 +715,20 @@ const image_dimensions_name= image_types[String(ruleForm.image_type)]+'_dimensio
     if (Object.keys(route.query).length > 0) {
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
-        getEditCurrentIdData(route.query);
+         // 字符串值转数字值
+        let id_string_to_number=Number(route.query.id);
+        // 拼接数据
+        let edit_current_id_data={
+          'id':id_string_to_number
+        }
+        getEditCurrentIdData(edit_current_id_data);
         getAddAndEditPageLayoutData();
         page_title.value = '编辑图片';
+        ruleForm.action = "edit";//编辑操作
       } else if (route.query.action == "add") {
         getAddAndEditPageLayoutData();
         page_title.value = '添加图片';
+        ruleForm.action = "add";//添加操作
 
       } else {
         $message('非法操作', 'error');

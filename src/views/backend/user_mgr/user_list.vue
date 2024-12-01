@@ -12,7 +12,7 @@
       <el-form :inline="false" class="flex-form" :model="query_form_data" @keyup.enter="queryInputData()">
         <!-- <div style="display: flex;flex-direction: column;"> -->
         <el-form-item label="用户昵称">
-          <el-input v-model="query_form_data.nike_name" placeholder="搜索用户昵称">
+          <el-input v-model="query_form_data.nick_name" placeholder="搜索用户昵称">
           </el-input>
         </el-form-item>
 
@@ -145,7 +145,7 @@ function getPageLayoutData(){
 
 //保存初始化数据
 const init_query_form_data ={
-  nike_name: '',
+  nick_name: '',
   email:'',
   role: '',
 }

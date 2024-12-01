@@ -4,7 +4,7 @@
   "data":  {
     "table_header": [
       { "prop": "user_id", "label": "user_id", "key": "user_id" },
-      { "prop": "nike_name", "label": "昵称", "key": "nike_name" },
+      { "prop": "nick_name", "label": "昵称", "key": "nick_name" },
       {
         "prop": "avatar",
         "label": "头像",
@@ -12,7 +12,7 @@
         "scopedSlot": "avatar"
       },
       { "prop": "email", "label": "邮箱", "key": "email" },
-      { "prop": "is_pulled", "label": "启用", "key": "is_pulled" },
+      { "prop": "is_enable", "label": "启用", "key": "is_enable" },
       { "prop": "role", "label": "角色", "key": "role" },
       { "prop": "account_status", "label": "账号状态", "key": "account_status" },
       { "prop": "ip", "label": "登陆ip", "key": "ip" },
@@ -30,13 +30,13 @@
         "label": "普通用户"
       }
     ],
-    "is_pulled_data": [
+    "is_enable_data": [
       {
-        "value": 0,
+        "is_enable": 0,
         "label": "否"
       },
       {
-        "value": 1,
+        "is_enable": 1,
         "label": "是"
       }
     ]

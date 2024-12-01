@@ -90,7 +90,7 @@
 
             <div class="bottom-button">
               <el-button>保存草稿</el-button>
-              <el-button type="primary" @click="clickSubmitAddAndEditData()">确定并发布</el-button>
+              <el-button type="primary" @click="clickSubmitAddOrEditData()">确定并发布</el-button>
 
             </div>
 
@@ -187,7 +187,8 @@
     author_name: "",
     menu_id: "",
     article_content: "",
-    is_pulled:0
+    is_pulled:0,
+   action:''//操作
 
   })
 
@@ -210,13 +211,13 @@
 
 
   //提交添加或修改数据
-  function clickSubmitAddAndEditData() {
+  function clickSubmitAddOrEditData() {
     //  valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
     ruleFormRef.value.validate((valid, fields) => {
       if (valid) {
         console.log("表单数据:", ruleForm)
         // 处理提交逻辑
-        articleModuleApi.clickSubmitAddAndEditData(ruleForm)
+        articleModuleApi.clickSubmitAddOrEditData(ruleForm)
           .then(response => {
             //把修改或添加消息广播出去
             // const msg_content=response.action_success_data;
@@ -370,12 +371,22 @@
     if (Object.keys(route.query).length > 0) {
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
-        getEditCurrentIdData(route.query);
+         // 字符串值转数字值
+        let id_string_to_number=Number(route.query.id);
+        // 拼接数据
+        let edit_current_id_data={
+          'id':id_string_to_number
+        }
+        getEditCurrentIdData(edit_current_id_data);
         getAddAndEditPageLayoutData();
         page_title.value='编辑文章';
+        ruleForm.action = "edit";//编辑操作
+
       } else if (route.query.action == "add") {
         getAddAndEditPageLayoutData();
         page_title.value='添加文章';
+        ruleForm.action = "add";//添加操作
+
       } else {
         $message('非法操作', 'error');
         router.push({ path: '/404' });//重定向到404页面

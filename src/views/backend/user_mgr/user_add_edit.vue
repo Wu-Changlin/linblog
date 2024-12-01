@@ -11,8 +11,8 @@
 
   <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="120px" class="demo-ruleForm"
     label-position="left">
-    <el-form-item label="用户昵称" prop="nike_name">
-      <el-input v-model="ruleForm.nike_name" placeholder="亲，请输入用户昵称"></el-input>
+    <el-form-item label="用户昵称" prop="nick_name">
+      <el-input v-model="ruleForm.nick_name" placeholder="亲，请输入用户昵称"></el-input>
     </el-form-item>
 
 
@@ -23,7 +23,7 @@
     <el-form-item v-model="ruleForm.avatar" label="头像" prop="avatar">
       <div v-if="ruleForm.avatar">
         <el-image style="width: 200px; height: 40px" :src="ruleForm.avatar" :preview-src-list="[ruleForm.avatar]"
-          fit="cover" />
+          fit="avatar" />
 
       </div>
 
@@ -47,14 +47,18 @@
     </el-form-item>
 
 
-    <el-form-item label="再次密码" prop="again_password">
-      <el-input v-model="ruleForm.again_password" type="password" placeholder="亲，请再次输入密码" show-password>
+    <el-form-item label="确认密码" prop="confirm_password">
+      <el-input v-model="ruleForm.confirm_password" type="password" placeholder="亲，请再次输入密码" show-password>
       </el-input>
     </el-form-item>
 
-    <el-form-item label="启用" prop="is_pulled">
-      <el-switch v-model="ruleForm.is_pulled" inline-prompt active-text="是" inactive-text="否" />
+    <el-form-item label="启用" prop="is_enable">
+      <el-radio-group v-model="ruleForm.is_enable">
+        <el-radio v-for="(item,index) in is_enable_data" :key="index" :value="item.is_enable"> {{
+          item.label }}</el-radio>
+      </el-radio-group>
     </el-form-item>
+
 
     <el-form-item label="角色" prop="role">
       <el-select v-model="ruleForm.role" placeholder="请选择">
@@ -79,6 +83,7 @@
   import ArticleCoverList from '@/components/backend/article_cover_list.vue';
   import { sendMsg } from '@/components/cross_tag_msg/crossTagMsg.js';
   import userModuleApi from "@/api/backend/user.js";//api接口
+  import { getEncryptData } from "@/hooks/useSign.js";//加密
 
 
 
@@ -97,13 +102,14 @@
   //初始化添加数据
   const ruleForm = reactive({
     user_id: 0,
-    nike_name: "",
+    nick_name: "",
     email: "",
-    cover: "",
+    avatar: "",
     password: "",
-    again_password: "",
+    confirm_password: "",
     role: "",
-    is_pulled: false,
+    is_enable: 1,
+    action:''//操作
 
   })
   /*封面 开始*/
@@ -156,8 +162,8 @@
       { validator: $verify.password, message: "密码至少包含大写字母、小写字母、数字和特殊字符中的三种，并且长度至少为8位‌15。" },
 
     ],
-    again_password: [
-      { required: true, message: "请再次输入密码" },
+    confirm_password: [
+      { required: true, message: "请输入确认密码" },
       { validator: checkPassword, message: "两次输入密码不一致" },
       { validator: $verify.password, message: "密码至少包含大写字母、小写字母、数字和特殊字符中的三种，并且长度至少为8位‌15。" },
 
@@ -172,9 +178,27 @@
     //valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
     ruleFormRef.value.validate((valid, fields) => {
       if (valid) {
-        console.log("表单数据:", ruleForm)
+        console.log("表单数据:", ruleForm);
+
+        // 使用扩展运算符进行深拷贝 避免修改一个变量时影响到另一个变量。
+        let params_data = { ...ruleForm };
+
+
+        // 加密密码
+        if(ruleForm.password){
+          const encrypt_password_result = getEncryptData(ruleForm.password);
+          params_data.password = encrypt_password_result;
+
+        }
+
+        if(ruleForm.confirm_password){
+         const encrypt_confirm_password_result = getEncryptData(ruleForm.confirm_password);
+          params_data.confirm_password = encrypt_confirm_password_result;
+
+        }
+        console.log("提交表单数据:", params_data);
         // 处理提交逻辑
-        userModuleApi.clickSubmitAddAndEditData(ruleForm)
+        userModuleApi.clickSubmitAddOrEditData(params_data)
           .then(response => {
             //把修改或添加消息广播出去
             // const msg_content=response.action_success_data;
@@ -182,11 +206,11 @@
               //模拟
               let msg_content = {
                 user_id: route.query.id ? Number(route.query.id) : 1,
-                nike_name: "edit-user",
+                nick_name: "edit-user",
                 avatar: "/logo.png",
                 email: "xxx@qq.com",
                 role: 1,
-                is_pulled: ruleForm.is_pulled === true ? 1 : 0,
+                is_enable: ruleForm.is_enable === true ? 1 : 0,
                 account_status: "edit-user",
                 created_time: "1687938191",
                 update_time: "1728874350",
@@ -200,11 +224,11 @@
               //模拟
               let msg_content = {
                 user_id: 999,
-                nike_name: "add-user",
+                nick_name: "add-user",
                 avatar: "/logo.png",
                 email: "xxx@qq.com",
                 role: 1,
-                is_pulled: ruleForm.is_pulled === true ? 1 : 0,
+                is_enable: ruleForm.is_enable === true ? 1 : 0,
                 account_status: "add-user",
                 created_time: "1687938191",
                 update_time: "1687938191",
@@ -246,13 +270,13 @@
       .then(response => {
 
         ruleForm.user_id = response.user_id;
-        ruleForm.nike_name = response.nike_name;
+        ruleForm.nick_name = response.nick_name;
         ruleForm.email = response.email;
         ruleForm.avatar = response.avatar;
         ruleForm.password = response.password;
-        ruleForm.again_password = response.again_password;
+        ruleForm.confirm_password = response.confirm_password;
         ruleForm.role = response.role;
-        ruleForm.is_pulled = response.is_pulled == 1 ? true : false;
+        ruleForm.is_enable = response.is_enable;
 
         //模拟数据 id=route.query.id
         ruleForm.menu_id = route.query.id;
@@ -275,6 +299,9 @@
   //选择器数据
   const options_role_data = ref([]);
 
+  const is_enable_data = ref([]);
+
+
   // 获取页面框架数据
   function getAddAndEditPageLayoutData() {
 
@@ -283,6 +310,8 @@
       .then(response => {
 
         options_role_data.value = response.options_role_data;
+        is_enable_data.value = response.is_enable_data;
+
       })
       .catch(error => {
                 // console.log('请求接口错误-提示：', error);
@@ -304,12 +333,22 @@
     if (Object.keys(route.query).length > 0) {
       //如果是action=="edit"，那么获取当前编辑id数据
       if (route.query.action == "edit") {
-        getEditCurrentIdData(route.query);
+         // 字符串值转数字值
+        let id_string_to_number=Number(route.query.id);
+        // 拼接数据
+        let edit_current_id_data={
+          'id':id_string_to_number
+        }
+        getEditCurrentIdData(edit_current_id_data);
         getAddAndEditPageLayoutData();
         page_title.value = '编辑用户';
+        ruleForm.action = "edit";//编辑操作
+
       } else if (route.query.action == "add") {
         getAddAndEditPageLayoutData();
         page_title.value = '添加用户';
+        ruleForm.action = "add";//添加操作
+
       } else {
         $message('非法操作', 'error');
         router.push({ path: '/404' });//重定向到404页面

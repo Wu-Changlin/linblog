@@ -2,11 +2,11 @@
   "code":200,
   "data":{
     "user_id": 1,
-    "nike_name": "守一",
+    "nick_name": "守一",
     "avatar": "/logo.png",
     "email": "111@qq.com",  
     "role": 1,
-    "is_pulled": 1,
+    "is_enable": 1,
     "password":"$A1xxx***",
     "again_password":"$A1xxx***",
     "account_status": "正常",
