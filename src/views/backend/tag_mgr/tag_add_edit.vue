@@ -69,7 +69,7 @@
   const ruleForm = reactive({
     tag_id: 0,
     menu_id: '',
-    menu_name: "",
+    // menu_name: "",
     menu_title: "",
     tag_name: "",
     tag_keywords: "",
@@ -115,7 +115,7 @@
               let msg_content = {
                 tag_id: route.query.id ? Number(route.query.id) : 1,
                 menu_id: ruleForm.menu_id,
-                menu_name: ruleForm.menu_name,
+                // menu_name: ruleForm.menu_name,
                 menu_title: ruleForm.menu_title,
                 tag_name:ruleForm.tag_name ,
                 tag_keywords: ruleForm.tag_keywords,
@@ -135,7 +135,7 @@
               let msg_content = {
                 tag_id: 999,
                 menu_id: ruleForm.menu_id,
-                menu_name: ruleForm.menu_name,
+                // menu_name: ruleForm.menu_name,
                 menu_title: ruleForm.menu_title,
                 tag_name:ruleForm.tag_name ,
                 tag_keywords: ruleForm.tag_keywords,
@@ -182,7 +182,7 @@
 
         ruleForm.tag_id = response.tag_id;
         ruleForm.menu_id = response.menu_id;
-        ruleForm.menu_name = response.menu_name;
+        // ruleForm.menu_name = response.menu_name;
         ruleForm.menu_title = response.menu_title;
 
         ruleForm.tag_name = response.tag_name;

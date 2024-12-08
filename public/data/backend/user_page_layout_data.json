@@ -23,11 +23,11 @@
     "options_role_data": [
       {
         "role": 1,
-        "label": "管理员"
+        "label": "普通用户"
       },
       {
         "role": 2,
-        "label": "普通用户"
+        "label": "管理员"
       }
     ],
     "is_enable_data": [

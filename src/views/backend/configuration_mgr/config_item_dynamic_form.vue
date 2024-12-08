@@ -16,8 +16,8 @@
             <span>配置值</span>
         </el-form-item>
         <el-form-item v-for="(item, index) in config_item" :label="item.cn_name" :key="index"
-            :prop="index + '.form_tag_active_value‌'">
-            <el-input v-model="item.form_tag_active_value‌" :key="index"></el-input>
+            :prop="index + '.form_tag_active_value'">
+            <el-input v-model="item.form_tag_active_value" :key="index"></el-input>
         </el-form-item>
         <el-button type="primary" @click="submitForm">提交</el-button>
     </el-form>
@@ -92,7 +92,7 @@
         const rules = {};
         for (let i = 0; i < num; i++) {
 
-            rules[`${i}.form_tag_active_value‌`] = validator;
+            rules[`${i}.form_tag_active_value`] = validator;
         }
         return rules;
     };

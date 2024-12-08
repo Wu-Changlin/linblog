@@ -145,8 +145,8 @@
     function checkTagsBoxInfo(val) {
       // 使用函数
       ruleForm.tag_ids_names = findTagNamesById(ruleForm.tag_ids, options_tags_data.value);
-      console.log('ruleForm.tag_ids_names:', ruleForm.tag_ids_names)
-      console.log('checkTagsBoxInfo（val） =',val)
+      // console.log('ruleForm.tag_ids_names:', ruleForm.tag_ids_names)
+      // console.log('checkTagsBoxInfo（val） =',val)
     }
 
 
@@ -215,9 +215,21 @@
     //  valid 类型：布尔值 。fields 没有通过校验的字段，类型：对象
     ruleFormRef.value.validate((valid, fields) => {
       if (valid) {
-        console.log("表单数据:", ruleForm)
+        console.log("表单数据:", ruleForm);
+         // 使用扩展运算符进行深拷贝 避免修改一个变量时影响到另一个变量。
+         let params_data = { ...ruleForm };
+
+
+        // 加密密码
+        if(params_data.hasOwnProperty('tag_ids') && Array.isArray(params_data['tag_ids']) && params_data['tag_ids'].length > 0){
+            // console.log('tag_ids有值');
+             // JavaScript数组转换为逗号分隔的字符串，可以使用join()方法。
+             params_data.tag_ids=params_data.tag_ids.join(',');
+            // console.log('转字符串：'+params_data.tag_ids);
+
+        }
         // 处理提交逻辑
-        articleModuleApi.clickSubmitAddOrEditData(ruleForm)
+        articleModuleApi.clickSubmitAddOrEditData(params_data)
           .then(response => {
             //把修改或添加消息广播出去
             // const msg_content=response.action_success_data;
